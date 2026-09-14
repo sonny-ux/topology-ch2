@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>Topology — Chapter 2</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
 <script>
   MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] } };
 </script>
@@ -30,7 +31,7 @@
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'EB Garamond',Palatino,'Palatino Linotype',Georgia,serif;font-size:18px;line-height:1.7;overflow-x:hidden;}
 mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%;}
 
 .topnav{position:sticky;top:0;z-index:200;background:rgba(15,17,21,.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);}
@@ -49,11 +50,11 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%;}
 
 .hero{padding:26px 20px 20px;border-bottom:1px solid var(--border);}
 .ch-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;border-radius:3px;margin-bottom:12px;}
-.hero h1{font-size:1.5rem;font-weight:700;line-height:1.25;margin-bottom:8px;}
-.hero-sub{font-size:.92rem;color:var(--muted);}
+.hero h1{font-family:'Cinzel',serif;font-size:1.5rem;font-weight:600;line-height:1.3;margin-bottom:8px;}
+.hero-sub{font-size:.92rem;color:var(--muted);font-style:italic;}
 
 .sec{padding:22px 20px;border-bottom:1px solid var(--border);}
-.sec h2{font-size:1.02rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.sec h2{font-family:'Cinzel',serif;font-size:1.02rem;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
 .sec-num{font-family:ui-monospace,'SF Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--subtle);}
 .prose{font-size:.94rem;line-height:1.75;color:#c9cdd6;margin-bottom:14px;}
 .prose p{margin-bottom:.7em;}
@@ -158,14 +159,14 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%;}
 <div class="hero">
   <div class="ch-badge" style="background:#1a2230;color:#8fb4dd;">Chapter 2</div>
   <h1>Topological Spaces and Continuous Functions</h1>
-  <p class="hero-sub">Munkres, <em>Topology</em>, 2nd ed. — building topologies, then studying what lives on them</p>
+  <p class="hero-sub">Munkres, <em>Topology</em>, 2nd ed. — constructing topological spaces, then the concepts built upon them</p>
 </div>
 
 <div class="sec">
-  <h2><span class="sec-num">02.00</span> What this chapter is doing</h2>
+  <h2><span class="sec-num">02.00</span> Chapter Architecture</h2>
   <div class="prose">
-    <p>Chapter 1 was set theory — vocabulary. Chapter 2 is where the actual subject starts: it defines what a topological space <em>is</em> (§12), then spends most of its length on <strong>ways of building topologies</strong> — from a basis (§13), from an order (§14), as a product of two spaces (§15), as a subspace of an existing space (§16) — before turning to the concepts that make topology worth doing at all: closed sets and limit points (§17), and finally continuous functions (§18), which is the actual point of the whole apparatus. §19–22 generalize products, recover ordinary real-analysis metric spaces as a special case (§20–21), and introduce quotient spaces (§22).</p>
-    <p>The throughline to hold onto: every section from §13–§16 is answering the same question — "given some raw material (a basis, an order, two existing spaces, a subset), how do I get a legitimate topology out of it?" — and each answer has to be checked against the three axioms from §12. That's why §12 has to come first and has to be internalized cold.</p>
+    <p>Chapter 1 established the set-theoretic vocabulary; Chapter 2 begins the subject proper. It defines what a topological space is (§12), and then devotes most of its length to methods of constructing topologies: from a basis (§13), from an order (§14), as a product of two spaces (§15), and as a subspace of an existing space (§16). It then turns to the concepts a topology exists to support — closed sets and limit points (§17), and continuous functions (§18), the central object of the theory. The remaining sections generalize the product construction (§19), recover the metric spaces of real analysis as a special case (§20–21), and introduce quotient spaces (§22).</p>
+    <p>Sections §13 through §16 each answer a version of the same question: given some raw material — a basis, an order, two existing spaces, a subset — how is a legitimate topology obtained from it? Every answer must be checked against the three axioms of §12, which is why that section precedes the rest and must be known precisely.</p>
   </div>
   <div class="chain">
     <div class="cn done">§12 Topology (def)</div><span class="ca">⟹</span>
@@ -179,7 +180,7 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%;}
 
 <div class="sec">
   <h2><span class="sec-num">02.01</span> Coverage so far</h2>
-  <div class="prose"><p>Built out in full, with worked examples, warnings, quiz questions, and practice problems. The rest of the chapter gets added the same way as you get to it — just say the word.</p></div>
+  <div class="prose"><p>The sections below are built out in full, with worked examples, warnings, quiz questions, and practice problems. Later sections will be added in the same form as the material is reached.</p></div>
   <div class="roadmap">
     <div class="rm built">§12 ✓</div>
     <div class="rm todo">§13</div>
@@ -207,7 +208,7 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%;}
 <div class="sec">
   <h2><span class="sec-num">12.01</span> The definition, and why it's shaped this way</h2>
   <div class="prose">
-    <p>A <strong>topology</strong> on a set $X$ is a collection $\mathcal T$ of subsets of $X$ (called the <strong>open sets</strong>) satisfying three rules. Before the formal statement, it's worth knowing why this particular set of rules and not some other — Munkres notes the definition took decades to settle on, because mathematicians needed it broad enough to include every space they actually cared about (Euclidean space, function spaces, ...) but narrow enough that the standard theorems about those spaces would still hold in general. What survived is remarkably short: three conditions, and everything else in the subject is built on top.</p>
+    <p>A <strong>topology</strong> on a set $X$ is a collection $\mathcal T$ of subsets of $X$, called the <strong>open sets</strong>, satisfying three conditions. The definition took decades to settle into its present form: it needed to be broad enough to include every space of real mathematical interest — Euclidean space, infinite-dimensional space, function spaces — while narrow enough that the familiar theorems about those spaces would continue to hold in general. What survived is three short conditions, and the entire subject is built on top of them.</p>
   </div>
   <div class="box bdef">
     <div class="bl">Definition — Topology</div>
@@ -218,14 +219,14 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%;}
   </div>
   <div class="prose"><p>$(X, \mathcal T)$ is then called a <strong>topological space</strong> (often just written $X$, with $\mathcal T$ left implicit). A set $U$ counts as "open" exactly when $U \in \mathcal T$ — openness isn't a property a set has on its own, it's a status conferred by whichever topology you've chosen.</p></div>
   <div class="box bwarn">
-    <div class="bl">The asymmetry in (2) vs (3) is not a typo</div>
-    <p>Unions get to be arbitrary; intersections only get to be finite. This asymmetry is deliberate and it's the single most load-bearing detail in the definition — you already have a concrete counterexample to why it can't be relaxed, from Modern Analysis: $G_n = (-1/n, 1/n) \subset \mathbb R$ is open for every $n$, but $\bigcap_{n=1}^\infty G_n = \{0\}$, which is <em>not</em> open. If axiom (3) allowed infinite intersections, the reals with their usual topology wouldn't even qualify as a topological space. Keep this example loaded — it is the standard answer whenever a problem asks you to show some claim fails for infinite intersections.</p>
+    <div class="bl">The asymmetry between (2) and (3)</div>
+    <p>Unions may be taken over any subcollection of $\mathcal T$, however large; intersections are guaranteed only for finite subcollections. This asymmetry is essential to the definition, not an oversight. A concrete instance of why it cannot be relaxed already appears in Modern Analysis: $G_n = (-1/n, 1/n) \subset \mathbb R$ is open for every $n$, yet $\bigcap_{n=1}^\infty G_n = \{0\}$, which is <em>not</em> open. Were axiom (3) to permit infinite intersections, the real line with its ordinary topology would fail to be a topological space at all. This is the standard example to produce whenever a problem asks for a case where an infinite intersection of open sets fails to be open.</p>
   </div>
 </div>
 
 <div class="sec">
-  <h2><span class="sec-num">12.02</span> Worked check: is this actually a topology?</h2>
-  <div class="prose"><p>The three axioms are a checklist, not a vibe — every time you're handed a candidate collection, you verify all three explicitly. Here's a full worked example, plus one that fails, so you can see exactly where a failure shows up.</p></div>
+  <h2><span class="sec-num">12.02</span> Verifying the axioms</h2>
+  <div class="prose"><p>Establishing that a given collection is a topology means checking all three axioms explicitly, in order. The two examples below carry out a full verification, and then examine a collection that fails, so that the point of failure is visible directly.</p></div>
   <div class="tc" id="tcA">
     <button class="tc-hdr" onclick="toggleCard('tcA')">
       <span class="tc-rn">CHECK 1</span><span class="tc-tt">$X=\{1,2,3\}$, $\mathcal T = \{\varnothing, \{1\}, \{1,2\}, X\}$ — is this a topology?</span><span class="tc-arr">▸</span>
@@ -234,7 +235,7 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%;}
       <p>(1) $\varnothing \in \mathcal T$ ✓ and $X \in \mathcal T$ ✓ — both listed explicitly.</p>
       <p>(2) Check every union: $\{1\}\cup\{1,2\}=\{1,2\}\in\mathcal T$ ✓. Any union involving $X$ or $\varnothing$ trivially stays in $\mathcal T$. All unions land back in the collection. ✓</p>
       <p>(3) Check intersections: $\{1\}\cap\{1,2\}=\{1\}\in\mathcal T$ ✓. All other intersections trivially work. ✓</p>
-      <p><strong>Conclusion:</strong> yes, this is a topology on $X$ — in fact it's exactly the "upper-right" example from Munkres Figure 12.1 (relabeled).</p>
+      <p><strong>Conclusion:</strong> $\mathcal T$ is a topology on $X$. It is, in relabeled form, the example in the upper-right corner of Munkres Figure 12.1.</p>
     </div>
   </div>
   <div class="tc" id="tcB">
@@ -244,18 +245,18 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%;}
     <div class="tc-body" id="tcB-body">
       <p>(1) $\varnothing, X \in \mathcal T$ ✓.</p>
       <p>(2) Check unions: $\{1\}\cup\{2\} = \{1,2\}$. Is $\{1,2\} \in \mathcal T$? <strong>No</strong> — it's not on the list.</p>
-      <div class="box bctr"><div class="bl">Fails here</div><p>Axiom (2) is violated: two open sets whose union isn't declared open. This is <em>not</em> a topology. The fix would be to add $\{1,2\}$ to $\mathcal T$ (which is exactly what CHECK 1 did) — you can't just declare singletons open without also including whatever their unions force in.</p></div>
+      <div class="box bctr"><div class="bl">Where it fails</div><p>Axiom (2) fails: two sets of $\mathcal T$ have a union that does not itself belong to $\mathcal T$. This collection is therefore not a topology. Adding $\{1,2\}$ to $\mathcal T$ — precisely the topology verified above — repairs it. Declaring a set of singletons open obligates the inclusion of every union they generate as well.</p></div>
     </div>
   </div>
 </div>
 
 <div class="sec">
   <h2><span class="sec-num">12.03</span> The four standard example-topologies</h2>
-  <div class="prose"><p>These four constructions appear constantly as test cases — whenever you want to check "does property P hold for every topology," these are the first four spaces to try, because they sit at the extremes of "how many sets are open."</p></div>
-  <div class="box bdef"><div class="bt">Discrete topology</div><p>$\mathcal T = \mathcal P(X)$ — literally every subset is open. The finest possible topology on $X$. Every singleton $\{x\}$ is open, which forces a huge amount of structure (in the discrete topology every function out of $X$ is automatically continuous, every subset is both open and closed, etc.).</p></div>
-  <div class="box bdef"><div class="bt">Indiscrete (trivial) topology</div><p>$\mathcal T = \{\varnothing, X\}$ — only the two sets every topology is forced to contain. The coarsest possible topology. Almost nothing is open, so almost nothing interesting can be distinguished (no two distinct points can be separated by open sets).</p></div>
-  <div class="box bdef"><div class="bt">Finite complement topology $\mathcal T_f$</div><p>$U \in \mathcal T_f$ iff $X - U$ is finite, or $U = \varnothing$. This is the first genuinely non-obvious topology in the book, and it's worth seeing exactly why axiom (3) survives: if $U_1,\dots,U_n \in \mathcal T_f$ are nonempty, then $X - \bigcap U_i = \bigcup (X-U_i)$ — a <em>finite</em> union of finite sets, hence finite. That finite union is only guaranteed finite because there are finitely many terms — this is a direct, concrete instance of why axiom (3) caps intersections at "finite."</p></div>
-  <div class="box bdef"><div class="bt">Countable complement topology $\mathcal T_c$</div><p>Same idea, one level up: $U \in \mathcal T_c$ iff $X-U$ is countable, or $U=\varnothing$. Axiom (2) (arbitrary unions) needs a countable union of countable sets to stay countable, which is true — but this is exactly why axiom (2) can't be relaxed to "countable unions of countable sets are fine, full stop" without checking; it happens to work out for $\mathcal T_c$, but the general principle (arbitrary unions always fine, only finite intersections guaranteed) is what's actually doing the work everywhere else.</p></div>
+  <div class="prose"><p>These four constructions recur throughout the book as standard test cases. Given a claimed property of topological spaces, these are the first spaces to check it against, since together they span the extremes of how many sets can be open.</p></div>
+  <div class="box bdef"><div class="bt">Discrete topology</div><p>$\mathcal T = \mathcal P(X)$: every subset is open. This is the finest possible topology on $X$. Every singleton $\{x\}$ is open, which forces a great deal of additional structure — in the discrete topology every function out of $X$ is automatically continuous, and every subset is both open and closed.</p></div>
+  <div class="box bdef"><div class="bt">Indiscrete (trivial) topology</div><p>$\mathcal T = \{\varnothing, X\}$: only the two sets every topology is required to contain. This is the coarsest possible topology. Almost nothing is open, and consequently almost nothing can be distinguished — no two distinct points can be separated by open sets.</p></div>
+  <div class="box bdef"><div class="bt">Finite complement topology $\mathcal T_f$</div><p>$U \in \mathcal T_f$ iff $X - U$ is finite, or $U = \varnothing$. This is the first topology in the book whose validity is not immediate, and the verification of axiom (3) is instructive: if $U_1,\dots,U_n \in \mathcal T_f$ are nonempty, then $X - \bigcap U_i = \bigcup (X-U_i)$, a union of finitely many finite sets, hence finite. The restriction to finitely many terms is exactly what axiom (3) requires, and exactly what makes the argument work.</p></div>
+  <div class="box bdef"><div class="bt">Countable complement topology $\mathcal T_c$</div><p>The same construction one level up: $U \in \mathcal T_c$ iff $X-U$ is countable, or $U=\varnothing$. Axiom (2) requires a countable union of countable sets to remain countable, which holds. The general principle — arbitrary unions of open sets are always open, while only finite intersections are guaranteed to be — is what does the work in every one of these examples; countability plays a supporting role here, not the decisive one.</p></div>
 </div>
 
 <div class="sec">
@@ -265,8 +266,8 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%;}
     <div class="bl">Definition</div>
     <p>If $\mathcal T'\supset \mathcal T$, we say $\mathcal T'$ is <strong>finer</strong> than $\mathcal T$ (strictly finer if the containment is proper), and $\mathcal T$ is <strong>coarser</strong> than $\mathcal T'$. If either containment holds, the two topologies are <strong>comparable</strong>.</p>
   </div>
-  <div class="box bkey"><div class="bl">The gravel analogy (Munkres')</div><p>Think of the open sets as pebbles in a truckload of gravel. Smashing pebbles into smaller pieces gives you more (smaller) pebbles, hence a bigger collection of "generatable" pieces — the topology gets <em>finer</em>, the same way gravel gets finer. Discrete topology = dust (finest); indiscrete = one giant boulder (coarsest).</p></div>
-  <div class="box bwarn"><div class="bl">Not every pair is comparable</div><p>Two topologies on the same $X$ need not be comparable at all — neither has to contain the other. This is a genuinely partial order, not a total order: you can't always say one topology is "bigger."</p></div>
+  <div class="box bkey"><div class="bl">Munkres' gravel analogy</div><p>Munkres compares a topology to a truckload of gravel, with the open sets as pebbles. Breaking the pebbles into smaller pieces produces more of them, and a topology built from smaller pieces is correspondingly finer, in the sense that finer gravel means smaller stones. The discrete topology is the limiting case of dust; the indiscrete topology, a single boulder.</p></div>
+  <div class="box bwarn"><div class="bl">Comparability is partial, not total</div><p>Two topologies on the same set need not be comparable: neither containment need hold. Comparability is a partial order among the topologies on $X$, and most pairs of topologies on a given set are simply incomparable.</p></div>
 </div>
 </div>
 
@@ -290,71 +291,71 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%;}
     <button class="tc-hdr" onclick="toggleCard('tcC')"><span class="tc-rn">PROOF</span><span class="tc-tt">Why $\mathcal T_Y$ is automatically a topology</span><span class="tc-arr">▸</span></button>
     <div class="tc-body" id="tcC-body">
       <p><strong>Axiom (1):</strong> $\varnothing = Y \cap \varnothing$ and $Y = Y \cap X$, and $\varnothing, X \in \mathcal T$, so both land in $\mathcal T_Y$.</p>
-      <p><strong>Axioms (2)/(3):</strong> intersection with $Y$ distributes over unions and intersections: $(U_1\cap Y)\cap\cdots\cap(U_n\cap Y) = (U_1\cap\cdots\cap U_n)\cap Y$, and $\bigcup_\alpha (U_\alpha \cap Y) = \big(\bigcup_\alpha U_\alpha\big)\cap Y$. Since $\mathcal T$ is already closed under finite intersections and arbitrary unions, running any $U_\alpha$'s through "$\cap\, Y$" first doesn't break that closure. The whole proof is really just this pair of set identities.</p>
+      <p><strong>Axioms (2)/(3):</strong> intersection with $Y$ distributes over unions and intersections: $(U_1\cap Y)\cap\cdots\cap(U_n\cap Y) = (U_1\cap\cdots\cap U_n)\cap Y$, and $\bigcup_\alpha (U_\alpha \cap Y) = \big(\bigcup_\alpha U_\alpha\big)\cap Y$. Since $\mathcal T$ is already closed under finite intersections and arbitrary unions, intersecting the $U_\alpha$ with $Y$ first does not disturb that closure. The verification reduces entirely to these two set identities.</p>
     </div>
   </div>
 </div>
 
 <div class="sec">
-  <h2><span class="sec-num">16.02</span> The one thing to actually internalize: "open in Y" ≠ "open in X"</h2>
-  <div class="prose"><p>This is the single most important practical fact in the section, and the most common source of errors. Once $Y$ has its own topology, the word "open" becomes ambiguous unless you specify open <em>relative to what</em>.</p></div>
+  <h2><span class="sec-num">16.02</span> Open in Y is not the same as open in X</h2>
+  <div class="prose"><p>Once $Y$ carries its own topology, the word "open" is no longer unambiguous: a set can be open in $Y$ without being open in $X$. This distinction accounts for most errors made when first working with subspaces, and every claim about openness in this setting should specify relative to which space it is made.</p></div>
   <div class="box bwarn">
-    <div class="bl">Worked example — the ambiguity, concretely</div>
-    <p>Let $X=\mathbb R$ (usual topology), $Y=[0,1]$. Is $[0,\,0.5)$ open in $Y$? Yes: $[0,0.5) = (-1,\,0.5)\cap Y$, and $(-1,0.5)$ is open in $\mathbb R$. But $[0,0.5)$ is <strong>not</strong> open in $\mathbb R$ itself — no open interval around the point $0$ fits inside it. Same set, two different verdicts, depending which space you're asking "open in."</p>
+    <div class="bl">Example — the same set, two verdicts</div>
+    <p>Let $X=\mathbb R$ (usual topology), $Y=[0,1]$. Is $[0,\,0.5)$ open in $Y$? Yes: $[0,0.5) = (-1,\,0.5)\cap Y$, and $(-1,0.5)$ is open in $\mathbb R$. But $[0,0.5)$ is <strong>not</strong> open in $\mathbb R$ itself — no open interval around the point $0$ fits inside it. The same set is open in one space and not in the other, depending on which topology is in question.</p>
   </div>
   <div class="box bthm">
-    <div class="bl">Lemma 16.2 — the one rescue case</div>
+    <div class="bl">Lemma 16.2</div>
     <p>If $U$ is open in $Y$, <em>and $Y$ itself is open in $X$</em>, then $U$ is also open in $X$.</p>
-    <p><strong>Proof:</strong> $U$ open in $Y$ means $U = Y\cap V$ for some $V$ open in $X$. If $Y$ is also open in $X$, then $Y\cap V$ is an intersection of two sets open in $X$, hence open in $X$ (axiom 3, finite intersection).</p>
-    <p>Note exactly what's required: $Y$ itself has to be open in $X$. In the example above, $[0,1]$ is <em>not</em> open in $\mathbb R$, which is precisely why the rescue doesn't apply and $[0,0.5)$ stays open-in-$Y$-only.</p>
+    <p><strong>Proof:</strong> $U$ open in $Y$ means $U = Y\cap V$ for some $V$ open in $X$. If $Y$ is also open in $X$, then $Y\cap V$ is an intersection of two sets open in $X$, hence open in $X$ by axiom (3).</p>
+    <p>The hypothesis that $Y$ itself is open in $X$ is essential: in the example above, $[0,1]$ is not open in $\mathbb R$, which is exactly why the conclusion of the lemma does not apply, and $[0,0.5)$ remains open in $Y$ without being open in $\mathbb R$.</p>
   </div>
 </div>
 
 <div class="sec">
   <h2><span class="sec-num">16.03</span> A basis for X restricts to a basis for Y (Lemma 16.1)</h2>
-  <div class="prose"><p>A quick primer since this leans on §13, which isn't built out yet: a <strong>basis</strong> $\mathcal B$ for a topology is a smaller collection of "generating" sets — every open set is a union of basis elements, so you never have to list the whole topology, just $\mathcal B$. (Full §13 treatment is coming; this is enough context for the one lemma below.)</p></div>
+  <div class="prose"><p>This lemma depends on the notion of a basis, treated fully in §13. Briefly: a <strong>basis</strong> $\mathcal B$ for a topology is a smaller generating collection of sets, with the property that every open set is a union of basis elements — so that specifying $\mathcal B$ specifies the whole topology. A full treatment of §13 will be added in due course; what follows requires only this much of it.</p></div>
   <div class="box bthm">
     <div class="bl">Lemma 16.1</div>
     <p>If $\mathcal B$ is a basis for the topology of $X$, then $\mathcal B_Y = \{B\cap Y \mid B \in \mathcal B\}$ is a basis for the subspace topology on $Y$.</p>
-    <p>Intuition: exactly the same restriction trick as the topology itself — intersect every generating piece with $Y$, and you still generate the (now smaller) subspace topology.</p>
+    <p>The argument mirrors the definition of the subspace topology itself: intersecting each generating set with $Y$ again produces a generating collection, now for the subspace topology on $Y$.</p>
   </div>
 </div>
 
 <div class="sec">
-  <h2><span class="sec-num">16.04</span> Subspace vs. product topology — they agree</h2>
-  <div class="prose"><p>Now the question becomes: if $Y$ is built from $X$ by some other construction (product, order), does the subspace topology on a further subset agree with the topology that construction would give directly? For products, the answer is the reassuring one.</p></div>
+  <h2><span class="sec-num">16.04</span> The subspace topology agrees with the product topology</h2>
+  <div class="prose"><p>A natural question follows: when $Y$ arises from some other construction on $X$ — a product, an order — does the subspace topology on a further subset agree with the topology that construction produces directly? For products, it does.</p></div>
   <div class="box bthm">
     <div class="bl">Theorem 16.3</div>
     <p>If $A$ is a subspace of $X$ and $B$ is a subspace of $Y$, then the product topology on $A\times B$ is the <em>same</em> as the topology $A\times B$ inherits as a subspace of $X\times Y$.</p>
-    <p>Reason in one line: the general basis element for $X\times Y$ is $U\times V$ ($U$ open in $X$, $V$ open in $Y$), and $(U\times V)\cap(A\times B) = (U\cap A)\times(V\cap B)$ — which is exactly the general basis element for the product topology on $A\times B$. Same basis elements, so same topology. No surprises here.</p>
+    <p>The general basis element for $X\times Y$ is $U\times V$ ($U$ open in $X$, $V$ open in $Y$), and $(U\times V)\cap(A\times B) = (U\cap A)\times(V\cap B)$, which is exactly the general basis element for the product topology on $A\times B$. The two constructions therefore generate the same basis, and hence the same topology.</p>
   </div>
 </div>
 
 <div class="sec">
-  <h2><span class="sec-num">16.05</span> Subspace vs. order topology — they usually DON'T agree</h2>
-  <div class="prose"><p>This is the genuinely surprising part of §16, and the part most worth remembering going into exams: unlike products, restricting an order topology to a subset does <strong>not</strong>, in general, give the same topology as the subspace topology. You get two competing, independently-defined topologies on $Y$, and they can differ.</p></div>
+  <h2><span class="sec-num">16.05</span> The subspace topology need not agree with the order topology</h2>
+  <div class="prose"><p>Unlike the product case, restricting an order topology to a subset does not, in general, reproduce the subspace topology on that subset. The order topology on $Y$ and the subspace topology on $Y$ are two independently defined topologies, and there is no guarantee in advance that they coincide.</p></div>
   <div class="box bctr">
     <div class="bl">Counterexample — $Y = [0,1)\cup\{2\}$ inside $\mathbb R$</div>
-    <p>In the <strong>subspace</strong> topology, $\{2\}$ is open: it equals $(\tfrac32,\tfrac52)\cap Y$. But in the <strong>order</strong> topology on $Y$ (treating $Y$ as an ordered set with the inherited order), $\{2\}$ is <em>not</em> open — every order-topology basis element containing $2$ has the form $\{x\in Y : a < x \le 2\}$ for some $a\in Y$, and every such set also contains points of $Y$ less than $2$, so it can never shrink down to just $\{2\}$. Two different, both perfectly legitimate topologies on the same set $Y$, disagreeing about a concrete set.</p>
+    <p>In the <strong>subspace</strong> topology, $\{2\}$ is open: it equals $(\tfrac32,\tfrac52)\cap Y$. But in the <strong>order</strong> topology on $Y$ (treating $Y$ as an ordered set with the inherited order), $\{2\}$ is <em>not</em> open — every order-topology basis element containing $2$ has the form $\{x\in Y : a < x \le 2\}$ for some $a\in Y$, and every such set also contains points of $Y$ less than $2$, so it can never shrink down to just $\{2\}$. The two topologies on $Y$ are each well defined, and they disagree about this particular set.</p>
   </div>
   <div class="box bthm">
-    <div class="bl">Theorem 16.4 — when they DO agree: convexity</div>
-    <p>Call $Y\subset X$ <strong>convex</strong> in $X$ if for every $a<b$ in $Y$, the whole interval $(a,b)$ of $X$ lies in $Y$ (no gaps). If $Y$ is convex in $X$, then the order topology on $Y$ <em>is</em> the subspace topology on $Y$.</p>
-    <p>Intervals and rays are always convex, which is why $[0,1]$ (an interval — no gaps) behaved fine, while $[0,1)\cup\{2\}$ (a gap between $1$ and $2$) is where the two topologies pull apart. The gap is exactly what breaks it: the missing chunk $[1,2)$ is where the order topology "would" put more open sets that don't exist here, letting stray points like $2$ get isolated in the subspace topology in a way the order topology can't replicate.</p>
+    <div class="bl">Theorem 16.4 — convexity</div>
+    <p>Call $Y\subset X$ <strong>convex</strong> in $X$ if for every $a<b$ in $Y$, the whole interval $(a,b)$ of $X$ lies in $Y$. If $Y$ is convex in $X$, then the order topology on $Y$ <em>is</em> the subspace topology on $Y$.</p>
+    <p>Intervals and rays are always convex, which is why $[0,1]$, having no gaps, presented no difficulty, while $[0,1)\cup\{2\}$, with a gap between $1$ and $2$, is exactly where the two topologies diverge. The gap is what permits the divergence: the missing interval $[1,2)$ is where the order topology would otherwise supply additional open sets, and their absence allows a point such as $2$ to be isolated in the subspace topology in a way the order topology has no means of reproducing.</p>
   </div>
-  <div class="box bkey"><div class="bl">Practical checklist</div><p>Given a subset $Y$ of an ordered space, before assuming "subspace topology = order topology": check whether $Y$ has any gaps (is it an interval/ray, or does it omit a chunk between two of its own points?). No gaps → safe to treat them as the same. Any gap → check directly; they can diverge exactly at the boundary of the gap.</p></div>
+  <div class="box bkey"><div class="bl">A practical criterion</div><p>Before treating the subspace and order topologies on a subset $Y$ of an ordered space as identical, check whether $Y$ is convex — an interval or ray, with no gap between two of its own points. If it is, the two topologies coincide by Theorem 16.4. If it is not, they must be checked directly, and any divergence will appear at the boundary of the gap.</p></div>
 </div>
 </div>
 
 <!-- ============ QUIZ ============ -->
 <div class="page" id="page-quiz">
-<div class="hero"><div class="ch-badge" style="background:var(--quiz-bg);color:var(--quiz);">Quiz</div><h1>Strategy Trainer</h1><p class="hero-sub">§12 and §16 — click an answer, get instant feedback</p></div>
+<div class="hero"><div class="ch-badge" style="background:var(--quiz-bg);color:var(--quiz);">Quiz</div><h1>Strategy Trainer</h1><p class="hero-sub">§12 and §16 — select an answer for immediate, explained feedback</p></div>
 <div class="sec" id="quiz-area"></div>
 </div>
 
 <!-- ============ PRACTICE ============ -->
 <div class="page" id="page-prac">
-<div class="hero"><div class="ch-badge" style="background:var(--prac-bg);color:var(--prac);">Practice</div><h1>Practice Problems</h1><p class="hero-sub">§12 and §16 — try before revealing hints or the solution</p></div>
+<div class="hero"><div class="ch-badge" style="background:var(--prac-bg);color:var(--prac);">Practice</div><h1>Practice Problems</h1><p class="hero-sub">§12 and §16 — attempt each problem before consulting the hints or the solution</p></div>
 <div class="sec" id="prac-container"></div>
 </div>
 
@@ -569,12 +570,13 @@ var PRACTICE = [
   },
   {
     n: "4 — §16", title: "Convexity and the order/subspace mismatch",
-    body: "Let $X=\\mathbb R$ and $Y = (0,1)\\cup(2,3)$. (a) Is $Y$ convex in $X$? (b) Based on that, do you expect the order topology and subspace topology on $Y$ to agree? (c) Exhibit a set that's open in one but not the other, if they disagree — or explain why none exists, if they agree.",
+    body: "Let $X=\\mathbb R$ and $Y = (0,1)\\cup\\{2\\}$. (a) Is $Y$ convex in $X$? (b) Is $\\{2\\}$ open in the subspace topology on $Y$? (c) Is $\\{2\\}$ open in the order topology on $Y$?",
     hints: [
-      "Convexity: pick $a=0.5 \\in Y$ and $b=2.5\\in Y$ with $a<b$ — is the whole interval $(a,b)$ contained in $Y$?",
-      "If convexity fails, look for a set analogous to the $\\{2\\}$ example — something that can be isolated using an $X$-open set that 'reaches across the gap,' but that no order-topology basis element can replicate."
+      "Convexity: pick $a = 0.5 \\in Y$ and $b = 2 \\in Y$ with $a<b$ — is the whole interval $(a,b)$ contained in $Y$?",
+      "For the subspace topology, look for an $\\mathbb R$-open interval around $2$ whose intersection with $Y$ is exactly $\\{2\\}$.",
+      "For the order topology, note that $2$ is the largest element of $Y$: every order-topology basis element containing $2$ must therefore be a ray $\\{x \\in Y : x > a\\}$ for some $a \\in Y$ with $a < 2$."
     ],
-    sol: "(a) $Y$ is <strong>not</strong> convex: take $a=0.5,\\,b=2.5\\in Y$; the interval $(0.5,2.5)$ is not contained in $Y$ (e.g. $1.5 \\in (0.5,2.5)$ but $1.5\\notin Y$, since $Y$ skips $[1,2]$ entirely).<br><br>(b) Since $Y$ fails convexity, Theorem 16.4 doesn't apply, so there's no guarantee the two topologies agree — and in fact they don't.<br><br>(c) Consider the single point $\\{0.9\\}$... actually the cleaner witness: consider a set like $\\{x \\in (2,3)\\}$'s left endpoint behavior — more directly, take a set that uses the gap the same way $\\{2\\}$ did in the book's example. E.g. is there a set open in the subspace topology that 'jumps the gap' the way $\\{2\\}$ did? Any subset entirely within $(0,1)$ or entirely within $(2,3)$ is open in <em>both</em> topologies here, since each piece is itself an open interval of $\\mathbb R$ and convex on its own. The mismatch in this particular $Y$ is subtler than the book's example and mainly shows up in how the two pieces relate to each other at the level of connectedness rather than a single isolated point — the safe general takeaway is procedural: since convexity fails, you cannot invoke Theorem 16.4 to assume agreement, and you'd need to check any specific claimed-open set directly rather than assuming the theorem covers you."
+    sol: "(a) $Y$ is not convex: taking $a=0.5,\\,b=2\\in Y$, the interval $(0.5,2)$ is not contained in $Y$, since $1.5\\in(0.5,2)$ but $1.5\\notin Y$.<br><br>(b) Yes. $(1.5,2.5)\\cap Y = \\{2\\}$, and $(1.5,2.5)$ is open in $\\mathbb R$, so $\\{2\\}$ is open in the subspace topology.<br><br>(c) No. Since $2$ is the largest element of $Y$, any order-topology basis element containing $2$ is a ray $\\{x\\in Y : x>a\\}$ for some $a\\in Y$ with $a<2$. Because $a<1$, this ray equals $(a,1)\\cup\\{2\\}$, which always contains points of $(0,1)$ in addition to $2$. No order-open set isolates $\\{2\\}$ alone, so $\\{2\\}$ is not open in the order topology.<br><br>This is the same mechanism as the book's example: the gap between $1$ and $2$ lets the subspace topology isolate the point flush against it, while the order topology, having no element of $Y$ between $1$ and $2$ to draw a boundary at, cannot."
   }
 ];
 
