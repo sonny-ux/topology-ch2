@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Topology HW">
+<meta name="theme-color" content="#08080c">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<title>Topology — Homework &amp; Midterm Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
+<style>
+
+:root{
+  --bg:#08080c;--surface:#0f0f14;--card:#141419;--border:#1e1e28;--border2:#2e2e3e;
+  --text:#e2dced;--muted:#5a5a7a;
+  --ac:#2f7a78;--acb:#62b5ae;
+  --green:#4a8c5a;--green2:#7abc8a;
+  --red:#9c4a4a;--red2:#cc7070;
+  --gold:#9c7a3a;--gold2:#ccaa6a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font-size:16px;line-height:1.8;overflow-x:hidden;}
+
+.topnav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(8,8,12,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:0;}
+.nav-scroll{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:0;scrollbar-width:none;}
+.nav-scroll::-webkit-scrollbar{display:none;}
+.nav-tab{flex-shrink:0;padding:13px 18px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;cursor:pointer;}
+.nav-tab.active,.nav-tab:hover{color:var(--acb);border-bottom-color:var(--ac);}
+
+.pbar{position:fixed;top:44px;left:0;right:0;height:2px;background:var(--border);z-index:199;}
+.pfill{height:100%;background:linear-gradient(90deg,var(--ac),var(--acb));width:0%;transition:width .1s;}
+
+.page{display:none;padding-top:52px;min-height:100vh;}
+.page.active{display:block;}
+
+.hero{padding:32px 20px 28px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(47,122,120,.07) 0%,transparent 60%);pointer-events:none;}
+.ch-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.25em;text-transform:uppercase;padding:4px 10px;border-radius:2px;margin-bottom:12px;}
+.hero h1{font-family:'Cinzel',serif;font-size:1.8rem;font-weight:600;line-height:1.2;margin-bottom:8px;}
+.hero-sub{font-size:.9rem;color:var(--muted);font-style:italic;line-height:1.7;}
+
+.sec{padding:28px 20px;border-bottom:1px solid var(--border);}
+.sec h2{font-family:'Cinzel',serif;font-size:1.15rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;}
+
+.main-idea{border-radius:4px;padding:18px 20px;margin-bottom:22px;}
+.mi-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:7px;}
+.mi-text{font-size:.95rem;line-height:1.78;}
+
+.def-box{border-left:3px solid;border-radius:0 3px 3px 0;padding:16px 18px;margin:14px 0;background:var(--card);}
+.box-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:5px;}
+.box-title{font-family:'Cinzel',serif;font-size:.88rem;margin-bottom:8px;}
+.box-body{font-size:.88rem;color:#9aacbc;line-height:1.75;}
+.box-body strong{color:var(--text);}
+.box-body p{margin-bottom:6px;}
+.box-body p:last-child{margin-bottom:0;}
+
+.thm{border-left:3px solid var(--green2);border-radius:0 3px 3px 0;padding:16px 18px;margin:14px 0;background:#0a100a;}
+.thm .box-label{color:var(--green2);}
+.thm .box-body{color:#8aac8a;}
+.thm .box-body strong{color:#aaccaa;}
+.thm .box-body p{margin-bottom:6px;}
+.thm .box-body p:last-child{margin-bottom:0;}
+
+.warn{border-left:3px solid var(--red2);border-radius:0 3px 3px 0;padding:14px 18px;margin:12px 0;background:#100a0a;}
+.warn .box-label{color:var(--red2);}
+.warn .box-body{color:#ac8a8a;}
+.warn .box-body p{margin-bottom:6px;}
+.warn .box-body p:last-child{margin-bottom:0;}
+
+.explain{border-left:3px solid var(--gold2);border-radius:0 3px 3px 0;padding:14px 18px;margin:12px 0;background:#0e0e0a;}
+.explain .box-label{color:var(--gold2);}
+.explain .box-body{color:#9a9070;}
+.explain .box-body strong{color:#ccc080;}
+.explain .box-body p{margin-bottom:6px;}
+.explain .box-body p:last-child{margin-bottom:0;}
+
+.pw{background:var(--card);border:1px solid var(--border2);border-radius:4px;padding:18px;margin:14px 0;}
+.pw-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:14px;color:var(--acb);}
+.pw-step{display:flex;gap:12px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.pw-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.pw-n{font-family:'JetBrains Mono',monospace;font-size:10px;min-width:20px;padding-top:2px;color:var(--acb);}
+.pw-c{flex:1;}
+.pw-s{font-size:.9rem;margin-bottom:5px;line-height:1.6;}
+.pw-w{font-size:.82rem;color:var(--muted);font-style:italic;line-height:1.6;}
+.pw-w strong{color:#8898a8;font-style:normal;}
+
+.acc-wrap{display:flex;flex-direction:column;gap:8px;margin:14px 0;}
+.acc{background:var(--card);border:1px solid var(--border);border-radius:3px;overflow:hidden;}
+.acc-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;background:var(--surface);}
+.acc-title{font-size:.9rem;font-style:italic;}
+.acc-arrow{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);transition:transform .2s;}
+.acc.open .acc-arrow{transform:rotate(90deg);}
+.acc-body{display:none;padding:14px 16px;font-size:.86rem;color:#9aacbc;line-height:1.78;border-top:1px solid var(--border);}
+.acc.open .acc-body{display:block;}
+
+.row-item{display:flex;gap:8px;align-items:baseline;font-size:.88rem;color:#9aacbc;padding:6px 0;border-bottom:1px solid var(--border);}
+.row-item:last-child{border-bottom:none;}
+.row-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);min-width:140px;flex-shrink:0;letter-spacing:.08em;}
+
+/* HW tags */
+.hw-num{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;color:var(--acb);background:rgba(47,122,120,.12);border:1px solid var(--ac);border-radius:2px;padding:2px 7px;margin-right:7px;}
+.ps-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;color:var(--green2);background:rgba(74,140,90,.1);border:1px solid var(--green);border-radius:2px;padding:2px 6px;margin-left:6px;}
+.rudin-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;color:var(--gold2);background:rgba(156,122,58,.1);border:1px solid var(--gold);border-radius:2px;padding:2px 6px;margin-left:6px;}
+
+/* Sol button */
+.sol-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:9px 16px;border:1px solid var(--border2);border-radius:2px;cursor:pointer;background:transparent;color:var(--muted);margin-top:12px;display:block;min-height:40px;-webkit-tap-highlight-color:transparent;transition:border-color .15s,color .15s;}
+.sol-btn:active{border-color:var(--acb);color:var(--acb);}
+
+/* Drills */
+.drill-card{background:var(--card);border:1px solid var(--border);border-radius:3px;padding:18px 20px;margin-bottom:10px;}
+.drill-tag{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:500;letter-spacing:.08em;border-radius:2px;padding:2px 7px;margin-right:7px;text-transform:uppercase;}
+.drill-tag.tf{background:rgba(47,122,120,.12);color:var(--acb);}
+.drill-tag.mc{background:rgba(74,140,90,.1);color:var(--green2);}
+.drill-tag.ord{background:rgba(156,170,106,.1);color:var(--gold2);}
+.drill-q{font-size:.9rem;color:var(--text);margin-bottom:14px;line-height:1.65;}
+.tf-row{display:flex;gap:8px;}
+.tf-btn{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:10px 14px;min-height:44px;font-size:.85rem;font-family:'JetBrains Mono',monospace;color:var(--muted);cursor:pointer;transition:border-color .13s;-webkit-tap-highlight-color:transparent;}
+.tf-btn:hover:not(:disabled){border-color:var(--acb);}
+.tf-btn.correct{border-color:var(--green2)!important;background:rgba(74,140,90,.1)!important;color:var(--green2)!important;}
+.tf-btn.wrong{border-color:var(--red2)!important;background:rgba(156,74,74,.08)!important;color:var(--red2)!important;}
+.drill-exp{margin-top:10px;display:none;}
+.mc-opts{display:flex;flex-direction:column;gap:6px;}
+.mc-opt{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:11px 14px;min-height:44px;font-size:.85rem;color:var(--muted);cursor:pointer;text-align:left;font-family:'EB Garamond',serif;line-height:1.5;transition:border-color .13s;display:flex;align-items:flex-start;gap:10px;width:100%;-webkit-tap-highlight-color:transparent;}
+.mc-opt:hover:not(:disabled){border-color:var(--acb);}
+.mc-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);min-width:16px;flex-shrink:0;padding-top:2px;}
+.mc-opt.correct{border-color:var(--green2)!important;background:rgba(74,140,90,.1)!important;color:var(--green2)!important;}
+.mc-opt.wrong{border-color:var(--red2)!important;background:rgba(156,74,74,.08)!important;}
+.ord-steps{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.ord-step{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:9px 13px;font-size:.85rem;color:var(--muted);line-height:1.5;display:flex;gap:10px;align-items:flex-start;cursor:grab;transition:border-color .13s,opacity .13s;-webkit-tap-highlight-color:transparent;touch-action:none;}
+.ord-step.dragging{opacity:.3;cursor:grabbing;}
+.ord-step.drag-over{border-color:var(--acb)!important;}
+.ord-step.correct-p{border-color:var(--green2)!important;background:rgba(74,140,90,.1)!important;color:var(--green2)!important;cursor:default;}
+.ord-step.wrong-p{border-color:var(--red2)!important;background:rgba(156,74,74,.08)!important;cursor:default;}
+.drag-handle{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--border2);padding-right:4px;flex-shrink:0;user-select:none;}
+.ord-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--acb);min-width:16px;padding-top:2px;flex-shrink:0;}
+.check-btn{margin-bottom:0;}
+
+@media(max-width:600px){
+  .sec{padding:22px 16px;}
+  .drill-card{padding:14px;}
+  .ord-step{padding:12px 10px;font-size:.84rem;}
+  .drag-handle{font-size:1.15rem;min-width:20px;text-align:center;}
+  .tf-btn,.sol-btn{min-height:48px;}
+  .nav-tab{padding:12px 14px;}
+  .hero{padding:24px 16px 20px;}
+  .box-body{font-size:.86rem;}
+}
+
+body{padding-bottom:env(safe-area-inset-bottom);}
+.topnav{padding-top:env(safe-area-inset-top);}
+.pbar{top:calc(44px + env(safe-area-inset-top));}
+.page{padding-top:calc(52px + env(safe-area-inset-top));}
+.prob-meta a{color:var(--gold2);text-decoration:none;border-bottom:1px dotted var(--gold);}
+.prob-q a{color:var(--gold2);}
+p.prose{font-size:.92rem;color:#a8b4c0;line-height:1.8;margin:0 0 14px;}
+p.prose strong{color:var(--text);}
+.sec h3{font-family:'Cinzel',serif;font-size:.95rem;font-weight:600;color:var(--acb);margin:22px 0 10px;}
+.builds{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.06em;color:var(--muted);margin-top:16px;padding-top:10px;border-top:1px dashed var(--border2);line-height:2;}
+.builds a{color:var(--gold2);text-decoration:none;border:1px solid var(--gold);border-radius:2px;padding:1px 6px;margin-left:4px;white-space:nowrap;}
+.mun{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.06em;color:var(--gold2);background:rgba(156,122,58,.1);border:1px solid var(--gold);border-radius:2px;padding:1px 6px;margin-left:6px;white-space:nowrap;}
+.readthru{border-left:3px solid var(--muted);border-radius:0 3px 3px 0;padding:12px 16px;margin:12px 0;background:#0c0c12;}
+.readthru .box-label{color:#8a8aaa;}
+.readthru .box-body{color:#9a9ab0;}
+.ex{border-left:3px solid var(--acb);border-radius:0 3px 3px 0;padding:16px 18px;margin:14px 0;background:#0a1110;}
+.ex .box-label{color:var(--acb);}
+.ex .box-body{color:#9ab8b4;}
+.ex .box-body strong{color:#c4e0dc;}
+.ex .box-body p{margin-bottom:8px;}
+.ex .box-body p:last-child{margin-bottom:0;}
+.box-body ul,.box-body ol{margin:6px 0 6px 20px;}
+.box-body li{margin-bottom:4px;}
+.maptbl{width:100%;border-collapse:collapse;font-size:.84rem;margin:10px 0;}
+.maptbl th{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--border2);}
+.maptbl td{padding:8px;border-bottom:1px solid var(--border);color:#a8b4c0;vertical-align:top;}
+.maptbl td:first-child{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--acb);white-space:nowrap;}
+.maptbl a{color:var(--gold2);text-decoration:none;}
+.hint-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:9px 14px;border:1px solid var(--border2);border-radius:2px;cursor:pointer;background:transparent;color:var(--gold2);margin:10px 8px 0 0;min-height:40px;-webkit-tap-highlight-color:transparent;}
+.hint-btn:disabled{opacity:.35;cursor:default;}
+.hint{display:none;}
+.prob{background:var(--card);border:1px solid var(--border);border-radius:3px;padding:18px 20px;margin-bottom:12px;}
+.prob.done{border-color:var(--green);}
+.prob-q{font-size:.92rem;color:var(--text);line-height:1.7;margin-bottom:6px;}
+.prob-q p{margin-bottom:8px;}
+.prob-meta{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.06em;margin-bottom:10px;}
+.done-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:9px 14px;border:1px solid var(--border2);border-radius:2px;cursor:pointer;background:transparent;color:var(--muted);margin-top:10px;min-height:40px;}
+.prob.done .done-btn{color:var(--green2);border-color:var(--green);}
+.notice{border:1px solid var(--gold);background:rgba(156,122,58,.07);border-radius:3px;padding:14px 16px;margin:0 0 16px;font-size:.88rem;color:#c8b890;line-height:1.7;}
+.lab label{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;}
+.lab input,.lab textarea{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:2px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;padding:10px;}
+.lab textarea{min-height:70px;}
+.lab .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.lab .row button{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:10px 14px;border:1px solid var(--ac);border-radius:2px;background:rgba(47,122,120,.1);color:var(--acb);cursor:pointer;min-height:42px;}
+.lab-out{margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.9;color:#b8c4cc;white-space:pre-wrap;word-break:break-word;background:var(--card);border:1px solid var(--border);border-radius:3px;padding:14px;min-height:60px;}
+.lab-out .ok{color:var(--green2);} .lab-out .bad{color:var(--red2);} .lab-out .k{color:var(--gold2);}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.chips button{font-family:'JetBrains Mono',monospace;font-size:9px;padding:7px 10px;border:1px solid var(--border2);border-radius:2px;background:transparent;color:var(--muted);cursor:pointer;min-height:36px;}
+
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0;}
+.box-body,.prob-q,.prose{overflow-wrap:break-word;}
+svg.fig{display:block;margin:12px auto;max-width:100%;height:auto;}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-scroll">
+    <button class="nav-tab active" onclick="showPage('p0',this)">Start</button>
+    <button class="nav-tab" onclick="showPage('p1',this)">Set Toolkit</button>
+    <button class="nav-tab" onclick="showPage('p2',this)">Topologies &amp; Bases</button>
+    <button class="nav-tab" onclick="showPage('p3',this)">Subspaces</button>
+    <button class="nav-tab" onclick="showPage('p4',this)">Closure &amp; Hausdorff</button>
+    <button class="nav-tab" onclick="showPage('p5',this)">Products</button>
+    <button class="nav-tab" onclick="showPage('p6',this)">Continuity</button>
+    <button class="nav-tab" onclick="showPage('p7',this)">Metrics</button>
+    <button class="nav-tab" onclick="showPage('p8',this)">Problems</button>
+    <button class="nav-tab" onclick="showPage('p9',this)">Finite-Space Lab</button>
+  </div>
+</nav>
+<div class="pbar"><div class="pfill" id="pf"></div></div>
+
+<!-- ==================== START ==================== -->
+<div class="page active" id="p0">
+<div class="hero">
+  <div class="ch-badge" style="background:rgba(47,122,120,.1);color:var(--acb);border:1px solid var(--ac);">Math GU4051 · Fall 2026</div>
+  <h1 style="color:var(--acb);">Point-Set Topology: Homework &amp; Midterm Guide</h1>
+  <p class="hero-sub">Munkres §12–§20 · Homework 1–3 · Midterm practice set. Each tab teaches the definitions and proof techniques one or more problems depend on, then the Problems tab works through the problems themselves.</p>
+</div>
+
+<div class="sec">
+  <h2><span class="sec-num" style="color:var(--acb);">01</span> How to Use This Guide</h2>
+  <p class="prose">The tabs are arranged in the order the material builds. The <strong>Set Toolkit</strong> covers the set-theoretic skills that almost every proof in this course uses: proving two sets equal, and working with images, preimages, unions, and complements. The next six tabs follow Munkres in order: topologies and bases (§12–13), subspaces (§16), closed sets, closure, and Hausdorff spaces (§17), products (§15 and §19), continuous functions (§18), and metric spaces (§20). The <strong>Problems</strong> tab contains every homework and midterm-practice problem, each linked back to the sections it depends on.</p>
+  <p class="prose">Each concept tab follows the same pattern. A short introduction says what the idea is and why it is needed. Then come the definition, a plain-language reading of the definition, a worked example, and the common mistakes. At the bottom of each section, <strong>Builds toward</strong> lists the problems that use that section.</p>
+  <div class="notice"><strong>About solutions.</strong> Homework 1 and 2 are past their due dates, so full solutions are available behind a button for midterm review. <strong>Homework 3 is due tonight (Monday 10/5, 11:59 pm)</strong>, so its problems have hints that reveal one step at a time and pointers to the relevant sections, but no full solutions. The midterm practice set has hints and full solutions. Try each problem in your notes before opening anything.</div>
+  <div class="notice" style="border-color:var(--border2);background:transparent;color:#9aa4b0;">Section and theorem numbers refer to Munkres, <em>Topology</em>, 2nd ed. They were written from memory, so check a number against your copy before you cite it in a submitted solution. Also note the rule printed on every assignment: a result not yet covered in class does not earn full credit. Several homework problems ask you to prove a theorem that appears in Munkres (for example, HW2 Q6 is Theorem 17.11). In those problems you must give the proof, not cite the theorem.</div>
+</div>
+
+<div class="sec">
+  <h2><span class="sec-num" style="color:var(--acb);">02</span> Problem Map</h2>
+  <p class="prose">This table lists which sections each problem draws on. Tap a section to go to it.</p>
+  <table class="maptbl">
+    <tr><th>Problem</th><th>Topic</th><th>Read first</th></tr>
+    <tr><td>HW1 Q1</td><td>Topology axioms on a 3-point set</td><td><a href="#" onclick="return go('p2','t-axioms')">Topology axioms</a></td></tr>
+    <tr><td>HW1 Q2</td><td>Basis axioms on a 3-point set</td><td><a href="#" onclick="return go('p2','t-basis')">Basis</a></td></tr>
+    <tr><td>HW1 Q3</td><td>Rational intervals generate the standard topology</td><td><a href="#" onclick="return go('p2','t-basis')">Basis</a>, <a href="#" onclick="return go('p2','t-compare')">Comparing topologies</a></td></tr>
+    <tr><td>HW1 Q4</td><td>Subspace of a subspace</td><td><a href="#" onclick="return go('p1','s-equal')">Set equality</a>, <a href="#" onclick="return go('p3','sub-def')">Subspace topology</a></td></tr>
+    <tr><td>HW1 Q5</td><td>Open in $\mathbb{R}$ versus open in $[-1,1]$</td><td><a href="#" onclick="return go('p3','sub-rel')">Open in $Y$ vs open in $X$</a></td></tr>
+    <tr><td>HW1 Q6</td><td>Computing $\mathcal{T}_A$ on a finite set</td><td><a href="#" onclick="return go('p3','sub-finite')">Finite subspace computations</a></td></tr>
+    <tr><td>HW2 Q1</td><td>Products of discrete and indiscrete spaces</td><td><a href="#" onclick="return go('p5','pr-basis')">Product basis</a></td></tr>
+    <tr><td>HW2 Q2</td><td>Projections are open maps</td><td><a href="#" onclick="return go('p1','s-img')">Images</a>, <a href="#" onclick="return go('p5','pr-proj')">Projections</a></td></tr>
+    <tr><td>HW2 Q3</td><td>Closure in the finite complement topology</td><td><a href="#" onclick="return go('p4','cl-closure')">Closure</a></td></tr>
+    <tr><td>HW2 Q4</td><td>Closure and interior in a finite space and subspace</td><td><a href="#" onclick="return go('p4','cl-closure')">Closure</a>, <a href="#" onclick="return go('p4','cl-sub')">Closure in a subspace</a></td></tr>
+    <tr><td>HW2 Q5</td><td>Closure of a union</td><td><a href="#" onclick="return go('p1','s-index')">Indexed unions</a>, <a href="#" onclick="return go('p4','cl-closure')">Closure</a></td></tr>
+    <tr><td>HW2 Q6</td><td>Products and subspaces of Hausdorff spaces</td><td><a href="#" onclick="return go('p4','cl-haus')">Hausdorff</a></td></tr>
+    <tr><td>HW3 Q1</td><td>$f\times g$ is continuous</td><td><a href="#" onclick="return go('p6','c-basis')">Continuity via a basis</a></td></tr>
+    <tr><td>HW3 Q2</td><td>Identity map and finer topologies</td><td><a href="#" onclick="return go('p6','c-def')">Continuity</a>, <a href="#" onclick="return go('p6','c-homeo')">Homeomorphisms</a></td></tr>
+    <tr><td>HW3 Q3</td><td>Continuous maps agreeing on a dense set</td><td><a href="#" onclick="return go('p4','cl-haus')">Hausdorff</a>, <a href="#" onclick="return go('p6','c-agree')">Where two maps agree</a></td></tr>
+    <tr><td>HW3 Q4</td><td>Retractions and embeddings</td><td><a href="#" onclick="return go('p1','s-equal')">Set equality</a>, <a href="#" onclick="return go('p6','c-agree')">Where two maps agree</a>, <a href="#" onclick="return go('p6','c-homeo')">Embeddings</a></td></tr>
+    <tr><td>HW3 Q5</td><td>Convergence in $\prod\{0,1\}$</td><td><a href="#" onclick="return go('p4','cl-seq')">Convergence</a>, <a href="#" onclick="return go('p5','pr-seq')">Sequences in products</a></td></tr>
+    <tr><td>HW3 Q6</td><td>The max function on an infinite product</td><td><a href="#" onclick="return go('p5','pr-general')">Product vs box</a></td></tr>
+    <tr><td>MT Q1</td><td>Subspace topology; $\{0\}$ in $\mathbb{Q}$</td><td><a href="#" onclick="return go('p3','sub-def')">Subspace topology</a></td></tr>
+    <tr><td>MT Q2</td><td>Closure in a finite space</td><td><a href="#" onclick="return go('p4','cl-closure')">Closure</a></td></tr>
+    <tr><td>MT Q3</td><td>True/false on subspaces of $\mathbb{R}$</td><td><a href="#" onclick="return go('p4','cl-haus')">Hausdorff</a>, <a href="#" onclick="return go('p6','c-def')">Continuity</a></td></tr>
+    <tr><td>MT Q4</td><td>Cofinite topology; injective maps</td><td><a href="#" onclick="return go('p1','s-img')">Preimages</a>, <a href="#" onclick="return go('p6','c-def')">Continuity</a></td></tr>
+    <tr><td>MT Q5</td><td>Products of closed sets are closed</td><td><a href="#" onclick="return go('p1','s-index')">De Morgan</a>, <a href="#" onclick="return go('p5','pr-general')">Product topology</a></td></tr>
+    <tr><td>MT Q6</td><td>Metric axioms; a closed ball is closed</td><td><a href="#" onclick="return go('p7','m-def')">Metrics</a></td></tr>
+  </table>
+</div>
+
+<div class="sec">
+  <h2><span class="sec-num" style="color:var(--acb);">03</span> What the Midterm Asks You to Do</h2>
+  <p class="prose">The practice midterm is closed-book and has six problems in 75 minutes. Four kinds of task appear on it, and each needs a different kind of preparation.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Four kinds of question</div>
+    <div class="box-body"><ol>
+      <li><strong>State a definition</strong>: subspace topology, closure, cofinite topology, metric. These must be exact. Each concept tab has a definition box. Practise writing them from memory.</li>
+      <li><strong>Compute in a finite space</strong>: a closure, an interior, or a subspace topology on a set of three or four points. These are fast once the procedure is routine. Use the Finite-Space Lab to check your answers.</li>
+      <li><strong>True or false with no justification</strong>: you need a stock of standard examples and counterexamples, such as $\mathbb{Z}$, $\{1/n\}$, $\mathbb{Q}$, and the cofinite and indiscrete topologies.</li>
+      <li><strong>Short proof</strong>: almost always "unwind the definitions, then apply one set identity." The Set Toolkit is the foundation for these.</li>
+    </ol></div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== SET TOOLKIT ==================== -->
+<div class="page" id="p1">
+<div class="hero">
+  <div class="ch-badge" style="background:rgba(47,122,120,.1);color:var(--acb);border:1px solid var(--ac);">Munkres Ch. 1 · §1–§2</div>
+  <h1 style="color:var(--acb);">The Set Toolkit</h1>
+  <p class="hero-sub">Most proofs in point-set topology consist of unwinding definitions and then applying a set-theoretic identity. This tab collects the identities and proof patterns that the homework uses repeatedly.</p>
+</div>
+
+<div class="sec" id="s-equal">
+  <h2><span class="sec-num" style="color:var(--acb);">01</span> Proving Two Sets Are Equal</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">Two sets are equal exactly when each is contained in the other. To prove $S=T$, you prove $S\subset T$ and $T\subset S$ as two separate arguments. Each argument starts with an arbitrary element of one set and shows that it belongs to the other.</div>
+  </div>
+  <p class="prose">Many problems do not look like set-equality problems but are: "the two topologies are the same" (HW1 Q3b, HW1 Q4), "this set equals the image $f(X)$" (HW3 Q4a), "the closure of a finite union is the union of the closures" (HW2 Q5b). A topology is itself a set (a set of subsets), so proving that two topologies are equal is also a two-inclusion argument: every set open in the first topology is open in the second, and conversely.</p>
+  <p class="prose">Recall the notation. In Munkres, $A\subset B$ means every element of $A$ is an element of $B$. It does <strong>not</strong> mean proper subset, so $A\subset A$ is true.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Template — two inclusions</div>
+    <div class="box-body">
+      <p><strong>($\subset$)</strong> Let $x\in S$. [Unwind what $x\in S$ means.] … Therefore $x\in T$.</p>
+      <p><strong>($\supset$)</strong> Let $x\in T$. [Unwind what $x\in T$ means.] … Therefore $x\in S$.</p>
+      <p>Since $S\subset T$ and $T\subset S$, $S=T$.</p>
+    </div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example</div>
+    <div class="box-body">
+      <p><strong>Claim.</strong> For any sets $A,B,C$: $A\cap(B\cup C)=(A\cap B)\cup(A\cap C)$.</p>
+      <p><strong>($\subset$)</strong> Let $x\in A\cap(B\cup C)$. Then $x\in A$, and $x\in B$ or $x\in C$. If $x\in B$, then $x\in A\cap B$. If $x\in C$, then $x\in A\cap C$. Either way $x\in(A\cap B)\cup(A\cap C)$.</p>
+      <p><strong>($\supset$)</strong> Let $x\in(A\cap B)\cup(A\cap C)$. If $x\in A\cap B$, then $x\in A$ and $x\in B\subset B\cup C$. If $x\in A\cap C$, then $x\in A$ and $x\in C\subset B\cup C$. Either way $x\in A\cap(B\cup C)$.</p>
+      <p>This identity, intersection distributing over union, is the step that does the work in HW1 Q4. There the subspace topology of $A$ inside $Y$ produces sets of the form $A\cap(Y\cap U)$, and you need to simplify them.</p>
+    </div>
+  </div>
+  <div class="warn">
+    <div class="box-label">Common mistake</div>
+    <div class="box-body">Proving only one inclusion and writing "similarly" for the other. The two directions often use different facts. In HW3 Q4a, one direction uses $g\circ f=\mathrm{id}_X$ and the other uses the definition of image. Write both directions out.</div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw1-4')">HW1 Q4</a><a href="#" onclick="return go('p8','hw1-3')">HW1 Q3b</a><a href="#" onclick="return go('p8','hw2-5')">HW2 Q5b</a><a href="#" onclick="return go('p8','hw3-4')">HW3 Q4a</a></div>
+</div>
+
+<div class="sec" id="s-img">
+  <h2><span class="sec-num" style="color:var(--acb);">02</span> Images and Preimages</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">Given a function $f:X\to Y$, the <strong>image</strong> of a set pushes it forward into $Y$, and the <strong>preimage</strong> of a set pulls it back into $X$. Preimages preserve every set operation. Images preserve unions only. This is why continuity is defined with preimages.</div>
+  </div>
+  <p class="prose">Continuity in topology is defined by preimages: $f$ is continuous when the preimage of every open set is open. Every continuity proof therefore uses the preimage identities below. Images appear when a problem asks whether a map sends open sets to open sets (HW2 Q2) or asks you to describe $f(X)$ (HW3 Q4).</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Definitions</div>
+    <div class="box-body">
+      <p>For $A\subset X$: $\;f(A)=\{f(a)\mid a\in A\}\subset Y$.</p>
+      <p>For $B\subset Y$: $\;f^{-1}(B)=\{x\in X\mid f(x)\in B\}\subset X$.</p>
+    </div>
+  </div>
+  <div class="readthru">
+    <div class="box-label">Reading the definitions</div>
+    <div class="box-body"><p>$y\in f(A)$ means: <em>there exists</em> some $a\in A$ with $f(a)=y$. So to use the statement $y\in f(A)$ in a proof, write "choose $a\in A$ with $f(a)=y$."</p>
+    <p>$x\in f^{-1}(B)$ means only that $f(x)\in B$. No existence claim is involved, and $f$ need not be invertible. The notation $f^{-1}(B)$ makes sense for every function.</p></div>
+  </div>
+  <div class="thm">
+    <div class="box-label">Preimage identities <span class="mun">§2</span></div>
+    <div class="box-body">
+      <p>$f^{-1}\big(\bigcup_\alpha B_\alpha\big)=\bigcup_\alpha f^{-1}(B_\alpha)$, $\quad f^{-1}\big(\bigcap_\alpha B_\alpha\big)=\bigcap_\alpha f^{-1}(B_\alpha)$, $\quad f^{-1}(Y\setminus B)=X\setminus f^{-1}(B)$.</p>
+      <p>Images: $f\big(\bigcup_\alpha A_\alpha\big)=\bigcup_\alpha f(A_\alpha)$, but only $f(A_1\cap A_2)\subset f(A_1)\cap f(A_2)$, with equality when $f$ is injective.</p>
+      <p>Round trips: $f(f^{-1}(B))\subset B$ (equal to $B\cap f(X)$), and $A\subset f^{-1}(f(A))$ (equal when $f$ is injective).</p>
+    </div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — image of an intersection</div>
+    <div class="box-body">
+      <p>Let $f:\mathbb{R}\to\mathbb{R}$, $f(x)=x^2$, $A_1=[-2,-1]$, $A_2=[1,2]$. Then $A_1\cap A_2=\varnothing$, so $f(A_1\cap A_2)=\varnothing$. But $f(A_1)=f(A_2)=[1,4]$, so $f(A_1)\cap f(A_2)=[1,4]\neq\varnothing$. The inclusion is strict because $f$ is not injective: $-1$ and $1$ have the same image.</p>
+    </div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — preimage of a complement</div>
+    <div class="box-body">
+      <p><strong>Claim.</strong> $f^{-1}(Y\setminus B)=X\setminus f^{-1}(B)$.</p>
+      <p>$x\in f^{-1}(Y\setminus B)\iff f(x)\in Y\setminus B\iff f(x)\notin B\iff x\notin f^{-1}(B)\iff x\in X\setminus f^{-1}(B)$.</p>
+      <p>Each step is a definition, so a chain of "if and only if" statements proves both inclusions at once. This identity is why "preimages of open sets are open" is equivalent to "preimages of closed sets are closed." The midterm cofinite problem (MT Q4) uses it.</p>
+    </div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — preimage of a finite set under an injection</div>
+    <div class="box-body">
+      <p>If $f:X\to Y$ is injective and $F\subset Y$ is finite with $n$ elements, then $f^{-1}(F)$ has at most $n$ elements. Reason: each $y\in F$ has at most one preimage (injectivity), and $f^{-1}(F)=\bigcup_{y\in F}f^{-1}(\{y\})$ is a union of $n$ sets, each with at most one element. Without injectivity this fails: for the constant function $f\equiv 0$ on $\mathbb{R}$, $f^{-1}(\{0\})=\mathbb{R}$.</p>
+    </div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw2-2')">HW2 Q2</a><a href="#" onclick="return go('p8','hw3-1')">HW3 Q1</a><a href="#" onclick="return go('p8','hw3-4')">HW3 Q4</a><a href="#" onclick="return go('p8','mt-4')">MT Q4</a></div>
+</div>
+
+<div class="sec" id="s-index">
+  <h2><span class="sec-num" style="color:var(--acb);">03</span> Indexed Unions, Intersections, and De Morgan's Laws</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">An <strong>indexed family</strong> $\{A_j\}_{j\in J}$ assigns a set $A_j$ to each element $j$ of an index set $J$, which may be infinite or even uncountable. The union $\bigcup_{j\in J} A_j$ contains the points that lie in <em>at least one</em> $A_j$. The intersection $\bigcap_{j\in J}A_j$ contains the points that lie in <em>every</em> $A_j$.</div>
+  </div>
+  <p class="prose">Topology depends on the difference between "arbitrary" and "finite." Open sets are closed under arbitrary unions but only finite intersections. Correspondingly, closed sets are closed under arbitrary intersections but only finite unions. De Morgan's laws convert one statement into the other. HW2 Q5 depends on exactly this finite-versus-arbitrary difference.</p>
+  <div class="thm">
+    <div class="box-label">De Morgan's laws</div>
+    <div class="box-body">$X\setminus\bigcup_{j}A_j=\bigcap_j(X\setminus A_j)\qquad X\setminus\bigcap_jA_j=\bigcup_j(X\setminus A_j)$</div>
+  </div>
+  <div class="readthru">
+    <div class="box-label">Reading the formula</div>
+    <div class="box-body">A point is outside the union exactly when it is outside every $A_j$. A point is outside the intersection exactly when it is outside at least one $A_j$. Taking complements turns "for all" into "there exists" and the reverse.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — an infinite intersection of open sets need not be open</div>
+    <div class="box-body">
+      <p>In $\mathbb{R}$, let $U_n=(-1/n,1/n)$ for $n=1,2,3,\dots$. Each $U_n$ is open. Their intersection is $\{0\}$: the point $0$ lies in every $U_n$, and any $x\neq0$ fails to lie in $U_n$ once $1/n\lt|x|$. The set $\{0\}$ is not open in $\mathbb{R}$. Taking complements gives the closed-set version: the sets $\mathbb{R}\setminus U_n$ are closed, but their union $\mathbb{R}\setminus\{0\}$ is not closed.</p>
+      <p>A similar example with closures settles HW2 Q5c: let infinitely many closed sets accumulate at a point that none of them contains.</p>
+    </div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — complement of a product</div>
+    <div class="box-body">
+      <p>For sets $A\subset X$ and $B\subset Y$: $\;(X\times Y)\setminus(A\times B)=\big((X\setminus A)\times Y\big)\cup\big(X\times(Y\setminus B)\big)$.</p>
+      <p>Reason: $(x,y)\notin A\times B$ means it is false that both $x\in A$ and $y\in B$. So $x\notin A$ or $y\notin B$, and those are the two pieces of the union. For an arbitrary product, the same reasoning gives $\prod X_j\setminus\prod A_j=\bigcup_k\pi_k^{-1}(X_k\setminus A_k)$. This identity is the key step in MT Q5.</p>
+    </div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw2-5')">HW2 Q5</a><a href="#" onclick="return go('p8','mt-5')">MT Q5</a></div>
+</div>
+
+<div class="sec" id="s-quant">
+  <h2><span class="sec-num" style="color:var(--acb);">04</span> Quantifiers, Negations, and Counterexamples</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">To prove that something fails (a collection is not a topology, a set is not open, a function is not continuous), negate the definition carefully. The negation of "for every $x$, P" is "there exists $x$ for which P fails." So you need one explicit witness.</div>
+  </div>
+  <p class="prose">Several problems ask you to show that something does <em>not</em> hold: HW1 Q1 (an axiom fails), MT Q1b ($\{0\}$ is not open in $\mathbb{Q}$), HW3 Q6 ($m$ is not continuous). In each case the proof consists of finding the witness and checking that it works.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Common negations</div>
+    <div class="box-body">
+      <p><strong>$U$ is open in the topology generated by a basis $\mathcal{B}$</strong>: for every $x\in U$ there exists $B\in\mathcal{B}$ with $x\in B\subset U$.<br><strong>Negation</strong>: there exists $x\in U$ such that every $B\in\mathcal{B}$ containing $x$ fails to lie inside $U$.</p>
+      <p><strong>$f$ is continuous</strong>: for every open $V$, $f^{-1}(V)$ is open.<br><strong>Negation</strong>: there exists an open $V$ with $f^{-1}(V)$ not open.</p>
+      <p><strong>$\mathcal{T}$ is closed under unions</strong>: for every subcollection, the union lies in $\mathcal{T}$.<br><strong>Negation</strong>: there exist specific sets in $\mathcal{T}$ whose union is not in $\mathcal{T}$.</p>
+    </div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example</div>
+    <div class="box-body">
+      <p><strong>Claim.</strong> $[0,1)$ is not open in $\mathbb{R}$ (standard topology, with basis the open intervals).</p>
+      <p>The witness point is $x=0$. Any basis element containing $0$ is an interval $(a,b)$ with $a\lt0\lt b$. It contains the point $a/2$, which is negative and so not in $[0,1)$. Hence no basis element around $0$ lies inside $[0,1)$, and $[0,1)$ is not open.</p>
+    </div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw1-1')">HW1 Q1</a><a href="#" onclick="return go('p8','mt-1')">MT Q1b</a><a href="#" onclick="return go('p8','hw3-6')">HW3 Q6</a></div>
+</div>
+</div>
+
+<!-- ==================== TOPOLOGIES & BASES ==================== -->
+<div class="page" id="p2">
+<div class="hero">
+  <div class="ch-badge" style="background:rgba(47,122,120,.1);color:var(--acb);border:1px solid var(--ac);">Munkres §12–§13</div>
+  <h1 style="color:var(--acb);">Topologies and Bases</h1>
+  <p class="hero-sub">What a topology is, how to check the axioms, and how a basis lets you describe a topology without listing every open set.</p>
+</div>
+
+<div class="sec" id="t-axioms">
+  <h2><span class="sec-num" style="color:var(--acb);">01</span> The Axioms for a Topology</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">In Modern Analysis, open sets were defined from a distance: $U$ is open if every point has a small ball around it inside $U$. Topology keeps only three properties that open sets have and takes those properties as the definition. A <strong>topology</strong> on a set is simply a choice of which subsets count as "open," subject to three rules.</div>
+  </div>
+  <p class="prose">This abstraction lets the same theorems apply to $\mathbb{R}$, to finite sets, and to infinite products, where no natural distance may exist. On a small finite set you can list every open set and check the axioms directly. HW1 Q1 and the midterm finite-space problems ask for exactly this.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Definition — topology <span class="mun">§12</span></div>
+    <div class="box-body">A <strong>topology</strong> on a set $X$ is a collection $\mathcal{T}$ of subsets of $X$ such that:
+    <ol>
+      <li>$\varnothing$ and $X$ are in $\mathcal{T}$.</li>
+      <li>The union of the elements of any subcollection of $\mathcal{T}$ is in $\mathcal{T}$.</li>
+      <li>The intersection of the elements of any <em>finite</em> subcollection of $\mathcal{T}$ is in $\mathcal{T}$.</li>
+    </ol>
+    The pair $(X,\mathcal{T})$ is a <strong>topological space</strong>, and the members of $\mathcal{T}$ are the <strong>open sets</strong>.</div>
+  </div>
+  <div class="readthru">
+    <div class="box-label">Reading the definition</div>
+    <div class="box-body">$\mathcal{T}$ is a set whose elements are themselves subsets of $X$. So $\mathcal{T}\subset\mathcal{P}(X)$, where $\mathcal{P}(X)$ denotes the <strong>power set</strong>, the set of all subsets of $X$. Axiom (2) allows unions of any size, including infinite ones. Axiom (3) requires closure only under finite intersections. For a finite collection, it suffices to check that the intersection of any two members is a member, because a longer finite intersection can be built up two sets at a time. When $X$ is finite, $\mathcal{T}$ is finite too, so axiom (2) also reduces to checking that the union of any two members is a member.</div>
+  </div>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Standard examples <span class="mun">§12</span></div>
+    <div class="box-body">
+      <ul>
+        <li><strong>Discrete topology</strong>: $\mathcal{T}=\mathcal{P}(X)$. Every subset is open.</li>
+        <li><strong>Indiscrete (trivial) topology</strong>: $\mathcal{T}=\{\varnothing,X\}$. Only the two required sets are open.</li>
+        <li><strong>Finite complement topology</strong> $\mathcal{T}_f$: $U$ is open if $U=\varnothing$ or $X\setminus U$ is finite. On an infinite set, nonempty open sets are therefore very large.</li>
+        <li><strong>Standard topology</strong> on $\mathbb{R}$: generated by the open intervals (see Section 03).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — checking the axioms on a small set</div>
+    <div class="box-body">
+      <p>Let $X=\{1,2,3\}$ and $\mathcal{S}=\{\varnothing,\{1\},\{2\},X\}$. Is $\mathcal{S}$ a topology?</p>
+      <p><strong>Axiom (1)</strong>: $\varnothing\in\mathcal{S}$ and $X\in\mathcal{S}$. Satisfied.</p>
+      <p><strong>Axiom (2)</strong>: check the union of each pair. $\{1\}\cup\{2\}=\{1,2\}$, which is <strong>not</strong> in $\mathcal{S}$. The axiom fails, and this pair is the witness.</p>
+      <p><strong>Axiom (3)</strong>: check the intersection of each pair. $\{1\}\cap\{2\}=\varnothing\in\mathcal{S}$. Every intersection involving $\varnothing$ is $\varnothing$, and every intersection with $X$ returns the other set. Satisfied.</p>
+      <p>So $\mathcal{S}$ satisfies (1) and (3) but not (2), and it is not a topology. When a problem asks about each axiom separately, as HW1 Q1 does, answer each one with either a witness for failure or a complete check.</p>
+    </div>
+  </div>
+  <div class="warn">
+    <div class="box-label">Common mistakes</div>
+    <div class="box-body">
+      <p>For axiom (3), the "empty intersection" is a convention issue. Munkres means intersections of nonempty finite subcollections, so do not worry about it.</p>
+      <p>Do not confuse "an element of $\mathcal{T}$" with "an element of $X$." $\{b\}\in\mathcal{T}$ says the subset $\{b\}$ is open. $b\in X$ says $b$ is a point.</p>
+    </div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw1-1')">HW1 Q1</a><a href="#" onclick="return go('p8','mt-2')">MT Q2</a><a href="#" onclick="return go('p8','mt-4')">MT Q4a</a></div>
+</div>
+
+<div class="sec" id="t-finer">
+  <h2><span class="sec-num" style="color:var(--acb);">02</span> Finer and Coarser Topologies</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">A single set can carry many topologies. Two topologies on the same set are compared by inclusion: the one with more open sets is <strong>finer</strong>. The discrete topology is the finest possible and the indiscrete topology is the coarsest.</div>
+  </div>
+  <p class="prose">This comparison is the subject of HW3 Q2, which shows that "$\mathcal{T}$ is finer than $\mathcal{T}'$" is equivalent to "the identity map from $(X,\mathcal{T})$ to $(X,\mathcal{T}')$ is continuous." It is also the language of HW1 Q3b, where you show two topologies on $\mathbb{R}$ are equal by showing each is finer than the other.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Definition <span class="mun">§12</span></div>
+    <div class="box-body">If $\mathcal{T}\subset\mathcal{T}'$, then $\mathcal{T}'$ is <strong>finer</strong> than $\mathcal{T}$, and $\mathcal{T}$ is <strong>coarser</strong> than $\mathcal{T}'$. Munkres adds "strictly" when the inclusion is proper. Two topologies are <strong>comparable</strong> if one contains the other.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example</div>
+    <div class="box-body">
+      <p>On $X=\{a,b\}$, the four topologies are $\{\varnothing,X\}$, $\{\varnothing,\{a\},X\}$, $\{\varnothing,\{b\},X\}$, and $\mathcal{P}(X)$. The middle two are not comparable: neither contains the other. Both are finer than the indiscrete topology and coarser than the discrete one.</p>
+    </div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw3-2')">HW3 Q2</a><a href="#" onclick="return go('p8','hw1-3')">HW1 Q3b</a></div>
+</div>
+
+<div class="sec" id="t-basis">
+  <h2><span class="sec-num" style="color:var(--acb);">03</span> Basis for a Topology</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">Listing every open set is usually impossible. A <strong>basis</strong> is a smaller collection of "building blocks" from which every open set is formed. In $\mathbb{R}$, the open intervals form a basis: a set is open when every point lies in some open interval contained in the set. This is the familiar analysis definition.</div>
+  </div>
+  <p class="prose">A basis has to satisfy two conditions so that the open sets it generates actually form a topology. The first ensures the whole space is covered. The second ensures that the intersection of two building blocks can itself be built from blocks, which is what makes axiom (3) hold.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Definition — basis <span class="mun">§13</span></div>
+    <div class="box-body">A <strong>basis</strong> for a topology on $X$ is a collection $\mathcal{B}$ of subsets of $X$ (the <strong>basis elements</strong>) such that:
+    <ol>
+      <li>For each $x\in X$, there is at least one $B\in\mathcal{B}$ with $x\in B$.</li>
+      <li>If $x\in B_1\cap B_2$ with $B_1,B_2\in\mathcal{B}$, then there is $B_3\in\mathcal{B}$ with $x\in B_3\subset B_1\cap B_2$.</li>
+    </ol>
+    The <strong>topology generated by $\mathcal{B}$</strong>: $U\subset X$ is open if for each $x\in U$ there is $B\in\mathcal{B}$ with $x\in B\subset U$.</div>
+  </div>
+  <div class="readthru">
+    <div class="box-label">Reading the definition</div>
+    <div class="box-body"><p>Condition (2) does <strong>not</strong> require $B_1\cap B_2$ itself to be a basis element. It requires only that around each point of the intersection there is a smaller basis element still inside the intersection. In $\mathbb{R}$, the intersection of two open intervals is an open interval or empty, so (2) holds with $B_3=B_1\cap B_2$. For open discs in the plane, the intersection of two discs is a lens shape, not a disc, but a small disc fits around each point of the lens.</p>
+    <p>The generating rule "for each $x\in U$ there is $B$ with $x\in B\subset U$" has the same form as "for each $x\in U$ there is $\varepsilon\gt0$ with $(x-\varepsilon,x+\varepsilon)\subset U$." The basis element plays the role of the $\varepsilon$-interval.</p></div>
+  </div>
+  <div class="thm">
+    <div class="box-label">Lemma 13.1 <span class="mun">§13</span></div>
+    <div class="box-body">The topology generated by $\mathcal{B}$ equals the collection of all unions of elements of $\mathcal{B}$.</div>
+  </div>
+  <div class="readthru">
+    <div class="box-label">Why this matters</div>
+    <div class="box-body">This gives a second description of the open sets, and it is often easier to use: an open set is a union of basis elements. On a finite set, you compute the generated topology by forming every possible union of basis elements and adding $\varnothing$, which is the empty union.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — checking basis axioms on a small set</div>
+    <div class="box-body">
+      <p>Let $X=\{1,2,3\}$ and $\mathcal{C}=\{\{1,2\},\{2,3\}\}$.</p>
+      <p><strong>Condition (1)</strong>: $1\in\{1,2\}$, $2\in\{1,2\}$, $3\in\{2,3\}$. Every point is covered. Satisfied.</p>
+      <p><strong>Condition (2)</strong>: the only intersection of two different elements is $\{1,2\}\cap\{2,3\}=\{2\}$, containing the point $2$. We need some $B_3\in\mathcal{C}$ with $2\in B_3\subset\{2\}$, so $B_3$ must be $\{2\}$, which is not in $\mathcal{C}$. Condition (2) fails, with witness $x=2$, $B_1=\{1,2\}$, $B_2=\{2,3\}$.</p>
+      <p>Adding $\{2\}$ repairs it. $\mathcal{C}'=\{\{2\},\{1,2\},\{2,3\}\}$ satisfies both conditions, and by Lemma 13.1 it generates $\{\varnothing,\{2\},\{1,2\},\{2,3\},X\}$.</p>
+      <p>The intersections of an element with itself, such as $B_1=B_2=\{1,2\}$, always satisfy (2) by taking $B_3=B_1$, so you only need to check pairs of different elements.</p>
+    </div>
+  </div>
+  <div class="warn">
+    <div class="box-label">Common mistake</div>
+    <div class="box-body">A collection can be a basis without being a topology. For example, $\mathcal{C}'$ above lacks $\varnothing$ and $X$. A basis need not satisfy the topology axioms. It only needs to generate a topology. HW1 Q1 and Q2 use the same collection specifically to make you notice this.</div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw1-2')">HW1 Q2</a><a href="#" onclick="return go('p8','hw1-3')">HW1 Q3a</a></div>
+</div>
+
+<div class="sec" id="t-compare">
+  <h2><span class="sec-num" style="color:var(--acb);">04</span> Comparing Topologies via Bases</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">To show one topology is finer than another, you do not need to check every open set. It is enough to check basis elements: every basis element of the coarser topology must be "fillable," around each of its points, by a basis element of the finer one.</div>
+  </div>
+  <p class="prose">This reduces "these two topologies on $\mathbb{R}$ are equal" to a concrete statement about intervals. HW1 Q3b is an instance: the rational-endpoint intervals generate the same topology as all open intervals.</p>
+  <div class="thm">
+    <div class="box-label">Lemma 13.3 <span class="mun">§13</span></div>
+    <div class="box-body">Let $\mathcal{B}$ and $\mathcal{B}'$ be bases for topologies $\mathcal{T}$ and $\mathcal{T}'$ on $X$. The following are equivalent:
+    <ol>
+      <li>$\mathcal{T}'$ is finer than $\mathcal{T}$.</li>
+      <li>For each $x\in X$ and each $B\in\mathcal{B}$ containing $x$, there is $B'\in\mathcal{B}'$ with $x\in B'\subset B$.</li>
+    </ol></div>
+  </div>
+  <div class="readthru">
+    <div class="box-label">Reading the lemma</div>
+    <div class="box-body">The primed basis elements must fit <em>inside</em> the unprimed ones, around every point. Finer means smaller building blocks are available. To show $\mathcal{T}=\mathcal{T}'$, apply the lemma twice, once in each direction.</div>
+  </div>
+  <div class="thm">
+    <div class="box-label">Lemma 13.2 — recognizing a basis <span class="mun">§13</span></div>
+    <div class="box-body">Let $(X,\mathcal{T})$ be a topological space and $\mathcal{C}\subset\mathcal{T}$ a collection of open sets such that for each open $U$ and each $x\in U$ there is $C\in\mathcal{C}$ with $x\in C\subset U$. Then $\mathcal{C}$ is a basis, and it generates $\mathcal{T}$.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — the lower limit topology is finer than the standard one</div>
+    <div class="box-body">
+      <p>Let $\mathcal{B}$ be the open intervals $(a,b)$, generating the standard topology $\mathcal{T}$. Let $\mathcal{B}'$ be the half-open intervals $[a,b)$, generating the <strong>lower limit topology</strong> $\mathcal{T}_\ell$ (§13).</p>
+      <p><strong>$\mathcal{T}_\ell$ is finer than $\mathcal{T}$.</strong> Take $x\in(a,b)$. Then $[x,b)$ is a basis element of $\mathcal{B}'$ with $x\in[x,b)\subset(a,b)$. By Lemma 13.3, $\mathcal{T}\subset\mathcal{T}_\ell$.</p>
+      <p><strong>$\mathcal{T}$ is not finer than $\mathcal{T}_\ell$.</strong> Take $x=0$ and $B'=[0,1)$. Every open interval containing $0$ contains negative numbers, so none lies inside $[0,1)$. The condition of Lemma 13.3 fails at this witness.</p>
+      <p>For HW1 Q3b the structure is the same, but both directions succeed. In one direction a rational-endpoint interval is already an open interval. In the other, you use the density of $\mathbb{Q}$ to find rationals $q_1,q_2$ with $a\lt q_1\lt x\lt q_2\lt b$.</p>
+    </div>
+  </div>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Fact you may use — density of $\mathbb{Q}$</div>
+    <div class="box-body">Between any two real numbers $a\lt b$ there is a rational number $q$ with $a\lt q\lt b$. This is from your analysis prerequisites (the Archimedean property), so it can be used without proof.</div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw1-3')">HW1 Q3</a><a href="#" onclick="return go('p8','hw3-2')">HW3 Q2</a></div>
+</div>
+</div>
+
+<!-- ==================== SUBSPACES ==================== -->
+<div class="page" id="p3">
+<div class="hero">
+  <div class="ch-badge" style="background:rgba(47,122,120,.1);color:var(--acb);border:1px solid var(--ac);">Munkres §16</div>
+  <h1 style="color:var(--acb);">The Subspace Topology</h1>
+  <p class="hero-sub">How a subset inherits a topology, how "open in $Y$" differs from "open in $X$," and how to compute $\mathcal{T}_A$ on a finite set.</p>
+</div>
+
+<div class="sec" id="sub-def">
+  <h2><span class="sec-num" style="color:var(--acb);">01</span> Definition</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">Any subset $Y$ of a topological space becomes a topological space in its own right: its open sets are the traces that open sets of $X$ leave on $Y$. You "look at $X$ through the window $Y$."</div>
+  </div>
+  <p class="prose">This is how $[0,1]$, $\mathbb{Q}$, and $\mathbb{Z}$ get their topologies from $\mathbb{R}$. Whenever a problem says "$A\subset X$ with the subspace topology" or "regard $A$ as a subspace," this is the topology meant. MT Q1a asks you to state the definition word for word.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Definition — subspace topology <span class="mun">§16</span></div>
+    <div class="box-body">Let $(X,\mathcal{T})$ be a topological space and $Y\subset X$. The <strong>subspace topology</strong> on $Y$ is
+    $$\mathcal{T}_Y=\{\,Y\cap U\mid U\in\mathcal{T}\,\}.$$
+    With this topology, $Y$ is called a <strong>subspace</strong> of $X$.</div>
+  </div>
+  <div class="readthru">
+    <div class="box-label">Reading the formula</div>
+    <div class="box-body">Each open set $U$ of $X$ contributes one open set $Y\cap U$ of $Y$, namely the part of $U$ inside $Y$. Different $U$'s can contribute the same trace, so $\mathcal{T}_Y$ may have fewer elements than $\mathcal{T}$. Munkres checks in §16 that $\mathcal{T}_Y$ satisfies the three axioms, using $Y\cap\bigcup U_\alpha=\bigcup(Y\cap U_\alpha)$ and $(Y\cap U_1)\cap(Y\cap U_2)=Y\cap(U_1\cap U_2)$.</div>
+  </div>
+  <div class="thm">
+    <div class="box-label">Lemma 16.1 — basis for a subspace <span class="mun">§16</span></div>
+    <div class="box-body">If $\mathcal{B}$ is a basis for the topology of $X$, then $\{\,B\cap Y\mid B\in\mathcal{B}\,\}$ is a basis for the subspace topology on $Y$.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — $\mathbb{Z}$ is discrete as a subspace of $\mathbb{R}$</div>
+    <div class="box-body">
+      <p>For $n\in\mathbb{Z}$: $\{n\}=\mathbb{Z}\cap(n-\tfrac12,n+\tfrac12)$, and $(n-\tfrac12,n+\tfrac12)$ is open in $\mathbb{R}$. So every one-point set is open in $\mathbb{Z}$. Since every subset of $\mathbb{Z}$ is a union of one-point sets, every subset is open, and the subspace topology on $\mathbb{Z}$ is discrete.</p>
+      <p><strong>Contrast with $\mathbb{Q}$ (MT Q1b).</strong> In $\mathbb{Q}$ the one-point set $\{0\}$ is <em>not</em> open. If $\{0\}=\mathbb{Q}\cap U$ for some open $U\subset\mathbb{R}$, then $U$ contains $0$ and hence an interval $(-\varepsilon,\varepsilon)$, and that interval contains a nonzero rational. The density of $\mathbb{Q}$ is what prevents isolating a point.</p>
+    </div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','mt-1')">MT Q1</a><a href="#" onclick="return go('p8','hw1-4')">HW1 Q4</a><a href="#" onclick="return go('p8','mt-3')">MT Q3</a></div>
+</div>
+
+<div class="sec" id="sub-rel">
+  <h2><span class="sec-num" style="color:var(--acb);">02</span> Open in $Y$ versus Open in $X$</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">"Open" always means open <em>in some particular space</em>. A set can be open in the subspace $Y$ without being open in $X$. For example, $(\tfrac12,1]$ is open in $[-1,1]$ but not in $\mathbb{R}$. The extra points outside $Y$ that would have been required are simply absent from $Y$.</div>
+  </div>
+  <p class="prose">HW1 Q5 is entirely about this distinction, using $Y=[-1,1]\subset\mathbb{R}$. A useful picture: inside $Y=[-1,1]$, an endpoint such as $1$ has no points to its right, so a set like $(\tfrac12,1]$ already contains a whole "neighborhood" of $1$ as seen from within $Y$.</p>
+  <svg class="fig" viewBox="0 0 420 110" width="420">
+    <line x1="20" y1="40" x2="400" y2="40" stroke="#5a5a7a" stroke-width="1.5"/>
+    <text x="404" y="44" fill="#5a5a7a" font-size="11" font-family="JetBrains Mono">ℝ</text>
+    <line x1="80" y1="40" x2="340" y2="40" stroke="#62b5ae" stroke-width="5"/>
+    <circle cx="80" cy="40" r="4" fill="#62b5ae"/><circle cx="340" cy="40" r="4" fill="#62b5ae"/>
+    <text x="70" y="62" fill="#62b5ae" font-size="11" font-family="JetBrains Mono">−1</text>
+    <text x="335" y="62" fill="#62b5ae" font-size="11" font-family="JetBrains Mono">1</text>
+    <text x="196" y="62" fill="#62b5ae" font-size="11" font-family="JetBrains Mono">Y</text>
+    <line x1="275" y1="40" x2="380" y2="40" stroke="#ccaa6a" stroke-width="2" stroke-dasharray="4 3" transform="translate(0,-12)"/>
+    <circle cx="275" cy="28" r="3.5" fill="#08080c" stroke="#ccaa6a"/>
+    <circle cx="380" cy="28" r="3.5" fill="#08080c" stroke="#ccaa6a"/>
+    <text x="300" y="20" fill="#ccaa6a" font-size="10" font-family="JetBrains Mono">U=(½,3/2)</text>
+    <line x1="275" y1="88" x2="340" y2="88" stroke="#7abc8a" stroke-width="3"/>
+    <circle cx="275" cy="88" r="3.5" fill="#08080c" stroke="#7abc8a"/>
+    <circle cx="340" cy="88" r="3.5" fill="#7abc8a"/>
+    <text x="150" y="92" fill="#7abc8a" font-size="10" font-family="JetBrains Mono">Y∩U=(½,1]</text>
+  </svg>
+  <div class="thm">
+    <div class="box-label">Lemma 16.2 <span class="mun">§16</span></div>
+    <div class="box-body">Let $Y$ be a subspace of $X$. If $U$ is open in $Y$ and $Y$ is open in $X$, then $U$ is open in $X$.</div>
+  </div>
+  <div class="readthru">
+    <div class="box-label">Reading the lemma</div>
+    <div class="box-body">$U$ open in $Y$ means $U=Y\cap V$ with $V$ open in $X$. If $Y$ is also open in $X$, then $Y\cap V$ is an intersection of two open sets of $X$, so it is open in $X$. When $Y$ is not open, as with $Y=[-1,1]$, the lemma does not apply and the conclusion can fail.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — deciding both questions</div>
+    <div class="box-body">
+      <p>Take $Y=[0,2]\subset\mathbb{R}$.</p>
+      <p><strong>$S=(1,2]$.</strong> Open in $\mathbb{R}$? No: no open interval around $2$ fits inside $S$. Open in $Y$? Yes: $S=Y\cap(1,3)$.</p>
+      <p><strong>$T=(1,3]$.</strong> Not a subset of $Y$, so the question "open in $Y$" does not apply. Open in $\mathbb{R}$? No, because of the endpoint $3$.</p>
+      <p><strong>$W=(\tfrac12,1)$.</strong> Open in $\mathbb{R}$, since it is an open interval. Open in $Y$: yes, $W=Y\cap W$. In general, a subset of $Y$ that is open in $X$ is always open in $Y$.</p>
+      <p><strong>Procedure.</strong> (i) Is the set a subset of $Y$? (ii) For open in $\mathbb{R}$: does every point have an open interval around it inside the set? (iii) For open in $Y$: can you write it as $Y\cap U$ with $U$ open in $\mathbb{R}$? The points that matter are the endpoints of $Y$.</p>
+    </div>
+  </div>
+  <div class="warn">
+    <div class="box-label">Watch the set-builder notation</div>
+    <div class="box-body">In HW1 Q5, sets (a)–(c) are defined with $x\in\mathbb{R}$, but (d) and (e) are defined with $x\in Y$. The condition "$\tfrac12\lt|x|\lt2$" restricted to $x\in Y$ describes a different set from the same condition with $x\in\mathbb{R}$. Write each set out as a union of intervals before answering.</div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw1-5')">HW1 Q5</a></div>
+</div>
+
+<div class="sec" id="sub-finite">
+  <h2><span class="sec-num" style="color:var(--acb);">03</span> Computing $\mathcal{T}_A$ on a Finite Set</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">On a finite space, compute $\mathcal{T}_A$ by intersecting $A$ with each open set of $X$, one at a time, and then deleting repeats. The number of distinct traces can be smaller than $|\mathcal{T}|$, because different open sets can have the same intersection with $A$.</div>
+  </div>
+  <p class="prose">This is a mechanical computation, but exams grade both the set notation and the explanation of the count. HW1 Q6b specifically asks why the count is what it is. The answer is always to name the two open sets of $X$ that give the same trace.</p>
+  <div class="ex">
+    <div class="box-label">Worked example</div>
+    <div class="box-body">
+      <p>Let $X=\{p,q,r,s\}$ with $\mathcal{T}=\{\varnothing,\{p\},\{p,q\},\{p,r\},\{p,q,r\},X\}$, and let $A=\{q,r,s\}$.</p>
+      <p>Intersect $A$ with each open set:</p>
+      <ul>
+        <li>$A\cap\varnothing=\varnothing$</li>
+        <li>$A\cap\{p\}=\varnothing$</li>
+        <li>$A\cap\{p,q\}=\{q\}$</li>
+        <li>$A\cap\{p,r\}=\{r\}$</li>
+        <li>$A\cap\{p,q,r\}=\{q,r\}$</li>
+        <li>$A\cap X=\{q,r,s\}$</li>
+      </ul>
+      <p>So $\mathcal{T}_A=\{\varnothing,\{q\},\{r\},\{q,r\},\{q,r,s\}\}$, which has 5 elements, not 6. <strong>Justification of the count:</strong> the two distinct open sets $\varnothing$ and $\{p\}$ have the same trace $\varnothing$ on $A$, because $p\notin A$. The remaining four traces are pairwise different, as the list shows.</p>
+    </div>
+  </div>
+  <div class="warn">
+    <div class="box-label">Notation is graded</div>
+    <div class="box-body">Write $\mathcal{T}_A=\{\varnothing,\{q\},\dots\}$. This is a set of sets, so it has outer braces enclosing inner braces. Writing $\{q\}$ when you mean the point $q$, or the reverse, loses credit. $\varnothing$ is an element of $\mathcal{T}_A$. It is not the same thing as $\{\varnothing\}$.</div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw1-6')">HW1 Q6</a><a href="#" onclick="return go('p8','hw2-4')">HW2 Q4b</a> · Check your answers in the <a href="#" onclick="return go('p9','lab')">Finite-Space Lab</a></div>
+</div>
+</div>
+
+<!-- ==================== CLOSURE & HAUSDORFF ==================== -->
+<div class="page" id="p4">
+<div class="hero">
+  <div class="ch-badge" style="background:rgba(47,122,120,.1);color:var(--acb);border:1px solid var(--ac);">Munkres §17</div>
+  <h1 style="color:var(--acb);">Closed Sets, Closure, and Hausdorff Spaces</h1>
+  <p class="hero-sub">Closed sets, interior and closure, the neighborhood test for closure, closure inside a subspace, convergence of sequences, and the Hausdorff condition.</p>
+</div>
+
+<div class="sec" id="cl-closed">
+  <h2><span class="sec-num" style="color:var(--acb);">01</span> Closed Sets</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">A set is <strong>closed</strong> when its complement is open. Closed is not the opposite of open. A set can be both, as $\varnothing$ and $X$ always are, or neither, as $[0,1)$ is in $\mathbb{R}$.</div>
+  </div>
+  <p class="prose">Closed sets are needed to define closure, and closure is needed for density, which HW3 Q3 uses. Many problems are also easier to state with closed sets. In a finite space, list the closed sets first: take the complement of each open set.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Definition <span class="mun">§17</span></div>
+    <div class="box-body">$A\subset X$ is <strong>closed</strong> if $X\setminus A$ is open.</div>
+  </div>
+  <div class="thm">
+    <div class="box-label">Theorem 17.1 <span class="mun">§17</span></div>
+    <div class="box-body">$\varnothing$ and $X$ are closed. Arbitrary intersections of closed sets are closed. Finite unions of closed sets are closed.</div>
+  </div>
+  <div class="readthru">
+    <div class="box-label">Why</div>
+    <div class="box-body">Take complements of the three topology axioms and apply De Morgan's laws. An arbitrary union of open sets becomes an arbitrary intersection of closed sets. A finite intersection becomes a finite union.</div>
+  </div>
+  <div class="thm">
+    <div class="box-label">Theorem 17.2 — closed sets in a subspace <span class="mun">§17</span></div>
+    <div class="box-body">Let $Y$ be a subspace of $X$. A set $A\subset Y$ is closed in $Y$ if and only if $A=C\cap Y$ for some $C$ closed in $X$.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example</div>
+    <div class="box-body">
+      <p>With $X=\{p,q,r,s\}$ and $\mathcal{T}=\{\varnothing,\{p\},\{p,q\},\{p,r\},\{p,q,r\},X\}$ (the example from the Subspaces tab), the closed sets are the complements:</p>
+      <p>$X,\ \{q,r,s\},\ \{r,s\},\ \{q,s\},\ \{s\},\ \varnothing.$</p>
+      <p>Every nonempty closed set contains $s$, and every nonempty open set contains $p$. This pattern is typical of small finite topologies, and spotting it makes closure computations quick.</p>
+    </div>
+  </div>
+</div>
+
+<div class="sec" id="cl-closure">
+  <h2><span class="sec-num" style="color:var(--acb);">02</span> Interior and Closure</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">The <strong>interior</strong> of $A$ is the largest open set inside $A$. The <strong>closure</strong> of $A$ is the smallest closed set containing $A$. They are always related by $\operatorname{Int}A\subset A\subset\bar A$.</div>
+  </div>
+  <p class="prose">There are two ways to compute a closure, and you need both. The definition (intersect all closed supersets) is best in finite spaces, where you can list the closed sets. The neighborhood test (Theorem 17.5) is best for proofs and for infinite spaces such as $\mathbb{R}$ or the cofinite topology.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Definition <span class="mun">§17</span></div>
+    <div class="box-body">
+      <p>$\operatorname{Int}A$ = the union of all open sets contained in $A$.</p>
+      <p>$\bar A$ (the <strong>closure</strong>) = the intersection of all closed sets containing $A$.</p>
+      <p>$A$ is <strong>dense</strong> in $X$ if $\bar A=X$.</p>
+    </div>
+  </div>
+  <div class="readthru">
+    <div class="box-label">Reading the definition</div>
+    <div class="box-body">The interior is a union of open sets, so it is open by axiom (2). The closure is an intersection of closed sets, so it is closed by Theorem 17.1. $A$ is open exactly when $A=\operatorname{Int}A$, and closed exactly when $A=\bar A$. Note that MT Q2a asks for the definition of closure. Give this intersection definition.</div>
+  </div>
+  <div class="thm">
+    <div class="box-label">Theorem 17.5 — neighborhood test <span class="mun">§17</span></div>
+    <div class="box-body">Let $A\subset X$ and $x\in X$.
+    <ol>
+      <li>$x\in\bar A$ if and only if every open set $U$ containing $x$ intersects $A$.</li>
+      <li>If the topology is given by a basis, $x\in\bar A$ if and only if every basis element containing $x$ intersects $A$.</li>
+    </ol></div>
+  </div>
+  <div class="readthru">
+    <div class="box-label">Reading the theorem</div>
+    <div class="box-body">A point is in the closure exactly when you cannot isolate it from $A$ with an open set. To show $x\notin\bar A$, produce one open set around $x$ that misses $A$. To show $x\in\bar A$, show every open set around $x$ meets $A$.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — closure and interior on a finite space</div>
+    <div class="box-body">
+      <p>Same space: $X=\{p,q,r,s\}$, open sets $\varnothing,\{p\},\{p,q\},\{p,r\},\{p,q,r\},X$. Let $A=\{q\}$.</p>
+      <p><strong>Closure.</strong> The closed sets containing $\{q\}$ are $X$, $\{q,r,s\}$, and $\{q,s\}$. Their intersection is $\{q,s\}$. So $\bar A=\{q,s\}$.</p>
+      <p><strong>Check with the neighborhood test.</strong> $p\notin\bar A$, because $\{p\}$ is open and misses $A$. $r\notin\bar A$, because $\{p,r\}$ is open and misses $A$. $s\in\bar A$, because the only open set containing $s$ is $X$, which meets $A$. Same answer.</p>
+      <p><strong>Interior.</strong> The open sets contained in $\{q\}$: only $\varnothing$, since every nonempty open set contains $p$. So $\operatorname{Int}A=\varnothing$.</p>
+    </div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — infinite spaces</div>
+    <div class="box-body">
+      <p><strong>Indiscrete topology.</strong> If $A\neq\varnothing$, the only closed set containing $A$ is $X$, so $\bar A=X$. Every nonempty set is dense.</p>
+      <p><strong>$\mathbb{Q}$ in $\mathbb{R}$.</strong> Every open interval contains a rational, so by the basis version of Theorem 17.5 every real number lies in $\bar{\mathbb{Q}}$. So $\bar{\mathbb{Q}}=\mathbb{R}$ and $\mathbb{Q}$ is dense. Every open interval also contains an irrational, so $\operatorname{Int}\mathbb{Q}=\varnothing$.</p>
+      <p><strong>Approach to HW2 Q3 (cofinite topology).</strong> First list the closed sets in $\mathcal{T}_f$: by definition they are $X$ and the finite subsets. Then ask, for a given $A$, which closed sets contain it. Whether $A$ is finite or infinite determines the answer, and those are the two cases the problem mentions.</p>
+    </div>
+  </div>
+  <div class="thm">
+    <div class="box-label">Facts about closure</div>
+    <div class="box-body">
+      <ul>
+        <li>If $A\subset B$, then $\bar A\subset\bar B$. Reason: $\bar B$ is a closed set containing $B\supset A$, and $\bar A$ is the smallest such set.</li>
+        <li>If $C$ is closed and $A\subset C$, then $\bar A\subset C$. This is the definition of "smallest," and it is the most used fact about closure.</li>
+      </ul>
+      These two facts, together with Theorem 17.1, are all that HW2 Q5 needs.
+    </div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw2-3')">HW2 Q3</a><a href="#" onclick="return go('p8','hw2-4')">HW2 Q4</a><a href="#" onclick="return go('p8','hw2-5')">HW2 Q5</a><a href="#" onclick="return go('p8','mt-2')">MT Q2</a><a href="#" onclick="return go('p8','hw3-3')">HW3 Q3</a></div>
+</div>
+
+<div class="sec" id="cl-sub">
+  <h2><span class="sec-num" style="color:var(--acb);">03</span> Closure Inside a Subspace</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">If $A\subset Y\subset X$, the closure of $A$ <em>in $Y$</em> is the closure of $A$ in $X$, cut down to $Y$.</div>
+  </div>
+  <p class="prose">This gives a shortcut for HW2 Q4b: compute the closure in the big space once, then intersect with the subspace. You can also compute directly from the closed sets of the subspace and confirm that the two answers agree.</p>
+  <div class="thm">
+    <div class="box-label">Theorem 17.4 <span class="mun">§17</span></div>
+    <div class="box-body">Let $Y$ be a subspace of $X$ and $A\subset Y$. Let $\bar A$ denote the closure of $A$ in $X$. Then the closure of $A$ in $Y$ equals $\bar A\cap Y$.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example</div>
+    <div class="box-body">
+      <p>In $\mathbb{R}$, let $Y=(0,1]$ and $A=(0,\tfrac12)$. The closure of $A$ in $\mathbb{R}$ is $[0,\tfrac12]$. The closure in $Y$ is $[0,\tfrac12]\cap(0,1]=(0,\tfrac12]$. The point $0$ is lost because it is not in $Y$.</p>
+      <p>There is no corresponding formula for interiors. The interior of $A$ in $Y$ can be larger than $\operatorname{Int}_X(A)\cap Y$. For example, $Y$ is open in itself even when it is not open in $X$. Compute interiors in a subspace directly from $\mathcal{T}_Y$.</p>
+    </div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw2-4')">HW2 Q4b</a></div>
+</div>
+
+<div class="sec" id="cl-limit">
+  <h2><span class="sec-num" style="color:var(--acb);">04</span> Limit Points</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">A <strong>limit point</strong> of $A$ is a point that every neighborhood brings close to <em>other</em> points of $A$. The closure is $A$ together with its limit points.</div>
+  </div>
+  <p class="prose">A <strong>neighborhood</strong> of $x$ means, in Munkres, an open set containing $x$. Limit points connect topology back to the sequence-based reasoning from Modern Analysis.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Definition and Theorem 17.6 <span class="mun">§17</span></div>
+    <div class="box-body">$x$ is a <strong>limit point</strong> of $A$ if every neighborhood of $x$ intersects $A$ in some point other than $x$. Writing $A'$ for the set of limit points: $\bar A=A\cup A'$.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example</div>
+    <div class="box-body">In $\mathbb{R}$, $A=\{1/n\mid n\in\mathbb{Z}_{\gt0}\}$ has exactly one limit point, $0$. So $\bar A=A\cup\{0\}$, and $A$ is not closed. Each point $1/n$ is isolated: a small enough interval around it contains no other point of $A$. As a subspace, $A$ is therefore discrete but not closed in $\mathbb{R}$. This is the counterexample for MT Q3c.</div>
+  </div>
+</div>
+
+<div class="sec" id="cl-seq">
+  <h2><span class="sec-num" style="color:var(--acb);">05</span> Convergence of Sequences</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">A sequence converges to $x$ if it eventually enters, and stays in, every neighborhood of $x$. This is the $\varepsilon$–$N$ definition with "within $\varepsilon$" replaced by "inside $U$."</div>
+  </div>
+  <p class="prose">HW3 Q5 asks you to use this definition (Munkres p. 98) in a product space. The behavior of sequences depends heavily on the topology. With very few open sets, sequences converge easily. With very many, they converge rarely.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Definition <span class="mun">§17, p. 98</span></div>
+    <div class="box-body">A sequence $x_1,x_2,\dots$ in $X$ <strong>converges</strong> to $x\in X$ if for each neighborhood $U$ of $x$ there is a positive integer $N$ such that $x_n\in U$ for all $n\ge N$.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — two extremes</div>
+    <div class="box-body">
+      <p><strong>Discrete space.</strong> $\{x\}$ is a neighborhood of $x$. So $x_n\to x$ forces $x_n\in\{x\}$, that is, $x_n=x$, for all $n\ge N$. In a discrete space a sequence converges exactly when it is <strong>eventually constant</strong>. This applies to each factor $\{0,1\}$ in HW3 Q5.</p>
+      <p><strong>Indiscrete space.</strong> The only neighborhood of $x$ is $X$, which contains every $x_n$. So every sequence converges to every point. Limits are not unique here, and the Hausdorff condition is what prevents this.</p>
+    </div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw3-5')">HW3 Q5</a></div>
+</div>
+
+<div class="sec" id="cl-haus">
+  <h2><span class="sec-num" style="color:var(--acb);">06</span> Hausdorff Spaces</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">In a <strong>Hausdorff</strong> space, any two distinct points can be put in disjoint open sets. This is the condition that makes limits unique and makes one-point sets closed. Every metric space is Hausdorff.</div>
+  </div>
+  <p class="prose">The Hausdorff condition appears in HW2 Q6, HW3 Q3, HW3 Q4b, and MT Q3a. In proofs it is used in one particular way: assume two things differ, then use disjoint open sets around them to reach a contradiction or to build an open set. The worked proof below shows this technique.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Definition <span class="mun">§17</span></div>
+    <div class="box-body">$X$ is <strong>Hausdorff</strong> if for each pair $x_1\neq x_2$ in $X$ there exist neighborhoods $U_1\ni x_1$ and $U_2\ni x_2$ with $U_1\cap U_2=\varnothing$.</div>
+  </div>
+  <div class="thm">
+    <div class="box-label">Theorems 17.8 and 17.10 <span class="mun">§17</span></div>
+    <div class="box-body">In a Hausdorff space, every finite point set is closed (17.8), and a sequence converges to at most one point (17.10).</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked proof — limits are unique in a Hausdorff space</div>
+    <div class="box-body">
+      <p>Suppose $x_n\to x$ and $x_n\to y$ with $x\neq y$. By the Hausdorff property choose disjoint open $U\ni x$ and $V\ni y$. By convergence to $x$, there is $N_1$ with $x_n\in U$ for $n\ge N_1$. By convergence to $y$, there is $N_2$ with $x_n\in V$ for $n\ge N_2$. For $n=\max(N_1,N_2)$, $x_n\in U\cap V=\varnothing$, a contradiction.</p>
+      <p><strong>The technique.</strong> To prove two things are equal in a Hausdorff space, assume they differ, separate them by disjoint open sets, and use continuity or convergence to force a point into both. HW3 Q3 is solved the same way.</p>
+    </div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — spaces that are not Hausdorff</div>
+    <div class="box-body">
+      <p><strong>Indiscrete with at least 2 points</strong>: the only nonempty open set is $X$, so two points cannot be separated.</p>
+      <p><strong>Finite complement topology on an infinite $X$</strong>: two nonempty open sets $U,V$ have finite complements, so $U\cap V$ has complement $(X\setminus U)\cup(X\setminus V)$, which is finite. Since $X$ is infinite, $U\cap V$ is nonempty. So no two nonempty open sets are disjoint.</p>
+      <p><strong>Subspaces of $\mathbb{R}$ are Hausdorff</strong> (MT Q3a): for $x\neq y$ in $A$, take $r=|x-y|/2$. The intervals $(x-r,x+r)$ and $(y-r,y+r)$ are disjoint, and their traces on $A$ are disjoint open sets of $A$.</p>
+    </div>
+  </div>
+  <div class="explain">
+    <div class="box-label">Proof pattern for HW2 Q6</div>
+    <div class="box-body"><strong>Products:</strong> two distinct points $(x_1,y_1)\neq(x_2,y_2)$ differ in at least one coordinate. Separate in that coordinate, then take the preimage under the corresponding projection, or form the product with the whole other factor. <strong>Subspaces:</strong> separate in $X$, then intersect with $Y$, exactly as in the $\mathbb{R}$ example above.</div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw2-6')">HW2 Q6</a><a href="#" onclick="return go('p8','hw3-3')">HW3 Q3</a><a href="#" onclick="return go('p8','hw3-4')">HW3 Q4b</a><a href="#" onclick="return go('p8','mt-3')">MT Q3</a></div>
+</div>
+</div>
+
+<!-- ==================== PRODUCTS ==================== -->
+<div class="page" id="p5">
+<div class="hero">
+  <div class="ch-badge" style="background:rgba(47,122,120,.1);color:var(--acb);border:1px solid var(--ac);">Munkres §15, §19</div>
+  <h1 style="color:var(--acb);">Product Topologies</h1>
+  <p class="hero-sub">The topology on $X\times Y$, projections, arbitrary products $\prod X_j$, the product versus box topology, and sequences in products.</p>
+</div>
+
+<div class="sec" id="pr-basis">
+  <h2><span class="sec-num" style="color:var(--acb);">01</span> The Product Topology on $X\times Y$</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">The open sets of $X\times Y$ are built from "open rectangles" $U\times V$, where $U$ is open in $X$ and $V$ is open in $Y$. A general open set is a union of such rectangles. It need not be a rectangle itself.</div>
+  </div>
+  <p class="prose">In $\mathbb{R}^2$ this gives the usual topology: the open rectangles $(a,b)\times(c,d)$ form a basis. The definition works for any two spaces, and the problems use it with discrete, indiscrete, and Hausdorff factors.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Definition <span class="mun">§15</span></div>
+    <div class="box-body">The <strong>product topology</strong> on $X\times Y$ is the topology with basis
+    $$\mathcal{B}=\{\,U\times V\mid U\text{ open in }X,\ V\text{ open in }Y\,\}.$$</div>
+  </div>
+  <div class="readthru">
+    <div class="box-label">Why this is a basis</div>
+    <div class="box-body">Condition (1): $X\times Y$ is itself a basis element. Condition (2): $(U_1\times V_1)\cap(U_2\times V_2)=(U_1\cap U_2)\times(V_1\cap V_2)$, which is again a basis element. This identity, "intersection of rectangles is a rectangle," is used constantly.</div>
+  </div>
+  <div class="thm">
+    <div class="box-label">Theorem 15.1 <span class="mun">§15</span></div>
+    <div class="box-body">If $\mathcal{B}$ is a basis for $X$ and $\mathcal{C}$ is a basis for $Y$, then $\{B\times C\mid B\in\mathcal{B},C\in\mathcal{C}\}$ is a basis for the product topology on $X\times Y$.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — a small finite product</div>
+    <div class="box-body">
+      <p>Let $S=\{0,1\}$ with topology $\{\varnothing,\{1\},S\}$ (the <strong>Sierpiński space</strong>). The basis for $S\times S$ consists of products of the open sets $\varnothing,\{1\},S$:</p>
+      <p>$\{1\}\times\{1\}=\{(1,1)\}$, $\ \{1\}\times S=\{(1,0),(1,1)\}$, $\ S\times\{1\}=\{(0,1),(1,1)\}$, $\ S\times S$, together with products involving $\varnothing$, which are all $\varnothing$.</p>
+      <p>The union $\{(1,0),(1,1)\}\cup\{(0,1),(1,1)\}=\{(1,0),(0,1),(1,1)\}$ is open but not a rectangle. Is $\{(0,0)\}$ open? Every basis element containing $(0,0)$ is $S\times S$, so no.</p>
+      <p><strong>For HW2 Q1</strong>, apply the same method: list the basis elements, then ask which one-point sets they produce (discrete case) or which sets they can be at all (indiscrete case).</p>
+    </div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw2-1')">HW2 Q1</a><a href="#" onclick="return go('p8','hw2-6')">HW2 Q6</a><a href="#" onclick="return go('p8','hw3-1')">HW3 Q1</a></div>
+</div>
+
+<div class="sec" id="pr-proj">
+  <h2><span class="sec-num" style="color:var(--acb);">02</span> Projections</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">The projection $\pi_1:X\times Y\to X$, $(x,y)\mapsto x$, forgets the second coordinate. Projections are continuous, and they also send open sets to open sets. They do <em>not</em> generally send closed sets to closed sets.</div>
+  </div>
+  <p class="prose">Continuity of $\pi_1$ is a preimage statement and is immediate. That projections carry open sets to open sets (they are <strong>open maps</strong>) is an image statement, which is HW2 Q2. Since an arbitrary open $W$ is a union of rectangles, and images preserve unions, the work reduces to computing the image of one rectangle.</p>
+  <div class="thm">
+    <div class="box-label">Preimages under projections <span class="mun">§15</span></div>
+    <div class="box-body">$\pi_1^{-1}(U)=U\times Y$ and $\pi_2^{-1}(V)=X\times V$. Hence $\pi_1,\pi_2$ are continuous, and $U\times V=\pi_1^{-1}(U)\cap\pi_2^{-1}(V)$.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — image of a rectangle</div>
+    <div class="box-body">
+      <p>$\pi_1(U\times V)=U$ if $V\neq\varnothing$: every $x\in U$ is the image of $(x,v)$ for any chosen $v\in V$. If $V=\varnothing$, then $U\times V=\varnothing$ and the image is $\varnothing$. Both are open in $X$. Handle the empty case explicitly in a proof.</p>
+    </div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — projections are not closed maps</div>
+    <div class="box-body">The hyperbola $H=\{(x,y)\in\mathbb{R}^2\mid xy=1\}$ is closed in $\mathbb{R}^2$, because it is the preimage of the closed set $\{1\}$ under the continuous map $(x,y)\mapsto xy$. But $\pi_1(H)=\mathbb{R}\setminus\{0\}$ is not closed. So "open map" really is special to open sets.</div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw2-2')">HW2 Q2</a></div>
+</div>
+
+<div class="sec" id="pr-general">
+  <h2><span class="sec-num" style="color:var(--acb);">03</span> Arbitrary Products: Product versus Box Topology</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">For a product of infinitely many spaces there are two natural topologies. The <strong>box topology</strong> allows open sets restricted in every coordinate at once. The <strong>product topology</strong> allows restrictions in only finitely many coordinates, leaving all other coordinates completely free. The product topology is the standard one, and it is what HW3 Q5–Q6 and MT Q5 use.</div>
+  </div>
+  <p class="prose">An element of $\prod_{j\in J}X_j$ is a family $x=(x_j)_{j\in J}$ with $x_j\in X_j$ for each $j$. When $J$ is infinite, a basic open set in the product topology can only "see" finitely many coordinates. This is the fact behind HW3 Q6: a one-point set constrains every coordinate, so when $J$ is infinite (and the factors have at least two points) it cannot be open.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Definition — product topology <span class="mun">§19</span></div>
+    <div class="box-body">The <strong>product topology</strong> on $\prod_{j\in J}X_j$ has basis all sets $\prod_{j\in J}U_j$ such that each $U_j$ is open in $X_j$ and <strong>$U_j=X_j$ for all but finitely many $j$</strong>. Equivalently, the basis consists of finite intersections $\pi_{j_1}^{-1}(U_1)\cap\dots\cap\pi_{j_n}^{-1}(U_n)$.<br><br>
+    The <strong>box topology</strong> has basis all $\prod U_j$ with each $U_j$ open, with no finiteness condition. For finite $J$ the two agree (Theorem 19.1).</div>
+  </div>
+  <div class="readthru">
+    <div class="box-label">Reading the definition</div>
+    <div class="box-body">Read $\pi_{j}^{-1}(U)$ as "the set of points whose $j$-th coordinate lies in $U$." A basic open set imposes conditions on finitely many coordinates $j_1,\dots,j_n$ and leaves every other coordinate unconstrained. The product topology is coarser than the box topology. It is the coarsest topology making every projection $\pi_j$ continuous.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — an open set in the box topology that is not open in the product topology</div>
+    <div class="box-body">
+      <p>In $\mathbb{R}^\omega=\prod_{n\in\mathbb{Z}_{\gt0}}\mathbb{R}$, let $W=\prod_n(-1,1)$. It is a basis element of the box topology. In the product topology, any basic open set containing $0=(0,0,\dots)$ leaves some coordinate $k$ free, so it contains a point with $k$-th coordinate $5$, which is not in $W$. So $W$ is not open in the product topology.</p>
+      <p>The same argument shows: <strong>if $J$ is infinite and every $X_j$ has at least two points, then no one-point set is open in the product topology.</strong> Any basic open set containing $x$ leaves a coordinate $k$ free, and you can change $x_k$ to a different value of $X_k$ while staying in that set.</p>
+    </div>
+  </div>
+  <div class="thm">
+    <div class="box-label">Theorem 19.6 — maps into products <span class="mun">§19</span></div>
+    <div class="box-body">Let $f:A\to\prod X_j$ be given by $f(a)=(f_j(a))_{j\in J}$, with the product topology on the target. Then $f$ is continuous if and only if each $f_j=\pi_j\circ f$ is continuous. This fails for the box topology.</div>
+  </div>
+  <div class="thm">
+    <div class="box-label">Theorem 19.5 — closures in products <span class="mun">§19</span></div>
+    <div class="box-body">For $A_j\subset X_j$, in either the product or the box topology: $\overline{\prod A_j}=\prod\bar A_j$.</div>
+  </div>
+  <div class="explain">
+    <div class="box-label">Two routes for MT Q5</div>
+    <div class="box-body"><strong>Route 1 (complement).</strong> Use the identity from the Set Toolkit: $\prod X_j\setminus\prod A_j=\bigcup_k\pi_k^{-1}(X_k\setminus A_k)$. Each piece is a preimage of an open set under a continuous projection, so the union is open. <strong>Route 2 (closure).</strong> Apply Theorem 19.5 with $\bar A_j=A_j$. On a closed-book exam, Route 1 is safer because it does not depend on citing a theorem correctly.</div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw3-6')">HW3 Q6</a><a href="#" onclick="return go('p8','mt-5')">MT Q5</a><a href="#" onclick="return go('p8','hw3-1')">HW3 Q1</a></div>
+</div>
+
+<div class="sec" id="pr-seq">
+  <h2><span class="sec-num" style="color:var(--acb);">04</span> Sequences in a Product</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">In the product topology, a sequence converges exactly when each coordinate converges. Because a basic neighborhood constrains only finitely many coordinates, you only ever need to wait for finitely many coordinates to settle down, and the maximum of finitely many $N$'s is finite.</div>
+  </div>
+  <p class="prose">This is Munkres Exercise 19.6. Since it is an exercise rather than a theorem in the text, prove the direction you need directly in HW3 Q5 rather than citing it. The proof pattern is below.</p>
+  <div class="ex">
+    <div class="box-label">Worked proof — coordinatewise convergence implies convergence</div>
+    <div class="box-body">
+      <p>Suppose $x^{(n)}\in\prod X_j$ and $x^{(n)}_j\to x_j$ in $X_j$ for every $j$. Let $U$ be any neighborhood of $x=(x_j)$.</p>
+      <p><strong>Step 1.</strong> Shrink to a basic open set: there is a basis element $B=\pi_{j_1}^{-1}(U_1)\cap\dots\cap\pi_{j_k}^{-1}(U_k)$ with $x\in B\subset U$. Here each $U_i$ is open in $X_{j_i}$ and contains $x_{j_i}$.</p>
+      <p><strong>Step 2.</strong> For each $i=1,\dots,k$, coordinate convergence gives $N_i$ with $x^{(n)}_{j_i}\in U_i$ for all $n\ge N_i$.</p>
+      <p><strong>Step 3.</strong> Let $N=\max(N_1,\dots,N_k)$. For $n\ge N$, every one of the $k$ conditions holds, so $x^{(n)}\in B\subset U$.</p>
+      <p>Step 3 is where finiteness matters. In the box topology there could be infinitely many $N_i$ with no finite maximum.</p>
+    </div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw3-5')">HW3 Q5</a></div>
+</div>
+</div>
+
+<!-- ==================== CONTINUITY ==================== -->
+<div class="page" id="p6">
+<div class="hero">
+  <div class="ch-badge" style="background:rgba(47,122,120,.1);color:var(--acb);border:1px solid var(--ac);">Munkres §18</div>
+  <h1 style="color:var(--acb);">Continuous Functions</h1>
+  <p class="hero-sub">Continuity defined by open sets, checking it on a basis, the standard rules, homeomorphisms and embeddings, and the set where two continuous maps agree.</p>
+</div>
+
+<div class="sec" id="c-def">
+  <h2><span class="sec-num" style="color:var(--acb);">01</span> Definition</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">Recall from Modern Analysis (Rudin 4.8): a map between metric spaces is continuous exactly when the preimage of every open set is open. Topology takes that characterization as the definition. With no distance available, it is the only way to say "nearby points go to nearby points."</div>
+  </div>
+  <p class="prose">Every continuity proof in this course has the same opening line: "Let $V$ be open in $Y$. We show $f^{-1}(V)$ is open in $X$." Every proof of discontinuity names one open $V$ whose preimage is not open. Whether a given $f$ is continuous depends on both topologies. The same formula can be continuous for one choice of topologies and not for another, which is the point of HW3 Q2 and MT Q4.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Definition <span class="mun">§18</span></div>
+    <div class="box-body">$f:X\to Y$ is <strong>continuous</strong> if for every open $V\subset Y$, the preimage $f^{-1}(V)$ is open in $X$.</div>
+  </div>
+  <div class="thm">
+    <div class="box-label">Theorem 18.1 — equivalent conditions <span class="mun">§18</span></div>
+    <div class="box-body">For $f:X\to Y$, the following are equivalent:
+    <ol>
+      <li>$f$ is continuous.</li>
+      <li>For every $A\subset X$: $f(\bar A)\subset\overline{f(A)}$.</li>
+      <li>For every closed $B\subset Y$, $f^{-1}(B)$ is closed in $X$.</li>
+      <li>For each $x\in X$ and each neighborhood $V$ of $f(x)$, there is a neighborhood $U$ of $x$ with $f(U)\subset V$.</li>
+    </ol></div>
+  </div>
+  <div class="readthru">
+    <div class="box-label">Reading the conditions</div>
+    <div class="box-body">(3) is (1) with complements taken, using $f^{-1}(Y\setminus B)=X\setminus f^{-1}(B)$. It is the more convenient form when the target's closed sets are easier to describe than its open sets, as in the cofinite topology, where the closed sets are just the finite sets and $Y$. (2) says continuous maps send points of the closure into the closure of the image, so limits are preserved. (4) is the $\varepsilon$–$\delta$ definition in topological language.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — the same formula, different topologies</div>
+    <div class="box-body">
+      <p>Let $f:\mathbb{R}\to\mathbb{R}$, $f(x)=x$.</p>
+      <ul>
+        <li>From $\mathbb{R}$ discrete to $\mathbb{R}$ standard: continuous, since every preimage is open in the discrete topology.</li>
+        <li>From $\mathbb{R}$ standard to $\mathbb{R}$ discrete: not continuous. $V=\{0\}$ is open in the target, but $f^{-1}(V)=\{0\}$ is not open in the standard topology.</li>
+        <li>From $\mathbb{R}$ standard to $\mathbb{R}_f$ (finite complement topology): continuous. A nonempty open $V$ has the form $\mathbb{R}\setminus F$ with $F$ finite, and $f^{-1}(V)=\mathbb{R}\setminus F$, which is open in the standard topology because finite sets are closed there.</li>
+      </ul>
+      <p>The last case is a special case of MT Q4b, where $f$ is any injective map. Injectivity guarantees that preimages of finite sets are still finite (Set Toolkit, Section 02).</p>
+    </div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — maps out of discrete or into indiscrete spaces</div>
+    <div class="box-body">
+      <p>If $X$ is discrete, <strong>every</strong> function $f:X\to Y$ is continuous, because every subset of $X$ is open. A finite subspace of $\mathbb{R}$ is discrete, since each point can be isolated by a small interval. So every function from a finite $A\subset\mathbb{R}$ to $\mathbb{R}$ is continuous. This is MT Q3b.</p>
+      <p>If $Y$ is indiscrete, every function $f:X\to Y$ is continuous, because the only preimages to check are $f^{-1}(\varnothing)=\varnothing$ and $f^{-1}(Y)=X$. This supplies counterexamples whenever a theorem needs $Y$ to be Hausdorff, as in HW3 Q3b.</p>
+    </div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — continuity on a finite space</div>
+    <div class="box-body">
+      <p>Let $X=\{a,b,c\}$ with $\mathcal{T}_X=\{\varnothing,\{a\},\{a,b\},X\}$, and $S=\{0,1\}$ with $\mathcal{T}_S=\{\varnothing,\{1\},S\}$. Define $f(a)=1,f(b)=1,f(c)=0$. The only open set to check is $\{1\}$: $f^{-1}(\{1\})=\{a,b\}$, which is open. So $f$ is continuous. If instead $g(a)=1,g(b)=0,g(c)=1$, then $g^{-1}(\{1\})=\{a,c\}$, which is not in $\mathcal{T}_X$, so $g$ is not continuous.</p>
+    </div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw3-2')">HW3 Q2</a><a href="#" onclick="return go('p8','mt-4')">MT Q4</a><a href="#" onclick="return go('p8','mt-3')">MT Q3b</a><a href="#" onclick="return go('p8','hw3-3')">HW3 Q3b</a></div>
+</div>
+
+<div class="sec" id="c-basis">
+  <h2><span class="sec-num" style="color:var(--acb);">02</span> Checking Continuity on a Basis</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">You do not have to check every open set of the target. It is enough to check that the preimage of every <strong>basis element</strong> is open. Every open set is a union of basis elements, and preimages preserve unions.</div>
+  </div>
+  <p class="prose">This turns continuity problems into product spaces (HW3 Q1) into a computation with rectangles. The argument is short and should be written out in full the first time you use it.</p>
+  <div class="thm">
+    <div class="box-label">Lemma — basis check <span class="mun">§18</span></div>
+    <div class="box-body">If $\mathcal{B}$ is a basis for the topology of $Y$ and $f^{-1}(B)$ is open for every $B\in\mathcal{B}$, then $f$ is continuous.<br><br>
+    <strong>Proof.</strong> Let $V$ be open in $Y$. By Lemma 13.1, $V=\bigcup_\alpha B_\alpha$ for some $B_\alpha\in\mathcal{B}$. Then $f^{-1}(V)=\bigcup_\alpha f^{-1}(B_\alpha)$ is a union of open sets, hence open.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — the swap map</div>
+    <div class="box-body">
+      <p><strong>Claim.</strong> $s:X\times Y\to Y\times X$, $s(x,y)=(y,x)$, is continuous (product topologies on both sides).</p>
+      <p><strong>Proof.</strong> A basis for $Y\times X$ is $\{V\times U\mid V\text{ open in }Y,\ U\text{ open in }X\}$. Compute the preimage of a basis element:
+      $$s^{-1}(V\times U)=\{(x,y)\mid (y,x)\in V\times U\}=\{(x,y)\mid x\in U,\ y\in V\}=U\times V,$$
+      which is a basis element of $X\times Y$, hence open. By the basis check, $s$ is continuous.</p>
+      <p><strong>Read-through.</strong> The middle equality just unpacks membership: $(y,x)\in V\times U$ means $y\in V$ and $x\in U$. HW3 Q1 has the same structure. Compute $h^{-1}(U\times V)$ for a basic open set of $B\times D$, unpack the membership condition coordinate by coordinate, and recognize the result as a product of preimages.</p>
+    </div>
+  </div>
+  <div class="thm">
+    <div class="box-label">Theorem 18.2 — rules for continuous maps <span class="mun">§18</span></div>
+    <div class="box-body"><ul>
+      <li>Constant maps are continuous.</li>
+      <li>Inclusion of a subspace $A\hookrightarrow X$ is continuous.</li>
+      <li>Compositions of continuous maps are continuous.</li>
+      <li>Restricting the domain: if $f$ is continuous, so is $f|_A$.</li>
+      <li>Restricting or expanding the range: if $f:X\to Y$ is continuous and $f(X)\subset Z\subset Y$, then $f:X\to Z$ is continuous (with the subspace topology on $Z$), and the same holds for a larger space containing $Y$.</li>
+    </ul></div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw3-1')">HW3 Q1</a><a href="#" onclick="return go('p8','hw3-4')">HW3 Q4b</a></div>
+</div>
+
+<div class="sec" id="c-homeo">
+  <h2><span class="sec-num" style="color:var(--acb);">03</span> Homeomorphisms and Embeddings</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">A <strong>homeomorphism</strong> is a bijection that matches up the open sets on both sides exactly. Two homeomorphic spaces are the same space as far as topology can tell. An <strong>embedding</strong> is a map that is a homeomorphism onto its image, so it places a faithful copy of $X$ inside $Y$.</div>
+  </div>
+  <p class="prose">A continuous bijection need not be a homeomorphism: its inverse can fail to be continuous. This is the most common trap in this section, and HW3 Q2b and Q4b are both built around it.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Definitions <span class="mun">§18</span></div>
+    <div class="box-body">
+      <p>$f:X\to Y$ is a <strong>homeomorphism</strong> if $f$ is a bijection and both $f$ and $f^{-1}$ are continuous. Equivalently: $f$ is a bijection, and $U$ is open in $X$ if and only if $f(U)$ is open in $Y$.</p>
+      <p>$f:X\to Y$ is an <strong>embedding</strong> (imbedding, in Munkres) if $f$ is injective and continuous, and the map $f':X\to f(X)$ obtained by restricting the range is a homeomorphism, where $f(X)$ has the subspace topology from $Y$.</p>
+    </div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — continuous bijection, not a homeomorphism</div>
+    <div class="box-body">
+      <p>The identity $\mathrm{id}:(\mathbb{R},\text{discrete})\to(\mathbb{R},\text{standard})$ is a continuous bijection, but its inverse $(\mathbb{R},\text{standard})\to(\mathbb{R},\text{discrete})$ is not continuous, because $\{0\}$ pulls back to a non-open set. In terms of the definition, $\{0\}$ is open in the domain but its image $\{0\}$ is not open in the target.</p>
+      <p>This is the identity-map situation of HW3 Q2. There, both directions of the identity reduce to inclusions between the two topologies.</p>
+    </div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — injective and continuous, but not an embedding</div>
+    <div class="box-body">
+      <p>Let $f:[0,1)\to\mathbb{R}^2$, $f(t)=(\cos2\pi t,\sin2\pi t)$. It is continuous and injective, with image the unit circle $S^1$. But it is not an embedding. The set $[0,\tfrac12)$ is open in $[0,1)$, while its image, an arc that includes the endpoint $(1,0)$, is not open in $S^1$: points of $S^1$ just below $(1,0)$ are close to $(1,0)$ but not in the arc.</p>
+      <p><strong>How to prove that something is an embedding</strong> (HW3 Q4b). Show that $f$ is injective and continuous, and that the inverse $f(X)\to X$ is continuous. A convenient way to get the inverse is to find a continuous map defined on all of $Y$ whose restriction to $f(X)$ is the inverse. Restricting a continuous map to a subspace keeps it continuous (Theorem 18.2).</p>
+    </div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw3-2')">HW3 Q2</a><a href="#" onclick="return go('p8','hw3-4')">HW3 Q4b</a></div>
+</div>
+
+<div class="sec" id="c-agree">
+  <h2><span class="sec-num" style="color:var(--acb);">04</span> The Set Where Two Maps Agree</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">For two continuous real-valued functions, the set where they agree is closed, because it is the zero set of the continuous function $f-g$. For maps into a general space there is no subtraction, but the Hausdorff property can do the same job. This is the idea behind HW3 Q3 and Q4b.</div>
+  </div>
+  <p class="prose">This section works the real-valued case in full and then sets up the general question. The general proof is HW3 Q3 itself, and the hints in the Problems tab guide you through it.</p>
+  <div class="ex">
+    <div class="box-label">Worked example — real-valued maps</div>
+    <div class="box-body">
+      <p><strong>Claim.</strong> If $f,g:X\to\mathbb{R}$ are continuous, then $E=\{x\in X\mid f(x)=g(x)\}$ is closed in $X$.</p>
+      <p><strong>Proof.</strong> The function $f-g$ is continuous (a difference of continuous real functions), and $E=(f-g)^{-1}(\{0\})$. The set $\{0\}$ is closed in $\mathbb{R}$, so $E$ is closed by Theorem 18.1(3).</p>
+      <p><strong>Consequence.</strong> If $f$ and $g$ agree on a dense set $A$, then $A\subset E$ with $E$ closed, so $X=\bar A\subset E$, and $f=g$ everywhere. Example: a continuous $f:\mathbb{R}\to\mathbb{R}$ that vanishes on $\mathbb{Q}$ vanishes everywhere.</p>
+    </div>
+  </div>
+  <div class="explain">
+    <div class="box-label">The general question</div>
+    <div class="box-body">For $f,g:X\to Y$ with $Y$ only a topological space, $f-g$ has no meaning. Show instead that the <em>complement</em> $\{x\mid f(x)\neq g(x)\}$ is open. Take a point $x$ where $f(x)\neq g(x)$. These are two distinct points of $Y$. What does the Hausdorff property give you, and how can continuity of $f$ and $g$ turn that into an open set around $x$? The worked proof that limits are unique (Closure tab, Section 06) uses the same technique.</div>
+  </div>
+  <div class="warn">
+    <div class="box-label">A note on HW3 Q3's statement</div>
+    <div class="box-body">The text extracted from the PDF reads "Assume $A = X$." The bar over $A$ was almost certainly lost in extraction, so the intended hypothesis is $\bar A=X$, that is, $A$ is dense in $X$. Confirm this against the original PDF.</div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','hw3-3')">HW3 Q3</a><a href="#" onclick="return go('p8','hw3-4')">HW3 Q4b</a></div>
+</div>
+</div>
+
+<!-- ==================== METRICS ==================== -->
+<div class="page" id="p7">
+<div class="hero">
+  <div class="ch-badge" style="background:rgba(47,122,120,.1);color:var(--acb);border:1px solid var(--ac);">Munkres §20</div>
+  <h1 style="color:var(--acb);">The Metric Topology</h1>
+  <p class="hero-sub">Metrics, $\varepsilon$-balls, and the triangle-inequality argument that shows a set is open or closed.</p>
+</div>
+
+<div class="sec" id="m-def">
+  <h2><span class="sec-num" style="color:var(--acb);">01</span> Metrics and the Metric Topology</h2>
+  <div class="main-idea" style="background:linear-gradient(135deg,rgba(47,122,120,.07),rgba(74,140,90,.03));border:1px solid var(--ac);">
+    <div class="mi-label" style="color:var(--acb);">Main Idea</div>
+    <div class="mi-text">A metric is a distance function. Every metric produces a topology whose basis is the open balls. This places Modern Analysis inside topology: every metric space from Rudin is a topological space, and the definitions agree.</div>
+  </div>
+  <p class="prose">MT Q6 asks for the metric axioms word for word and then for one triangle-inequality argument. The argument below for "an open ball is open" is the model. The midterm's closed-ball problem is the same argument applied to the complement.</p>
+  <div class="def-box" style="border-left-color:var(--acb);">
+    <div class="box-label" style="color:var(--acb);">Definition — metric <span class="mun">§20</span></div>
+    <div class="box-body">A <strong>metric</strong> on $X$ is a function $d:X\times X\to\mathbb{R}$ such that for all $x,y,z\in X$:
+    <ol>
+      <li>$d(x,y)\ge0$, with equality if and only if $x=y$. (positivity)</li>
+      <li>$d(x,y)=d(y,x)$. (symmetry)</li>
+      <li>$d(x,y)+d(y,z)\ge d(x,z)$. (triangle inequality)</li>
+    </ol>
+    The <strong>$\varepsilon$-ball</strong> centered at $x$ is $B_d(x,\varepsilon)=\{y\mid d(x,y)\lt\varepsilon\}$. The <strong>metric topology</strong> is the topology with basis all $\varepsilon$-balls, for all $x\in X$ and $\varepsilon\gt0$.</div>
+  </div>
+  <div class="thm">
+    <div class="box-label">Open sets in the metric topology <span class="mun">§20</span></div>
+    <div class="box-body">$U$ is open if and only if for each $y\in U$ there is $\delta\gt0$ with $B_d(y,\delta)\subset U$.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked proof — an open ball is open</div>
+    <div class="box-body">
+      <p><strong>Claim.</strong> $B=B_d(x,\varepsilon)$ is open.</p>
+      <p><strong>Proof.</strong> Let $y\in B$, so $d(x,y)\lt\varepsilon$. Set $\delta=\varepsilon-d(x,y)\gt0$. If $z\in B_d(y,\delta)$, then
+      $$d(x,z)\le d(x,y)+d(y,z)\lt d(x,y)+\delta=\varepsilon,$$
+      so $z\in B$. Hence $B_d(y,\delta)\subset B$.</p>
+      <p><strong>Read-through.</strong> $\delta$ is the room left between $y$ and the edge of the ball. The triangle inequality says any point within $\delta$ of $y$ is within $d(x,y)+\delta=\varepsilon$ of the center.</p>
+    </div>
+  </div>
+  <svg class="fig" viewBox="0 0 300 200" width="300">
+    <circle cx="140" cy="100" r="80" fill="none" stroke="#62b5ae" stroke-width="1.5"/>
+    <circle cx="140" cy="100" r="3" fill="#62b5ae"/><text x="128" y="118" fill="#62b5ae" font-size="11" font-family="JetBrains Mono">x</text>
+    <circle cx="185" cy="80" r="3" fill="#ccaa6a"/><text x="188" y="76" fill="#ccaa6a" font-size="11" font-family="JetBrains Mono">y</text>
+    <circle cx="185" cy="80" r="30.8" fill="none" stroke="#ccaa6a" stroke-dasharray="3 3"/>
+    <line x1="140" y1="100" x2="185" y2="80" stroke="#5a5a7a"/>
+    <line x1="185" y1="80" x2="213" y2="67.5" stroke="#ccaa6a"/>
+    <text x="214" y="62" fill="#ccaa6a" font-size="10" font-family="JetBrains Mono">δ</text>
+    <text x="40" y="190" fill="#5a5a7a" font-size="10" font-family="JetBrains Mono">δ = ε − d(x,y)</text>
+  </svg>
+  <div class="explain">
+    <div class="box-label">For the closed-ball problem (MT Q6b)</div>
+    <div class="box-body">To show $A=\{y\mid d(x,y)\le1\}$ is closed, show that its complement $\{z\mid d(x,z)\gt1\}$ is open. For such a $z$, the room is now $d(x,z)-1\gt0$. Use the triangle inequality in the form $d(x,z)\le d(x,w)+d(w,z)$ to show that every $w$ close to $z$ also has $d(x,w)\gt1$.</div>
+  </div>
+  <div class="ex">
+    <div class="box-label">Worked example — the discrete metric</div>
+    <div class="box-body">On any set, $d(x,y)=1$ for $x\neq y$ and $d(x,x)=0$ is a metric. The ball $B_d(x,\tfrac12)=\{x\}$, so every one-point set is open and the metric topology is discrete. Note that $\{y\mid d(x,y)\le1\}=X$, while $\{y\mid d(x,y)\lt1\}=\{x\}$. In this space the closed ball is not the closure of the open ball.</div>
+  </div>
+  <div class="builds">Builds toward <a href="#" onclick="return go('p8','mt-6')">MT Q6</a></div>
+</div>
+</div>
+
+<!-- ==================== PROBLEMS ==================== -->
+<div class="page" id="p8">
+<div class="hero">
+  <div class="ch-badge" style="background:rgba(47,122,120,.1);color:var(--acb);border:1px solid var(--ac);">HW1 · HW2 · HW3 · Midterm practice</div>
+  <h1 style="color:var(--acb);">Problems</h1>
+  <p class="hero-sub">Every assigned problem, with the sections to read first and hints that reveal one at a time. HW1, HW2, and the midterm practice set also have full solutions. Your "mark done" choices are saved in this browser.</p>
+</div>
+
+<div class="sec">
+  <h2><span class="sec-num" style="color:var(--acb);">01</span> Homework 3 <span class="mun">due Mon 10/5, 11:59 pm</span></h2>
+  <div class="notice">This assignment is due tonight and is graded, so the problems below have hints only. Each hint reveals one more step. Use as few as you need, and write the proof in your own words, as the course policy requires.</div>
+
+  <div class="prob" id="hw3-1">
+    <div class="prob-q"><span class="hw-num">HW3 Q1</span>Prove that if $f:A\to B$ and $g:C\to D$ are continuous, then $h:A\times C\to B\times D$, $h(a,c)=(f(a),g(c))$, is continuous.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p6','c-basis')">Continuity via a basis</a> · <a href="#" onclick="return go('p5','pr-basis')">Product basis</a></div>
+    <div class="hint ex"><div class="box-label">Hint 1</div><div class="box-body">The open sets $U\times V$ ($U$ open in $B$, $V$ open in $D$) form a basis for $B\times D$. By the basis check, it suffices to show $h^{-1}(U\times V)$ is open in $A\times C$.</div></div>
+    <div class="hint ex"><div class="box-label">Hint 2</div><div class="box-body">Unpack membership: $(a,c)\in h^{-1}(U\times V)\iff(f(a),g(c))\in U\times V\iff f(a)\in U\text{ and }g(c)\in V$.</div></div>
+    <div class="hint ex"><div class="box-label">Hint 3</div><div class="box-body">So $h^{-1}(U\times V)=f^{-1}(U)\times g^{-1}(V)$. Say why each factor is open, and why a product of open sets is open in $A\times C$. Write the set equality as a chain of "if and only if" statements, as in the swap-map example.</div></div>
+    <button class="hint-btn" onclick="nextHint(this)">Show hint 1 of 3</button>
+    <button class="done-btn" onclick="toggleDone('hw3-1')">mark done</button>
+  </div>
+
+  <div class="prob" id="hw3-2">
+    <div class="prob-q"><span class="hw-num">HW3 Q2</span>Let $\mathcal{T},\mathcal{T}'$ be topologies on $X$ and $i:(X,\mathcal{T})\to(X,\mathcal{T}')$ the identity. (a) Prove $i$ is continuous if and only if $\mathcal{T}$ is finer than $\mathcal{T}'$. (b) Prove $i$ is a homeomorphism if and only if $\mathcal{T}=\mathcal{T}'$.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p2','t-finer')">Finer/coarser</a> · <a href="#" onclick="return go('p6','c-def')">Continuity</a> · <a href="#" onclick="return go('p6','c-homeo')">Homeomorphisms</a></div>
+    <div class="hint ex"><div class="box-label">Hint 1</div><div class="box-body">For any subset $U\subset X$: $i^{-1}(U)=U$. So the continuity condition reads: for every $U\in\mathcal{T}'$, $U\in\mathcal{T}$.</div></div>
+    <div class="hint ex"><div class="box-label">Hint 2</div><div class="box-body">That condition is exactly the inclusion $\mathcal{T}'\subset\mathcal{T}$. Recall which direction "finer" means: $\mathcal{T}$ finer than $\mathcal{T}'$ means $\mathcal{T}\supset\mathcal{T}'$. Prove both directions of the "if and only if."</div></div>
+    <div class="hint ex"><div class="box-label">Hint 3</div><div class="box-body">(b) $i$ is a bijection, and its inverse is the identity $(X,\mathcal{T}')\to(X,\mathcal{T})$. Apply part (a) to $i$ and, with the roles of the topologies swapped, to $i^{-1}$. You get two inclusions, and together they give equality. Again, prove both directions.</div></div>
+    <button class="hint-btn" onclick="nextHint(this)">Show hint 1 of 3</button>
+    <button class="done-btn" onclick="toggleDone('hw3-2')">mark done</button>
+  </div>
+
+  <div class="prob" id="hw3-3">
+    <div class="prob-q"><span class="hw-num">HW3 Q3</span>Let $A\subset X$ with $\bar A=X$. (a) If $f,g:X\to Y$ are continuous, $f|_A=g|_A$, and $Y$ is Hausdorff, prove $f=g$. (b) Give an example showing the conclusion fails without the Hausdorff assumption. Justify.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p6','c-agree')">Where two maps agree</a> · <a href="#" onclick="return go('p4','cl-haus')">Hausdorff</a> · <a href="#" onclick="return go('p4','cl-closure')">Closure facts</a></div>
+    <div class="hint ex"><div class="box-label">Hint 1</div><div class="box-body">Let $E=\{x\in X\mid f(x)=g(x)\}$. The hypothesis gives $A\subset E$. If you show $E$ is closed, then $X=\bar A\subset E$, because the closure is the smallest closed set containing $A$.</div></div>
+    <div class="hint ex"><div class="box-label">Hint 2</div><div class="box-body">Show $X\setminus E$ is open. Take $x$ with $f(x)\neq g(x)$. By the Hausdorff property choose disjoint open $U\ni f(x)$ and $V\ni g(x)$ in $Y$.</div></div>
+    <div class="hint ex"><div class="box-label">Hint 3</div><div class="box-body">Consider $W=f^{-1}(U)\cap g^{-1}(V)$. It is open, since it is a finite intersection of preimages of open sets, and it contains $x$. Show $W\subset X\setminus E$: if some $z\in W$ had $f(z)=g(z)$, where would that common value lie?</div></div>
+    <div class="hint ex"><div class="box-label">Hint 4 (part b)</div><div class="box-body">Every map into an indiscrete space is continuous. Take $Y$ indiscrete with two points, $X=\mathbb{R}$, and $A=\mathbb{Q}$, which is dense. Define $f$ and $g$ to agree on $\mathbb{Q}$ but differ somewhere. Justify that $Y$ is not Hausdorff, that both maps are continuous, that $\mathbb{Q}$ is dense, and that $f\neq g$.</div></div>
+    <button class="hint-btn" onclick="nextHint(this)">Show hint 1 of 4</button>
+    <button class="done-btn" onclick="toggleDone('hw3-3')">mark done</button>
+  </div>
+
+  <div class="prob" id="hw3-4">
+    <div class="prob-q"><span class="hw-num">HW3 Q4</span>Let $f:X\to Y$ and $g:Y\to X$ be continuous with $g\circ f(x)=x$ for all $x\in X$. (a) Prove $\{y\in Y\mid f\circ g(y)=y\}=f(X)$. (b) If $Y$ is Hausdorff, prove $f(X)$ is closed in $Y$ and $f$ is an embedding.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p1','s-equal')">Two inclusions</a> · <a href="#" onclick="return go('p6','c-agree')">Where two maps agree</a> · <a href="#" onclick="return go('p6','c-homeo')">Embeddings</a></div>
+    <div class="hint ex"><div class="box-label">Hint 1 — (a), the inclusion $\subset$</div><div class="box-body">If $f(g(y))=y$, then $y$ is $f$ of something. Of what? That shows $y\in f(X)$.</div></div>
+    <div class="hint ex"><div class="box-label">Hint 2 — (a), the inclusion $\supset$</div><div class="box-body">If $y\in f(X)$, choose $x$ with $y=f(x)$. Compute $f(g(y))=f(g(f(x)))$ and use $g\circ f=\mathrm{id}_X$.</div></div>
+    <div class="hint ex"><div class="box-label">Hint 3 — (b), closed</div><div class="box-body">By (a), $f(X)$ is the set where the two continuous maps $f\circ g:Y\to Y$ and $\mathrm{id}_Y:Y\to Y$ agree. Their target $Y$ is Hausdorff. Reuse the argument from HW3 Q3(a): prove once, as a lemma, that the agreement set of two continuous maps into a Hausdorff space is closed.</div></div>
+    <div class="hint ex"><div class="box-label">Hint 4 — (b), embedding</div><div class="box-body">$f$ is injective: if $f(x_1)=f(x_2)$, apply $g$. The candidate inverse of $f':X\to f(X)$ is $g|_{f(X)}$. Check both compositions are identities (part (a) handles one of them), and note that $g|_{f(X)}$ is continuous as a restriction of a continuous map. The Hausdorff hypothesis is not needed for this part.</div></div>
+    <button class="hint-btn" onclick="nextHint(this)">Show hint 1 of 4</button>
+    <button class="done-btn" onclick="toggleDone('hw3-4')">mark done</button>
+  </div>
+
+  <div class="prob" id="hw3-5">
+    <div class="prob-q"><span class="hw-num">HW3 Q5</span>Let $X=\prod_{j\in J}\{0,1\}$ (discrete factors, product topology). For $A\subset J$ let $x(A)_j=1$ if $j\in A$ and $0$ otherwise. Prove: if $A_1\subset A_2\subset\cdots$, then $x(A_n)\to x(A)$ where $A=\bigcup_nA_n$.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p4','cl-seq')">Convergence</a> · <a href="#" onclick="return go('p5','pr-general')">Product topology</a> · <a href="#" onclick="return go('p5','pr-seq')">Sequences in products</a></div>
+    <div class="hint ex"><div class="box-label">Hint 1</div><div class="box-body">Let $U$ be a neighborhood of $x(A)$. It contains a basic open set $B=\pi_{j_1}^{-1}(U_1)\cap\cdots\cap\pi_{j_k}^{-1}(U_k)$ containing $x(A)$. It suffices to show $x(A_n)\in B$ for all large $n$.</div></div>
+    <div class="hint ex"><div class="box-label">Hint 2</div><div class="box-body">For a single coordinate $j$, show that the sequence $x(A_n)_j$ is eventually equal to $x(A)_j$. Two cases: if $j\in A$, then $j\in A_N$ for some $N$, and nestedness keeps it in $A_n$ for all $n\ge N$. If $j\notin A$, then $j\notin A_n$ for every $n$.</div></div>
+    <div class="hint ex"><div class="box-label">Hint 3</div><div class="box-body">So for each $i=1,\dots,k$ there is $N_i$ with $x(A_n)_{j_i}=x(A)_{j_i}\in U_i$ for $n\ge N_i$. Take $N=\max_iN_i$, which is finite because $k$ is finite. Then for $n\ge N$, $x(A_n)\in B\subset U$.</div></div>
+    <button class="hint-btn" onclick="nextHint(this)">Show hint 1 of 3</button>
+    <button class="done-btn" onclick="toggleDone('hw3-5')">mark done</button>
+  </div>
+
+  <div class="prob" id="hw3-6">
+    <div class="prob-q"><span class="hw-num">HW3 Q6</span>For $n\in\mathbb{Z}_{\gt0}$, give $\{0,1,\dots,n\}$ the discrete topology and let $X=\prod_{j\in J}\{0,\dots,n\}$. Define $m(x)=\max\{x_j\mid j\in J\}$. Prove $m$ is not continuous unless $J$ is finite.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p5','pr-general')">Product vs box (one-point sets)</a> · <a href="#" onclick="return go('p1','s-quant')">Negating continuity</a></div>
+    <div class="hint ex"><div class="box-label">Hint 1</div><div class="box-body">Assume $J$ is infinite. You need one open set in $\{0,\dots,n\}$ whose preimage under $m$ is not open. Since the target is discrete, $\{0\}$ is open. Compute $m^{-1}(\{0\})$.</div></div>
+    <div class="hint ex"><div class="box-label">Hint 2</div><div class="box-body">$m(x)=0$ exactly when every coordinate is $0$, because all coordinates are $\ge0$. So $m^{-1}(\{0\})$ is a single point $\mathbf{0}=(0)_{j\in J}$. (The maximum exists because the coordinates take values in a finite set.)</div></div>
+    <div class="hint ex"><div class="box-label">Hint 3</div><div class="box-body">Show $\{\mathbf{0}\}$ is not open: any basic open set containing $\mathbf{0}$ constrains only finitely many coordinates. Because $J$ is infinite, some coordinate $k$ is unconstrained, and since $n\ge1$ you can set that coordinate to $1$ and stay in the basic set. That point is not $\mathbf{0}$.</div></div>
+    <button class="hint-btn" onclick="nextHint(this)">Show hint 1 of 3</button>
+    <button class="done-btn" onclick="toggleDone('hw3-6')">mark done</button>
+  </div>
+</div>
+
+<div class="sec">
+  <h2><span class="sec-num" style="color:var(--acb);">02</span> Midterm Practice Set</h2>
+  <p class="prose">Write each answer in your notes as if under exam conditions: closed book, about 12 minutes per problem. Then compare with the solution. For the "state the definition" parts, the exact wording matters.</p>
+
+  <div class="prob" id="mt-1">
+    <div class="prob-q"><span class="hw-num">MT Q1</span>(a) State the definition of the subspace topology $\mathcal{T}_A$. (b) With $\mathbb{Q}\subset\mathbb{R}$ as a subspace, prove $\{0\}$ is not open in $\mathbb{Q}$.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p3','sub-def')">Subspace topology</a></div>
+    <div class="hint ex"><div class="box-label">Hint</div><div class="box-body">Argue by contradiction: $\{0\}=\mathbb{Q}\cap U$ with $U$ open in $\mathbb{R}$. Find a basis interval inside $U$ around $0$ and a nonzero rational inside it.</div></div>
+    <button class="hint-btn" onclick="nextHint(this)">Show hint 1 of 1</button>
+    <button class="sol-btn" onclick="toggleSol('s-mt-1')">show solution</button>
+    <div id="s-mt-1" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">(a)</div><div class="box-body">$\mathcal{T}_A=\{A\cap U\mid U\in\mathcal{T}\}$.</div></div>
+      <div class="thm"><div class="box-label">(b)</div><div class="box-body">Suppose $\{0\}$ is open in $\mathbb{Q}$. Then $\{0\}=\mathbb{Q}\cap U$ for some $U$ open in $\mathbb{R}$. Since $0\in U$ and the open intervals form a basis, there are $a\lt0\lt b$ with $(a,b)\subset U$. Choose a rational $q$ with $0\lt q\lt b$ (for example $q=1/N$ with $N\gt1/b$). Then $q\in\mathbb{Q}\cap(a,b)\subset\mathbb{Q}\cap U=\{0\}$, so $q=0$, a contradiction. Hence $\{0\}$ is not open in $\mathbb{Q}$.</div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('mt-1')">mark done</button>
+  </div>
+
+  <div class="prob" id="mt-2">
+    <div class="prob-q"><span class="hw-num">MT Q2</span>(a) State the definition of $\bar A$. (b) $X=\{0,1,2\}$, $\mathcal{T}=\{\varnothing,\{0\},\{0,1\},X\}$, $A=\{1\}$. Determine $\bar A$, with justification.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p4','cl-closure')">Closure</a></div>
+    <div class="hint ex"><div class="box-label">Hint</div><div class="box-body">List the closed sets (complements of the open sets), then intersect the ones containing $\{1\}$.</div></div>
+    <button class="hint-btn" onclick="nextHint(this)">Show hint 1 of 1</button>
+    <button class="sol-btn" onclick="toggleSol('s-mt-2')">show solution</button>
+    <div id="s-mt-2" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">(a)</div><div class="box-body">$\bar A$ is the intersection of all closed subsets of $X$ that contain $A$. (The problem statement says "the closure of $X$"; it means the closure of $A$.)</div></div>
+      <div class="thm"><div class="box-label">(b)</div><div class="box-body">The closed sets are the complements of the open sets: $X\setminus\varnothing=\{0,1,2\}$, $X\setminus\{0\}=\{1,2\}$, $X\setminus\{0,1\}=\{2\}$, $X\setminus X=\varnothing$. Those containing $\{1\}$ are $\{0,1,2\}$ and $\{1,2\}$. Their intersection is $\{1,2\}$. So $\bar A=\{1,2\}$.<br><br>Check with the neighborhood test: $0\notin\bar A$ because $\{0\}$ is an open set containing $0$ that misses $A$. $2\in\bar A$ because the only open set containing $2$ is $X$, which meets $A$.</div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('mt-2')">mark done</button>
+  </div>
+
+  <div class="prob" id="mt-3">
+    <div class="prob-q"><span class="hw-num">MT Q3</span>True/false, for subspaces $A\subset\mathbb{R}$ (standard topology). Answer these in the <a href="#" onclick="return go('p8','drills')">True/False drills</a> below. They are the first five drill cards.</div>
+    <button class="done-btn" onclick="toggleDone('mt-3')">mark done</button>
+  </div>
+
+  <div class="prob" id="mt-4">
+    <div class="prob-q"><span class="hw-num">MT Q4</span>(a) State the definition of the cofinite (finite complement) topology on $X$. (b) Prove that every injective $f:\mathbb{R}\to\mathbb{R}_f$ is continuous, where the domain has the standard topology.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p6','c-def')">Continuity examples</a> · <a href="#" onclick="return go('p1','s-img')">Preimages under injections</a></div>
+    <div class="hint ex"><div class="box-label">Hint</div><div class="box-body">Use the closed-set form of continuity: the closed sets of $\mathbb{R}_f$ are $\mathbb{R}$ and the finite sets. What is the preimage of a finite set under an injection, and is it closed in the standard topology?</div></div>
+    <button class="hint-btn" onclick="nextHint(this)">Show hint 1 of 1</button>
+    <button class="sol-btn" onclick="toggleSol('s-mt-4')">show solution</button>
+    <div id="s-mt-4" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">(a)</div><div class="box-body">$\mathcal{T}_f=\{U\subset X\mid X\setminus U\text{ is finite, or }U=\varnothing\}$. (Some texts write: $U=\varnothing$ or $X\setminus U$ finite. The two are the same.)</div></div>
+      <div class="thm"><div class="box-label">(b)</div><div class="box-body">By Theorem 18.1 it suffices to show that the preimage of each closed set of $\mathbb{R}_f$ is closed in $\mathbb{R}$. The closed sets of $\mathbb{R}_f$ are $\mathbb{R}$ and the finite subsets. $f^{-1}(\mathbb{R})=\mathbb{R}$ is closed. If $F$ is finite, $f^{-1}(F)=\bigcup_{y\in F}f^{-1}(\{y\})$, and each $f^{-1}(\{y\})$ has at most one point because $f$ is injective. So $f^{-1}(F)$ is finite. Finite subsets of $\mathbb{R}$ are closed in the standard topology: $\mathbb{R}$ is Hausdorff (Theorem 17.8), or directly, the complement of a finite set is a finite union of open intervals and rays. Hence $f$ is continuous.<br><br><strong>Equivalent open-set version.</strong> A nonempty open $V=\mathbb{R}\setminus F$ has $f^{-1}(V)=\mathbb{R}\setminus f^{-1}(F)$, which is the complement of a finite set and so is open.</div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('mt-4')">mark done</button>
+  </div>
+
+  <div class="prob" id="mt-5">
+    <div class="prob-q"><span class="hw-num">MT Q5</span>Let $A_j\subset X_j$ be closed for each $j\in J$, and $X=\prod X_j$ with the product topology. Prove $\prod A_j$ is closed in $X$.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p1','s-index')">Complement of a product</a> · <a href="#" onclick="return go('p5','pr-general')">Product topology</a></div>
+    <div class="hint ex"><div class="box-label">Hint</div><div class="box-body">A point is outside $\prod A_j$ exactly when at least one coordinate lies outside its $A_k$. Write the complement as a union over $k$ and recognize each piece.</div></div>
+    <button class="hint-btn" onclick="nextHint(this)">Show hint 1 of 1</button>
+    <button class="sol-btn" onclick="toggleSol('s-mt-5')">show solution</button>
+    <div id="s-mt-5" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">Solution</div><div class="box-body"><strong>Claim:</strong> $X\setminus\prod_jA_j=\bigcup_{k\in J}\pi_k^{-1}(X_k\setminus A_k)$.<br>
+      ($\subset$) If $x\notin\prod A_j$, then $x_k\notin A_k$ for some $k$, so $\pi_k(x)\in X_k\setminus A_k$, and $x$ lies in the $k$-th set of the union.<br>
+      ($\supset$) If $x\in\pi_k^{-1}(X_k\setminus A_k)$ for some $k$, then $x_k\notin A_k$, so $x\notin\prod A_j$.<br><br>
+      Each $X_k\setminus A_k$ is open because $A_k$ is closed. $\pi_k^{-1}(X_k\setminus A_k)$ is open in the product topology: it is a subbasis element, a product with $X_j\setminus A_j$ in coordinate $k$ and $X_j$ in every other coordinate, so only one coordinate is restricted. A union of open sets is open, so the complement of $\prod A_j$ is open, and $\prod A_j$ is closed.</div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('mt-5')">mark done</button>
+  </div>
+
+  <div class="prob" id="mt-6">
+    <div class="prob-q"><span class="hw-num">MT Q6</span>(a) State the axioms for a metric $d$ on $X$. (b) For $x\in X$, prove $A=\{y\in X\mid d(x,y)\le1\}$ is closed.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p7','m-def')">Metrics</a></div>
+    <div class="hint ex"><div class="box-label">Hint</div><div class="box-body">Show the complement is open. For $z$ with $d(x,z)\gt1$, try the radius $r=d(x,z)-1$.</div></div>
+    <button class="hint-btn" onclick="nextHint(this)">Show hint 1 of 1</button>
+    <button class="sol-btn" onclick="toggleSol('s-mt-6')">show solution</button>
+    <div id="s-mt-6" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">(a)</div><div class="box-body">For all $x,y,z\in X$: (1) $d(x,y)\ge0$, and $d(x,y)=0\iff x=y$. (2) $d(x,y)=d(y,x)$. (3) $d(x,y)+d(y,z)\ge d(x,z)$.</div></div>
+      <div class="thm"><div class="box-label">(b)</div><div class="box-body">Let $z\in X\setminus A$, so $d(x,z)\gt1$. Let $r=d(x,z)-1\gt0$. If $w\in B_d(z,r)$, then by the triangle inequality $d(x,z)\le d(x,w)+d(w,z)\lt d(x,w)+r$, so $d(x,w)\gt d(x,z)-r=1$, and $w\notin A$. Thus $B_d(z,r)\subset X\setminus A$. Every point of $X\setminus A$ has a ball around it inside $X\setminus A$, so $X\setminus A$ is open and $A$ is closed.</div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('mt-6')">mark done</button>
+  </div>
+</div>
+
+<div class="sec" id="drills">
+  <h2><span class="sec-num" style="color:var(--acb);">03</span> True/False Drills</h2>
+  <p class="prose">The first five are MT Q3, where $A\subset\mathbb{R}$ has the subspace topology. The rest test the standard examples. For each one, name the example or counterexample before you tap.</p>
+
+  <div class="drill-card" id="tf1" data-correct="true"><div class="drill-q"><span class="drill-tag tf">MT 3a</span>Any $A\subset\mathbb{R}$ is Hausdorff.</div><div class="tf-row"><button class="tf-btn" data-val="true" onclick="answerTF('tf1','true')">True</button><button class="tf-btn" data-val="false" onclick="answerTF('tf1','false')">False</button></div><div class="drill-exp"><div class="thm"><div class="box-label">True</div><div class="box-body">$\mathbb{R}$ is Hausdorff and subspaces of Hausdorff spaces are Hausdorff: intersect disjoint intervals with $A$.</div></div></div></div>
+
+  <div class="drill-card" id="tf2" data-correct="true"><div class="drill-q"><span class="drill-tag tf">MT 3b</span>If $A$ is finite, then any function $f:A\to\mathbb{R}$ is continuous.</div><div class="tf-row"><button class="tf-btn" data-val="true" onclick="answerTF('tf2','true')">True</button><button class="tf-btn" data-val="false" onclick="answerTF('tf2','false')">False</button></div><div class="drill-exp"><div class="thm"><div class="box-label">True</div><div class="box-body">A finite subspace of $\mathbb{R}$ is discrete: around each point choose an interval of radius less than half the smallest gap, so each one-point set is open in $A$. Every function out of a discrete space is continuous.</div></div></div></div>
+
+  <div class="drill-card" id="tf3" data-correct="false"><div class="drill-q"><span class="drill-tag tf">MT 3c</span>If $A$ is discrete, then $A$ is closed in $\mathbb{R}$.</div><div class="tf-row"><button class="tf-btn" data-val="true" onclick="answerTF('tf3','true')">True</button><button class="tf-btn" data-val="false" onclick="answerTF('tf3','false')">False</button></div><div class="drill-exp"><div class="warn"><div class="box-label">False</div><div class="box-body">$A=\{1/n\mid n\ge1\}$ is discrete (each $1/n$ is isolated) but $0\in\bar A\setminus A$.</div></div></div></div>
+
+  <div class="drill-card" id="tf4" data-correct="false"><div class="drill-q"><span class="drill-tag tf">MT 3d</span>If $A$ is discrete, then $A$ is a finite set.</div><div class="tf-row"><button class="tf-btn" data-val="true" onclick="answerTF('tf4','true')">True</button><button class="tf-btn" data-val="false" onclick="answerTF('tf4','false')">False</button></div><div class="drill-exp"><div class="warn"><div class="box-label">False</div><div class="box-body">$\mathbb{Z}$ is infinite and discrete: $\{n\}=\mathbb{Z}\cap(n-\tfrac12,n+\tfrac12)$.</div></div></div></div>
+
+  <div class="drill-card" id="tf5" data-correct="true"><div class="drill-q"><span class="drill-tag tf">MT 3e</span>If $A$ is open (in $\mathbb{R}$) and $A\neq\varnothing$, then $A$ is not a finite set.</div><div class="tf-row"><button class="tf-btn" data-val="true" onclick="answerTF('tf5','true')">True</button><button class="tf-btn" data-val="false" onclick="answerTF('tf5','false')">False</button></div><div class="drill-exp"><div class="thm"><div class="box-label">True</div><div class="box-body">A nonempty open set contains some interval $(a,b)$ with $a\lt b$, which has infinitely many points.</div></div></div></div>
+
+  <div class="drill-card" id="tf6" data-correct="false"><div class="drill-q"><span class="drill-tag tf">T/F</span>A set that is not open is closed.</div><div class="tf-row"><button class="tf-btn" data-val="true" onclick="answerTF('tf6','true')">True</button><button class="tf-btn" data-val="false" onclick="answerTF('tf6','false')">False</button></div><div class="drill-exp"><div class="warn"><div class="box-label">False</div><div class="box-body">$[0,1)$ in $\mathbb{R}$ is neither open nor closed.</div></div></div></div>
+
+  <div class="drill-card" id="tf7" data-correct="false"><div class="drill-q"><span class="drill-tag tf">T/F</span>In every topological space, one-point sets are closed.</div><div class="tf-row"><button class="tf-btn" data-val="true" onclick="answerTF('tf7','true')">True</button><button class="tf-btn" data-val="false" onclick="answerTF('tf7','false')">False</button></div><div class="drill-exp"><div class="warn"><div class="box-label">False</div><div class="box-body">In the Sierpiński space $\{0,1\}$ with open sets $\varnothing,\{1\},\{0,1\}$, the set $\{1\}$ is not closed, because its complement $\{0\}$ is not open. One-point sets are closed in Hausdorff spaces (Theorem 17.8).</div></div></div></div>
+
+  <div class="drill-card" id="tf8" data-correct="true"><div class="drill-q"><span class="drill-tag tf">T/F</span>In $\mathbb{R}$ with the finite complement topology, the sequence $x_n=1/n$ converges to $0$.</div><div class="tf-row"><button class="tf-btn" data-val="true" onclick="answerTF('tf8','true')">True</button><button class="tf-btn" data-val="false" onclick="answerTF('tf8','false')">False</button></div><div class="drill-exp"><div class="thm"><div class="box-label">True, and it converges to every point</div><div class="box-body">A neighborhood $U$ of $0$ omits only finitely many reals. Since the $x_n$ are distinct, only finitely many of them are omitted, so all $x_n$ with $n$ large lie in $U$. The same argument works for any limit candidate, so limits are not unique, which is consistent with $\mathbb{R}_f$ not being Hausdorff.</div></div></div></div>
+
+  <div class="drill-card" id="tf9" data-correct="true"><div class="drill-q"><span class="drill-tag tf">T/F</span>If $\mathcal{T}\subset\mathcal{T}'$ and $f:(X,\mathcal{T})\to Y$ is continuous, then $f:(X,\mathcal{T}')\to Y$ is continuous.</div><div class="tf-row"><button class="tf-btn" data-val="true" onclick="answerTF('tf9','true')">True</button><button class="tf-btn" data-val="false" onclick="answerTF('tf9','false')">False</button></div><div class="drill-exp"><div class="thm"><div class="box-label">True</div><div class="box-body">Each preimage $f^{-1}(V)$ lies in $\mathcal{T}\subset\mathcal{T}'$. A finer domain topology can only help continuity, and a finer target topology can only hurt it.</div></div></div></div>
+
+  <div class="drill-card" id="tf10" data-correct="false"><div class="drill-q"><span class="drill-tag tf">T/F</span>The union of any collection of closed sets is closed.</div><div class="tf-row"><button class="tf-btn" data-val="true" onclick="answerTF('tf10','true')">True</button><button class="tf-btn" data-val="false" onclick="answerTF('tf10','false')">False</button></div><div class="drill-exp"><div class="warn"><div class="box-label">False — only finite unions</div><div class="box-body">$\bigcup_n\{1/n\}$ is a union of closed sets in $\mathbb{R}$ but is not closed. This is HW2 Q5c in another form.</div></div></div></div>
+
+  <div class="drill-card" id="tf11" data-correct="false"><div class="drill-q"><span class="drill-tag tf">T/F</span>On $\mathbb{R}^\omega$, the product topology and the box topology are the same.</div><div class="tf-row"><button class="tf-btn" data-val="true" onclick="answerTF('tf11','true')">True</button><button class="tf-btn" data-val="false" onclick="answerTF('tf11','false')">False</button></div><div class="drill-exp"><div class="warn"><div class="box-label">False</div><div class="box-body">$\prod_n(-1,1)$ is box-open but not product-open. They agree only for finite products.</div></div></div></div>
+
+  <div class="drill-card" id="tf12" data-correct="false"><div class="drill-q"><span class="drill-tag tf">T/F</span>A continuous bijection is a homeomorphism.</div><div class="tf-row"><button class="tf-btn" data-val="true" onclick="answerTF('tf12','true')">True</button><button class="tf-btn" data-val="false" onclick="answerTF('tf12','false')">False</button></div><div class="drill-exp"><div class="warn"><div class="box-label">False</div><div class="box-body">$\mathrm{id}:(\mathbb{R},\text{discrete})\to(\mathbb{R},\text{standard})$ is a continuous bijection, but its inverse is not continuous.</div></div></div></div>
+</div>
+
+<div class="sec">
+  <h2><span class="sec-num" style="color:var(--acb);">04</span> Proof Ordering</h2>
+  <div class="drill-card" id="ord1" data-answer="A,B,C,D,E">
+    <div class="drill-q"><span class="drill-tag ord">ORDER</span>Drag to arrange the proof that $\{0\}$ is not open in $\mathbb{Q}$ (MT Q1b).</div>
+    <div class="ord-steps">
+      <div class="ord-step" data-label="C" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event)" ontouchstart="touchStart(event)"><span class="drag-handle">⠿</span><span class="ord-lbl">C</span><span>Since $0\in U$ and $U$ is open, there are $a\lt0\lt b$ with $(a,b)\subset U$.</span></div>
+      <div class="ord-step" data-label="E" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event)" ontouchstart="touchStart(event)"><span class="drag-handle">⠿</span><span class="ord-lbl">E</span><span>Hence $q\in\{0\}$, contradicting $q\neq0$.</span></div>
+      <div class="ord-step" data-label="A" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event)" ontouchstart="touchStart(event)"><span class="drag-handle">⠿</span><span class="ord-lbl">A</span><span>Suppose, for contradiction, that $\{0\}$ is open in $\mathbb{Q}$.</span></div>
+      <div class="ord-step" data-label="D" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event)" ontouchstart="touchStart(event)"><span class="drag-handle">⠿</span><span class="ord-lbl">D</span><span>Choose a rational $q$ with $0\lt q\lt b$; then $q\in\mathbb{Q}\cap U$.</span></div>
+      <div class="ord-step" data-label="B" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event)" ontouchstart="touchStart(event)"><span class="drag-handle">⠿</span><span class="ord-lbl">B</span><span>Then $\{0\}=\mathbb{Q}\cap U$ for some $U$ open in $\mathbb{R}$.</span></div>
+    </div>
+    <button class="sol-btn check-btn" onclick="checkOrder('ord1')">check order</button>
+  </div>
+</div>
+
+<div class="sec">
+  <h2><span class="sec-num" style="color:var(--acb);">05</span> Homework 1 (review)</h2>
+  <p class="prose">These are past due, so full solutions are included for midterm review. The finite-set problems (Q1, Q2, Q6) are the same kind as MT Q2.</p>
+
+  <div class="prob" id="hw1-1">
+    <div class="prob-q"><span class="hw-num">HW1 Q1</span>$X=\{a,b,c\}$, $\mathcal{T}=\{\{b\},\{a,b\},\{b,c\}\}$. Does $\mathcal{T}$ satisfy topology axiom (1)? (2)? (3)? Justify.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p2','t-axioms')">Topology axioms</a></div>
+    <div class="hint ex"><div class="box-label">Hint</div><div class="box-body">Check each axiom separately. For (2) and (3), go through every pair of distinct members.</div></div>
+    <button class="hint-btn" onclick="nextHint(this)">Show hint 1 of 1</button>
+    <button class="sol-btn" onclick="toggleSol('s-hw1-1')">show solution</button>
+    <div id="s-hw1-1" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">Solution</div><div class="box-body">
+      <p><strong>(1) No.</strong> $\varnothing\notin\mathcal{T}$ (and also $X\notin\mathcal{T}$).</p>
+      <p><strong>(2) No.</strong> $\{a,b\}\cup\{b,c\}=\{a,b,c\}=X\notin\mathcal{T}$.</p>
+      <p><strong>(3) Yes.</strong> The pairwise intersections of distinct members are $\{b\}\cap\{a,b\}=\{b\}$, $\{b\}\cap\{b,c\}=\{b\}$, and $\{a,b\}\cap\{b,c\}=\{b\}$, all in $\mathcal{T}$. The intersection of a set with itself is that set. Any finite intersection is computed two sets at a time, so every finite intersection lies in $\mathcal{T}$.</p></div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('hw1-1')">mark done</button>
+  </div>
+
+  <div class="prob" id="hw1-2">
+    <div class="prob-q"><span class="hw-num">HW1 Q2</span>Same $X$, $\mathcal{B}=\{\{b\},\{a,b\},\{b,c\}\}$. Does $\mathcal{B}$ satisfy basis axiom (1)? (2)?</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p2','t-basis')">Basis</a></div>
+    <button class="sol-btn" onclick="toggleSol('s-hw1-2')">show solution</button>
+    <div id="s-hw1-2" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">Solution</div><div class="box-body">
+      <p><strong>(1) Yes.</strong> $a\in\{a,b\}$, $b\in\{b\}$, $c\in\{b,c\}$.</p>
+      <p><strong>(2) Yes.</strong> Every intersection of two distinct members equals $\{b\}$ and contains only the point $b$. Take $B_3=\{b\}\in\mathcal{B}$: then $b\in B_3\subset\{b\}$. For $B_1=B_2$, take $B_3=B_1$.</p>
+      <p>So $\mathcal{B}$ is a basis, even though (by Q1) it is not a topology. It generates $\{\varnothing,\{b\},\{a,b\},\{b,c\},X\}$.</p></div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('hw1-2')">mark done</button>
+  </div>
+
+  <div class="prob" id="hw1-3">
+    <div class="prob-q"><span class="hw-num">HW1 Q3</span>$\mathcal{B}=\{(a,b)\mid a\lt b,\ a,b\in\mathbb{Q}\}$. (a) Prove $\mathcal{B}$ is a basis on $\mathbb{R}$. (b) Prove it generates the standard topology.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p2','t-basis')">Basis</a> · <a href="#" onclick="return go('p2','t-compare')">Lemma 13.3, density of ℚ</a></div>
+    <div class="hint ex"><div class="box-label">Hint</div><div class="box-body">(a) For (1), use density twice to trap $x$ between rationals. For (2), the intersection of two rational intervals is either empty or another rational interval. (b) Apply Lemma 13.3 in both directions.</div></div>
+    <button class="hint-btn" onclick="nextHint(this)">Show hint 1 of 1</button>
+    <button class="sol-btn" onclick="toggleSol('s-hw1-3')">show solution</button>
+    <div id="s-hw1-3" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">(a)</div><div class="box-body">
+      <p><strong>(1)</strong> Let $x\in\mathbb{R}$. By density of $\mathbb{Q}$ choose $q_1\in\mathbb{Q}$ with $x-1\lt q_1\lt x$ and $q_2\in\mathbb{Q}$ with $x\lt q_2\lt x+1$. Then $x\in(q_1,q_2)\in\mathcal{B}$.</p>
+      <p><strong>(2)</strong> Let $x\in(a_1,b_1)\cap(a_2,b_2)$ with all endpoints rational. Then $(a_1,b_1)\cap(a_2,b_2)=(\max(a_1,a_2),\min(b_1,b_2))$. Its endpoints are rational, and it contains $x$, so the left endpoint is less than the right one. So $B_3=(\max(a_1,a_2),\min(b_1,b_2))\in\mathcal{B}$ and $x\in B_3\subset B_1\cap B_2$.</p></div></div>
+      <div class="thm"><div class="box-label">(b)</div><div class="box-body">
+      <p>Let $\mathcal{T}$ be generated by $\mathcal{B}$ and $\mathcal{T}_s$ the standard topology, generated by $\mathcal{B}_s=\{(a,b)\mid a\lt b\text{ real}\}$.</p>
+      <p><strong>$\mathcal{T}\subset\mathcal{T}_s$.</strong> Given $x\in B\in\mathcal{B}$, the same $B$ lies in $\mathcal{B}_s$ with $x\in B\subset B$. By Lemma 13.3, $\mathcal{T}_s$ is finer than $\mathcal{T}$.</p>
+      <p><strong>$\mathcal{T}_s\subset\mathcal{T}$.</strong> Given $x\in(a,b)$ with $a,b$ real, choose rationals $q_1\in(a,x)$ and $q_2\in(x,b)$. Then $x\in(q_1,q_2)\subset(a,b)$ with $(q_1,q_2)\in\mathcal{B}$. By Lemma 13.3, $\mathcal{T}$ is finer than $\mathcal{T}_s$.</p>
+      <p>Hence $\mathcal{T}=\mathcal{T}_s$.</p></div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('hw1-3')">mark done</button>
+  </div>
+
+  <div class="prob" id="hw1-4">
+    <div class="prob-q"><span class="hw-num">HW1 Q4</span>If $Y$ is a subspace of $X$ and $A\subset Y$, prove the topology $A$ inherits from $Y$ equals the topology $A$ inherits from $X$.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p3','sub-def')">Subspace topology</a> · <a href="#" onclick="return go('p1','s-equal')">Two inclusions</a></div>
+    <button class="sol-btn" onclick="toggleSol('s-hw1-4')">show solution</button>
+    <div id="s-hw1-4" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">Solution</div><div class="box-body">
+      <p>Let $\mathcal{T}$ be the topology of $X$. Then $\mathcal{T}_Y=\{Y\cap U\mid U\in\mathcal{T}\}$. The topology $A$ inherits from $Y$ is $(\mathcal{T}_Y)_A=\{A\cap V\mid V\in\mathcal{T}_Y\}$, and the one it inherits from $X$ is $\mathcal{T}_A=\{A\cap U\mid U\in\mathcal{T}\}$.</p>
+      <p><strong>Key identity:</strong> since $A\subset Y$, $A\cap Y=A$, so $A\cap(Y\cap U)=(A\cap Y)\cap U=A\cap U$.</p>
+      <p>($\subset$) Let $W\in(\mathcal{T}_Y)_A$. Then $W=A\cap V$ with $V=Y\cap U$, $U\in\mathcal{T}$. So $W=A\cap(Y\cap U)=A\cap U\in\mathcal{T}_A$.</p>
+      <p>($\supset$) Let $W\in\mathcal{T}_A$, so $W=A\cap U$ with $U\in\mathcal{T}$. Put $V=Y\cap U\in\mathcal{T}_Y$. Then $A\cap V=A\cap U=W$, so $W\in(\mathcal{T}_Y)_A$.</p></div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('hw1-4')">mark done</button>
+  </div>
+
+  <div class="prob" id="hw1-5">
+    <div class="prob-q"><span class="hw-num">HW1 Q5</span>$Y=[-1,1]\subset\mathbb{R}$. For each set, is it open in $\mathbb{R}$? If it is a subset of $Y$, is it open in $Y$?<br>
+    (a) $A=\{x\in\mathbb{R}\mid\tfrac12\lt|x|\lt1\}$ (b) $B=\{x\in\mathbb{R}\mid\tfrac12\lt|x|\le1\}$ (c) $C=\{x\in\mathbb{R}\mid\tfrac12\lt|x|\le2\}$ (d) $D=\{x\in Y\mid\tfrac12\lt|x|\lt2\}$ (e) $E=\{x\in Y\mid\tfrac12\lt|x|\lt1\}$</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p3','sub-rel')">Open in Y vs open in X</a> · The fractions were reconstructed from garbled PDF text. Check them against your copy.</div>
+    <button class="sol-btn" onclick="toggleSol('s-hw1-5')">show solution</button>
+    <div id="s-hw1-5" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">Solution</div><div class="box-body">
+      <ul>
+        <li><strong>A</strong> $=(-1,-\tfrac12)\cup(\tfrac12,1)$. Open in $\mathbb{R}$: yes. $A\subset Y$, open in $Y$: yes.</li>
+        <li><strong>B</strong> $=[-1,-\tfrac12)\cup(\tfrac12,1]$. Open in $\mathbb{R}$: no (no interval around $1$ fits). $B\subset Y$, open in $Y$: yes, $B=Y\cap\big((-2,-\tfrac12)\cup(\tfrac12,2)\big)$.</li>
+        <li><strong>C</strong> $=[-2,-\tfrac12)\cup(\tfrac12,2]$. Open in $\mathbb{R}$: no (endpoint $2$). Not a subset of $Y$.</li>
+        <li><strong>D</strong> $=[-1,-\tfrac12)\cup(\tfrac12,1]=B$. Not open in $\mathbb{R}$. Open in $Y$: yes.</li>
+        <li><strong>E</strong> $=(-1,-\tfrac12)\cup(\tfrac12,1)=A$. Open in $\mathbb{R}$: yes. Open in $Y$: yes.</li>
+      </ul></div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('hw1-5')">mark done</button>
+  </div>
+
+  <div class="prob" id="hw1-6">
+    <div class="prob-q"><span class="hw-num">HW1 Q6</span>$X=\{0,1,2,3\}$, $\mathcal{T}=\{\varnothing,\{0\},\{0,1\},\{0,1,2\},X\}$, $A=\{0,1,3\}$. (a) Determine $\mathcal{T}_A$. (b) How many elements does it have? Justify.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p3','sub-finite')">Computing 𝒯<sub>A</sub></a></div>
+    <button class="sol-btn" onclick="toggleSol('s-hw1-6')">show solution</button>
+    <div id="s-hw1-6" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">Solution</div><div class="box-body">
+      <p>$A\cap\varnothing=\varnothing$, $A\cap\{0\}=\{0\}$, $A\cap\{0,1\}=\{0,1\}$, $A\cap\{0,1,2\}=\{0,1\}$, $A\cap X=\{0,1,3\}$.</p>
+      <p>(a) $\mathcal{T}_A=\{\varnothing,\{0\},\{0,1\},\{0,1,3\}\}$.</p>
+      <p>(b) Four elements. Although $\mathcal{T}$ has five elements, $\{0,1\}$ and $\{0,1,2\}$ have the same trace $\{0,1\}$ on $A$, because $2\notin A$. The four listed sets are pairwise distinct, since they have 0, 1, 2, and 3 elements. So $\mathcal{T}_A$ has exactly 4 elements.</p></div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('hw1-6')">mark done</button>
+  </div>
+</div>
+
+<div class="sec">
+  <h2><span class="sec-num" style="color:var(--acb);">06</span> Homework 2 (review)</h2>
+
+  <div class="prob" id="hw2-1">
+    <div class="prob-q"><span class="hw-num">HW2 Q1</span>If $X$ and $Y$ are discrete, prove $X\times Y$ is discrete. Then prove the analogous statement for indiscrete.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p5','pr-basis')">Product basis</a></div>
+    <button class="sol-btn" onclick="toggleSol('s-hw2-1')">show solution</button>
+    <div id="s-hw2-1" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">Solution</div><div class="box-body">
+      <p><strong>Discrete.</strong> The product topology is contained in $\mathcal{P}(X\times Y)$, so it suffices to show every subset is open. For $(x,y)\in X\times Y$, $\{x\}$ and $\{y\}$ are open, so $\{(x,y)\}=\{x\}\times\{y\}$ is a basis element and hence open. Any $W\subset X\times Y$ equals $\bigcup_{w\in W}\{w\}$, a union of open sets, so it is open.</p>
+      <p><strong>Indiscrete.</strong> The basis elements are $U\times V$ with $U\in\{\varnothing,X\}$ and $V\in\{\varnothing,Y\}$. Each is either $\varnothing$ (if a factor is empty) or $X\times Y$. By Lemma 13.1 the open sets are the unions of these, which are again only $\varnothing$ and $X\times Y$. So the product topology is $\{\varnothing,X\times Y\}$.</p></div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('hw2-1')">mark done</button>
+  </div>
+
+  <div class="prob" id="hw2-2">
+    <div class="prob-q"><span class="hw-num">HW2 Q2</span>Prove that if $W\subset X\times Y$ is open, then $\pi_1(W)$ is open in $X$.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p5','pr-proj')">Projections</a> · <a href="#" onclick="return go('p1','s-img')">Images preserve unions</a></div>
+    <button class="sol-btn" onclick="toggleSol('s-hw2-2')">show solution</button>
+    <div id="s-hw2-2" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">Solution</div><div class="box-body">
+      <p>By Lemma 13.1, $W=\bigcup_{\alpha}(U_\alpha\times V_\alpha)$ with each $U_\alpha$ open in $X$ and $V_\alpha$ open in $Y$. Images preserve unions: $x\in\pi_1(\bigcup S_\alpha)$ iff $x=\pi_1(w)$ for some $w$ in some $S_\alpha$, iff $x\in\bigcup\pi_1(S_\alpha)$. So $\pi_1(W)=\bigcup_\alpha\pi_1(U_\alpha\times V_\alpha)$.</p>
+      <p>If $V_\alpha\neq\varnothing$, then $\pi_1(U_\alpha\times V_\alpha)=U_\alpha$: "$\subset$" is clear, and for $x\in U_\alpha$ pick $v\in V_\alpha$, so $x=\pi_1(x,v)$. If $V_\alpha=\varnothing$, the image is $\varnothing$. In both cases the image is open, so $\pi_1(W)$ is a union of open sets and is open.</p></div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('hw2-2')">mark done</button>
+  </div>
+
+  <div class="prob" id="hw2-3">
+    <div class="prob-q"><span class="hw-num">HW2 Q3</span>$X$ infinite with the finite complement topology. Describe $\bar A$ for $A\subset X$. Justify. (Two cases.)</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p4','cl-closure')">Closure</a></div>
+    <button class="sol-btn" onclick="toggleSol('s-hw2-3')">show solution</button>
+    <div id="s-hw2-3" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">Solution</div><div class="box-body">
+      <p>$C$ is closed iff $X\setminus C$ is open iff $X\setminus C=\varnothing$ or $X\setminus(X\setminus C)=C$ is finite. So the closed sets are $X$ and the finite subsets.</p>
+      <p><strong>$A$ finite:</strong> $A$ is closed, so $\bar A=A$.</p>
+      <p><strong>$A$ infinite:</strong> a closed set containing $A$ is infinite, so it cannot be finite, and the only remaining closed set is $X$. Hence $\bar A=X$.</p></div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('hw2-3')">mark done</button>
+  </div>
+
+  <div class="prob" id="hw2-4">
+    <div class="prob-q"><span class="hw-num">HW2 Q4</span>$X$ as in HW1 Q6, $B=\{1,3\}$. (a) Closure and interior of $B$ in $X$. (b) With $A=\{0,1,3\}$, closure and interior of $B$ in $A$.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p4','cl-closure')">Closure</a> · <a href="#" onclick="return go('p4','cl-sub')">Closure in a subspace</a></div>
+    <button class="sol-btn" onclick="toggleSol('s-hw2-4')">show solution</button>
+    <div id="s-hw2-4" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">Solution</div><div class="box-body">
+      <p><strong>(a)</strong> The closed sets of $X$ are $X,\{1,2,3\},\{2,3\},\{3\},\varnothing$. Those containing $\{1,3\}$ are $X$ and $\{1,2,3\}$, so $\bar B=\{1,2,3\}$. Every nonempty open set contains $0\notin B$, so the only open subset of $B$ is $\varnothing$, and $\operatorname{Int}B=\varnothing$.</p>
+      <p><strong>(b)</strong> $\mathcal{T}_A=\{\varnothing,\{0\},\{0,1\},A\}$, so the closed sets of $A$ are $A,\{1,3\},\{3\},\varnothing$. $B=\{1,3\}$ is closed in $A$, so its closure in $A$ is $\{1,3\}$. This agrees with Theorem 17.4: $\{1,2,3\}\cap A=\{1,3\}$. Every nonempty open set of $A$ contains $0$, so the interior of $B$ in $A$ is $\varnothing$.</p></div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('hw2-4')">mark done</button>
+  </div>
+
+  <div class="prob" id="hw2-5">
+    <div class="prob-q"><span class="hw-num">HW2 Q5</span>(a) Prove $\bigcup_j\bar A_j\subset\overline{\bigcup_jA_j}$. (b) Prove equality when $J$ is finite. (c) Show equality can fail in general.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p4','cl-closure')">Facts about closure</a> · <a href="#" onclick="return go('p1','s-index')">Finite vs arbitrary</a></div>
+    <button class="sol-btn" onclick="toggleSol('s-hw2-5')">show solution</button>
+    <div id="s-hw2-5" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">Solution</div><div class="box-body">
+      <p><strong>(a)</strong> Let $C=\overline{\bigcup_jA_j}$, a closed set. For each $k$, $A_k\subset\bigcup_jA_j\subset C$, so $\bar A_k\subset C$, because $\bar A_k$ is the smallest closed set containing $A_k$. Taking the union over $k$ gives $\bigcup_k\bar A_k\subset C$.</p>
+      <p><strong>(b)</strong> If $J$ is finite, $\bigcup_j\bar A_j$ is a finite union of closed sets, so it is closed (Theorem 17.1), and it contains $\bigcup_jA_j$. Hence $\overline{\bigcup_jA_j}\subset\bigcup_j\bar A_j$. Combined with (a), the two sets are equal.</p>
+      <p><strong>(c)</strong> In $\mathbb{R}$, let $A_n=\{1/n\}$ for $n\in\mathbb{Z}_{\gt0}$. Each $A_n$ is closed, so $\bigcup\bar A_n=\{1/n\mid n\ge1\}$, which does not contain $0$. But $0\in\overline{\bigcup A_n}$: every interval around $0$ contains some $1/n$. So the inclusion is strict.</p></div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('hw2-5')">mark done</button>
+  </div>
+
+  <div class="prob" id="hw2-6">
+    <div class="prob-q"><span class="hw-num">HW2 Q6</span>Show the product of two Hausdorff spaces is Hausdorff, and a subspace of a Hausdorff space is Hausdorff.</div>
+    <div class="prob-meta">Read: <a href="#" onclick="return go('p4','cl-haus')">Hausdorff</a></div>
+    <button class="sol-btn" onclick="toggleSol('s-hw2-6')">show solution</button>
+    <div id="s-hw2-6" style="display:none;margin-top:12px;">
+      <div class="thm"><div class="box-label">Solution</div><div class="box-body">
+      <p><strong>Product.</strong> Let $(x_1,y_1)\neq(x_2,y_2)$ in $X\times Y$. Then $x_1\neq x_2$ or $y_1\neq y_2$. Suppose $x_1\neq x_2$; the other case is symmetric. Choose disjoint open $U_1\ni x_1$, $U_2\ni x_2$ in $X$. Then $U_1\times Y$ and $U_2\times Y$ are open in $X\times Y$, contain the two points, and are disjoint, because a common point $(x,y)$ would have $x\in U_1\cap U_2=\varnothing$.</p>
+      <p><strong>Subspace.</strong> Let $Y\subset X$ and $y_1\neq y_2$ in $Y$. Choose disjoint open $U_1\ni y_1$, $U_2\ni y_2$ in $X$. Then $Y\cap U_1$ and $Y\cap U_2$ are open in $Y$, contain $y_1$ and $y_2$ respectively, and are disjoint, since $(Y\cap U_1)\cap(Y\cap U_2)\subset U_1\cap U_2=\varnothing$.</p></div></div>
+    </div>
+    <button class="done-btn" onclick="toggleDone('hw2-6')">mark done</button>
+  </div>
+</div>
+</div>
+
+<!-- ==================== LAB ==================== -->
+<div class="page" id="p9">
+<div class="hero">
+  <div class="ch-badge" style="background:rgba(47,122,120,.1);color:var(--acb);border:1px solid var(--ac);">Check your work</div>
+  <h1 style="color:var(--acb);">Finite-Space Lab</h1>
+  <p class="hero-sub">Enter a finite set and a collection of subsets. The lab checks the topology or basis axioms and computes closed sets, closure, interior, limit points, and subspace topologies, naming the witness whenever something fails.</p>
+</div>
+<div class="sec lab" id="lab">
+  <h2><span class="sec-num" style="color:var(--acb);">01</span> Calculator</h2>
+  <p class="prose">Use it to check an answer after you have worked it by hand, not before. On the exam you will need the hand procedure: list the closed sets, intersect the ones containing $A$, and so on. Write sets with braces, separated by commas or spaces. Write the empty set as {} or ∅.</p>
+  <label>Points of X</label>
+  <input id="labX" value="0, 1, 2, 3">
+  <label>Collection (open sets, or a candidate basis)</label>
+  <textarea id="labT">∅, {0}, {0,1}, {0,1,2}, {0,1,2,3}</textarea>
+  <label>Subset A (for closure, interior, subspace)</label>
+  <input id="labA" value="{0,1,3}">
+  <div class="row">
+    <button onclick="labTopology()">Topology axioms</button>
+    <button onclick="labBasis()">Basis axioms</button>
+    <button onclick="labSubset()">Closure / interior of A</button>
+    <button onclick="labSubspace()">Subspace topology on A</button>
+  </div>
+  <div class="chips">
+    <button onclick="labPreset(0)">HW1 Q1</button>
+    <button onclick="labPreset(1)">HW1 Q6</button>
+    <button onclick="labPreset(2)">HW2 Q4a</button>
+    <button onclick="labPreset(3)">MT Q2</button>
+    <button onclick="labPreset(4)">Sierpiński</button>
+  </div>
+  <div class="lab-out" id="labOut">Results appear here.</div>
+  <div class="explain" style="margin-top:16px;"><div class="box-label">For HW2 Q4b</div><div class="box-body">To compute closure and interior <em>inside</em> a subspace $A$, first run "Subspace topology on A." Then copy $A$ into "Points of X," copy the resulting $\mathcal{T}_A$ into the collection box, put $B$ in the subset box, and run "Closure / interior."</div></div>
+</div>
+</div>
+
+<script>
+
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0,0);
+  updatePbar();
+}
+function updatePbar(){
+  window.addEventListener('scroll',function(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    var pct=h>0?(window.scrollY/h)*100:0;
+    document.getElementById('pf').style.width=pct+'%';
+  },{once:false});
+}
+document.addEventListener('scroll',function(){
+  var h=document.documentElement.scrollHeight-window.innerHeight;
+  var pct=h>0?(window.scrollY/h)*100:0;
+  document.getElementById('pf').style.width=pct+'%';
+});
+function toggleSol(id){
+  var el=document.getElementById(id);
+  var btn=el.previousElementSibling;
+  var hidden=el.style.display==='none'||el.style.display==='';
+  el.style.display=hidden?'block':'none';
+  btn.textContent=hidden?'hide solution':'show solution';
+}
+function answerTF(id,val){
+  var c=document.getElementById(id);
+  if(c.dataset.done)return;
+  c.dataset.done='1';
+  var ans=c.dataset.correct;
+  c.querySelectorAll('.tf-btn').forEach(function(b){
+    b.disabled=true;
+    if(b.dataset.val===ans)b.classList.add('correct');
+    else b.classList.add('wrong');
+  });
+  var e=c.querySelector('.drill-exp');
+  if(e)e.style.display='block';
+}
+function answerMC(id,el){
+  var c=document.getElementById(id);
+  if(c.dataset.done)return;
+  c.dataset.done='1';
+  c.querySelectorAll('.mc-opt').forEach(function(b){
+    b.disabled=true;
+    if(b.dataset.correct==='true')b.classList.add('correct');
+    else if(b===el)b.classList.add('wrong');
+  });
+  var e=c.querySelector('.drill-exp');
+  if(e)e.style.display='block';
+}
+
+/* ===== DRAG-AND-DROP ORDERING ===== */
+var _dragSrc=null,_touchDragEl=null,_touchClone=null,_touchOffX=0,_touchOffY=0;
+function dragStart(e){
+  var el=e.currentTarget;
+  if(el.classList.contains('correct-p')||el.classList.contains('wrong-p')){e.preventDefault();return;}
+  _dragSrc=el;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain','');
+  setTimeout(function(){el.classList.add('dragging');},0);
+}
+function dragEnd(e){
+  e.currentTarget.classList.remove('dragging');
+  document.querySelectorAll('.ord-step').forEach(function(s){s.classList.remove('drag-over');});
+}
+function dragOver(e){
+  e.preventDefault();var t=e.currentTarget;
+  if(t!==_dragSrc)t.classList.add('drag-over');return false;
+}
+function dragLeave(e){e.currentTarget.classList.remove('drag-over');}
+function drop(e){
+  e.stopPropagation();var t=e.currentTarget;
+  t.classList.remove('drag-over');
+  if(_dragSrc&&_dragSrc!==t&&_dragSrc.parentNode===t.parentNode){
+    var p=t.parentNode,si=Array.from(p.children).indexOf(_dragSrc),ti=Array.from(p.children).indexOf(t);
+    if(si<ti)p.insertBefore(_dragSrc,t.nextSibling);else p.insertBefore(_dragSrc,t);
+  }
+  return false;
+}
+function touchStart(e){
+  var el=e.currentTarget;
+  if(el.classList.contains('correct-p')||el.classList.contains('wrong-p'))return;
+  e.preventDefault();
+  _touchDragEl=el;
+  var r=el.getBoundingClientRect();
+  _touchOffX=e.touches[0].clientX-r.left;
+  _touchOffY=e.touches[0].clientY-r.top;
+  _touchClone=el.cloneNode(true);
+  ['ondragstart','ondragend','ondragover','ondragleave','ondrop','ontouchstart'].forEach(function(a){_touchClone.removeAttribute(a);});
+  _touchClone.style.cssText='position:fixed;width:'+r.width+'px;opacity:.72;z-index:9999;pointer-events:none;margin:0;border-radius:3px;box-shadow:0 6px 24px rgba(0,0,0,.5);left:'+(e.touches[0].clientX-_touchOffX)+'px;top:'+(e.touches[0].clientY-_touchOffY)+'px;';
+  document.body.appendChild(_touchClone);
+  el.classList.add('dragging');
+  document.body.style.overscrollBehavior='none';
+}
+/* touchmove and touchend registered at document level with passive:false
+   so e.preventDefault() reliably blocks iOS scroll/bounce during drag */
+document.addEventListener('touchmove',function(e){
+  if(!_touchDragEl)return;
+  e.preventDefault();
+  var tx=e.touches[0].clientX,ty=e.touches[0].clientY;
+  _touchClone.style.left=(tx-_touchOffX)+'px';
+  _touchClone.style.top=(ty-_touchOffY)+'px';
+  document.querySelectorAll('.ord-step').forEach(function(s){s.classList.remove('drag-over');});
+  _touchClone.style.display='none';
+  var hit=document.elementFromPoint(tx,ty);
+  _touchClone.style.display='';
+  var tgt=hit?hit.closest('.ord-step'):null;
+  if(tgt&&tgt!==_touchDragEl&&tgt.parentNode===_touchDragEl.parentNode)tgt.classList.add('drag-over');
+},{passive:false});
+document.addEventListener('touchend',function(e){
+  if(!_touchDragEl)return;
+  e.preventDefault();
+  var tx=e.changedTouches[0].clientX,ty=e.changedTouches[0].clientY;
+  _touchClone.style.display='none';
+  var hit=document.elementFromPoint(tx,ty);
+  document.body.removeChild(_touchClone);_touchClone=null;
+  _touchDragEl.classList.remove('dragging');
+  document.querySelectorAll('.ord-step').forEach(function(s){s.classList.remove('drag-over');});
+  var tgt=hit?hit.closest('.ord-step'):null;
+  if(tgt&&tgt!==_touchDragEl&&tgt.parentNode===_touchDragEl.parentNode){
+    var p=tgt.parentNode,si=Array.from(p.children).indexOf(_touchDragEl),ti=Array.from(p.children).indexOf(tgt);
+    if(si<ti)p.insertBefore(_touchDragEl,tgt.nextSibling);else p.insertBefore(_touchDragEl,tgt);
+  }
+  _touchDragEl=null;
+  document.body.style.overscrollBehavior='';
+},{passive:false});
+document.addEventListener('touchcancel',function(){
+  if(!_touchDragEl)return;
+  if(_touchClone&&_touchClone.parentNode)document.body.removeChild(_touchClone);
+  _touchClone=null;
+  if(_touchDragEl)_touchDragEl.classList.remove('dragging');
+  document.querySelectorAll('.ord-step').forEach(function(s){s.classList.remove('drag-over');});
+  _touchDragEl=null;
+  document.body.style.overscrollBehavior='';
+});
+function checkOrder(id){
+  var c=document.getElementById(id);
+  if(c.dataset.done)return;c.dataset.done='1';
+  var correct=c.dataset.answer.split(',');
+  var steps=c.querySelectorAll('.ord-steps .ord-step');
+  var ok=true;
+  steps.forEach(function(s,i){
+    s.removeAttribute('draggable');
+    if(s.dataset.label===correct[i])s.classList.add('correct-p');
+    else{s.classList.add('wrong-p');ok=false;}
+  });
+  var btn=c.querySelector('.check-btn');
+  if(btn){btn.disabled=true;btn.textContent=ok?'✓ Correct!':'✗ Not quite — answer revealed below';}
+  var ans=document.getElementById(id+'-ans');
+  if(ans)ans.style.display='block';
+}
+function initAll(){}
+
+</script>
+<script>
+function updatePbar(){}
+var NAVKEY='topo-hw-tab',DONEKEY='topo-hw-done';
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function tabBtn(id){
+  var bs=document.querySelectorAll('.nav-tab');
+  for(var i=0;i<bs.length;i++){if(bs[i].getAttribute('onclick').indexOf("'"+id+"'")>=0)return bs[i];}
+  return null;
+}
+var _show=showPage;
+showPage=function(id,btn){_show(id,btn);lsSet(NAVKEY,id);btn.scrollIntoView({inline:'center',block:'nearest'});};
+function go(page,anchor){
+  var b=tabBtn(page);if(b)showPage(page,b);
+  setTimeout(function(){
+    var el=document.getElementById(anchor);
+    if(el){var y=el.getBoundingClientRect().top+window.scrollY-60;window.scrollTo(0,y);}
+  },30);
+  if(window.event)window.event.preventDefault();
+  return false;
+}
+function nextHint(btn){
+  var p=btn.closest('.prob');var hs=p.querySelectorAll('.hint');
+  var n=0;for(var i=0;i<hs.length;i++){if(hs[i].style.display==='block')n++;}
+  if(n<hs.length){hs[n].style.display='block';n++;}
+  if(n>=hs.length){btn.textContent='all hints shown';btn.disabled=true;}
+  else btn.textContent='Show hint '+(n+1)+' of '+hs.length;
+}
+function doneSet(){var s=lsGet(DONEKEY);try{return s?JSON.parse(s):{};}catch(e){return {};}}
+function toggleDone(id){
+  var d=doneSet();d[id]=!d[id];lsSet(DONEKEY,JSON.stringify(d));paintDone();
+}
+function paintDone(){
+  var d=doneSet();
+  document.querySelectorAll('.prob').forEach(function(p){
+    var on=!!d[p.id];p.classList.toggle('done',on);
+    var b=p.querySelector('.done-btn');if(b)b.textContent=on?'✓ done':'mark done';
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  paintDone();
+  var t=lsGet(NAVKEY);if(t&&document.getElementById(t)){var b=tabBtn(t);if(b)showPage(t,b);}
+});
+
+/* ===== Finite-space lab ===== */
+var PRESETS=[
+  {X:'a, b, c',T:'{b}, {a,b}, {b,c}',A:'{a}'},
+  {X:'0, 1, 2, 3',T:'∅, {0}, {0,1}, {0,1,2}, {0,1,2,3}',A:'{0,1,3}'},
+  {X:'0, 1, 2, 3',T:'∅, {0}, {0,1}, {0,1,2}, {0,1,2,3}',A:'{1,3}'},
+  {X:'0, 1, 2',T:'∅, {0}, {0,1}, {0,1,2}',A:'{1}'},
+  {X:'0, 1',T:'∅, {1}, {0,1}',A:'{1}'}
+];
+function labPreset(i){var p=PRESETS[i];document.getElementById('labX').value=p.X;document.getElementById('labT').value=p.T;document.getElementById('labA').value=p.A;document.getElementById('labOut').textContent='Preset loaded. Choose a computation.';}
+var LX=[];
+function toks(s){return s.split(/[\s,]+/).map(function(t){return t.trim();}).filter(function(t){return t.length;});}
+function readX(){
+  var xs=toks(document.getElementById('labX').value.replace(/[{}]/g,' '));
+  var u=[];xs.forEach(function(x){if(u.indexOf(x)<0)u.push(x);});LX=u;return u;
+}
+function norm(arr){var s=arr.filter(function(v,i){return arr.indexOf(v)===i;});s.sort(function(a,b){return LX.indexOf(a)-LX.indexOf(b);});return s;}
+function key(s){return s.join('\u0001');}
+function fmt(s){return s.length?'{'+s.join(', ')+'}':'∅';}
+function fmtC(c){return c.length?'{ '+c.map(fmt).join(', ')+' }':'{ }';}
+function readColl(str){
+  var out=[],bad=[];str=str.replace(/∅/g,'{}');
+  var re=/\{([^}]*)\}/g,m;
+  while((m=re.exec(str))!==null){
+    var s=toks(m[1]);s.forEach(function(x){if(LX.indexOf(x)<0&&bad.indexOf(x)<0)bad.push(x);});
+    s=norm(s);if(!out.some(function(o){return key(o)===key(s);}))out.push(s);
+  }
+  return {sets:out,bad:bad};
+}
+function readA(){var r=readColl(document.getElementById('labA').value);return {set:r.sets[0]||[],bad:r.bad};}
+function uni(a,b){return norm(a.concat(b));}
+function inter(a,b){return norm(a.filter(function(x){return b.indexOf(x)>=0;}));}
+function sub(a,b){return a.every(function(x){return b.indexOf(x)>=0;});}
+function has(c,s){return c.some(function(o){return key(o)===key(s);});}
+function comp(s){return norm(LX.filter(function(x){return s.indexOf(x)<0;}));}
+function out(h){document.getElementById('labOut').innerHTML=h;}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function setup(){
+  readX();if(!LX.length){out('<span class="bad">Enter the points of X.</span>');return null;}
+  if(LX.length>10){out('<span class="bad">Keep X to at most 10 points.</span>');return null;}
+  var r=readColl(document.getElementById('labT').value);
+  if(r.bad.length){out('<span class="bad">Not points of X: '+esc(r.bad.join(', '))+'</span>');return null;}
+  return r.sets;
+}
+function topoReport(T){
+  var X=norm(LX.slice()),lines=[],ok=true;
+  var a1=has(T,[])&&has(T,X);
+  lines.push('<span class="k">Axiom (1)</span> ∅ and X in the collection: '+(a1?'<span class="ok">yes</span>':'<span class="bad">no</span> — missing '+[has(T,[])?'':'∅',has(T,X)?'':fmt(X)].filter(Boolean).join(' and ')));
+  ok=ok&&a1;
+  var w2=null,w3=null;
+  for(var i=0;i<T.length;i++)for(var j=i+1;j<T.length;j++){
+    if(!w2&&!has(T,uni(T[i],T[j])))w2=[T[i],T[j],uni(T[i],T[j])];
+    if(!w3&&!has(T,inter(T[i],T[j])))w3=[T[i],T[j],inter(T[i],T[j])];
+  }
+  lines.push('<span class="k">Axiom (2)</span> closed under unions: '+(w2?'<span class="bad">no</span> — '+fmt(w2[0])+' ∪ '+fmt(w2[1])+' = '+fmt(w2[2])+' is missing':'<span class="ok">yes</span> (all pairwise unions checked; X is finite)'));
+  lines.push('<span class="k">Axiom (3)</span> closed under finite intersections: '+(w3?'<span class="bad">no</span> — '+fmt(w3[0])+' ∩ '+fmt(w3[1])+' = '+fmt(w3[2])+' is missing':'<span class="ok">yes</span> (all pairwise intersections checked)'));
+  ok=ok&&!w2&&!w3;
+  return {ok:ok,html:lines.join('\n')};
+}
+function labTopology(){var T=setup();if(!T)return;var r=topoReport(T);out(r.html+'\n\n'+(r.ok?'<span class="ok">This is a topology on X.</span>':'<span class="bad">This is not a topology on X.</span>'));}
+function labBasis(){
+  var T=setup();if(!T)return;var lines=[],ok=true;
+  var unc=LX.filter(function(x){return !T.some(function(B){return B.indexOf(x)>=0;});});
+  lines.push('<span class="k">Basis (1)</span> every point lies in some element: '+(unc.length?'<span class="bad">no</span> — not covered: '+unc.join(', '):'<span class="ok">yes</span>'));
+  ok=!unc.length;var w=null;
+  for(var i=0;i<T.length&&!w;i++)for(var j=i+1;j<T.length&&!w;j++){
+    var I=inter(T[i],T[j]);
+    for(var k=0;k<I.length&&!w;k++){var x=I[k];
+      if(!T.some(function(B){return B.indexOf(x)>=0&&sub(B,I);}))w=[x,T[i],T[j],I];}
+  }
+  lines.push('<span class="k">Basis (2)</span> intersection condition: '+(w?'<span class="bad">no</span> — x = '+w[0]+' lies in '+fmt(w[1])+' ∩ '+fmt(w[2])+' = '+fmt(w[3])+', but no element containing '+w[0]+' fits inside it':'<span class="ok">yes</span>'));
+  ok=ok&&!w;
+  if(ok){
+    var G=[[]];T.forEach(function(B){if(!has(G,B))G.push(B);});
+    var grew=true;while(grew){grew=false;for(var a=0;a<G.length;a++)for(var b=a+1;b<G.length;b++){var U=uni(G[a],G[b]);if(!has(G,U)){G.push(U);grew=true;}}}
+    G.sort(function(p,q){return p.length-q.length;});
+    lines.push('\n<span class="ok">This is a basis.</span> Generated topology (all unions of elements, plus ∅), '+G.length+' sets:\n'+fmtC(G));
+  } else lines.push('\n<span class="bad">This is not a basis.</span>');
+  out(lines.join('\n'));
+}
+function needTopo(T){var r=topoReport(T);if(!r.ok){out('<span class="bad">The collection is not a topology, so this cannot be computed.</span>\n\n'+r.html);return false;}return true;}
+function labSubset(){
+  var T=setup();if(!T||!needTopo(T))return;var a=readA();
+  if(a.bad.length){out('<span class="bad">A contains points not in X: '+esc(a.bad.join(', '))+'</span>');return;}
+  var A=a.set,C=T.map(comp);C.sort(function(p,q){return p.length-q.length;});
+  var sup=C.filter(function(c){return sub(A,c);});
+  var cl=sup.reduce(function(acc,c){return inter(acc,c);},norm(LX.slice()));
+  var ins=T.filter(function(U){return sub(U,A);});
+  var it=ins.reduce(function(acc,U){return uni(acc,U);},[]);
+  var lp=LX.filter(function(x){return T.filter(function(U){return U.indexOf(x)>=0;}).every(function(U){return U.some(function(y){return y!==x&&A.indexOf(y)>=0;});});});
+  var lines=[];
+  lines.push('A = '+fmt(A));
+  lines.push('<span class="k">Closed sets</span> (complements of open sets):\n'+fmtC(C));
+  lines.push('<span class="k">Closed sets containing A</span>: '+fmtC(sup));
+  lines.push('<span class="k">Closure</span> = their intersection = <span class="ok">'+fmt(cl)+'</span>');
+  lines.push('<span class="k">Open sets inside A</span>: '+fmtC(ins));
+  lines.push('<span class="k">Interior</span> = their union = <span class="ok">'+fmt(it)+'</span>');
+  lines.push('<span class="k">Limit points</span> A′ = '+fmt(norm(lp))+'   (check: A ∪ A′ = '+fmt(uni(A,lp))+')');
+  lines.push('A is open: '+(has(T,A)?'yes':'no')+' · closed: '+(has(C,A)?'yes':'no')+' · dense: '+(cl.length===LX.length?'yes':'no'));
+  out(lines.join('\n'));
+}
+function labSubspace(){
+  var T=setup();if(!T||!needTopo(T))return;var a=readA();
+  if(a.bad.length){out('<span class="bad">A contains points not in X: '+esc(a.bad.join(', '))+'</span>');return;}
+  var A=a.set,traces=[],from={};
+  T.forEach(function(U){var t=inter(A,U),k=key(t);if(!from[k]){from[k]=[];traces.push(t);}from[k].push(U);});
+  traces.sort(function(p,q){return p.length-q.length;});
+  var lines=['A = '+fmt(A),'<span class="k">Traces A ∩ U</span>:'];
+  T.forEach(function(U){lines.push('  A ∩ '+fmt(U)+' = '+fmt(inter(A,U)));});
+  lines.push('\n<span class="k">𝒯_A</span> = <span class="ok">'+fmtC(traces)+'</span>   ('+traces.length+' elements; 𝒯 has '+T.length+')');
+  traces.forEach(function(t){var f=from[key(t)];if(f.length>1)lines.push('  '+fmt(t)+' arises from '+f.length+' different open sets: '+f.map(fmt).join(', '));});
+  out(lines.join('\n'));
+}
+</script>
+</body>
+</html>
