@@ -630,6 +630,47 @@ svg.fig{display:block;margin:12px auto;max-width:100%;height:auto;}
     <div class="box-label">Reading the formula</div>
     <div class="box-body">Each open set $U$ of $X$ contributes one open set $Y\cap U$ of $Y$, namely the part of $U$ inside $Y$. Different $U$'s can contribute the same trace, so $\mathcal{T}_Y$ may have fewer elements than $\mathcal{T}$. Munkres checks in §16 that $\mathcal{T}_Y$ satisfies the three axioms, using $Y\cap\bigcup U_\alpha=\bigcup(Y\cap U_\alpha)$ and $(Y\cap U_1)\cap(Y\cap U_2)=Y\cap(U_1\cap U_2)$.</div>
   </div>
+  <div class="ex" id="sub-fig">
+    <div class="box-label">Picture — the trace of an open set on $Y$</div>
+    <div class="box-body">
+      <p>The rectangle is $X$. The teal oval is the subset $Y$. A dashed gold outline is an open set $U$ of $X$. The solid green region is its <strong>trace</strong> $Y\cap U$, which is the open set of $Y$ that $U$ contributes to $\mathcal{T}_Y$. Tap through the four cases.</p>
+      <div class="chips" style="margin-bottom:6px;">
+        <button onclick="showU(1)" id="ub1">U crosses Y</button>
+        <button onclick="showU(2)" id="ub2">U misses Y</button>
+        <button onclick="showU(3)" id="ub3">U contains Y</button>
+        <button onclick="showU(4)" id="ub4">different U, same trace</button>
+      </div>
+      <svg class="fig" viewBox="0 0 420 270" width="420" role="img" aria-label="Subspace topology: the trace of an open set U on the subset Y">
+        <defs><clipPath id="clipY"><ellipse cx="210" cy="140" rx="150" ry="62"/></clipPath></defs>
+        <rect x="8" y="8" width="404" height="254" rx="10" fill="none" stroke="#5a5a7a" stroke-width="1.5"/>
+        <text x="20" y="30" fill="#8a8aaa" font-size="14" font-family="JetBrains Mono">X</text>
+        <ellipse cx="210" cy="140" rx="150" ry="62" fill="rgba(98,181,174,.10)" stroke="#62b5ae" stroke-width="2"/>
+        <text x="96" y="146" fill="#62b5ae" font-size="14" font-family="JetBrains Mono">Y</text>
+        <g class="uopt" data-u="1">
+          <g clip-path="url(#clipY)"><circle cx="330" cy="95" r="70" fill="rgba(122,188,138,.55)"/></g>
+          <circle cx="330" cy="95" r="70" fill="none" stroke="#ccaa6a" stroke-width="2" stroke-dasharray="6 4"/>
+          <text x="262" y="40" fill="#ccaa6a" font-size="13" font-family="JetBrains Mono">U</text>
+        </g>
+        <g class="uopt" data-u="2" style="display:none">
+          <circle cx="368" cy="228" r="28" fill="none" stroke="#ccaa6a" stroke-width="2" stroke-dasharray="6 4"/>
+          <text x="328" y="250" fill="#ccaa6a" font-size="13" font-family="JetBrains Mono">U</text>
+        </g>
+        <g class="uopt" data-u="3" style="display:none">
+          <g clip-path="url(#clipY)"><ellipse cx="210" cy="140" rx="188" ry="102" fill="rgba(122,188,138,.55)"/></g>
+          <ellipse cx="210" cy="140" rx="188" ry="102" fill="none" stroke="#ccaa6a" stroke-width="2" stroke-dasharray="6 4"/>
+          <text x="370" y="62" fill="#ccaa6a" font-size="13" font-family="JetBrains Mono">U</text>
+        </g>
+        <g class="uopt" data-u="4" style="display:none">
+          <g clip-path="url(#clipY)"><circle cx="330" cy="95" r="70" fill="rgba(122,188,138,.55)"/></g>
+          <circle cx="330" cy="95" r="70" fill="none" stroke="#ccaa6a" stroke-width="2" stroke-dasharray="6 4"/>
+          <circle cx="72" cy="48" r="30" fill="none" stroke="#ccaa6a" stroke-width="2" stroke-dasharray="6 4"/>
+          <text x="262" y="40" fill="#ccaa6a" font-size="13" font-family="JetBrains Mono">U′</text>
+          <text x="108" y="40" fill="#ccaa6a" font-size="13" font-family="JetBrains Mono">U′</text>
+        </g>
+      </svg>
+      <p id="ucap" style="min-height:5.5em;"></p>
+    </div>
+  </div>
   <div class="thm">
     <div class="box-label">Lemma 16.1 — basis for a subspace <span class="mun">§16</span></div>
     <div class="box-body">If $\mathcal{B}$ is a basis for the topology of $X$, then $\{\,B\cap Y\mid B\in\mathcal{B}\,\}$ is a basis for the subspace topology on $Y$.</div>
@@ -1867,6 +1908,22 @@ document.addEventListener('DOMContentLoaded',function(){
   var t=lsGet(NAVKEY);if(t&&document.getElementById(t)){var b=tabBtn(t);if(b)showPage(t,b);}
 });
 
+
+/* ===== Subspace picture ===== */
+var UCAP={
+ 1:'<strong>U crosses Y.</strong> The trace $Y\\cap U$ is the green lens. It is open in $Y$ by definition, since it is $Y\\cap U$ with $U$ open in $X$. Notice that it includes a stretch of the edge of $Y$. Seen from inside $Y$ there is nothing beyond that edge, which is the 2-D version of $(\\tfrac12,1]$ being open in $[-1,1]$.',
+ 2:'<strong>U misses Y.</strong> The trace is $Y\\cap U=\\varnothing$. Every open set that misses $Y$ contributes the same open set of $Y$: the empty set.',
+ 3:'<strong>U contains Y.</strong> The trace is $Y\\cap U=Y$, the whole oval. This is why $Y$ is always open in itself, even when $Y$ is not open in $X$.',
+ 4:'<strong>Different U, same trace.</strong> $U^{\\prime}$ is $U$ together with an extra open piece outside $Y$. The extra piece is invisible to $Y$, so $Y\\cap U^{\\prime}=Y\\cap U$. This is why $\\mathcal{T}_Y$ can have fewer elements than $\\mathcal{T}$, as in HW1 Q6.'
+};
+function showU(n){
+  document.querySelectorAll('.uopt').forEach(function(g){g.style.display=(g.getAttribute('data-u')==n)?'':'none';});
+  for(var i=1;i<=4;i++){var b=document.getElementById('ub'+i);if(b){b.style.borderColor=i==n?'var(--acb)':'';b.style.color=i==n?'var(--acb)':'';}}
+  var c=document.getElementById('ucap');c.innerHTML=UCAP[n];
+  if(window.renderMathInElement)renderMathInElement(c,{delimiters:[{left:'$',right:'$',display:false}],throwOnError:false});
+}
+document.addEventListener('DOMContentLoaded',function(){showU(1);});
+window.addEventListener('load',function(){showU(1);});
 /* ===== Finite-space lab ===== */
 var PRESETS=[
   {X:'a, b, c',T:'{b}, {a,b}, {b,c}',A:'{a}'},
