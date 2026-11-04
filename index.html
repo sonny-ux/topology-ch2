@@ -255,6 +255,9 @@ var A = {
 'product-topology': {title: 'Product topology on X × Y', kind: 'definition', where: '§15', pre: ['basis'],
   lede: R`Open sets are unions of open boxes $U\times V$.`,
   sections: [['Definition', R`<p>The topology on $X\times Y$ with [[basis]] all $U\times V$, $U$ open in $X$, $V$ open in $Y$. Theorem 15.1: products of basis elements also form a basis.</p>`],
+    ['Which topology a product carries', R`<p>$X\times Y$ by itself is only a <b>set</b>, the pairs $(x,y)$; a set has no topology until one is chosen, and many are possible (discrete, indiscrete, others). The <b>convention</b>: whenever $X$ and $Y$ are spaces and $X\times Y$ is used as a space without further comment, it carries the product topology. Munkres follows this throughout, and so do the homework problems (HW7 Q3: "let $X$ and $Y$ be topological spaces" and the projection $\pi_1:X\times Y\to X$). A different topology would be named explicitly.</p>
+<p><b>Why this is the default:</b> it is built from the factors' own open sets, and it is the coarsest topology making both projections continuous ([[defining-by-maps]]). In $\mathbb R\times\mathbb R$ it gives the usual open sets of the plane.</p>
+<p><b>What it lets you use:</b> because the boxes form a basis, the open sets of $X\times Y$ are <em>exactly</em> the unions of boxes $U\times V$ (Lemma 13.1); equivalently, around each point of an open $W$ there is a box inside $W$. Either form can start a proof, as in [[hw7-q3]].</p>`],
     ['Watch out', R`<p>Not every open set is a box: an open disc in $\mathbb R^2$ is a union of boxes.</p>`],
     ['Facts', R`<p>The projections are [[continuous]]; a map into a product is continuous iff its components are (Theorem 18.4); products of Hausdorff spaces are [[hausdorff|Hausdorff]].</p>`]]},
 'subspace-topology': {title: 'Subspace topology', kind: 'definition', where: '§16', pre: ['topology'],
