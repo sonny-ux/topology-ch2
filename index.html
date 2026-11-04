@@ -681,6 +681,110 @@ BOOK = [
 PROBSETS = [['Homework 1', ['hw1-q1', 'hw1-q2', 'hw1-q3', 'hw1-q4', 'hw1-q5', 'hw1-q6']], ['Homework 2', ['hw2-q1', 'hw2-q2', 'hw2-q3', 'hw2-q4', 'hw2-q5', 'hw2-q6']], ['Homework 3', ['hw3-q1', 'hw3-q2', 'hw3-q3', 'hw3-q4', 'hw3-q5', 'hw3-q6']], ['Midterm 1 practice', ['mt-q1', 'mt-q2', 'mt-q3', 'mt-q4', 'mt-q5', 'mt-q6']], ['Homework 4', ['hw4-q1', 'hw4-q2', 'hw4-q3', 'hw4-q4']], ['Homework 6 (file header "Homework 5")', ['hw6-q1', 'hw6-q2', 'hw6-q3', 'hw6-q4', 'hw6-q5']], ['Homework 7', ['hw7-q1', 'hw7-q2', 'hw7-q3', 'hw7-q4', 'hw7-q5', 'hw7-q6']]];
 METHODS = ['m-set-equality', 'm-topology', 'm-finite', 'm-open', 'm-compare', 'm-closed', 'm-closure', 'm-hausdorff', 'm-true-false', 'm-continuous', 'm-open-map', 'm-product-maps', 'm-quotient-map', 'm-not-quotient', 'm-quotient', 'm-counterexample', 'm-connected', 'm-compact'];
 
+// ===== Deeper teaching for the core concepts: inserted right after each article's Definition.
+// Labels used: Reading the definition · Why it is defined this way · Worked example · Non-example, and why it fails · Common confusions
+var DEEP = {
+'topology': [
+  ['Reading the definition', R`<p><b>"A collection of subsets."</b> A topology is not a shape or a distance. It is a list: some subsets of $X$ are placed on the list and called open, the rest are not. Two different lists on the same set $X$ are two different spaces.</p>
+<p><b>Axiom (1), $\varnothing$ and $X$ are open.</b> The empty set and the whole space are always on the list. Without this, statements like "the preimage of $Y$ is $X$, which is open" would fail for no good reason.</p>
+<p><b>Axiom (2), any union is open.</b> If you have open sets, however many (finitely many, countably many, uncountably many), the set of points lying in at least one of them is open. Gluing open regions together keeps them open.</p>
+<p><b>Axiom (3), finite intersections are open.</b> The points lying in all of finitely many open sets form an open set. Only finitely many: the condition is about shrinking a little, not infinitely.</p>`],
+  ['Why it is defined this way', R`<p>In $\mathbb R$, a set is open when every point has some room around it inside the set. Unions keep that room (each point keeps the room it had). Intersections of two open sets keep it too (take the smaller of the two rooms). But infinitely many intersections can squeeze the room to nothing: $\bigcap_n(-\tfrac1n,\tfrac1n)=\{0\}$. The three axioms are exactly what survives when you forget distance and keep only "which sets have room".</p>
+<p>So a topology records <em>nearness without measurement</em>: which points are close to which sets, and nothing more. Continuity, convergence, closure and connectedness can all be defined from that record alone.</p>`],
+  ['Worked example', R`<p>$X=\{a,b,c\}$, $\mathcal T=\{\varnothing,\{a\},\{a,b\},X\}$.</p>
+<ol><li>(1): $\varnothing$ and $X$ are listed. ✓</li><li>(2): every union of listed sets: $\{a\}\cup\{a,b\}=\{a,b\}$, and anything with $X$ gives $X$. All listed. ✓</li><li>(3): $\{a\}\cap\{a,b\}=\{a\}$; intersections with $X$ change nothing. All listed. ✓</li></ol>
+<p>So $\mathcal T$ is a topology. In it, $a$ is "close to everything" in a sense: every open set containing $b$ or $c$ also contains $a$.</p>`],
+  ['Non-example, and why it fails', R`<p>$\{\varnothing,\{a\},\{b\},X\}$ on $\{a,b,c\}$: the union $\{a\}\cup\{b\}=\{a,b\}$ is not listed, so axiom (2) fails.</p>`],
+  ['Common confusions', R`<p>Open is not the opposite of closed. A topology does not need to contain complements of its sets. The sets in $\mathcal T$ are open <em>by definition</em>; there is nothing more to check about them.</p>`]],
+'open-set': [
+  ['Reading the definition', R`<p>"$U$ is open" is shorthand for "$U\in\mathcal T$". It has no meaning until a topology is fixed. The same set $[0,1)$ is open in [[ex-lower-limit|ℝ_ℓ]] and not open in standard ℝ.</p>`],
+  ['Why it is defined this way', R`<p>The open sets are the ones that contain a little room around each of their points. When a topology comes from a [[basis]] or a [[metric]], that is literally the test: around each point of $U$ fits a basis element (a ball) inside $U$.</p>`],
+  ['Worked example', R`<p>Show $(0,\infty)$ is open in $\mathbb R$. Take $x>0$. The interval $(x/2,\,2x)$ contains $x$ and lies inside $(0,\infty)$ because $x/2>0$. Every point has room, so the set is open.</p>`],
+  ['Non-example, and why it fails', R`<p>$[0,1)$ in $\mathbb R$: at the point $0$ every interval $(-\varepsilon,\varepsilon)$ sticks out to the left of $0$, outside the set. One point without room is enough to fail.</p>`]],
+'basis': [
+  ['Reading the definition', R`<p><b>Condition (1), every point is in some basis element.</b> The building blocks reach every point, so every point will have at least one open set around it.</p>
+<p><b>Condition (2), intersections contain a block.</b> If $x$ sits in two blocks $B_1,B_2$, there is a third block $B_3$ around $x$ inside both. This is what makes the generated collection closed under intersections (axiom (3) of a [[topology]]).</p>`],
+  ['Why it is defined this way', R`<p>Listing every open set of $\mathbb R$ is impossible; listing the open intervals is easy. A basis is a small, describable collection from which the whole topology is built by taking unions. The two conditions are exactly what is needed for those unions to form a topology.</p>`],
+  ['Worked example', R`<p>Open intervals in $\mathbb R$. (1): $x\in(x-1,x+1)$. (2): if $x\in(a,b)\cap(c,d)$, then $(\max(a,c),\min(b,d))$ is an open interval around $x$ inside both.</p>`],
+  ['Non-example, and why it fails', R`<p>Closed intervals $[a,b]$ with $a<b$. Condition (2) fails at $1\in[0,1]\cap[1,2]=\{1\}$: there is no closed interval of positive length around $1$ inside $\{1\}$.</p>`],
+  ['Common confusions', R`<p>A basis is not itself a topology: $(0,1)\cup(2,3)$ is open but not an interval. A topology can have many bases (intervals with rational endpoints also work, HW1 Q3).</p>`]],
+'subspace-topology': [
+  ['Reading the definition', R`<p><b>$\mathcal T_Y=\{Y\cap U: U\in\mathcal T\}$.</b> To get an open set of $Y$, take any open set $U$ of the big space and keep only the part inside $Y$. Every open set of $Y$ arises this way, and only these.</p>`],
+  ['Why it is defined this way', R`<p>$Y$ should be close to what $X$ says it is close to, seen from inside $Y$. Points of $X$ outside $Y$ simply are not there any more. Equivalently, it is the coarsest topology making the inclusion $Y\hookrightarrow X$ [[continuous]] ([[defining-by-maps]]).</p>`],
+  ['Worked example', R`<p>$Y=[0,1]\subset\mathbb R$. Is $[0,\tfrac12)$ open in $Y$? Yes: $[0,\tfrac12)=Y\cap(-1,\tfrac12)$, and $(-1,\tfrac12)$ is open in $\mathbb R$. The point $0$ has no room to its left in $\mathbb R$, but inside $Y$ there is nothing to its left to need room for.</p>`],
+  ['Non-example, and why it fails', R`<p>$\{0\}$ in $Y=\mathbb Q$: any open $U\ni0$ contains an interval around $0$, which contains other rationals, so $\mathbb Q\cap U\ne\{0\}$ (MT Q1).</p>`],
+  ['Common confusions', R`<p>Always say "open in $Y$" or "open in $X$". A set open in $Y$ need not be open in $X$ unless $Y$ itself is open in $X$.</p>`]],
+'product-topology': [
+  ['Reading the definition', R`<p>An open set of $X\times Y$ is a union of <b>open boxes</b> $U\times V$: pick an open set in each factor and take all pairs.</p>`],
+  ['Why it is defined this way', R`<p>It is the coarsest topology making both projections continuous: $\pi_1^{-1}(U)=U\times Y$ and $\pi_2^{-1}(V)=X\times V$ must be open, and their intersections $U\times V$ then are too ([[defining-by-maps]]). Nothing more is added.</p>`],
+  ['Worked example', R`<p>In $\mathbb R^2$ the open disc $D$ is open: around each point of $D$ fits a small open square $(a,b)\times(c,d)$ inside $D$, so $D$ is a union of boxes.</p>`],
+  ['Common confusions', R`<p>$D$ itself is not a box; open sets are unions of boxes. For infinitely many factors, see [[product-vs-box]].</p>`]],
+'closed-set': [
+  ['Reading the definition', R`<p>$A$ is closed when everything <em>outside</em> it is open: each point not in $A$ has room around it that avoids $A$ entirely.</p>`],
+  ['Why it is defined this way', R`<p>A closed set is one you cannot leave by approaching its edge: if points of $A$ crowd in on some $x$, then $x$ is in $A$ already ([[closure-limit-points]]). Defining it through the complement makes this automatic from the open sets.</p>`],
+  ['Worked example', R`<p>$[0,1]$ in $\mathbb R$: its complement $(-\infty,0)\cup(1,\infty)$ is a union of open intervals, so it is open, and $[0,1]$ is closed.</p>`],
+  ['Non-example, and why it fails', R`<p>$(0,1]$: the complement contains $0$, and every interval around $0$ meets $(0,1]$. The complement is not open.</p>`],
+  ['Common confusions', R`<p>"Not open" does not mean closed: $[0,1)$ is neither. $\varnothing$ and $X$ are both. In a [[subspace-topology|subspace]], closed means $C\cap Y$ for $C$ closed in $X$.</p>`]],
+'closure': [
+  ['Reading the definition', R`<p>"The intersection of all closed sets containing $A$" is the smallest closed set that still contains all of $A$. Anything smaller would either miss part of $A$ or fail to be closed.</p>`],
+  ['Why it is defined this way', R`<p>It adds to $A$ exactly the points $A$ cannot be separated from: the points every open neighbourhood of which reaches into $A$ ([[closure-test]]). So it answers "which points are stuck to $A$?"</p>`],
+  ['Worked example', R`<p>$A=(0,1)$ in $\mathbb R$. Guess $[0,1]$. It is closed and contains $A$. Nothing smaller works: $0$ is in the closure because every interval $(-\varepsilon,\varepsilon)$ meets $(0,1)$; likewise $1$. Points outside $[0,1]$, say $2$, have $(1.5,2.5)$ missing $A$.</p>`],
+  ['Common confusions', R`<p>The closure depends on the topology: in [[ex-lower-limit|ℝ_ℓ]], $\overline{(0,1)}=[0,1)$, since $[1,2)$ is an open set around $1$ missing $A$.</p>`]],
+'limit-point': [
+  ['Reading the definition', R`<p><b>"Every neighbourhood of $x$"</b>: however small an open set around $x$ you take. <b>"Contains a point of $A$ other than $x$"</b>: points of $A$ can be found arbitrarily close to $x$, not counting $x$ itself.</p>`],
+  ['Why it is defined this way', R`<p>It captures "$A$ accumulates at $x$". Excluding $x$ itself is what distinguishes a genuine accumulation from simply containing $x$.</p>`],
+  ['Worked example', R`<p>$A=\{1/n\}$. Is $0$ a limit point? Any open $U\ni0$ contains some $(-\varepsilon,\varepsilon)$, and $1/n<\varepsilon$ for large $n$. Yes. Is $\tfrac12$ a limit point? The interval $(0.45,0.55)$ contains no other $1/n$. No.</p>`],
+  ['Common confusions', R`<p>A limit point need not be in $A$, and a point of $A$ need not be a limit point (isolated points). The closure is $A$ together with its limit points.</p>`]],
+'hausdorff': [
+  ['Reading the definition', R`<p><b>"For all $x\ne y$"</b>: every pair of distinct points, not just some. <b>"Open $U\ni x$, $V\ni y$"</b>: a neighbourhood of each. <b>"$U\cap V=\varnothing$"</b>: they share no point at all.</p>`],
+  ['Why it is defined this way', R`<p>Without it, two different points can be indistinguishable by open sets: every neighbourhood of one meets every neighbourhood of the other. Then a sequence can converge to both. Hausdorff is the condition that rules this out, and it holds in every space with a [[metric]].</p>`],
+  ['Worked example', R`<p>$\mathbb R$: for $x<y$ let $r=(y-x)/2$. Then $(x-r,x+r)$ and $(y-r,y+r)$ meet only if some point is within $r$ of both, which would put $x,y$ within $2r=y-x$ of each other strictly, impossible.</p>`],
+  ['Non-example, and why it fails', R`<p>[[ex-finite-complement|The cofinite line]]: two nonempty open sets each miss only finitely many points, so they share infinitely many. No pair can be separated.</p>`]],
+'continuous': [
+  ['Reading the definition', R`<p><b>"For every open $V\subseteq Y$"</b>: start in the target. <b>"$f^{-1}(V)$ is open in $X$"</b>: the set of all points that land in $V$ is open. Continuity is a statement about pulling open sets back, never pushing them forward.</p>`],
+  ['Why it is defined this way', R`<p>In ε–δ form: for any target window around $f(x)$ (that is $V$) there is a source window around $x$ that lands inside it. "All points landing in $V$ form an open set" says exactly that every such $x$ has its window. The output window is chosen first, the input window found: the backward direction.</p>`],
+  ['Worked example', R`<p>$\pi_1:\mathbb R^2\to\mathbb R$. For open $U\subseteq\mathbb R$, $\pi_1^{-1}(U)=U\times\mathbb R$, an open box. So $\pi_1$ is continuous.</p>`],
+  ['Non-example, and why it fails', R`<p>$f(x)=0$ for $x<0$, $1$ for $x\ge0$. Take $V=(\tfrac12,\tfrac32)$. Then $f^{-1}(V)=[0,\infty)$, not open: the point $0$ has no room. That is the jump, seen through preimages.</p>`],
+  ['Common confusions', R`<p>Images of open sets need not be open: that is a separate property, [[open-map|being an open map]]. A constant map is continuous but sends open sets to single points.</p>`]],
+'homeomorphism': [
+  ['Reading the definition', R`<p>Three requirements: a <b>bijection</b> (points correspond one to one), <b>continuous</b> (open sets of $Y$ pull back to open sets), and <b>continuous inverse</b> (open sets of $X$ pull back under $f^{-1}$, i.e. $f$ sends open sets to open sets).</p>`],
+  ['Why it is defined this way', R`<p>Together these say $f$ matches up the points <em>and</em> the open sets exactly. Every topological statement true of $X$ is then true of $Y$. It is the notion of "the same space".</p>`],
+  ['Worked example', R`<p>$(-1,1)\to\mathbb R$, $x\mapsto x/(1-x^2)$: continuous, strictly increasing, onto, with continuous inverse. An open interval and the whole line are the same space.</p>`],
+  ['Non-example, and why it fails', R`<p>$[0,1)\to S^1$, $t\mapsto(\cos2\pi t,\sin2\pi t)$ is a continuous bijection, but $[0,\tfrac12)$ is open in $[0,1)$ while its image, an arc including $(1,0)$ but approaching it only from one side, is not open in $S^1$. The inverse is not continuous.</p>`]],
+'open-map': [
+  ['Reading the definition', R`<p>Open map: push an open set <em>forward</em> and it stays open. Closed map: push a closed set forward and it stays closed. Continuity is about pulling back; these are about pushing forward.</p>`],
+  ['Why it is defined this way', R`<p>Continuity alone does not say how $f$ treats open sets of the source. Open and closed maps are the extra conditions that make a continuous surjection into a [[quotient-map]], and an open continuous bijection into a [[homeomorphism]].</p>`],
+  ['Worked example', R`<p>$\pi_1:X\times Y\to X$ is open. For open $W$ and $x\in\pi_1(W)$, pick $(x,y)\in W$ and a box $U\times V\subseteq W$ around it. Then $U\subseteq\pi_1(W)$ and $x\in U$: room around $x$ inside $\pi_1(W)$.</p>`],
+  ['Non-example, and why it fails', R`<p>$\pi_1$ is not closed: the hyperbola $\{xy=1\}$ is closed in $\mathbb R^2$, but $\pi_1$ of it is $\mathbb R\setminus\{0\}$, not closed. The branches approach the $y$-axis without reaching it.</p>`],
+  ['Common confusions', R`<p>Open, closed and continuous are independent of each other in general. For bijections, open and closed coincide (HW7 Q6a).</p>`]],
+'quotient-topology': [
+  ['Reading the definition', R`<p><b>"A partition $X^*$ of $X$"</b>: we have decided which points to glue: each piece of the partition becomes a single point. <b>"$p:X\to X^*$"</b>: sends each point to the piece it belongs to. <b>"$U\subseteq X^*$ is open iff $p^{-1}(U)$ is open"</b>: a set of glued points is open exactly when all the original points lying over it form an open set of $X$.</p>`],
+  ['Why it is defined this way', R`<p>We want $p$ [[continuous]], so every open $U$ must have $p^{-1}(U)$ open: that is one direction. Among all topologies with that property we take the largest one: every set whose preimage is open is declared open. This keeps as much of $X$'s topology as the gluing allows ([[defining-by-maps]]).</p>
+<p>Picture it as looking down from above: $X$ is upstairs, $X^*$ downstairs. Downstairs has no topology of its own; each candidate set is tested by looking at what lies over it.</p>`],
+  ['Worked example', R`<p>$p:\mathbb R\to\{-1,0,1\}$, the sign of $x$ (HW6 Q1). Test each subset by its preimage:</p>
+<ul><li>$\{-1\}$: preimage $(-\infty,0)$, open. Open.</li><li>$\{1\}$: preimage $(0,\infty)$, open. Open.</li><li>$\{0\}$: preimage $\{0\}$, not open. Not open.</li><li>$\{-1,0\}$: preimage $(-\infty,0]$, not open. Not open.</li><li>$\{-1,1\}$: preimage $\mathbb R\setminus\{0\}$, open. Open.</li></ul>
+<p>So the topology is $\{\varnothing,\{-1\},\{1\},\{-1,1\},\{-1,0,1\}\}$. The point $0$ cannot be separated from $\pm1$: every open set containing $0$ is the whole space.</p>`],
+  ['Non-example, and why it fails', R`<p>The quotient topology does not inherit good properties: crushing $(0,1)$ in $\mathbb R$ gives a space that is not Hausdorff ([[ex-crush-open]]).</p>`],
+  ['Common confusions', R`<p>The quotient set is a set of <em>pieces</em>, which are subsets of $X$. A "point" of $X^*$ like $[A]$ is a whole set upstairs.</p>`]],
+'saturated': [
+  ['Reading the definition', R`<p>$p^{-1}(p(C))$ is "everything glued to something in $C$": push $C$ down, then take everything lying over the result. $C$ is <b>saturated</b> when this adds nothing, i.e. whenever $C$ contains one point of a piece it contains the whole piece.</p>`],
+  ['Why it is defined this way', R`<p>It is the exact condition under which pushing a set down and pulling it back returns the same set. For open saturated $C$ that means $p^{-1}(p(C))=C$ is open, so $p(C)$ is open downstairs. Saturated open sets are precisely the open sets of $X$ that correspond to open sets of $X^*$.</p>`],
+  ['Worked example', R`<p>Crush $A=[0,1]$ in $\mathbb R$. $C=(2,3)$ misses $A$: saturated. $C=(-1,2)$ contains all of $A$: saturated. $C=(-1,\tfrac12)$ contains part of $A$: not saturated; pulling back after pushing down gives $(-1,\tfrac12)\cup[0,1]=(-1,1]$, which is not even open.</p>`],
+  ['Common confusions', R`<p>Saturated is about $C$ relative to the gluing, not about openness: a set can be saturated and not open, or open and not saturated.</p>`]],
+'quotient-map': [
+  ['Reading the definition', R`<p>Three parts. <b>Surjective</b>: every point of $Y$ comes from somewhere, so every point downstairs has something over it. <b>If $U$ open then $p^{-1}(U)$ open</b>: continuity. <b>If $p^{-1}(U)$ open then $U$ open</b>: the reverse direction, which says $Y$ has no fewer open sets than the gluing allows.</p>`],
+  ['Why it is defined this way', R`<p>It says $Y$ carries exactly the [[quotient-topology]] for the partition into fibres $p^{-1}(\{y\})$. So a quotient map is "gluing, with the right topology downstairs". It is how gluings that arise as maps (wrapping $[0,1]$ around a circle, projecting a product) are recognized as quotients.</p>`],
+  ['Worked example', R`<p>$\pi_1:X\times Y\to X$ (HW6 Q2), with $Y\ne\varnothing$.</p>
+<ol><li>Surjective: fix $y_0\in Y$; then $\pi_1(x,y_0)=x$.</li><li>Continuous: $\pi_1^{-1}(U)=U\times Y$ is open.</li><li>Reverse: suppose $\pi_1^{-1}(U)$ is open. The map $i(x)=(x,y_0)$ is continuous and $\pi_1\circ i=\mathrm{id}$, so $U=i^{-1}(\pi_1^{-1}(U))$ is open, a preimage of an open set under a continuous map.</li></ol>`],
+  ['Non-example, and why it fails', R`<p>$g:[0,1)\cup\{2\}\to[0,1]$, $g(2)=1$ and $g(t)=t$ otherwise. It is a continuous bijection, but $g^{-1}(\{1\})=\{2\}$ is open (isolated) while $\{1\}$ is not open in $[0,1]$. The reverse direction fails: a point alone upstairs is crowded downstairs.</p>`],
+  ['Common confusions', R`<p>The reverse direction is not the same as being an [[open-map]]: it only concerns full preimages $p^{-1}(U)$. Open (or closed) plus continuous surjective implies quotient, not conversely (HW7 Q4).</p>`]],
+'maps-out-of-quotients': [
+  ['Reading the definition', R`<p><b>"$h$ constant on each $p^{-1}(\{y\})$"</b>: $h$ does not distinguish points that get glued together, so it makes sense on the glued space. <b>"$g\circ p=h$"</b>: $g$ sends each glued point to the common value of $h$ on it. <b>"$g$ continuous"</b>: continuity comes for free.</p>`],
+  ['Why it is true', R`<p>For open $V\subseteq Z$: $p^{-1}(g^{-1}(V))=h^{-1}(V)$ is open, because $h$ is continuous. By the definition of the quotient topology, $g^{-1}(V)$ is open. Openness downstairs is tested upstairs, and upstairs $h$ does the work.</p>`],
+  ['Worked example', R`<p>HW6 Q5: to show $X/{\sim}$ is Hausdorff when $x\sim y$ iff $q(x)=q(y)$ for a map $q$ into a Hausdorff space, define $g([z])=q(z)$. It is well defined by the definition of $\sim$ and continuous by this theorem; distinct classes have distinct images, which have disjoint neighbourhoods, which pull back to disjoint neighbourhoods of the classes.</p>`]]
+};
+Object.keys(DEEP).forEach(function(id){ var a = A[id]; if (!a) return; var s = a.sections || []; var k = s.length && /^(Definition|Statement)$/.test(s[0][0]) ? 1 : 0; a.sections = s.slice(0, k).concat(DEEP[id], s.slice(k)); a.deep = 1; });
+
 </script>
 <script>
 // ===== The encyclopedia: home page, articles, link previews, a trail of where you have been, search.
@@ -722,7 +826,7 @@ function article(id){
   if (a.steps) h += '<details class="sec" open><summary>Steps</summary><div class="secb"><ol class="steps">' + a.steps.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + wiki(s[0]) + '</summary><div class="why"><b>Why:</b> ' + wiki(s[1]) + '</div></details>' : wiki(s[0])) + '</li>'; }).join('') + '</ol></div></details>';
   (a.sections || []).forEach(function(s, i){ var body = s[1];
     if (s[0] === 'Concepts and method') body = '<p><b>Concepts:</b></p><div class="chips">' + (a.pre || []).map(chip).join('') + '</div><p style="margin-top:10px"><b>Method:</b></p><div class="chips">' + (a.method || []).map(chip).join('') + '</div>';
-    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method') : (i === 0 && !a.steps); if (s[0] === 'Picture') open = true;
+    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method') : (i === 0 && !a.steps); if (s[0] === 'Picture' || s[0] === 'Reading the definition') open = true;
     h += '<details class="sec"' + (open ? ' open' : '') + '><summary>' + s[0] + '</summary><div class="secb">' + wiki(body) + '</div></details>'; });
   if (a.kind === 'method' && (USEDIN[id] || []).length) h += '<div class="links"><h3>Used in these problems</h3><div class="chips">' + USEDIN[id].map(chip).join('') + '</div></div>';
   h += '<div class="links">';
