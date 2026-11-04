@@ -161,6 +161,21 @@ details.pad>summary{color:var(--text);}
 .padprev p{color:var(--text);} .padempty{color:var(--muted)!important;}
 #padprint{display:none;}
 @media print{ body.printing>*:not(#padprint){display:none!important;} body.printing{background:#fff!important;color:#000!important;} #padprint{display:block;color:#000;font:12pt/1.55 Georgia,serif;padding:0 6mm;} #padprint h1{font-size:16pt;font-weight:normal;margin:0 0 8pt;} #padprint h2{font-size:12pt;margin:14pt 0 6pt;} #padprint .pq{border-left:2pt solid #999;padding-left:8pt;color:#222;} #padprint p{margin:0 0 7pt;color:#000;} }
+#ltx{display:none;position:fixed;z-index:70;background:var(--surf);border-top:1px solid var(--border2);flex-direction:column;}
+#ltx.on{display:flex;}
+#ltx .lxh{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 6px;font:600 14px -apple-system,system-ui,sans-serif;}
+#ltx .lxx{border:1px solid var(--border2);background:var(--card2);color:var(--text);border-radius:8px;padding:6px 12px;font:13px -apple-system,system-ui,sans-serif;cursor:pointer;}
+#lxq{margin:0 14px;padding:8px 10px;border:1px solid var(--border2);border-radius:8px;background:var(--card);color:var(--text);font:15px -apple-system,system-ui,sans-serif;}
+#ltx .lxn{margin:6px 14px 4px;font:12px/1.4 -apple-system,system-ui,sans-serif;color:var(--muted);}
+#ltx .lxb{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 14px 16px;flex:1;}
+#ltx h4{font:600 11px -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:12px 0 6px;}
+#ltx .lxe{display:grid;grid-template-columns:72px 1fr;grid-template-rows:auto auto;gap:0 10px;width:100%;text-align:left;border:0;border-bottom:1px solid var(--border);background:none;color:var(--text);padding:7px 2px;cursor:pointer;}
+#ltx .lxs{grid-row:1/3;align-self:center;font-size:1.05rem;overflow:hidden;}
+#ltx code{font:12px ui-monospace,Menlo,monospace;color:var(--text2);word-break:break-all;}
+#ltx .lxe i{font:12px -apple-system,system-ui,sans-serif;font-style:normal;color:var(--muted);}
+@media (min-width:1000px){ #ltx{top:0;right:0;bottom:0;width:330px;border-top:0;border-left:1px solid var(--border2);padding-top:env(safe-area-inset-top);} body.ltxon .wrap,body.ltxon .toprow{margin-left:max(16px,calc((100vw - 330px - 760px)/2));margin-right:346px;} }
+@media (max-width:999px){ #ltx{left:0;right:0;bottom:0;height:44vh;padding-bottom:env(safe-area-inset-bottom);border-radius:14px 14px 0 0;box-shadow:0 -8px 24px rgba(0,0,0,.3);} body.ltxon{padding-bottom:46vh;} }
+@media print{ #ltx{display:none!important;} }
 </style>
 </head>
 <body>
@@ -1759,7 +1774,7 @@ function padHtml(id){ return '<details class="sec pad" open><summary>Your write-
   + '<p class="padnote">Type your answer. Put math between dollar signs, like $\\pi_1(W)$, or use the buttons. It renders below as you type and is kept on this device.</p>'
   + '<div class="padbar">' + PADSYM.map(function(b, i){ return '<button type="button" data-p="' + i + '">' + (i === 0 ? 'inline math' : b[0] === 'display' ? 'display math' : '$' + b[0] + '$') + '</button>'; }).join('') + '</div>'
   + '<textarea id="padin" spellcheck="false" autocapitalize="sentences" placeholder="Let $W$ be open in $X \\times Y$. …"></textarea>'
-  + '<div class="padtools"><button type="button" id="padcopy">Copy text</button><button type="button" id="padpdf">Save as PDF</button><span id="padsaved"></span></div>'
+  + '<div class="padtools"><button type="button" id="padcopy">Copy text</button><button type="button" id="padpdf">Save as PDF</button><button type="button" id="padltx">LaTeX dictionary</button><span id="padsaved"></span></div>'
   + '<div class="padprev" id="padprev"></div></div></details>'; }
 function padRender(txt){ function esc(x){ return x.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   return txt.trim() ? esc(txt).split(/\n\s*\n/).map(function(par){ return '<p>' + par.replace(/\n/g, '<br>') + '</p>'; }).join('') : '<p class="padempty">Your rendered write-up appears here.</p>'; }
@@ -1769,6 +1784,9 @@ function padInit(id){
   function draw(){ pv.innerHTML = padRender(ta.value); math(pv); }
   function grow(){ ta.style.height = 'auto'; ta.style.height = Math.max(120, ta.scrollHeight + 4) + 'px'; }
   draw(); grow(); math(document.querySelector('.padbar'));
+  ['keyup', 'mouseup', 'select', 'input', 'blur'].forEach(function(ev){ ta.addEventListener(ev, function(){ PADSEL = [ta.selectionStart, ta.selectionEnd]; }); }); PADSEL = [ta.value.length, ta.value.length];
+  document.getElementById('padltx').onclick = function(){ ltxShow(!document.body.classList.contains('ltxon')); };
+  try { if (localStorage.getItem('tg-ltx')) ltxShow(true); } catch(e){}
   ta.addEventListener('input', function(){ grow(); clearTimeout(tm); tm = setTimeout(function(){ draw(); try { localStorage.setItem(key, ta.value); sv.textContent = 'Saved on this device'; } catch(e){ sv.textContent = 'Could not save on this device'; } }, 250); });
   document.querySelector('.padbar').addEventListener('click', function(e){ var b = e.target.closest('button'); if (!b) return; var d = PADSYM[+b.dataset.p], a0 = ta.selectionStart, a1 = ta.selectionEnd, sel = ta.value.slice(a0, a1);
     var ins, caret; if (d[2]){ ins = d[1].slice(0, d[2]) + sel + d[1].slice(d[2]); caret = a0 + d[2] + sel.length; } else if (d[3]){ ins = d[1] + sel + d[3]; caret = a0 + d[1].length + sel.length; } else { ins = d[1]; caret = a0 + ins.length; }
@@ -1779,6 +1797,50 @@ function padInit(id){
     document.body.appendChild(box); math(box); document.body.classList.add('printing');
     setTimeout(function(){ window.print(); setTimeout(function(){ document.body.classList.remove('printing'); box.remove(); }, 500); }, 300); };
 }
+// ===== LaTeX dictionary: a panel docked beside the page (wide screens) or along the bottom (narrow ones), so it never covers
+// the write-up box or the symbol bar. Tap an entry to insert it where the cursor was; it stays open until closed.
+var LTX = [
+ ['Sets', [['\\in', '\\in', 'is an element of'], ['\\notin', '\\notin', 'is not an element of'], ['\\subseteq', '\\subseteq', 'is a subset of (may be equal)'], ['\\subsetneq', '\\subsetneq', 'is a proper subset of'], ['\\supseteq', '\\supseteq', 'contains as a subset'],
+   ['\\cup', '\\cup', 'union'], ['\\cap', '\\cap', 'intersection'], ['\\setminus', '\\setminus', 'set difference, A minus B'], ['\\varnothing', '\\varnothing', 'the empty set'], ['X \\times Y', '\\times', 'Cartesian product'],
+   ['\\{x \\in X : P\\}', '\\{x \\in X : \\}', 'the set of x in X such that …'], ['\\bigcup_{i \\in I} A_i', '\\bigcup_{i \\in I} A_i', 'union of a family'], ['\\bigcap_{i \\in I} A_i', '\\bigcap_{i \\in I} A_i', 'intersection of a family'],
+   ['\\prod_{\\alpha} X_\\alpha', '\\prod_{\\alpha} X_\\alpha', 'product of a family'], ['\\mathcal P(X)', '\\mathcal P(X)', 'power set: all subsets of X'], ['X^c', 'X^c', 'complement (when the ambient set is clear)']]],
+ ['Numbers', [['\\mathbb R', '\\mathbb R', 'the real numbers'], ['\\mathbb Q', '\\mathbb Q', 'the rationals'], ['\\mathbb Z', '\\mathbb Z', 'the integers'], ['\\mathbb N', '\\mathbb N', 'the natural numbers'], ['\\mathbb R^n', '\\mathbb R^n', 'n-dimensional space'],
+   ['\\mathbb R_\\ell', '\\mathbb R_\\ell', 'lower limit topology'], ['\\mathbb R_K', '\\mathbb R_K', 'K-topology'], ['\\mathbb R^\\omega', '\\mathbb R^\\omega', 'countable product of lines']]],
+ ['Logic', [['\\forall', '\\forall', 'for all'], ['\\exists', '\\exists', 'there exists'], ['\\nexists', '\\nexists', 'there does not exist'], ['\\Rightarrow', '\\Rightarrow', 'implies'], ['\\Leftarrow', '\\Leftarrow', 'is implied by'],
+   ['\\iff', '\\iff', 'if and only if'], ['\\neg', '\\neg', 'not'], ['\\wedge', '\\wedge', 'and'], ['\\vee', '\\vee', 'or'], ['\\therefore', '\\therefore', 'therefore'], ['\\blacksquare', '\\blacksquare', 'end of proof']]],
+ ['Relations', [['\\neq', '\\neq', 'not equal'], ['\\le', '\\le', 'less than or equal'], ['\\ge', '\\ge', 'greater than or equal'], ['\\lt', '\\lt', 'less than (safe form of <)'], ['\\gt', '\\gt', 'greater than (safe form of >)'],
+   ['\\sim', '\\sim', 'is equivalent to (a relation)'], ['\\cong', '\\cong', 'is homeomorphic to'], ['\\approx', '\\approx', 'approximately'], ['\\equiv', '\\equiv', 'is identical / congruent to']]],
+ ['Maps', [['f : X \\to Y', 'f : X \\to Y', 'a function from X to Y'], ['x \\mapsto x^2', '\\mapsto', 'sends … to …'], ['f^{-1}(V)', 'f^{-1}(V)', 'preimage of V'], ['f(A)', 'f(A)', 'image of A'], ['g \\circ f', 'g \\circ f', 'composition: f, then g'],
+   ['f|_A', 'f|_A', 'restriction of f to A'], ['\\mathrm{id}_X', '\\mathrm{id}_X', 'identity map'], ['\\pi_1', '\\pi_1', 'first projection'], ['\\hookrightarrow', '\\hookrightarrow', 'inclusion map']]],
+ ['Topology', [['\\mathcal T', '\\mathcal T', 'a topology'], ['\\mathcal B', '\\mathcal B', 'a basis'], ['\\overline{A}', '\\overline{A}', 'closure of A'], ['\\operatorname{Int} A', '\\operatorname{Int} A', 'interior of A'], ['\\partial A', '\\partial A', 'boundary of A'],
+   ["A'", "A'", 'limit points of A'], ['B_d(x, \\varepsilon)', 'B_d(x, \\varepsilon)', 'open ball'], ['d(x, y)', 'd(x, y)', 'distance (metric)'], ['X/{\\sim}', 'X/{\\sim}', 'quotient space'], ['[x]', '[x]', 'equivalence class of x'],
+   ['p^{-1}(p(U))', 'p^{-1}(p(U))', 'saturation of U'], ['U \\times V', 'U \\times V', 'a box in a product'], ['x_n \\to x', 'x_n \\to x', 'the sequence converges to x']]],
+ ['Greek', [['\\alpha', '\\alpha', 'alpha'], ['\\beta', '\\beta', 'beta'], ['\\gamma', '\\gamma', 'gamma'], ['\\delta', '\\delta', 'delta'], ['\\varepsilon', '\\varepsilon', 'epsilon'], ['\\lambda', '\\lambda', 'lambda'], ['\\mu', '\\mu', 'mu'],
+   ['\\pi', '\\pi', 'pi'], ['\\rho', '\\rho', 'rho'], ['\\sigma', '\\sigma', 'sigma'], ['\\tau', '\\tau', 'tau'], ['\\phi', '\\phi', 'phi'], ['\\omega', '\\omega', 'omega'], ['\\Delta', '\\Delta', 'capital delta (the diagonal)']]],
+ ['Layout', [['x_{n}', '_{}', 'subscript (braces for more than one character)'], ['x^{2}', '^{}', 'superscript'], ['\\frac{a}{b}', '\\frac{}{}', 'fraction'], ['\\sqrt{x}', '\\sqrt{}', 'square root'], ['|x|', '|x|', 'absolute value'],
+   ['\\lim_{n \\to \\infty}', '\\lim_{n \\to \\infty}', 'limit'], ['\\inf', '\\inf', 'infimum'], ['\\sup', '\\sup', 'supremum'], ['\\min', '\\min', 'minimum'], ['\\max', '\\max', 'maximum'], ['\\ldots', '\\ldots', 'dots on the line'],
+   ['\\text{ such that }', '\\text{ such that }', 'ordinary words inside math'], ['a \\quad b', '\\quad', 'a wide space'], ['\\left( \\frac{a}{b} \\right)', '\\left(  \\right)', 'brackets that grow to fit']]]];
+function ltxPanel(){ var p = document.getElementById('ltx'); if (p) return p; p = document.createElement('div'); p.id = 'ltx';
+  p.innerHTML = '<div class="lxh"><b>LaTeX dictionary</b><button type="button" class="lxx" aria-label="Close">Close</button></div><input id="lxq" type="search" placeholder="Search: union, epsilon, closure…" autocomplete="off"><p class="lxn">Tap an entry to put it where your cursor was. Outside dollar signs it is wrapped as math for you.</p><div class="lxb">'
+    + LTX.map(function(g, gi){ return '<div class="lxg"><h4>' + g[0] + '</h4>' + g[1].map(function(e, ei){ return '<button type="button" class="lxe" data-g="' + gi + '" data-e="' + ei + '"><span class="lxs">$' + e[0] + '$</span><code>' + e[1].replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</code><i>' + e[2] + '</i></button>'; }).join('') + '</div>'; }).join('') + '</div>';
+  document.body.appendChild(p); math(p);
+  p.querySelector('.lxx').onclick = function(){ ltxShow(false); };
+  p.querySelector('#lxq').addEventListener('input', function(){ var q = this.value.trim().toLowerCase(); p.querySelectorAll('.lxe').forEach(function(b){ var e = LTX[+b.dataset.g][1][+b.dataset.e]; b.style.display = !q || (e[1] + ' ' + e[2]).toLowerCase().indexOf(q) >= 0 ? '' : 'none'; });
+    p.querySelectorAll('.lxg').forEach(function(g){ g.style.display = [].some.call(g.querySelectorAll('.lxe'), function(b){ return b.style.display !== 'none'; }) ? '' : 'none'; }); });
+  p.addEventListener('mousedown', function(e){ if (e.target.closest('.lxe')) e.preventDefault(); });
+  p.addEventListener('click', function(e){ var b = e.target.closest('.lxe'); if (!b) return; var code = LTX[+b.dataset.g][1][+b.dataset.e][1]; padInsert(code); });
+  return p; }
+function ltxShow(on){ var p = ltxPanel(); p.classList.toggle('on', on); document.body.classList.toggle('ltxon', on); try { localStorage.setItem('tg-ltx', on ? '1' : ''); } catch(e){}
+  if (on) ltxKeep(); }
+// on narrow screens keep the write-up box (and its symbol bar) in the space above the panel
+function ltxKeep(){ if (window.innerWidth >= 1000 || !document.body.classList.contains('ltxon')) return; var ta = document.getElementById('padin'), bar = document.querySelector('.padbar'); if (!ta) return;
+  var head = document.querySelector('.top').offsetHeight, room = window.innerHeight*0.56 - head, top = (bar && ta.offsetHeight + bar.offsetHeight + 16 < room ? bar : ta).getBoundingClientRect().top + window.scrollY - head - 8;
+  setTimeout(function(){ window.scrollTo({top: top, behavior: 'smooth'}); }, 30); }
+var PADSEL = null;
+function padInsert(code){ var ta = document.getElementById('padin'); if (!ta) return; var a0 = PADSEL ? PADSEL[0] : ta.value.length, a1 = PADSEL ? PADSEL[1] : a0, before = ta.value.slice(0, a0);
+  var dollars = (before.replace(/\\\$/g, '').match(/\$/g) || []).length, inMath = dollars % 2 === 1, ins = inMath ? code : '$' + code + '$';
+  var hole = ins.indexOf('{}'), caret = hole >= 0 ? a0 + hole + 1 : a0 + ins.length; if (!inMath && hole < 0) caret = a0 + ins.length;
+  ta.value = before + ins + ta.value.slice(a1); ta.focus({preventScroll: true}); ta.setSelectionRange(caret, caret); PADSEL = [caret, caret]; ta.dispatchEvent(new Event('input')); ltxKeep(); }
 window.addEventListener('hashchange', route);
 window.addEventListener('load', route);
 </script>
