@@ -785,6 +785,104 @@ var DEEP = {
 };
 Object.keys(DEEP).forEach(function(id){ var a = A[id]; if (!a) return; var s = a.sections || []; var k = s.length && /^(Definition|Statement)$/.test(s[0][0]) ? 1 : 0; a.sections = s.slice(0, k).concat(DEEP[id], s.slice(k)); a.deep = 1; });
 
+// ===== Deeper teaching, second batch: the rest of Chapters 1–2 and the start of Chapter 3.
+var DEEP2 = {
+'image-preimage': [
+  ['Reading the definition', R`<p><b>$f(A)$</b>: start with points of $A$, apply $f$, collect where they land. <b>$f^{-1}(B)$</b>: start with the target set $B$, collect every point of $X$ that lands inside $B$. The symbol $f^{-1}$ here does not mean $f$ has an inverse; it is just the set of points that map into $B$.</p>`],
+  ['Worked example', R`<p>$f(x)=x^2$ on $\mathbb R$. $f([-1,2])=[0,4]$. $f^{-1}([1,4])=[-2,-1]\cup[1,2]$. $f^{-1}(\{-1\})=\varnothing$.</p>`],
+  ['Common confusions', R`<p>$f^{-1}$ takes sets, not points: write $f^{-1}(\{0\})$, not $f^{-1}(0)$. And $f(A\cap B)\subseteq f(A)\cap f(B)$ can be strict ($f(x)=x^2$, $A=\{-1\}$, $B=\{1\}$), while $f^{-1}$ preserves intersections exactly.</p>`]],
+'relation-equivalence': [
+  ['Reading the definition', R`<p><b>Reflexive</b>: everything is the same as itself. <b>Symmetric</b>: "same as" works both ways. <b>Transitive</b>: same as something that is same as a third thing means same as the third thing. Together they say the relation behaves like equality, but coarser.</p>`],
+  ['Why it is defined this way', R`<p>These three properties are exactly what is needed for "the set of things the same as $x$" to be well behaved: two such sets are either identical or disjoint, so they cut $X$ into pieces ([[partition]]). That is what lets us glue.</p>`],
+  ['Worked example', R`<p>Check $\sim_A$: reflexive since $x=x$; symmetric since "$x=y$ or both in $A$" is symmetric in $x,y$; transitive: if $x\sim y$ and $y\sim z$, either one of them is an equality (then substitute), or $x,y\in A$ and $y,z\in A$, so $x,z\in A$.</p>`]],
+'equivalence-class': [
+  ['Reading the definition', R`<p>$[x]$ collects every $y$ that $\sim$ declares the same as $x$. If $y\in[x]$ then $[y]=[x]$: any member can name the class.</p>`],
+  ['Why two classes are equal or disjoint', R`<p>If $z\in[x]\cap[y]$ then $z\sim x$ and $z\sim y$, so by symmetry and transitivity $x\sim y$, and every element of one class is related to every element of the other.</p>`]],
+'functions': [
+  ['Reading the definition', R`<p><b>Injective</b>: different inputs give different outputs; nothing is merged. <b>Surjective</b>: every target point is hit; nothing is missed. <b>Bijective</b>: a perfect matching, so it can be run backwards.</p>`],
+  ['Why it matters here', R`<p>Quotient maps are surjections that merge points (not injective): gluing. Homeomorphisms are bijections that match open sets: renaming. Injectivity is what makes $A=f^{-1}(f(A))$ automatic, which is why every set is [[saturated]] for an injective map.</p>`]],
+'countable': [
+  ['Reading the definition', R`<p>"Injective map $J\to\mathbb N$" means you can label the elements of $J$ with different natural numbers. Then you could list them one after another, possibly with gaps.</p>`],
+  ['Worked example', R`<p>A countable union of finite sets $J_1,J_2,\dots$ is countable: list all of $J_1$, then the new elements of $J_2$, and so on. Each element gets a position in the list. This is the last step of HW4 Q4(b).</p>`]],
+'finer-coarser': [
+  ['Reading the definition', R`<p>$\mathcal T\subseteq\mathcal T'$: every set open for $\mathcal T$ is also open for $\mathcal T'$. The finer topology has at least as many open sets.</p>`],
+  ['Why it matters', R`<p>More open sets make more maps <em>out of</em> the space continuous and fewer maps <em>into</em> it. The identity $(X,\mathcal T')\to(X,\mathcal T)$ is continuous exactly when $\mathcal T'$ is finer (HW3 Q2). A finer topology than a Hausdorff one is Hausdorff (same disjoint open sets still available, HW6 Q4).</p>`],
+  ['Worked example', R`<p>$\mathbb R_\ell$ is finer than $\mathbb R$: any $(a,b)\ni x$ contains $[x,b)\ni x$. Strictly finer: $[0,1)$ is open in $\mathbb R_\ell$ but not in $\mathbb R$.</p>`]],
+'generated-topology': [
+  ['Reading the statement', R`<p>"$U$ is open iff around each $x\in U$ some basis element fits inside $U$." This turns openness into a pointwise check you can actually carry out.</p>`],
+  ['Worked example', R`<p>In the metric topology, $\{(x,y): x>0\}$ is open: at $(x,y)$ with $x>0$ the ball of radius $x$ fits inside.</p>`]],
+'lemma-13-3': [
+  ['Reading the statement', R`<p>To show the new topology $\mathcal T'$ has every old open set, it is enough to look at old <em>basis</em> elements, one point at a time: inside each old block around $x$ find a new block around $x$.</p>`],
+  ['Worked example', R`<p>HW1 Q3: rational intervals versus all intervals. Inside $(a,b)\ni x$ pick rationals $p,q$ with $a<p<x<q<b$; then $x\in(p,q)\subseteq(a,b)$. And rational intervals are intervals. So each topology is finer than the other: they are equal.</p>`]],
+'subbasis': [
+  ['Reading the definition', R`<p>Start with a family $\mathcal S$ that covers $X$. Allow finite intersections of its members (these form a basis), then all unions of those. The result is the smallest topology containing $\mathcal S$.</p>`],
+  ['Why it is useful', R`<p>It is the easiest way to say "make these particular sets open and nothing more". The product topology is "make every $\pi_\alpha^{-1}(U)$ open and nothing more".</p>`]],
+'projections': [
+  ['Reading the definition', R`<p>$\pi_1$ forgets the second coordinate. Picture $\mathbb R^2\to\mathbb R$: each point drops straight down to the $x$-axis, its shadow.</p>`],
+  ['Why open but not closed', R`<p>An open set has room around each point, and a box of room projects to an interval of room: open. But a closed set can creep toward a vertical line without touching it (the hyperbola), so its shadow approaches a point it never reaches: not closed.</p>`]],
+'interior': [
+  ['Reading the definition', R`<p>The interior of $A$ is the set of points of $A$ that have room inside $A$: those with some open set around them contained in $A$.</p>`],
+  ['Worked example', R`<p>$A=[0,1)$ in $\mathbb R$: $\operatorname{Int}A=(0,1)$. The point $0$ is in $A$, but every interval around it pokes out to the left.</p>`]],
+'closure-test': [
+  ['Reading the statement', R`<p>To decide whether $x$ is stuck to $A$, probe it with every open set around it. If even one probe misses $A$, $x$ is not in the closure. If every probe hits $A$, it is.</p>`],
+  ['Worked example', R`<p>MT Q2: $X=\{0,1,2\}$, $\mathcal T=\{\varnothing,\{0\},\{0,1\},X\}$, $A=\{1\}$. For $x=0$: the open set $\{0\}$ misses $A$, so $0\notin\overline A$. For $x=2$: the only open set containing $2$ is $X$, which meets $A$, so $2\in\overline A$. And $1\in A$. So $\overline A=\{1,2\}$.</p>`]],
+'closure-limit-points': [
+  ['Reading the statement', R`<p>Every point stuck to $A$ is either in $A$ already or is a point that $A$ accumulates at. Nothing else gets added.</p>`],
+  ['Worked example', R`<p>$A=\{1/n\}\cup\{2\}$. Limit points: only $0$ (the point $2$ is isolated). So $\overline A=A\cup\{0\}$.</p>`]],
+'dense': [
+  ['Reading the definition', R`<p>$\overline A=X$ means every point of $X$ is stuck to $A$: no open set, however small, avoids $A$.</p>`],
+  ['Why it matters', R`<p>Continuous maps into Hausdorff spaces are determined by their values on a dense set (HW3 Q3). That is why knowing a continuous function on $\mathbb Q$ determines it on $\mathbb R$.</p>`]],
+'t1': [
+  ['Reading the definition', R`<p>Every single point $\{x\}$ is closed: for any $y\ne x$ there is an open set around $y$ missing $x$. Points can be avoided one at a time, but not necessarily separated in pairs.</p>`],
+  ['Worked example', R`<p>[[ex-finite-complement|Cofinite]]: $X\setminus\{x\}$ is open (its complement is finite), so points are closed: T₁. Not Hausdorff.</p>`]],
+'convergence': [
+  ['Reading the definition', R`<p>"For every open $U\ni x$ there is $N$ with $x_n\in U$ for $n\ge N$": whatever neighbourhood of $x$ you choose, the sequence eventually enters it and stays.</p>`],
+  ['Worked example', R`<p>In $\mathbb R$, $1/n\to0$: for $U\supseteq(-\varepsilon,\varepsilon)$ take $N>1/\varepsilon$. In the [[ex-indiscrete|indiscrete]] topology the only neighbourhood is $X$, so every sequence converges to every point: limits need not be unique without [[hausdorff|Hausdorff]].</p>`]],
+'continuity-equivalents': [
+  ['Reading the statement', R`<p>Four ways of saying the same thing. (2) says continuous maps do not tear points away from sets they were stuck to. (3) is (1) with complements. (4) is the local, ε–δ-like version: around each point separately.</p>`],
+  ['When to use which', R`<p>(1) with a basis for general proofs; (3) when closed sets are easier (MT Q4); (4) when working at one point at a time; (2) for closure arguments (HW3 Q3).</p>`]],
+'pasting-lemma': [
+  ['Reading the statement', R`<p>If $X$ is cut into two closed pieces and $f$ is continuous on each piece, with the pieces agreeing where they meet, then the combined function is continuous.</p>`],
+  ['Worked example', R`<p>$h(x)=x$ for $x\le0$ and $h(x)=x/2$ for $x\ge0$: both pieces are continuous on the closed sets $(-\infty,0]$, $[0,\infty)$ and agree at $0$. So $h$ is continuous.</p>`]],
+'embedding': [
+  ['Reading the definition', R`<p>$f$ puts a copy of $X$ inside $Y$: injective, continuous, and with the subspace topology on $f(X)$ matching the topology of $X$ exactly.</p>`],
+  ['Non-example', R`<p>$[0,1)\to S^1$ wrapping around: injective and continuous, but not an embedding, because the image has the wrong topology near $(1,0)$.</p>`]],
+'product-vs-box': [
+  ['Reading the definition', R`<p>A box-topology basis element may restrict every coordinate. A product-topology basis element restricts only finitely many and leaves all the others completely free ($U_\alpha=X_\alpha$).</p>`],
+  ['Why the product topology wins', R`<p>Restricting infinitely many coordinates is too strong: in the box topology on $\mathbb R^\omega$, the diagonal map $t\mapsto(t,t,t,\dots)$ is not continuous, since $\prod(-\tfrac1n,\tfrac1n)$ pulls back to $\{0\}$. The product topology is the coarsest making projections continuous, and that is exactly enough for coordinatewise statements to work.</p>`],
+  ['Worked example', R`<p>HW3 Q6: if $J$ is infinite, $m^{-1}(\{0\})=\{(0,0,\dots)\}$. Any product-topology basis element around this point leaves some coordinate free, so it contains points with a nonzero coordinate. So the preimage is not open, and $m$ is not continuous.</p>`]],
+'maps-into-products': [
+  ['Reading the statement', R`<p>A map into a product is just a list of maps, one per factor. It is continuous exactly when each map in the list is.</p>`],
+  ['Why it fails for the box topology', R`<p>The diagonal $\mathbb R\to\mathbb R^\omega$ has continuous coordinates (all the identity) but is not continuous into the box topology; see [[product-vs-box]].</p>`]],
+'products-and-subspaces': [
+  ['Reading the statement', R`<p>Two ways to topologize $\prod A_\alpha$: as a subspace of the big product, or as a product of the smaller subspaces. They give the same open sets.</p>`],
+  ['Contrast', R`<p>Subspaces and quotients do <em>not</em> commute in this way (HW6 Q3, HW7 Q5); see [[defining-by-maps]].</p>`]],
+'metric': [
+  ['Reading the definition', R`<p><b>Positive</b>: distances are never negative, and zero only between a point and itself. <b>Symmetric</b>: from $x$ to $y$ is as far as from $y$ to $x$. <b>Triangle inequality</b>: a detour through $y$ is never shorter than going straight.</p>`],
+  ['Why the triangle inequality matters', R`<p>Nearly every proof with balls uses it: balls are open, metric spaces are Hausdorff, closed balls are closed (MT Q6). It is what turns "close to $y$, and $y$ close to $x$" into "close to $x$".</p>`]],
+'ball': [
+  ['Reading the definition', R`<p>$B(x,\varepsilon)$: all points strictly closer than $\varepsilon$ to $x$. The strict inequality is what makes it open; with $\le$ you get a closed ball.</p>`],
+  ['Worked example', R`<p>In $\mathbb R^2$ with Euclidean distance, $B(0,1)$ is the open unit disc. With the max metric $d=\max(|x_1-y_1|,|x_2-y_2|)$ it is an open square. Same topology: each contains a smaller copy of the other around each point.</p>`]],
+'metric-topology': [
+  ['Reading the definition', R`<p>A set is open when every point of it is the centre of some ball lying inside it. The radius may shrink as you approach the edge.</p>`],
+  ['Worked example', R`<p>MT Q6: $A=\{y: d(x,y)\le1\}$ is closed. For $z\notin A$, $d(x,z)>1$; let $r=d(x,z)-1$. If $w\in B(z,r)$, then $d(x,w)\ge d(x,z)-d(z,w)>1$. So $B(z,r)$ misses $A$: the complement is open.</p>`]],
+'first-countable': [
+  ['Reading the definition', R`<p>You can list countably many neighbourhoods of $x$ such that every neighbourhood of $x$, however small, contains one from your list. In a metric space: $B(x,1),B(x,\tfrac12),B(x,\tfrac13),\dots$</p>`],
+  ['Why it matters', R`<p>It lets you build a sequence $x_n\in U_n\cap A$ approaching $x$, so closures and continuity can be tested with sequences.</p>`]],
+'metrizable': [
+  ['Reading the definition', R`<p>"Some metric produces exactly these open sets." The metric is not part of the space; the question is whether one exists.</p>`],
+  ['How to show a space is not metrizable', R`<p>Find a property every metric space has and show it fails: not Hausdorff, or some point with no countable neighbourhood base (HW4 Q4).</p>`]],
+'connected': [
+  ['Reading the definition', R`<p>A separation splits $X$ into two nonempty open pieces with nothing in common. Connected means this is impossible: you cannot break the space into two open parts.</p>`],
+  ['Why it is defined this way', R`<p>It captures "in one piece" without paths or distances. And it is what makes the intermediate value theorem work: a continuous function cannot jump over a value without splitting its domain.</p>`],
+  ['Worked example', R`<p>$\mathbb Q$ is not connected: $U=\mathbb Q\cap(-\infty,\sqrt2)$ and $V=\mathbb Q\cap(\sqrt2,\infty)$ are open in $\mathbb Q$, disjoint, nonempty, and cover $\mathbb Q$ because $\sqrt2\notin\mathbb Q$.</p>`]],
+'compact': [
+  ['Reading the definition', R`<p><b>Open cover</b>: a collection of open sets that together contain every point. <b>Finite subcover</b>: finitely many of them already do. Compact means: whatever cover you are given, finitely many of its sets suffice.</p>`],
+  ['Why it is defined this way', R`<p>It is the topological version of "finite enough": properties that hold locally (bounded near each point, separated near each point) can be patched together using finitely many pieces. That is how compactness gives maxima, uniform continuity, and closedness in Hausdorff spaces.</p>`],
+  ['Worked example', R`<p>$(0,1)$ is not compact: the cover by $(\tfrac1n,1)$, $n\ge2$, has no finite subcover, since finitely many miss the points below the smallest $\tfrac1n$. $[0,1]$ is compact (Heine–Borel).</p>`]]
+};
+Object.keys(DEEP2).forEach(function(id){ var a = A[id]; if (!a) return; var s = a.sections || []; var k = s.length && /^(Definition|Statement|Statements)$/.test(s[0][0]) ? 1 : 0; a.sections = s.slice(0, k).concat(DEEP2[id], s.slice(k)); a.deep = 1; });
+
 </script>
 <script>
 // ===== The encyclopedia: home page, articles, link previews, a trail of where you have been, search.
@@ -826,7 +924,7 @@ function article(id){
   if (a.steps) h += '<details class="sec" open><summary>Steps</summary><div class="secb"><ol class="steps">' + a.steps.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + wiki(s[0]) + '</summary><div class="why"><b>Why:</b> ' + wiki(s[1]) + '</div></details>' : wiki(s[0])) + '</li>'; }).join('') + '</ol></div></details>';
   (a.sections || []).forEach(function(s, i){ var body = s[1];
     if (s[0] === 'Concepts and method') body = '<p><b>Concepts:</b></p><div class="chips">' + (a.pre || []).map(chip).join('') + '</div><p style="margin-top:10px"><b>Method:</b></p><div class="chips">' + (a.method || []).map(chip).join('') + '</div>';
-    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method') : (i === 0 && !a.steps); if (s[0] === 'Picture' || s[0] === 'Reading the definition') open = true;
+    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method') : (i === 0 && !a.steps); if (s[0] === 'Picture' || s[0] === 'Reading the definition' || s[0] === 'Reading the statement') open = true;
     h += '<details class="sec"' + (open ? ' open' : '') + '><summary>' + s[0] + '</summary><div class="secb">' + wiki(body) + '</div></details>'; });
   if (a.kind === 'method' && (USEDIN[id] || []).length) h += '<div class="links"><h3>Used in these problems</h3><div class="chips">' + USEDIN[id].map(chip).join('') + '</div></div>';
   h += '<div class="links">';
