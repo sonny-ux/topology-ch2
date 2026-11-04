@@ -190,7 +190,9 @@ var A = {
     ['Why it matters', R`<p>Its [[equivalence-class|classes]] form a [[partition]], and a partition is exactly what a [[quotient-topology|quotient space]] is built from.</p>`]]},
 'equivalence-class': {title: 'Equivalence class', kind: 'definition', where: 'Ch. 1, §3', pre: ['relation-equivalence'],
   lede: R`$[x]=\{y\in X: y\sim x\}$, everything that counts as the same as $x$.`,
-  sections: [['Definition', R`<p>For an [[relation-equivalence|equivalence relation]] $\sim$ on $X$ and $x\in X$, the class of $x$ is $[x]=\{y\in X : y\sim x\}$. Two classes are either equal or disjoint.</p>`],
+  sections: [['Definition', R`<p>For an [[relation-equivalence|equivalence relation]] $\sim$ on $X$ and $x\in X$, the class of $x$ is $[x]=\{y\in X : y\sim x\}$. Two classes are either equal or disjoint.</p>
+<p><b>A set that is also one point.</b> Recall: a set is a collection, and its members can be anything, including other sets. A team is a set of players: $\{\text{Ann},\text{Bo},\text{Cy}\}$. A league is a set of teams. In the league, each team is one member, even though each team has several players inside it.</p>
+<p>An equivalence class is a team in this sense. Inside $X$ it is a collection of points. In the quotient $X/{\sim}$ it is one member. For example, on $X=\{1,2,3,4\}$ with "same parity", $[1]=[3]=\{1,3\}$ and $[2]=[4]=\{2,4\}$, so $X/{\sim}=\{\{1,3\},\{2,4\}\}$ has two members, each of them a set of two numbers. To ask whether a set of classes is open, unpack it: pool the points of its classes into one subset of $X$, which is its preimage under $\pi$.</p>`],
     ['Example', R`<p>For $\sim_A$: if $a\in A$ then $[a]=A$ (every point of $A$ is related to $a$ by the "both in $A$" clause); if $x\notin A$ then $[x]=\{x\}$.</p>`],
     ['Watch out', R`<p>$[x]$ is a <em>set</em> of points of $X$, but a single <em>point</em> of the quotient $X/{\sim}$.</p>`]]},
 'partition': {title: 'Partition', kind: 'definition', where: 'Ch. 1, §3', pre: ['equivalence-class'],
