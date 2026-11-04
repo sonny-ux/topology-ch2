@@ -381,6 +381,7 @@ var A = {
   lede: R`Collapse $A\subseteq X$ to one point. The result is Hausdorff when $A$ is closed in a metric space, and can fail otherwise.`,
   sections: [['Setup', R`<p>$x\sim_A y$ iff $x=y$ or both in $A$. The points of $X/{\sim_A}$ are $[A]$ and $\{x\}$ for $x\notin A$ ([[equivalence-class]]).</p>`],
     ['Picture', '<canvas id="qfig" class="figc" width="560" height="170" aria-label="Crushing A to a point"></canvas><div class="figctl"><label>x <input id="qx" type="range" min="0" max="1000" value="180"></label><label><input id="qclosed" type="checkbox" checked> A closed</label></div><p id="qmsg" class="figmsg"></p>'],
+    ['Saturated sets', '<canvas id="satfig" class="figc" width="560" height="236" aria-label="A draggable open interval S, its image, and the preimage of its image"></canvas><div class="figctl"><span>Drag an endpoint of S, or drag the middle to move it.</span></div><p id="satmsg" class="figmsg"></p>' + R`<p>A set is saturated iff it is a union of whole equivalence classes. Here the only non-singleton class is $A$, so $S$ is saturated iff it contains all of $A$ or none of $A$. For a saturated open set, $\pi^{-1}(\pi(S))=S$ is open, so $\pi(S)$ is open in the quotient. This is why the separation argument only pushes forward saturated sets like $U$ and $W$.</p>`],
     ['Why closed matters', R`<p>For $x\notin A$ with $A$ closed there is $r>0$ with $B(x,r)\cap A=\varnothing$, a gap. For $A=(0,1)$ and $x=0$ there is no gap: $d(0,A)=0$, every open set around $\{0\}$ contains $[A]$, and the quotient is not Hausdorff ([[ex-crush-open]]).</p>`],
     ['The proof', R`<p>Written out in [[hw7-q1]].</p>`]]},
 'gluing-examples': {title: 'Gluing examples', kind: 'example', where: '§22', pre: ['quotient-topology', 'homeomorphism'],
@@ -1523,7 +1524,7 @@ function route(){
   closePv();
   if (hsh.indexOf('a/') === 0){ var id = hsh.slice(2); v.innerHTML = article(id); document.title = (A[id] ? A[id].title + ' · ' : '') + 'Topology Reference Guide'; }
   else { v.innerHTML = home(); document.title = 'Topology Reference Guide'; }
-  math(v); window.scrollTo(0, 0); if (document.getElementById('qfig')) quotFig(); if (document.getElementById('drill')) drill();
+  math(v); window.scrollTo(0, 0); if (document.getElementById('qfig')) quotFig(); if (document.getElementById('satfig')) satFig(); if (document.getElementById('drill')) drill();
 }
 // previews: a tap on an underlined term inside an article shows its summary first
 function closePv(){ document.getElementById('pv').classList.remove('on'); }
@@ -1634,7 +1635,7 @@ document.getElementById('fp').addEventListener('click', function(e){
 window.addEventListener('hashchange', closeFind);
 // theme
 var tb = document.getElementById('themeBtn'); function setTb(){ tb.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? 'Dark' : 'Light'; } setTb();
-tb.addEventListener('click', function(){ var l = document.documentElement.getAttribute('data-theme') === 'light'; if (l) document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', 'light'); try { localStorage.setItem('tg-theme', l ? 'dark' : 'light'); } catch(e){} setTb(); if (document.getElementById('qfig')) quotFig(); });
+tb.addEventListener('click', function(){ var l = document.documentElement.getAttribute('data-theme') === 'light'; if (l) document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', 'light'); try { localStorage.setItem('tg-theme', l ? 'dark' : 'light'); } catch(e){} setTb(); if (document.getElementById('qfig')) quotFig(); if (document.getElementById('satfig')) satFig(); });
 // the crushing picture
 function quotFig(){
   var cv = document.getElementById('qfig'); if (!cv) return; var g = cv.getContext('2d'), xs = document.getElementById('qx'), cl = document.getElementById('qclosed'), out = document.getElementById('qmsg');
@@ -1658,6 +1659,49 @@ function quotFig(){
       out.innerHTML = 'r = d(x, A) > 0. Green: U = B(x, r/2), missing A. Blue: W = {z : d(z, x) > r/2}, containing all of A. Both are saturated, so their images are disjoint open sets around {x} and [A].'; }
     g.fillStyle = fg; g.beginPath(); g.arc(X(x), y0, 4, 0, 7); g.fill(); g.fillText('x', X(x) - 3, y0 + 26); if (!inA){ g.beginPath(); g.arc(down(x), y1, 4, 0, 7); g.fill(); g.fillText('{x}', down(x) - 8, y1 + 28); } }
   xs.oninput = draw; cl.onchange = function(){ if (!cl.checked) xs.value = 350; draw(); }; draw();
+}
+// saturated sets: drag an open interval S and compare S with the preimage of its image
+var SAT = {s1: 0.2, s2: 0.5};
+function satFig(){
+  var cv = document.getElementById('satfig'); if (!cv) return; var g = cv.getContext('2d'), out = document.getElementById('satmsg');
+  var W = cv.width, H = cv.height, L = 30, Rr = W - 30, a = 0.35, b = 0.65, y0 = 78, y1 = 182, PUR = '#9b7fd4', ORA = '#e0947a', RED = '#c9495a';
+  function X(u){ return L + (Rr - L)*u; } var shift = X(b) - X(a), pA = X(a);
+  function down(u){ return u <= a ? X(u) : u >= b ? X(u) - shift : pA; }
+  function col(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim() || '#888'; }
+  function seg(x1, x2, y, c, w){ g.strokeStyle = c; g.lineWidth = w; g.beginPath(); g.moveTo(x1, y); g.lineTo(x2, y); g.stroke(); }
+  function hollow(x, y, c, r){ g.beginPath(); g.arc(x, y, r || 5, 0, 7); g.fillStyle = col('--card'); g.fill(); g.strokeStyle = c; g.lineWidth = 2; g.stroke(); }
+  function draw(){
+    var fg = col('--text'), mu = col('--muted'), bg = col('--card'), s1 = SAT.s1, s2 = SAT.s2;
+    var none = s2 <= a || s1 >= b, all = s1 <= a && s2 >= b, sat = none || all, touches = !none;
+    g.fillStyle = bg; g.fillRect(0, 0, W, H); g.font = '19px Georgia, serif';
+    // top line, A, then the preimage of the image (dashed), then S
+    seg(L, Rr, y0, mu, 2); g.fillStyle = mu; g.fillText('ℝ', L, 26); g.fillText('A = (a, b)', X(a) + 10, 26);
+    seg(X(a), X(b), y0, ORA, 6); hollow(X(a), y0, ORA, 4); hollow(X(b), y0, ORA, 4);
+    var p1 = sat ? s1 : Math.min(s1, a), p2 = sat ? s2 : Math.max(s2, b);
+    g.setLineDash([6, 4]); g.strokeStyle = sat ? fg : RED; g.lineWidth = 1.5; g.strokeRect(X(p1) - 4, y0 - 16, X(p2) - X(p1) + 8, 32); g.setLineDash([]);
+    g.fillStyle = sat ? mu : RED; g.font = '16px -apple-system, system-ui, sans-serif'; g.fillText('π⁻¹(π(S))', X(p1) - 4, y0 + 36); g.font = '19px Georgia, serif';
+    if (!sat){ g.fillStyle = 'rgba(201,73,90,.55)'; if (s1 > a) g.fillRect(X(a), y0 - 7, X(Math.min(s1, b)) - X(a), 14); if (s2 < b) g.fillRect(X(Math.max(s2, a)), y0 - 7, X(b) - X(Math.max(s2, a)), 14); }
+    g.strokeStyle = PUR; g.lineWidth = 4; g.globalAlpha = .9; g.beginPath(); g.moveTo(X(s1), y0 - 10); g.lineTo(X(s2), y0 - 10); g.stroke(); g.globalAlpha = 1;
+    [s1, s2].forEach(function(e){ hollow(X(e), y0 - 10, PUR, 6); }); g.fillStyle = PUR; g.fillText('S', (X(s1) + X(s2))/2 - 4, y0 - 24);
+    // the quotient, and the image of S in it
+    seg(L, Rr - shift, y1, mu, 2); g.fillStyle = mu; g.fillText('X/∼ : A is one point [A]', L, y1 - 34);
+    g.fillStyle = ORA; g.beginPath(); g.arc(pA, y1, 7, 0, 7); g.fill();
+    if (s1 < a) seg(down(s1), down(Math.min(s2, a)), y1, PUR, 5);
+    if (s2 > b) seg(down(Math.max(s1, b)), down(s2), y1, PUR, 5);
+    if (touches){ g.strokeStyle = PUR; g.lineWidth = 3; g.beginPath(); g.arc(pA, y1, 10, 0, 7); g.stroke(); }
+    [s1, s2].forEach(function(e){ if (e <= a || e >= b) hollow(down(e), y1, PUR, 5); });
+    g.fillStyle = PUR; var mid = (down(s1) + down(s2))/2; g.fillText('π(S)', mid - 14, y1 + 36); g.fillStyle = mu; g.fillText('[A]', pA - 13, y1 - 14);
+    out.innerHTML = sat ? '<b>Saturated:</b> pushing forward and pulling back catches nothing new. ' + (none ? 'S contains none of A, so ' : 'S contains all of A, so ') + 'π⁻¹(π(S)) = S.'
+      : '<b style="color:' + RED + '">Not saturated:</b> π(S) contains [A], so the preimage drags in all of A. π⁻¹(π(S)) = S ∪ A; the red part of A is what it catches that S did not have.'; }
+  var drag = null;
+  function u(e){ var r = cv.getBoundingClientRect(); return ((e.clientX - r.left)*W/r.width - L)/(Rr - L); }
+  cv.onpointerdown = function(e){ var v = u(e), tol = 16/(Rr - L)*(W/cv.getBoundingClientRect().width);
+    if (Math.abs(v - SAT.s1) < tol) drag = {k: 's1'}; else if (Math.abs(v - SAT.s2) < tol) drag = {k: 's2'}; else if (v > SAT.s1 && v < SAT.s2) drag = {k: 'mv', off: v - SAT.s1, w: SAT.s2 - SAT.s1}; else return;
+    cv.setPointerCapture(e.pointerId); e.preventDefault(); };
+  cv.onpointermove = function(e){ if (!drag) return; var v = Math.max(0, Math.min(1, u(e))), m = 0.03;
+    if (drag.k === 's1') SAT.s1 = Math.min(v, SAT.s2 - m); else if (drag.k === 's2') SAT.s2 = Math.max(v, SAT.s1 + m); else { var x1 = Math.max(0, Math.min(1 - drag.w, v - drag.off)); SAT.s1 = x1; SAT.s2 = x1 + drag.w; } draw(); };
+  cv.onpointerup = cv.onpointercancel = function(){ drag = null; };
+  draw();
 }
 window.addEventListener('hashchange', route);
 window.addEventListener('load', route);
