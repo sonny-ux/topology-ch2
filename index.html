@@ -125,6 +125,30 @@ details.topic .tlist{padding-left:10px;}
 .scard h2{font-weight:normal;font-size:1.3rem;margin-bottom:6px;} .scard p{color:var(--text2);}
 .scard h3{font:600 12px -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px;}
 #sugg a.sall{color:var(--muted);font:13px -apple-system,system-ui,sans-serif;}
+.secb table{border-collapse:collapse;width:100%;font-size:.85em;margin:.4em 0 1em;display:block;overflow-x:auto;}
+.secb th,.secb td{border-bottom:1px solid var(--border);padding:7px 8px;text-align:left;vertical-align:top;}
+.secb th{font:600 11px -apple-system,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+.role{font:13px/1.5 -apple-system,system-ui,sans-serif;color:var(--muted);margin:-6px 0 16px;}
+.role b{color:var(--text2);font-weight:600;}
+.dnav{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 14px;}
+.dnav button{width:34px;height:34px;border-radius:50%;border:1px solid var(--border2);background:var(--card);color:var(--muted);font:13px -apple-system,system-ui,sans-serif;cursor:pointer;}
+.dnav button.part{color:var(--text2);border-color:var(--text2);}
+.dnav button.ok{background:var(--card2);color:var(--text);border-color:var(--text);}
+.dnav button.cur{outline:2px solid var(--text);outline-offset:1px;}
+.dq{border:1px solid var(--border2);border-radius:12px;padding:12px 14px;margin-bottom:14px;background:var(--card);}
+.dq p{color:var(--text);margin:4px 0 0;}
+.dst{margin:0 0 16px;}
+.dsq{font:600 14px -apple-system,system-ui,sans-serif;color:var(--text);margin-bottom:8px;}
+.dopt{display:block;width:100%;text-align:left;border:1px solid var(--border2);border-radius:10px;background:var(--card);color:var(--text);padding:10px 12px;margin:0 0 7px;font:16px/1.45 Georgia,serif;cursor:pointer;}
+.dopt.right{border-color:#5fae7a;background:rgba(95,174,122,.12);}
+.dopt.wrong{border-color:#c9495a;background:rgba(201,73,90,.12);}
+.dopt.dim{opacity:.45;}
+.dopt:disabled{cursor:default;color:var(--text);}
+.dwhy{color:var(--text2);font-size:.95em;padding:4px 2px 0;}
+.dout{border-top:1px solid var(--border2);padding-top:12px;margin-top:6px;}
+.dout p{color:var(--text);}
+.dbtn{display:flex;gap:8px;margin-top:14px;}
+.dbtn button{flex:1;border:1px solid var(--border2);border-radius:8px;background:var(--card2);color:var(--text);padding:11px;font:14px -apple-system,system-ui,sans-serif;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -1218,6 +1242,227 @@ This set is open in $B$: $[0,r)\times\{-1\}=B\cap\big((-1,r)\times(-\tfrac32,-\t
  ['Why it makes sense', R`<p>$p:D\to C$ is a quotient map (part (a)), but restricting it to the subspace $B$ gives a map whose quotient topology on the image is finer than the subspace topology. Taking the subspace first and the quotient second differs from the other order. See [[defining-by-maps]] ("When the constructions are combined").</p>`]]); })();
 A['hw7-q5'].pre = ['quotient-map', 'subspace-topology', 'saturated', 'hw6-q3'];
 
+// ===== How to approach a problem: the routine, the whole picture, and a drill on first moves
+A['approach'] = {title: 'How to approach a problem', kind: 'idea', where: 'Start here', pre: ['describing-by-structure'],
+  lede: 'Most proofs in this course are found the same way: read the shape of the claim, name the spaces and their open sets, unwind the goal and the hypotheses into definitions, test an example, then write the first and last lines before the middle.',
+  sections: [
+  ['Why a routine', R`<p>A problem in topology rarely needs a clever idea at the start. It needs the statement turned into something concrete enough to act on. Almost every statement is made of defined words (closed, Hausdorff, continuous, quotient map), and each defined word, unwound, says exactly what has to be produced. The routine below does that unwinding in a fixed order, so that the first move is never a blank page. The clever step, when there is one, comes late, and it is usually small: which radius, which box, which set.</p>`],
+  ['1. Read the logical shape', R`<p>The grammar of the claim fixes the first line of the proof.</p>
+<table><tr><th>The claim says</th><th>The proof starts</th></tr>
+<tr><td>"for every $x$ …", "every $U$ …"</td><td>"Let $x$ be arbitrary." Keep it arbitrary: never pick a convenient one.</td></tr>
+<tr><td>"there exists …"</td><td>Construct the object and say what it is; then check it works.</td></tr>
+<tr><td>"$P$ if and only if $Q$"</td><td>Two proofs, $(\Rightarrow)$ and $(\Leftarrow)$, each with its own routine.</td></tr>
+<tr><td>"$A=B$", "$A\subseteq B$"</td><td>Take an element of the left side and show it lies in the right ([[m-set-equality]]).</td></tr>
+<tr><td>"need not", "show by example", "is not"</td><td>One counterexample, checked in full ([[m-counterexample]]).</td></tr>
+<tr><td>"determine whether"</td><td>Decide first by testing; then either prove it or give a counterexample.</td></tr></table>
+<p>Many quantifiers are hidden inside definitions. "$f$ is continuous" hides "for every open $V$"; "$X$ is Hausdorff" hides "for every pair $x\neq y$"; "$C$ is closed" hides "for every point outside $C$". Bring them to the surface: they decide what the first line names.</p>`],
+  ['2. Name the spaces and their open sets', R`<p>Before using any open set, know what the open sets are. For each space in the problem ask: what are its points, which topology does it carry, and what does a basic open set look like there? Draw it when you can.</p>
+<ul><li>A subspace $Y\subseteq X$: the sets $Y\cap U$, $U$ open in $X$ ([[subspace-topology]]).</li>
+<li>A product $X\times Y$: unions of boxes $U\times V$ ([[product-topology]]).</li>
+<li>A quotient $X/{\sim}$: the sets whose preimage is open upstairs ([[quotient-topology]]).</li>
+<li>A metric space: unions of balls ([[ball]]).</li>
+<li>A finite space: the list of open sets itself ([[m-finite]]).</li></ul>
+<p>Most errors in this course come from using the wrong open sets: treating a subspace's open sets as open in the big space, or a quotient's as images of open sets.</p>`],
+  ['3. Unwind the goal', R`<p>Replace the conclusion by its definition, and keep replacing until it says what you must <em>produce</em>.</p>
+<ul><li>"$X/{\sim}$ is Hausdorff" → for distinct points $[x]\neq[y]$, open sets $U\ni[x]$, $V\ni[y]$ with $U\cap V=\varnothing$ → (by the quotient topology) two disjoint, saturated, open sets in $X$, one containing each class.</li>
+<li>"$C$ is closed" → $X\setminus C$ is open → every point outside $C$ has a basic open set around it that misses $C$.</li>
+<li>"$f$ is continuous" → for each open $V$ (it is enough to take each basis element), $f^{-1}(V)$ is open.</li></ul>
+<p>Then write the <b>last line</b> of the proof now, for example: "Hence $U$ and $V$ are disjoint open sets containing $[x]$ and $[y]$, so $X/{\sim}$ is Hausdorff." The proof is whatever connects the first line to it.</p>`],
+  ['4. Unwind the hypotheses', R`<p>Do the same for what you are given, and write down what each hypothesis hands you.</p>
+<ul><li>"$A$ is closed" gives: each $x\notin A$ has a basic open set (in a metric space, a ball) missing $A$.</li>
+<li>"$f$ is continuous" gives: preimages of open sets are open.</li>
+<li>"$X$ is Hausdorff" gives: disjoint neighbourhoods for any two points you name.</li></ul>
+<p>A proof is usually the goal's demand met by the hypotheses' supply. If at the end a hypothesis has not been used, either the statement is more general than needed or, more often, that hypothesis is where the missing step lives.</p>`],
+  ['5. Choose the form of each definition', R`<p>Most notions have several equivalent forms, and the right one makes the proof short.</p>
+<ul><li>Closed: complement open; contains its limit points; equals its closure.</li>
+<li>In the closure: every neighbourhood, or every basic neighbourhood, meets the set ([[closure-test]]).</li>
+<li>Continuous: preimages of open sets; of closed sets; of basis elements; in metric spaces, ε–δ ([[continuity-equivalents]], [[epsilon-delta]]).</li></ul>
+<p>Match the form to the supply. Hypotheses about complements and closed sets suggest the closed-set forms; hypotheses about individual points suggest the neighbourhood forms. The full table is in [[whole-picture]].</p>`],
+  ['6. Test before proving', R`<p>Try the statement on a picture or a standard space before writing: $\mathbb R$, the plane, a three-point space, $\mathbb R_\ell$ ([[ex-lower-limit]]), an indiscrete space ([[ex-indiscrete]]). The test does one of two things. It shows why the statement is true (the picture often contains the proof: which ball, which radius, which box), or it produces a counterexample. For a "determine whether" question, this step is where the answer comes from.</p>`],
+  ['7. Write it', R`<p>Write the first line (from the shape: "Let $x\in X\setminus C$"), the last line (from the unwound goal), and fill the middle with the hypotheses' supply. Name every object when it first appears and say where it comes from: "Since $A$ is closed, $X\setminus A$ is open, so there is $r\gt0$ with $B(x,r)\cap A=\varnothing$."</p>`],
+  ['When you are stuck', R`<ul><li>Find the hypothesis you have not used, and unwind it again.</li>
+<li>Switch to another form of the definition (step 5).</li>
+<li>Reduce to basis elements: to show a set is open, show each of its points has a basis element inside it.</li>
+<li>Try the special case: $\mathbb R$, or a finite space where everything can be listed.</li>
+<li>Redraw the picture with the specific points named.</li>
+<li>Look up the method for the goal in [[whole-picture]] (Goal → method).</li></ul>`],
+  ['A demonstration', R`<p><b>Problem</b> (Munkres §17, Exercise 13). Show that $X$ is Hausdorff if and only if the diagonal $\Delta=\{(x,x):x\in X\}$ is closed in $X\times X$.</p>
+<p><b>Shape.</b> "If and only if": two implications.</p>
+<p><b>Spaces.</b> $X\times X$ with the product topology, so basic open sets are boxes $U\times V$. In the plane, $\Delta$ is the line $y=x$.</p>
+<p><b>Unwind the goal.</b> $\Delta$ closed means its complement $\{(x,y):x\neq y\}$ is open, which means every $(x,y)$ with $x\neq y$ lies in a box $U\times V$ that misses $\Delta$. And a box misses $\Delta$ exactly when no point lies in both $U$ and $V$, that is, when $U\cap V=\varnothing$.</p>
+<p><b>Compare with the hypothesis.</b> "A box $U\times V$ around $(x,y)$ missing $\Delta$" now reads word for word as "disjoint open sets $U\ni x$ and $V\ni y$", which is Hausdorff. Once both sides are unwound, the two directions are the same translation read forwards and backwards.</p>
+<p><b>Write it.</b> $(\Rightarrow)$ Let $(x,y)\notin\Delta$, so $x\neq y$. Hausdorff gives open $U\ni x$, $V\ni y$ with $U\cap V=\varnothing$. Then $U\times V$ is open, contains $(x,y)$, and misses $\Delta$; so the complement of $\Delta$ is open and $\Delta$ is closed. $(\Leftarrow)$ Let $x\neq y$. Then $(x,y)$ lies in the open complement of $\Delta$, so some box $U\times V$ around it misses $\Delta$, which means $U\cap V=\varnothing$: $U$ and $V$ separate $x$ and $y$.</p>`],
+  ['Practise', R`<p>[[first-moves]] drills the first three steps on short problems, with the reasoning for each choice.</p>`]]};
+
+A['whole-picture'] = {title: 'The whole picture: spaces, constructions, maps, properties', kind: 'idea', where: 'Start here', pre: ['defining-by-maps', 'approach'],
+  lede: 'Everything in the course is one of four things: a space, a way of building spaces, a kind of map, or a property; most problems ask how two of them interact.',
+  sections: [
+  ['The four kinds of thing', R`<ul><li><b>Spaces</b>: a set with a topology, usually given by a basis. The ones that recur: $\mathbb R$, $\mathbb R_\ell$, $\mathbb R_K$, finite spaces, metric spaces, $\prod\{0,1\}$ ([[standard-topologies]], [[ex-real-line]]).</li>
+<li><b>Constructions</b>: new spaces from old. Subspace, product, quotient; also the metric and order topologies, which build a topology from extra structure.</li>
+<li><b>Maps</b>: continuous, open, closed, quotient, homeomorphism, embedding. Each says what a function does to open sets.</li>
+<li><b>Properties</b>: Hausdorff, $T_1$, connected, compact, metrizable, first countable. Each is a statement made with open sets only, so homeomorphisms keep it.</li></ul>
+<p>A typical problem names two of these and asks how they interact. "Is the quotient Hausdorff?" is a construction against a property. "Is the projection open?" is a construction against a kind of map. "Is the continuous image of a connected space connected?" is a map against a property. Recognizing which interaction is being asked about tells you which theorems and which examples are relevant before you start.</p>`],
+  ['Constructions and their maps', R`<p>Each construction comes with a map, and its topology is chosen to make that map continuous in the most economical way ([[defining-by-maps]]).</p>
+<table><tr><th>Construction</th><th>Its map</th><th>Topology</th><th>Open sets</th></tr>
+<tr><td>Subspace $Y\subseteq X$</td><td>inclusion $i:Y\to X$</td><td>coarsest making $i$ continuous</td><td>$Y\cap U$</td></tr>
+<tr><td>Product $X\times Y$</td><td>projections $\pi_1,\pi_2$</td><td>coarsest making both continuous</td><td>unions of boxes $U\times V$</td></tr>
+<tr><td>Quotient $X/{\sim}$</td><td>$p:X\to X/{\sim}$</td><td>finest making $p$ continuous</td><td>$U$ with $p^{-1}(U)$ open</td></tr></table>
+<p>Two consequences settle most continuity questions about constructions. A map <em>into</em> a product is continuous exactly when each coordinate is ([[maps-into-products]]), and a map into a subspace exactly when it is continuous into the big space. A map <em>out of</em> a quotient is continuous exactly when its composite with $p$ is, so it is tested upstairs ([[maps-out-of-quotients]]).</p>`],
+  ['Pulling back and pushing forward', R`<table><tr><th>Notion</th><th>Direction</th><th>Condition</th></tr>
+<tr><td>[[continuous|Continuous]]</td><td>back</td><td>$f^{-1}$(open) is open</td></tr>
+<tr><td>[[open-map|Open map]]</td><td>forward</td><td>$f$(open) is open</td></tr>
+<tr><td>Closed map</td><td>forward</td><td>$f$(closed) is closed</td></tr>
+<tr><td>[[quotient-map|Quotient map]]</td><td>both</td><td>surjective, and $U$ open $\iff f^{-1}(U)$ open</td></tr>
+<tr><td>[[homeomorphism|Homeomorphism]]</td><td>both</td><td>bijective, continuous, with continuous inverse</td></tr>
+<tr><td>[[embedding|Embedding]]</td><td>both, onto the image</td><td>a homeomorphism onto $f(X)$</td></tr></table>
+<p>Preimages respect every set operation ($f^{-1}(A\cap B)=f^{-1}(A)\cap f^{-1}(B)$, and the same for unions and complements); images do not ($f(A\cap B)$ can be smaller than $f(A)\cap f(B)$). That is why continuity is the basic notion and openness of a map has to be checked case by case. Useful links between the rows: a continuous surjection that is open, or closed, is a quotient map (§22); a continuous open bijection is a homeomorphism; and for a bijection, open and closed are the same condition ([[hw7-q6]]).</p>`],
+  ['Which properties survive which constructions', R`<table><tr><th>Property</th><th>Subspace</th><th>Product</th><th>Quotient</th><th>Image</th></tr>
+<tr><td>[[hausdorff|Hausdorff]]</td><td>yes</td><td>yes</td><td>not always</td><td>no</td></tr>
+<tr><td>[[t1|$T_1$]]</td><td>yes</td><td>yes</td><td>iff every class is closed</td><td>no</td></tr>
+<tr><td>[[connected|Connected]]</td><td>no</td><td>yes</td><td>yes</td><td>yes</td></tr>
+<tr><td>[[compact|Compact]]</td><td>if closed</td><td>yes</td><td>yes</td><td>yes</td></tr>
+<tr><td>[[metrizable|Metrizable]]</td><td>yes</td><td>countable</td><td>not always</td><td>no</td></tr>
+<tr><td>[[first-countable|First countable]]</td><td>yes</td><td>countable</td><td>not always</td><td>no</td></tr></table>
+<p>"Image" means the image under a continuous surjection; "if closed" means closed subspaces; "countable" means countable products.</p>
+<p>The standard examples behind the "not always" and "no" entries: $\mathbb R/(0,1)$ ([[ex-crush-open]]) and the line with two origins ([[ex-two-origins]]) are quotients of Hausdorff spaces that are not Hausdorff; the quotient in [[hw6-q3]] is Hausdorff but, by the remark there, not metrizable; two points of $\mathbb R$ form a subspace of a connected space that is not connected; any map onto an indiscrete space is continuous, so continuous images lose separation.</p>
+<p>How to use the table: when a problem asks whether a construction has a property, a "yes" means look for a proof, and the theorem behind it is the model; a "not always" means look for a counterexample, and the standard example is the one to adapt. For quotients, failures happen at glued points, so check neighbourhoods of the glued classes first ([[crushing-a-set]]). A positive quotient result needs a hypothesis that controls the gluing, such as crushing a <em>closed</em> set ([[hw7-q1]]).</p>`],
+  ['Goal → method', R`<table><tr><th>You are asked to show</th><th>Method</th></tr>
+<tr><td>a collection is a topology</td><td>[[m-topology]]</td></tr>
+<tr><td>two sets or two topologies are equal</td><td>[[m-set-equality]]</td></tr>
+<tr><td>one topology is finer than another</td><td>[[m-compare]]</td></tr>
+<tr><td>a set is open</td><td>[[m-open]]</td></tr>
+<tr><td>a set is closed</td><td>[[m-closed]]</td></tr>
+<tr><td>what a closure is</td><td>[[m-closure]]</td></tr>
+<tr><td>a space is Hausdorff</td><td>[[m-hausdorff]]</td></tr>
+<tr><td>a function is continuous</td><td>[[m-continuous]]</td></tr>
+<tr><td>a map into a product is continuous</td><td>[[m-product-maps]]</td></tr>
+<tr><td>a map is open, or closed</td><td>[[m-open-map]]</td></tr>
+<tr><td>a map is a quotient map</td><td>[[m-quotient-map]]</td></tr>
+<tr><td>a map is not a quotient map</td><td>[[m-not-quotient]]</td></tr>
+<tr><td>something about a quotient space</td><td>[[m-quotient]]</td></tr>
+<tr><td>a space is (not) connected</td><td>[[m-connected]]</td></tr>
+<tr><td>a space is (not) compact</td><td>[[m-compact]]</td></tr>
+<tr><td>something fails, or "need not" hold</td><td>[[m-counterexample]]</td></tr>
+<tr><td>a computation in a finite space</td><td>[[m-finite]]</td></tr>
+<tr><td>true or false, quickly</td><td>[[m-true-false]]</td></tr></table>`],
+  ['Switching between forms of a definition', R`<table><tr><th>Notion</th><th>Equivalent forms</th></tr>
+<tr><td>$U$ is open</td><td>$U\in\mathcal T$; each $x\in U$ has a basis element $B$ with $x\in B\subseteq U$; $U$ is a union of basis elements</td></tr>
+<tr><td>$C$ is closed</td><td>$X\setminus C$ is open; $C$ contains all its limit points; $C=\overline C$</td></tr>
+<tr><td>$x\in\overline A$</td><td>every open set containing $x$ meets $A$; every basis element containing $x$ meets $A$; in a metric space, some sequence in $A$ converges to $x$</td></tr>
+<tr><td>$f$ is continuous</td><td>preimages of open sets are open; preimages of closed sets are closed; preimages of basis (or subbasis) elements are open; $f(\overline A)\subseteq\overline{f(A)}$ for all $A$; for each $x$ and each neighbourhood $V$ of $f(x)$ there is a neighbourhood $U$ of $x$ with $f(U)\subseteq V$; in metric spaces, ε–δ</td></tr>
+<tr><td>$X$ is Hausdorff</td><td>distinct points have disjoint neighbourhoods; the diagonal is closed in $X\times X$</td></tr>
+<tr><td>$p$ is a quotient map</td><td>surjective, and $U$ open $\iff p^{-1}(U)$ open; the same with closed sets; open sets of the target correspond to saturated open sets upstairs</td></tr></table>
+<p>The first form in each row is the definition; the others are theorems ([[continuity-equivalents]], [[closure-test]], [[closure-limit-points]], [[sequence-lemma]], and the demonstration in [[approach]]). A short proof is usually a matter of choosing the form whose ingredients you already have.</p>`],
+  ['How the chapters fit', R`<p>Chapter 1 supplies the language: sets, functions, relations, products. Chapter 2 builds the setting: spaces and bases, the three constructions, closed sets and limits, continuous maps, separation, metrics. Chapter 3 studies connectedness and compactness, the two properties that make the intermediate and extreme value theorems of calculus true in general; both are defined with open sets alone and both are carried forward by continuous maps. The later chapters (the fundamental group, covering spaces, surfaces) tell spaces apart by the loops they contain. At every stage the question is the same: what can be said using only open sets, and what survives continuous maps.</p>`]]};
+
+A['first-moves'] = {title: 'Practice: first moves', kind: 'idea', where: 'Start here', pre: ['approach'],
+  lede: 'Short drills on the start of a proof: for each problem, read its shape, unwind the goal, and choose the first line; then compare with the reasoning.',
+  sections: [['The drill', R`<div id="drill"></div>`],
+  ['How to use it', R`<p>Answer each stage before reading the explanation. The point is the opening, not the whole proof: when the shape, the unwound goal and the first line are right, the rest usually follows by matching the hypotheses to the goal. Each problem ends with an outline of the proof and links to its concepts. The routine behind the stages is in [[approach]].</p>`]]};
+
+// each drill: statement, source, links, three stages [question, options, correct index, explanation], outline
+var DRILL = [
+ {q: R`Show that $X$ is Hausdorff if and only if the diagonal $\Delta=\{(x,x):x\in X\}$ is closed in $X\times X$.`, src: 'Munkres §17, Ex. 13', links: ['hausdorff', 'product-topology', 'closed-set'],
+  st: [[R`What is the shape of the claim?`, [R`One example`, R`Two implications, each proved on its own`, R`An element chase between two sets`, R`A construction`], 1, R`"If and only if" is two claims: Hausdorff gives $\Delta$ closed, and $\Delta$ closed gives Hausdorff. Each direction gets its own first and last line.`],
+   [R`What does "$\Delta$ is closed" unwind to?`, [R`Every point of $\Delta$ has a box inside $\Delta$`, R`Each $(x,y)$ with $x\neq y$ has a box $U\times V$ around it missing $\Delta$`, R`$\Delta$ has a limit point`, R`$\Delta$ is a product of closed sets`], 1, R`Closed means the complement is open; open in $X\times X$ means a basic box around each point. A box misses $\Delta$ exactly when $U\cap V=\varnothing$, which is the Hausdorff condition in disguise.`],
+   [R`For $(\Rightarrow)$, which first line?`, [R`Let $(x,x)\in\Delta$.`, R`Let $(x,y)\in X\times X$ with $x\neq y$.`, R`Suppose $\Delta$ is not closed.`, R`Let $U$ and $V$ be open in $X$.`], 1, R`The goal is about points of the complement, so the proof starts by naming one. Starting on $\Delta$ itself goes nowhere: closedness is shown from outside.`]],
+  out: R`$(\Rightarrow)$ Hausdorff gives disjoint open $U\ni x$, $V\ni y$; then $U\times V$ contains $(x,y)$ and misses $\Delta$. $(\Leftarrow)$ For $x\neq y$, the open complement contains a box $U\times V$ around $(x,y)$; missing $\Delta$ means $U\cap V=\varnothing$.`},
+ {q: R`Show that in a Hausdorff space every finite set is closed.`, src: 'Munkres Theorem 17.8', links: ['t1', 'hausdorff', 'closed-set'],
+  st: [[R`What is the shape, and how can it be reduced?`, [R`For every finite set; since finite unions of closed sets are closed, it is enough to show each one-point set is closed`, R`There exists a closed finite set`, R`A counterexample`, R`If and only if`], 0, R`A finite set is a finite union of one-point sets, and a finite union of closed sets is closed. So the real claim is: each $\{x\}$ is closed.`],
+   [R`What is the cleanest way to show $\{x\}$ is closed?`, [R`Show $\{x\}$ is open`, R`Show its complement is open: each $y\neq x$ has a neighbourhood missing $x$`, R`Show $x$ is a limit point of $\{x\}$`, R`Show every sequence converges to $x$`], 1, R`Closed via the complement. The hypothesis (Hausdorff) is about pairs of points, and so is this form of the goal: a point $y$ outside $\{x\}$, and the point $x$.`],
+   [R`Which first line?`, [R`Let $y\in X$ with $y\neq x$.`, R`Let $y=x$.`, R`Let $U$ be an open set containing $x$.`], 0, R`Name a point of the complement. Hausdorff then gives disjoint $U\ni x$ and $V\ni y$, and $V$ is a neighbourhood of $y$ missing $x$.`]],
+  out: R`For $y\neq x$, Hausdorff gives $V\ni y$ with $x\notin V$. So $X\setminus\{x\}$ is the union of such $V$, hence open, and $\{x\}$ is closed. A finite set is a finite union of such sets, so it is closed.`},
+ {q: R`Show that if $A\subseteq B$, then $\overline A\subseteq\overline B$.`, src: 'Closure basics', links: ['closure', 'closure-test'],
+  st: [[R`What is the shape?`, [R`An element chase: take $x$ in the left side and show it is in the right`, R`A counterexample`, R`If and only if`, R`Construct a set`], 0, R`An inclusion of sets is proved point by point. (There is also a one-line route; see the outline.)`],
+   [R`What does "$x\in\overline B$" unwind to?`, [R`$x\in B$`, R`Every open set containing $x$ meets $B$`, R`$x$ is a limit point of $B$`, R`$B$ is closed`], 1, R`The neighbourhood form of closure (Theorem 17.5). "$x\in B$" is too strong, and "limit point" leaves out the points of $B$ itself.`],
+   [R`Which first line?`, [R`Let $x\in\overline A$, and let $U$ be an open set containing $x$.`, R`Let $x\in B$.`, R`Suppose $\overline A=\overline B$.`], 0, R`Start with a point of the left side, and name the arbitrary neighbourhood that the unwound goal quantifies over.`]],
+  out: R`$U$ meets $A$ because $x\in\overline A$; since $A\subseteq B$, $U$ meets $B$; so $x\in\overline B$. One-line alternative: $\overline B$ is a closed set containing $B\supseteq A$, and $\overline A$ is the smallest closed set containing $A$.`},
+ {q: R`Let $f:X\to Y$ be continuous. Show that $f(\overline A)\subseteq\overline{f(A)}$ for every $A\subseteq X$.`, src: 'Munkres Theorem 18.1', links: ['continuity-equivalents', 'closure-test', 'image-preimage'],
+  st: [[R`What is the shape?`, [R`For every $A$, an inclusion: take a point of $f(\overline A)$, which has the form $f(x)$ with $x\in\overline A$`, R`A counterexample`, R`There exists $A$`], 0, R`A point of an image is $f$ of something. Naming that something, $x\in\overline A$, puts the hypothesis about $\overline A$ into play.`],
+   [R`What does "$f(x)\in\overline{f(A)}$" unwind to?`, [R`Every open $V$ containing $f(x)$ meets $f(A)$`, R`$f(x)\in f(A)$`, R`$f$ is a closed map`], 0, R`The neighbourhood form of closure again, now in $Y$.`],
+   [R`Which first line?`, [R`Let $x\in\overline A$, and let $V$ be open in $Y$ with $f(x)\in V$.`, R`Let $y\in\overline{f(A)}$.`, R`Let $V$ be open in $X$.`], 0, R`Point of the left side, then the arbitrary neighbourhood. The next move is to pull $V$ back: continuity is the only hypothesis, and it speaks about preimages.`]],
+  out: R`$f^{-1}(V)$ is open (continuity) and contains $x$, so it meets $A$ at some $a$ (as $x\in\overline A$). Then $f(a)\in V\cap f(A)$, so $V$ meets $f(A)$.`},
+ {q: R`Show that the lower limit topology on $\mathbb R$ is strictly finer than the standard topology.`, src: 'Munkres Lemma 13.4', links: ['lemma-13-3', 'ex-lower-limit', 'finer-coarser', 'm-compare'],
+  st: [[R`What is the shape?`, [R`Two claims: an inclusion of topologies, and one set showing the inclusion is strict`, R`A single example`, R`An element chase inside $\mathbb R$`, R`If and only if`], 0, R`"Finer" is $\mathcal T\subseteq\mathcal T_\ell$; "strictly" adds that some $\ell$-open set is not standard-open, which is shown by one example.`],
+   [R`How are two topologies given by bases compared?`, [R`List all their open sets`, R`Lemma 13.3: for each basis element $(a,b)$ and each $x$ in it, find $[c,d)$ with $x\in[c,d)\subseteq(a,b)$`, R`Show each $[a,b)$ is a union of intervals $(c,d)$`, R`Show $\mathbb R_\ell$ is Hausdorff`], 1, R`Comparing bases point by point is the standard tool. The third option is the wrong direction: it would show the standard topology is finer, which is false.`],
+   [R`Which first line?`, [R`Let $x\in(a,b)$.`, R`Let $x\in[a,b)$.`, R`Suppose $[0,1)$ is open in $\mathbb R$.`], 0, R`Start inside a basis element of the coarser topology. Then $[x,b)$ contains $x$ and lies in $(a,b)$.`]],
+  out: R`For $x\in(a,b)$, the set $[x,b)$ works, so $\mathcal T\subseteq\mathcal T_\ell$. Strictness: $[0,1)$ is $\ell$-open, but no interval $(c,d)$ with $0\in(c,d)$ lies inside $[0,1)$, so it is not standard-open.`},
+ {q: R`Show that $\overline{A\cap B}$ need not equal $\overline A\cap\overline B$.`, src: 'Munkres §17, Ex. 8', links: ['closure', 'm-counterexample'],
+  st: [[R`What is the shape?`, [R`An element chase both ways`, R`One counterexample, checked in full`, R`A proof by contradiction`, R`If and only if`], 1, R`"Need not" denies a general statement; one example in which it fails is the whole answer.`],
+   [R`What must the example show?`, [R`That $\overline{A\cap B}$ is bigger than $\overline A\cap\overline B$`, R`A point of $\overline A\cap\overline B$ that is not in $\overline{A\cap B}$ (the inclusion $\subseteq$ always holds)`, R`That $A\cap B=\varnothing$ always`], 1, R`$\overline{A\cap B}\subseteq\overline A\cap\overline B$ is always true, since $A\cap B$ lies in each of $A$ and $B$. So a failure must come from the other side.`],
+   [R`Which first line?`, [R`Take $A=(0,1)$ and $B=(1,2)$ in $\mathbb R$.`, R`Let $x\in\overline{A\cap B}$.`, R`Take $A=B$.`], 0, R`Two sets that share an edge but no points. ($\mathbb Q$ and the irrationals work too.)`]],
+  out: R`$A\cap B=\varnothing$, so $\overline{A\cap B}=\varnothing$; but $\overline A\cap\overline B=[0,1]\cap[1,2]=\{1\}$.`},
+ {q: R`Let $Y$ be closed in $X$, and let $A$ be closed in the subspace $Y$. Show that $A$ is closed in $X$.`, src: 'Munkres Theorem 17.3', links: ['subspace-topology', 'closed-set'],
+  st: [[R`Which hypothesis do you unwind first?`, [R`"$A$ is closed in $Y$": $A=Y\cap C$ for some $C$ closed in $X$`, R`"$Y$ is closed in $X$": $X\setminus Y$ is open`, R`"$A\subseteq X$"`], 0, R`The unfamiliar hypothesis is the one about the subspace; Theorem 17.2 turns "closed in $Y$" into a statement about closed sets of $X$, where the goal lives.`],
+   [R`What does the goal become?`, [R`$A=Y\cap C$ is an intersection of two closed sets of $X$`, R`$A$ is open in $Y$`, R`$A$ has no limit points`], 0, R`Once $A$ is written as $Y\cap C$, both pieces are closed in $X$.`],
+   [R`Which first line?`, [R`Since $A$ is closed in $Y$, $A=Y\cap C$ for some $C$ closed in $X$.`, R`Let $x\in A$.`, R`Suppose $A$ is not closed in $X$.`], 0, R`Here the first line is the unwound hypothesis; no element chase is needed.`]],
+  out: R`$A=Y\cap C$ with $Y$ and $C$ closed in $X$, and an intersection of closed sets is closed.`},
+ {q: R`Show that if $p:X\to Y$ and $q:Y\to Z$ are quotient maps, then $q\circ p$ is a quotient map.`, src: 'Munkres §22', links: ['quotient-map', 'm-quotient-map'],
+  st: [[R`What is the shape?`, [R`Unwind the definition into three checks: surjective, continuous, and $U$ open whenever $(q\circ p)^{-1}(U)$ is open`, R`Find a counterexample`, R`Show $q\circ p$ is an open map`], 0, R`A defined term in the goal becomes a list of things to check. Composites of surjections are surjective and of continuous maps continuous; the third check is the real work.`],
+   [R`Given that $(q\circ p)^{-1}(U)=p^{-1}(q^{-1}(U))$ is open in $X$, how do you conclude?`, [R`$q^{-1}(U)$ is open in $Y$ because $p$ is a quotient map; then $U$ is open because $q$ is`, R`$U$ is open because $q\circ p$ is continuous`, R`$p^{-1}(U)$ is open`], 0, R`Use the quotient condition twice, peeling one map at a time. Continuity gives the opposite direction and does not help here.`],
+   [R`Which first line for the third check?`, [R`Let $U\subseteq Z$ with $(q\circ p)^{-1}(U)$ open in $X$.`, R`Let $U$ be open in $Z$.`, R`Let $x\in X$.`], 0, R`"Let $U$ be open in $Z$" starts the continuity check, the easy half. The quotient condition starts from a set whose preimage is open.`]],
+  out: R`Surjective and continuous as composites. If $p^{-1}(q^{-1}(U))$ is open, then $q^{-1}(U)$ is open ($p$ quotient), so $U$ is open ($q$ quotient).`},
+ {q: R`Determine whether $f:\mathbb R\to\mathbb R$, with $f(x)=x$ for $x\lt0$ and $f(x)=x+1$ for $x\ge0$, is continuous.`, src: 'Practice', links: ['continuous', 'm-continuous', 'm-counterexample'],
+  st: [[R`What is the shape?`, [R`Decide by testing first, then prove it or give a counterexample`, R`Prove continuity directly`, R`If and only if`], 0, R`"Determine whether" leaves the answer open. The jump at $0$ suggests it fails there.`],
+   [R`If it fails, what single thing shows it?`, [R`An open $V$ with $f^{-1}(V)$ not open`, R`A closed set with a closed image`, R`A point where $f$ is defined`], 0, R`Continuity is "for every open $V$"; its failure is one $V$.`],
+   [R`Which $V$ to test?`, [R`$V=(\tfrac12,\tfrac32)$, so $f^{-1}(V)=[0,\tfrac12)$`, R`$V=(-1,1)$`, R`$V=\mathbb R$`], 0, R`Choose $V$ around $f(0)=1$ but small enough to exclude the values just left of $0$. With $V=(-1,1)$ the preimage is $(-1,0)$, which is open, so it shows nothing.`]],
+  out: R`$f^{-1}((\tfrac12,\tfrac32))=[0,\tfrac12)$, which contains $0$ but no interval around $0$, so it is not open. $f$ is not continuous.`},
+ {q: R`Show that a subspace of a Hausdorff space is Hausdorff.`, src: 'Munkres Theorem 17.11', links: ['hausdorff', 'subspace-topology'],
+  st: [[R`What is the shape?`, [R`For every pair of distinct points of the subspace, find disjoint open sets of the subspace`, R`There exists a pair of points`, R`A counterexample`], 0, R`Hausdorff hides "for every pair". The pair must come from the space the claim is about, the subspace $Y$.`],
+   [R`What are the open sets of $Y$?`, [R`$Y\cap U$ with $U$ open in $X$`, R`Open sets of $X$ contained in $Y$`, R`Closed sets of $X$`], 0, R`The subspace topology. The second option describes only some of them.`],
+   [R`Which first line?`, [R`Let $x\neq y$ be points of $Y$.`, R`Let $x\neq y$ be points of $X$.`, R`Let $U$ be open in $X$.`], 0, R`Points of $Y$, since the goal is about $Y$; they are also points of $X$, where the hypothesis applies.`]],
+  out: R`Hausdorff in $X$ gives disjoint open $U\ni x$, $V\ni y$. Then $Y\cap U$ and $Y\cap V$ are open in $Y$, contain $x$ and $y$, and are disjoint.`},
+ {q: R`Let $U$ be open and $A$ closed in $X$. Show that $U\setminus A$ is open.`, src: 'Practice', links: ['de-morgan', 'topology', 'closed-set'],
+  st: [[R`Which form makes this short?`, [R`$U\setminus A=U\cap(X\setminus A)$, an intersection of two open sets`, R`Show each point has a basis element inside`, R`Show the complement is closed using limit points`], 0, R`Rewrite set differences as intersections with complements; "closed" then becomes "complement open".`],
+   [R`Why is the intersection open?`, [R`A topology is closed under finite intersections`, R`A topology is closed under arbitrary unions`, R`Complements of open sets are open`], 0, R`The intersection axiom, for two sets.`],
+   [R`Which first line?`, [R`Note that $U\setminus A=U\cap(X\setminus A)$.`, R`Let $x\in U$.`, R`Suppose $U\setminus A$ is not open.`], 0, R`An identity of sets is the whole first step here.`]],
+  out: R`$X\setminus A$ is open since $A$ is closed; $U\cap(X\setminus A)$ is then an intersection of two open sets.`},
+ {q: R`Let $\mathbb R/{\sim}$ be the quotient of $\mathbb R$ in which $\mathbb Q$ is crushed to a single point. Determine whether it is Hausdorff.`, src: 'Practice (compare HW7 Q1)', links: ['quotient-topology', 'saturated', 'crushing-a-set', 'hausdorff'],
+  st: [[R`Where should the test begin?`, [R`At the glued point $[\mathbb Q]$, and a point next to it such as $[\sqrt2]$`, R`At two irrational points far apart`, R`With the metric on $\mathbb R$`], 0, R`Quotients fail at glued points (see the whole-picture table). Also, $\mathbb Q$ is not closed, which is the hypothesis HW7 Q1 needed.`],
+   [R`An open set $W$ containing $[\sqrt2]$ corresponds to`, [R`a saturated open set $p^{-1}(W)$ in $\mathbb R$ containing $\sqrt2$`, R`an interval around $\sqrt2$`, R`a closed set`], 0, R`The quotient topology is read upstairs: $W$ is open exactly when $p^{-1}(W)$ is, and preimages are always saturated.`],
+   [R`Which first line?`, [R`Let $W$ be open with $[\sqrt2]\in W$; then $p^{-1}(W)$ is open in $\mathbb R$ and contains $\sqrt2$.`, R`Let $x,y\in\mathbb R$.`, R`Let $\varepsilon\gt0$.`], 0, R`Follow an arbitrary neighbourhood of the point next to the glued one upstairs.`]],
+  out: R`$p^{-1}(W)$ contains an interval around $\sqrt2$, hence a rational, hence (being saturated) all of $\mathbb Q$; so $[\mathbb Q]\in W$. Every neighbourhood of $[\sqrt2]$ contains $[\mathbb Q]$, so the two points cannot be separated: not Hausdorff.`}
+];
+(function(){ var st = BOOK[0]; if (st && st[0] === 'Start here') st[1].push(['How to approach a problem', ['approach', 'whole-picture', 'first-moves']]); })();
+// where a concept sits among the four kinds of thing
+var ROLE = {hausdorff: ['a property of spaces', 'It passes to subspaces and products, not always to quotients or continuous images.'],
+  t1: ['a property of spaces', 'It passes to subspaces and products; a quotient is T₁ exactly when every class is closed.'],
+  connected: ['a property of spaces', 'It passes to products, quotients and continuous images, not to subspaces.'],
+  compact: ['a property of spaces', 'It passes to closed subspaces, products, quotients and continuous images.'],
+  metrizable: ['a property of spaces', 'It passes to subspaces and countable products, not always to quotients.'],
+  'first-countable': ['a property of spaces', 'It passes to subspaces and countable products.'],
+  'subspace-topology': ['a construction', 'Defined by its inclusion map: the coarsest topology making it continuous.'],
+  'product-topology': ['a construction', 'Defined by its projections: the coarsest topology making them continuous.'],
+  'quotient-topology': ['a construction', 'Defined by its quotient map: the finest topology making it continuous.'],
+  'metric-topology': ['a construction', 'A topology built from a distance.'],
+  'order-topology': ['a construction', 'A topology built from an order.'],
+  continuous: ['a kind of map', 'It pulls open sets back.'],
+  'open-map': ['a kind of map', 'It pushes open (or closed) sets forward.'],
+  'quotient-map': ['a kind of map', 'It works both ways: a set is open exactly when its preimage is.'],
+  homeomorphism: ['a kind of map', 'It matches points and open sets exactly, so it keeps every property.'],
+  embedding: ['a kind of map', 'A homeomorphism onto its image.'],
+  topology: ['the structure of a space', 'Everything else in the course is defined from it.'],
+  basis: ['the structure of a space', 'The usual way a topology is given.']};
+function drill(){
+  var el = document.getElementById('drill'); if (!el) return; var S = {}; try { S = JSON.parse(localStorage.getItem('tg-drill') || '{}'); } catch(e){}
+  var k = typeof window._dk === 'number' ? window._dk : (S.at || 0), item = DRILL[k], ans = window._da && window._da.k === k ? window._da.a : [];
+  function save(){ try { localStorage.setItem('tg-drill', JSON.stringify(S)); } catch(e){} }
+  var h = '<div class="dnav">' + DRILL.map(function(d, i){ var r = (S.done || {})[i]; return '<button data-go="' + i + '" class="' + (i === k ? 'cur ' : '') + (r === 3 ? 'ok' : r != null ? 'part' : '') + '">' + (i + 1) + '</button>'; }).join('') + '</div>';
+  h += '<div class="dq"><div class="meta">Problem ' + (k + 1) + ' of ' + DRILL.length + ' · ' + item.src + '</div><p>' + item.q + '</p></div>';
+  for (var s = 0; s < 3; s++){ if (s > ans.length) break; var st = item.st[s], got = ans[s];
+    h += '<div class="dst"><div class="dsq">' + (s + 1) + '. ' + st[0] + '</div>' + st[1].map(function(o, j){ var c = got == null ? '' : j === st[2] ? ' right' : j === got ? ' wrong' : ' dim'; return '<button class="dopt' + c + '" data-s="' + s + '" data-j="' + j + '"' + (got != null ? ' disabled' : '') + '>' + o + '</button>'; }).join('');
+    if (got != null) h += '<div class="dwhy"><b>' + (got === st[2] ? 'Right.' : 'Not quite.') + '</b> ' + st[3] + '</div>'; h += '</div>'; }
+  if (ans.length === 3){ var n = ans.filter(function(a, i){ return a === item.st[i][2]; }).length;
+    h += '<div class="dout"><div class="meta">Outline · ' + n + ' of 3 first time</div><p>' + item.out + '</p><div class="chips">' + item.links.map(chip).join('') + '</div></div><div class="dbtn"><button data-next="1">Next problem →</button><button data-rand="1">Random</button></div>'; }
+  el.innerHTML = h; math(el);
+  el.onclick = function(e){ var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.go != null){ window._dk = +b.dataset.go; window._da = null; S.at = window._dk; save(); drill(); return; }
+    if (b.dataset.next){ window._dk = (k + 1) % DRILL.length; window._da = null; S.at = window._dk; save(); drill(); return; }
+    if (b.dataset.rand){ var r; do { r = Math.floor(Math.random()*DRILL.length); } while (r === k && DRILL.length > 1); window._dk = r; window._da = null; S.at = r; save(); drill(); return; }
+    if (b.dataset.s != null){ var s = +b.dataset.s; if (s !== ans.length) return; ans = ans.concat([+b.dataset.j]); window._da = {k: k, a: ans};
+      if (ans.length === 3){ S.done = S.done || {}; if (S.done[k] == null) S.done[k] = ans.filter(function(a, i){ return a === item.st[i][2]; }).length; save(); }
+      drill(); } };
+}
 </script>
 <script>
 // ===== The encyclopedia: home page, articles, link previews, a trail of where you have been, search.
@@ -1237,7 +1482,7 @@ var TRAIL = []; try { TRAIL = JSON.parse(sessionStorage.getItem('tg-trail') || '
 function home(){
   var recent = []; try { recent = JSON.parse(localStorage.getItem('tg-recent') || '[]'); } catch(e){}
   var h = '<h1>Topology Reference Guide</h1><p class="intro">An encyclopedia of the course in the order of Munkres. Each section holds its concepts, the methods its problems call for, and the assigned problems themselves, all linked to each other. Each article opens to a one-line summary and its definition; everything else unfolds when you want it. Underlined terms are links: tap one for a preview, then read on or stay where you are. At the end of each article you will find what it depends on and what builds on it, and the next article in the book.</p>';
-  h += '<div class="start"><a class="chip" href="#a/what-is-topology">Start here: what topology is</a><a class="chip" href="#a/image-preimage">Chapter 1</a><a class="chip" href="#a/quotient-topology">Now: §22 quotients</a><a class="chip" href="#a/hw7-q2">Homework 7</a><a class="chip" href="tabs/">Quick-reference tabs</a></div>';
+  h += '<div class="start"><a class="chip" href="#a/what-is-topology">Start here: what topology is</a><a class="chip" href="#a/approach">How to approach a problem</a><a class="chip" href="#a/whole-picture">The whole picture</a><a class="chip" href="#a/first-moves">Practice: first moves</a><a class="chip" href="#a/image-preimage">Chapter 1</a><a class="chip" href="#a/quotient-topology">Now: §22 quotients</a><a class="chip" href="#a/hw7-q2">Homework 7</a><a class="chip" href="tabs/">Quick-reference tabs</a></div>';
   if (recent.length) h += '<div class="topic"><h2>Recently read</h2><div class="chips">' + recent.slice(0, 8).map(chip).join('') + '</div></div>';
   function row(id){ var a = A[id]; return '<a href="#a/' + id + '"><b>' + a.title + '</b><span class="kind">' + KIND[a.kind] + '</span><i>' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }
   function group(ids){ var g = {c: [], m: [], p: []}; ids.forEach(function(id){ var k = A[id].kind; (k === 'method' ? g.m : k === 'problem' ? g.p : g.c).push(id); });
@@ -1256,6 +1501,7 @@ function article(id){
   TRAIL = TRAIL.filter(function(x){ return x !== id; }); TRAIL.push(id); TRAIL = TRAIL.slice(-3); try { sessionStorage.setItem('tg-trail', JSON.stringify(TRAIL)); var r = JSON.parse(localStorage.getItem('tg-recent') || '[]').filter(function(x){ return x !== id; }); r.unshift(id); localStorage.setItem('tg-recent', JSON.stringify(r.slice(0, 12))); } catch(e){}
   var h = '<div class="trail"><a href="#">Home</a>' + TRAIL.slice(0, -1).map(function(t){ return '<span class="sep">›</span><a href="#a/' + t + '">' + A[t].title + '</a>'; }).join('') + '<span class="sep">›</span>' + a.title + '</div>';
   h += '<div class="meta">' + KIND[a.kind] + ' · ' + (SECOF[id] || a.where) + '</div><h1>' + a.title + '</h1><div class="lede">' + wiki(a.lede) + '</div>';
+  if (typeof ROLE !== 'undefined' && ROLE[id]) h += '<div class="role">In the whole picture: <b>' + ROLE[id][0] + '</b>. ' + ROLE[id][1] + ' ' + wiki('[[whole-picture|See how it fits →]]') + '</div>';
   if (a.steps) h += '<details class="sec" open><summary>Steps</summary><div class="secb"><ol class="steps">' + a.steps.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + wiki(s[0]) + '</summary><div class="why"><b>Why:</b> ' + wiki(s[1]) + '</div></details>' : wiki(s[0])) + '</li>'; }).join('') + '</ol></div></details>';
   (a.sections || []).forEach(function(s, i){ var body = s[1];
     if (s[0] === 'Concepts and method') body = '<p><b>Concepts:</b></p><div class="chips">' + (a.pre || []).map(chip).join('') + '</div><p style="margin-top:10px"><b>Method:</b></p><div class="chips">' + (a.method || []).map(chip).join('') + '</div>';
@@ -1277,7 +1523,7 @@ function route(){
   closePv();
   if (hsh.indexOf('a/') === 0){ var id = hsh.slice(2); v.innerHTML = article(id); document.title = (A[id] ? A[id].title + ' · ' : '') + 'Topology Reference Guide'; }
   else { v.innerHTML = home(); document.title = 'Topology Reference Guide'; }
-  math(v); window.scrollTo(0, 0); if (document.getElementById('qfig')) quotFig();
+  math(v); window.scrollTo(0, 0); if (document.getElementById('qfig')) quotFig(); if (document.getElementById('drill')) drill();
 }
 // previews: a tap on an underlined term inside an article shows its summary first
 function closePv(){ document.getElementById('pv').classList.remove('on'); }
