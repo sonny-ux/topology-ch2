@@ -149,6 +149,14 @@ details.topic .tlist{padding-left:10px;}
 .dout p{color:var(--text);}
 .dbtn{display:flex;gap:8px;margin-top:14px;}
 .dbtn button{flex:1;border:1px solid var(--border2);border-radius:8px;background:var(--card2);color:var(--text);padding:11px;font:14px -apple-system,system-ui,sans-serif;cursor:pointer;}
+#live{max-width:760px;margin:8px auto 0;display:flex;align-items:center;gap:10px;font:13px -apple-system,system-ui,sans-serif;color:var(--muted);flex-wrap:wrap;}
+#live[hidden]{display:none;}
+#live b{color:var(--text);font-weight:600;}
+#lclock{font-variant-numeric:tabular-nums;color:var(--text);font-size:15px;}
+.ldot{width:8px;height:8px;border-radius:50%;background:#5fae7a;animation:lpulse 2s ease-in-out infinite;}
+@keyframes lpulse{50%{opacity:.25;}}
+#lbar{flex:1;min-width:80px;height:4px;border-radius:2px;background:var(--border);position:relative;overflow:hidden;font-style:normal;}
+#lbar i{position:absolute;left:0;top:0;bottom:0;background:#5fae7a;border-radius:2px;}
 </style>
 </head>
 <body>
@@ -157,7 +165,7 @@ details.topic .tlist{padding-left:10px;}
   <div class="search"><input id="q" type="search" placeholder="Search the guide" autocomplete="off" aria-label="Search"><div id="sugg"></div></div>
   <button class="tb" id="findBtn" aria-label="Browse and symbols">Browse</button>
   <button class="tb" id="themeBtn" aria-label="Light or dark">Light</button>
-</div></div>
+</div><div id="live" hidden><span class="ldot"></span><b id="lcls"></b><span id="lclock"></span><span id="ltoday"></span><i id="lbar"><i></i></i></div></div>
 <div class="wrap" id="view"></div>
 <div id="fp" aria-label="Browse and symbols"></div>
 <div id="pv" role="dialog" aria-modal="false"><div class="pm"></div><div class="pt"></div><div class="pl"></div><div class="pb"><a class="pgo" href="#">Read article →</a><button class="px">Close</button></div></div>
@@ -1731,6 +1739,27 @@ function satFig(){
   cv.onpointerup = cv.onpointercancel = function(){ drag = null; };
   draw();
 }
+// live session meter: reads the homework log's published data (same site), shows the running session and today's total
+(function(){
+  var box = document.getElementById('live'), S = null;
+  function hm(m){ m = Math.max(0, Math.round(m)); var h = Math.floor(m/60), r = m%60; return h ? h + 'h' + (r < 10 ? '0' : '') + r + 'm' : r + 'm'; }
+  function iso(d){ return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function load(){ fetch('/homework-log/data.json?' + Date.now(), {cache: 'no-store'}).then(function(r){ return r.json(); }).then(function(d){
+      var ss = d.sessions || [], live = ss.filter(function(x){ return x.in_progress; }).sort(function(a, b){ return (a.date + a.start_min) < (b.date + b.start_min) ? 1 : -1; })[0];
+      if (!live){ S = null; box.hidden = true; return; }
+      var p = live.date.split('-'), st = new Date(+p[0], +p[1] - 1, +p[2], Math.floor(live.start_min/60), live.start_min % 60);
+      var t = iso(new Date()), done = ss.filter(function(x){ return !x.in_progress && x.date === t && x['class'] === live['class']; }).reduce(function(a, x){ return a + (x.minutes || 0); }, 0);
+      S = {cls: live['class'], start: st, done: done, label: live.start}; tick(); }).catch(function(){}); }
+  function tick(){ if (!S){ box.hidden = true; return; } var sec = Math.max(0, Math.floor((Date.now() - S.start)/1000)); if (sec > 16*3600){ box.hidden = true; return; }
+    box.hidden = false; var h = Math.floor(sec/3600), m = Math.floor(sec/60) % 60, x = sec % 60;
+    document.getElementById('lcls').textContent = S.cls + ' session';
+    document.getElementById('lclock').textContent = (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0');
+    document.getElementById('ltoday').textContent = 'since ' + S.label + ' · today ' + hm(S.done + sec/60);
+    document.querySelector('#lbar i').style.width = (100*((sec % 3600)/3600)) + '%'; box.title = 'The bar fills once per hour of the session.'; }
+  load(); setInterval(load, 60000); setInterval(tick, 1000);
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden) load(); });
+})();
+
 window.addEventListener('hashchange', route);
 window.addEventListener('load', route);
 </script>
