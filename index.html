@@ -159,7 +159,7 @@ details.pad>summary{color:var(--text);}
 .padtools button{border:1px solid var(--border2);background:var(--card2);color:var(--text);border-radius:8px;padding:8px 12px;font:14px -apple-system,system-ui,sans-serif;cursor:pointer;}
 #padsaved{font:12px -apple-system,system-ui,sans-serif;color:var(--muted);}
 .padprev{border:1px solid var(--border);border-radius:10px;padding:12px 14px;background:var(--card);color:var(--text);}
-.padprev p{color:var(--text);} .padempty{color:var(--muted)!important;}
+.padprev p{color:var(--text);} .padprev .padtip{color:var(--muted);font:12px/1.4 -apple-system,system-ui,sans-serif;border-top:1px solid var(--border);padding-top:8px;margin-top:6px;} .padempty{color:var(--muted)!important;}
 #padprint{display:none;}
 @media print{ body.printing>*:not(#padprint){display:none!important;} body.printing{background:#fff!important;color:#000!important;} #padprint{display:block;color:#000;font:12pt/1.55 Georgia,serif;padding:0 6mm;} #padprint h1{font-size:16pt;font-weight:normal;margin:0 0 8pt;} #padprint h2{font-size:12pt;margin:14pt 0 6pt;} #padprint .pq{border-left:2pt solid #999;padding-left:8pt;color:#222;} #padprint p{margin:0 0 7pt;color:#000;} }
 #ltx{display:none;position:fixed;z-index:70;background:var(--surf);border-top:1px solid var(--border2);flex-direction:column;}
@@ -1783,12 +1783,15 @@ function padHtml(id){ return '<details class="sec pad" open><summary>Your write-
   + '<textarea id="padin" spellcheck="false" autocapitalize="sentences" placeholder="Let $W$ be open in $X \\times Y$. …"></textarea>'
   + '<div class="padtools"><button type="button" id="padundo" aria-label="Undo">↶ Undo</button><button type="button" id="padredo" aria-label="Redo">↷ Redo</button><button type="button" id="padcopy">Copy text</button><button type="button" id="padpdf">Save as PDF</button><button type="button" id="padltx">LaTeX dictionary</button><span id="padsaved"></span></div>'
   + '<div class="padprev" id="padprev"></div></div></details>'; }
+// outside dollar signs, a bare LaTeX command (\\pi_1, \\times, \\mathbb R, \\overline{A}) is rendered as math anyway
+function padAuto(t){ return t.split(/(\$\$[\s\S]*?\$\$|\$[^$]*\$)/).map(function(seg, i){ if (i % 2) return seg;
+    return seg.replace(/\\(?:(?:mathbb|mathcal|operatorname|mathrm)\s?(?:\{[^{}]*\}|[A-Za-z])|[a-zA-Z]+(?:\{[^{}]*\})?)(?:_\{[^{}]*\}|_[A-Za-z0-9]|\^\{[^{}]*\}|\^[A-Za-z0-9])*(?:\([^()$]*\))?/g, function(m){ return '$' + m + '$'; }); }).join(''); }
 function padRender(txt){ function esc(x){ return x.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-  return txt.trim() ? esc(txt).split(/\n\s*\n/).map(function(par){ return '<p>' + par.replace(/\n/g, '<br>') + '</p>'; }).join('') : '<p class="padempty">Your rendered write-up appears here.</p>'; }
+  return txt.trim() ? esc(padAuto(txt)).split(/\n\s*\n/).map(function(par){ return '<p>' + par.replace(/\n/g, '<br>') + '</p>'; }).join('') : '<p class="padempty">Your rendered write-up appears here.</p>'; }
 function padInit(id){
   var ta = document.getElementById('padin'), pv = document.getElementById('padprev'), sv = document.getElementById('padsaved'), key = 'tg-pad-' + id, tm = null;
   try { ta.value = localStorage.getItem(key) || ''; } catch(e){}
-  function draw(){ pv.innerHTML = padRender(ta.value); math(pv); }
+  function draw(){ pv.innerHTML = padRender(ta.value) + (padAuto(ta.value) !== ta.value ? '<p class="padtip">Commands outside dollar signs are shown as math anyway. Put whole expressions between $ signs (for example $X \\times Y$) so the letters are set as math too.</p>' : ''); math(pv); }
   function grow(){ ta.style.height = 'auto'; ta.style.height = Math.max(120, ta.scrollHeight + 4) + 'px'; }
   draw(); grow(); math(document.querySelector('.padbar'));
   // undo and redo: our own history, because inserts from the buttons bypass the browser's undo. Typing is grouped into one step per pause.
