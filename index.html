@@ -452,7 +452,7 @@ var A = {
 var BOOK = [
   ['Chapter 1 · Set Theory and Logic', [
     ['§1–2 · Sets and functions', ['image-preimage', 'set-equality']],
-    ['§3 · Relations', ['relation-equivalence', 'equivalence-class', 'partition']]]],
+    ['§3 · Relations', ['relation', 'relation-equivalence', 'equivalence-class', 'partition']]]],
   ['Chapter 2 · Topological Spaces and Continuous Functions', [
     ['§12 · Topological spaces', ['topology', 'open-set', 'standard-topologies', 'finer-coarser']],
     ['§13 · Basis for a topology', ['basis', 'generated-topology', 'lemma-13-3', 'subbasis']],
@@ -702,7 +702,7 @@ BOOK = [
   ['Chapter 1 · Set Theory and Logic', [
     ['§1 · Fundamental concepts', ['set-equality', 'de-morgan', 'm-set-equality']],
     ['§2 · Functions', ['image-preimage', 'functions']],
-    ['§3 · Relations', ['relation-equivalence', 'equivalence-class', 'partition']],
+    ['§3 · Relations', ['relation', 'relation-equivalence', 'equivalence-class', 'partition']],
     ['§5 · Cartesian products', ['indexed-products']],
     ['§7 · Countable and uncountable sets', ['countable']]]],
   ['Chapter 2 · Topological Spaces and Continuous Functions', [
@@ -1464,6 +1464,34 @@ function drill(){
       if (ans.length === 3){ S.done = S.done || {}; if (S.done[k] == null) S.done[k] = ans.filter(function(a, i){ return a === item.st[i][2]; }).length; save(); }
       drill(); } };
 }
+// ===== Relation, and more on what equivalence classes are for
+A['relation'] = {title: 'Relation', kind: 'definition', where: 'Ch. 1, §3', pre: ['indexed-products'],
+  lede: R`A relation on $X$ is a set of ordered pairs from $X$: the pairs $(x,y)$ for which "$x$ is related to $y$" is true.`,
+  sections: [
+  ['What it is', R`<p>A relation is <b>a yes-or-no question about pairs</b>: for each pair of elements $x,y$ of $X$, is $x$ related to $y$? "Is less than", "has the same sign as" and "is equal to" are relations on $\mathbb R$. The relation is recorded by listing the pairs that get the answer yes.</p>`],
+  ['Definition', R`<p>A <b>relation</b> on a set $X$ is a subset $C\subseteq X\times X$. One writes $x\,C\,y$, or $x\sim y$, to mean $(x,y)\in C$.</p>`],
+  ['Reading the definition', R`<p>"$X\times X$" is the set of all ordered pairs $(x,y)$ with $x,y\in X$ ([[indexed-products]]). "A subset $C$" is a choice of some of these pairs. Nothing else is required: any choice of pairs is a relation. Munkres defines a relation as a set, rather than as a "rule", so that it is an exact object; two rules that say yes to the same pairs are the same relation.</p>`],
+  ['Why it is defined this way', R`<p>Mathematics prefers to build everything out of sets. A function is also defined this way, as a set of pairs (its graph) in which each $x$ appears exactly once as a first entry. A relation drops that condition: $x$ may be related to many $y$, or to none.</p>`],
+  ['Examples', R`<ul><li>$x\lt y$ on $\mathbb R$: the pairs with first entry smaller; in the plane, the region above the line $y=x$.</li>
+<li>$x=y$ on $X$: only the pairs $(x,x)$, the <b>diagonal</b> $\Delta$ of $X\times X$.</li>
+<li>On $\{1,2,3\}$, the set $C=\{(1,2),(3,3)\}$: $1$ is related to $2$, $3$ to $3$, and nothing else. It has no meaning beyond the list, and it is still a relation.</li></ul>`],
+  ['What depends on it', R`<p>The relations that behave like "sameness" are the [[relation-equivalence|equivalence relations]]; their [[equivalence-class|classes]] form a [[partition]], from which a [[quotient-topology|quotient space]] is built. Order relations ($\lt$) give the [[order-topology]].</p>`],
+  ['Where it sits', R`<p>Relations, functions and orders are all subsets of a product $X\times X$ or $X\times Y$. This is the set-theoretic foundation of Chapter 1: every later object (a topology, a metric, a map) is a set with a structure, and relations are the simplest structure there is.</p>`]]};
+A['relation-equivalence'].pre = ['relation'];
+A['relation-equivalence'].sections.splice(A['relation-equivalence'].sections.length - 1, 0,
+  ['What counts as the same', R`<p>Nothing counts as the same automatically: the equivalence relation is a <em>choice</em> of which differences to ignore. On the same set $\mathbb R$:</p>
+<table><tr><th>$x\sim y$ when</th><th>Classes</th></tr>
+<tr><td>$x=y$</td><td>each point alone, $\{x\}$</td></tr>
+<tr><td>same sign</td><td>$(-\infty,0)$, $\{0\}$, $(0,\infty)$</td></tr>
+<tr><td>$x-y$ is an integer</td><td>one class for each decimal part $t\in[0,1)$</td></tr>
+<tr><td>$x=y$, or both in $A$</td><td>$A$, and $\{x\}$ for each $x\notin A$</td></tr>
+<tr><td>always</td><td>one class, all of $\mathbb R$</td></tr></table>
+<p>The points never change; only the chosen sameness does. Equality ignores nothing and "always" ignores everything. In a problem the relation is given (as $\sim_A$ in [[hw7-q1]]); in building a space it is the list of what you want glued. The one constraint is the three rules, and transitivity is the one that bites: declaring $0\sim1$ and $1\sim2$ also declares $0\sim2$.</p>`]);
+A['equivalence-class'].sections.splice(1, 0,
+  ['Why classes do not overlap', R`<p>Suppose $z\in[x]$ and $z\in[y]$, so $z\sim x$ and $z\sim y$. Symmetry gives $x\sim z$, and transitivity with $z\sim y$ gives $x\sim y$. Then anything related to $x$ is related to $y$ and conversely, so $[x]=[y]$. Hence two classes are either equal or disjoint, and the classes sort $X$ into bins: a [[partition]].</p>`],
+  ['What a class is for', R`<p>A class lets a whole group of things that count as the same be treated as <b>one object</b>. Many familiar objects are built this way: the number $\tfrac12$ is the class of pairs $(1,2),(2,4),(3,6),\ldots$; "3 o'clock" is the class $\{\ldots,-9,3,15,27,\ldots\}$.</p>
+<p>In topology this is how spaces are glued. The relation says what is glued to what, and each class becomes one point of the [[quotient-topology|quotient]]: for the circle, $0$ and $1$ form one class; for [[crushing-a-set]], all of $A$ does.</p>
+<p>Once things are glued, anything done on the new space may depend only on the class, not on the element chosen from it. A function descends to the quotient only if it is constant on each class ([[maps-out-of-quotients]]); a set has a picture downstairs only if it takes whole classes ([[saturated]]).</p>`]);
 </script>
 <script>
 // ===== The encyclopedia: home page, articles, link previews, a trail of where you have been, search.
