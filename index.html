@@ -182,7 +182,7 @@ details.pad>summary{color:var(--text);}
 .padsymt span{color:var(--muted);margin-left:4px;}
 .padbar[hidden]{display:none;}
 @media (pointer:coarse){ .padsymt{min-height:40px;padding:6px 14px;font-size:15px;} }
-.padref{max-height:42vh;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border2);border-left:3px solid var(--text2);border-radius:8px;background:var(--card2);padding:4px 14px 10px;margin:8px 0 10px;color:var(--text2);font-size:.95em;}
+.padref{max-height:55vh;overflow-y:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border2);border-left:3px solid var(--text2);border-radius:8px;background:var(--card2);padding:4px 14px 10px;margin:8px 0 10px;color:var(--text2);font-size:.95em;}
 .padref[hidden]{display:none;}
 .padref h4{font:600 11px -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:12px 0 4px;}
 .padref p{margin-bottom:.6em;} .padref ol,.padref ul{padding-left:22px;}
@@ -201,6 +201,17 @@ details.pad>summary{color:var(--text);}
 .docedit,.docrm{font:12px -apple-system,system-ui,sans-serif;color:var(--muted);background:none;border:0;text-decoration:underline;cursor:pointer;padding:0;}
 button.chip{cursor:pointer;font:inherit;}
 @media print{ #padprint, #padprint *{color:#000;} #padprint .padempty{color:#777!important;} #padprint .dochead{display:block;margin-bottom:14pt;color:#000;} #padprint .dochead b,#padprint .dochead span{display:block;} #padprint .docq{border-top:0.5pt solid #999;padding-top:8pt;margin-top:12pt;} #padprint .docq h2{font-size:13pt;font-weight:bold;margin:0 0 6pt;} #padprint .docq h3{font-size:10pt;text-transform:uppercase;letter-spacing:.06em;margin:8pt 0 4pt;color:#333;} #padprint .pq{border-left:2pt solid #999;padding-left:8pt;color:#222;break-inside:avoid;} #padprint .padempty{color:#777;} }
+.padref{font-size:1em!important;line-height:1.75;padding:10px 16px 12px!important;}
+.rtabs{display:flex;gap:6px;flex-wrap:wrap;position:sticky;top:-10px;background:var(--card2);padding:6px 0 8px;margin-bottom:4px;z-index:1;}
+.rtabs button{border:1px solid var(--border2);background:var(--card);color:var(--text2);border-radius:999px;padding:5px 12px;font:13px -apple-system,system-ui,sans-serif;cursor:pointer;}
+.rtabs button.on{background:var(--text);color:var(--bg);border-color:var(--text);}
+.rpane[hidden]{display:none;}
+ol.sent{list-style:none;padding-left:0!important;margin:4px 0 10px;counter-reset:sn;}
+ol.sent li{counter-increment:sn;position:relative;padding:5px 0 5px 28px;border-bottom:1px solid var(--border);color:var(--text);}
+ol.sent li:last-child{border-bottom:0;}
+ol.sent li::before{content:counter(sn);position:absolute;left:0;top:7px;width:19px;height:19px;border:1px solid var(--border2);border-radius:50%;font:11px/19px -apple-system,system-ui,sans-serif;text-align:center;color:var(--muted);}
+.why1{color:var(--text);padding:4px 0;}
+@media (pointer:coarse){ .rtabs button{min-height:38px;padding:6px 14px;font-size:14px;} }
 </style>
 </head>
 <body>
@@ -1802,7 +1813,19 @@ var PADSYM = [['$\\ldots$', '$ $', 1], ['display', '$$\n\n$$', 3], ['\\in', '\\i
 function padRefHtml(id){ var a = A[id], ss = (a.sections || []).filter(function(x){ return /^Clean solution/.test(x[0]) || /^Why/.test(x[0]); });
   if (!ss.length) ss = (a.sections || []).filter(function(x){ return x[0] === 'Key idea'; });
   if (!ss.length) return '';
-  return '<button type="button" class="padsymt" id="padreft" aria-expanded="false">Solution and why <span>▸</span></button><div class="padref" id="padref" hidden>' + ss.map(function(x){ return '<h4>' + x[0] + '</h4>' + wiki(x[1]); }).join('') + '</div>'; }
+  // split each paragraph into sentences (only at full stops outside math), one per line, so a long proof reads as steps
+  function lines(html){ return html.replace(/<p>([\s\S]*?)<\/p>/g, function(m, body){ var out = [], cur = '', inM = false;
+      for (var k = 0; k < body.length; k++){ var c = body.charAt(k); cur += c; if (c === '$') inM = !inM;
+        if (!inM && (c === '.' || c === ';') && /^\s+(?=[A-Z(\[$]|<b>)/.test(body.slice(k + 1)) && !/(e\.g|i\.e|Thm|Ex|cf|vs)\.$/.test(cur)){ out.push(cur.trim()); cur = ''; } }
+      if (cur.trim()) out.push(cur.trim());
+      return '<ol class="sent">' + out.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ol>'; }); }
+  var tabs = [], panes = [];
+  ss.forEach(function(x){ var body = /^Clean solution/.test(x[0]) ? x[1] : null;
+    if (body){ var parts = body.split(/(?=<p><b>\([a-z]\)[^<]*<\/b>)/); if (parts.length > 1) parts.forEach(function(pt){ var lab = (pt.match(/<b>(\([a-z]\)[^<]*)<\/b>/) || [, 'Solution'])[1]; tabs.push(lab); panes.push(lines(wiki(pt.replace(/<b>\([a-z]\)[^<]*<\/b>\s*/, '')))); });
+      else { tabs.push(x[0]); panes.push(lines(wiki(body))); } }
+    else { tabs.push(x[0].replace(/^Why (it|the answer) makes sense$/, 'Why')); panes.push('<div class="why1">' + wiki(x[1]) + '</div>'); } });
+  return '<button type="button" class="padsymt" id="padreft" aria-expanded="false">Solution and why <span>▸</span></button><div class="padref" id="padref" hidden><div class="rtabs">' + tabs.map(function(tb, i){ return '<button type="button" data-t="' + i + '"' + (i ? '' : ' class="on"') + '>' + tb + '</button>'; }).join('') + '</div>'
+    + panes.map(function(pn, i){ return '<div class="rpane"' + (i ? ' hidden' : '') + '>' + pn + '</div>'; }).join('') + '</div>'; }
 function padHtml(id){ return '<details class="sec pad" open><summary>Your write-up</summary><div class="secb">'
   + '<p class="padnote">Type your answer. Put math between dollar signs, like $\\pi_1(W)$, or use the buttons. It renders below as you type and is kept on this device.</p>'
   + padRefHtml(id)
@@ -1869,7 +1892,9 @@ function padInit(id){
   docButtonInit(id);
   var rt = document.getElementById('padreft'), rb = document.getElementById('padref');
   if (rt){ var refShow = function(on){ rb.hidden = !on; rt.setAttribute('aria-expanded', on); rt.querySelector('span').textContent = on ? '▾' : '▸'; try { localStorage.setItem('tg-padref', on ? '1' : ''); } catch(e){} };
-    try { refShow(!!localStorage.getItem('tg-padref')); } catch(e){} rt.addEventListener('mousedown', function(e){ e.preventDefault(); }); rt.onclick = function(){ refShow(rb.hidden); }; }
+    try { refShow(!!localStorage.getItem('tg-padref')); } catch(e){} rt.addEventListener('mousedown', function(e){ e.preventDefault(); }); rt.onclick = function(){ refShow(rb.hidden); }; 
+    rb.querySelector('.rtabs').addEventListener('click', function(e){ var b = e.target.closest('button'); if (!b) return; var i = +b.dataset.t; rb.querySelectorAll('.rtabs button').forEach(function(x, k){ x.classList.toggle('on', k === i); }); rb.querySelectorAll('.rpane').forEach(function(x, k){ x.hidden = k !== i; }); });
+    rb.querySelector('.rtabs').addEventListener('mousedown', function(e){ e.preventDefault(); }); }
   var st = document.getElementById('padsymt'), sb = document.getElementById('padbar');
   function symShow(on){ sb.hidden = !on; st.setAttribute('aria-expanded', on); st.querySelector('span').textContent = on ? '▾' : '▸'; try { localStorage.setItem('tg-padsym', on ? '' : 'closed'); } catch(e){} }
   try { symShow(localStorage.getItem('tg-padsym') !== 'closed'); } catch(e){}
@@ -1969,6 +1994,16 @@ function docButtonInit(id){ var b = document.getElementById('padadd'), si = docS
   function lab(){ var on = docGet(si).indexOf(id) >= 0; b.textContent = on ? '✓ In ' + PROBSETS[si][0].replace(/ \(file header.*\)/, '') + ' document' : '+ Add to document'; b.classList.toggle('on', on); }
   lab(); b.onclick = function(){ var inc = docGet(si); if (inc.indexOf(id) >= 0) inc = inc.filter(function(x){ return x !== id; }); else inc.push(id); docPut(si, inc); lab(); };
   var o = document.getElementById('padopendoc'); if (o) o.setAttribute('href', '#doc/' + si); }
+
+// ===== Auto-update while the guide is being built: every minute (and on return to the page) fetch the published page; if it has
+// changed since this copy loaded, reload, unless the write-up box is being typed in (drafts are saved, so a reload loses nothing)
+(function(){ var base = null; function sig(t){ var h = 0; for (var i = 0; i < t.length; i += 7) h = (h*31 + t.charCodeAt(i)) | 0; return t.length + ':' + h; }
+  function check(){ if (location.protocol === 'file:') return; fetch(location.pathname + '?v=' + Date.now(), {cache: 'no-store'}).then(function(r){ return r.text(); }).then(function(t){ var g = sig(t);
+      if (base === null){ base = g; return; } if (g === base) return; var ae = document.activeElement; if (ae && (ae.id === 'padin' || ae.tagName === 'INPUT') && Date.now() - (window._lastKey || 0) < 20000) return;
+      location.replace(location.pathname + '?u=' + Date.now() + location.hash); }).catch(function(){}); }
+  document.addEventListener('keydown', function(){ window._lastKey = Date.now(); }, true);
+  check(); setInterval(function(){ if (!document.hidden) check(); }, 60000); document.addEventListener('visibilitychange', function(){ if (!document.hidden) check(); });
+})();
 window.addEventListener('hashchange', route);
 window.addEventListener('load', route);
 </script>
