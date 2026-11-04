@@ -1783,15 +1783,46 @@ function padHtml(id){ return '<details class="sec pad" open><summary>Your write-
   + '<textarea id="padin" spellcheck="false" autocapitalize="sentences" placeholder="Let $W$ be open in $X \\times Y$. …"></textarea>'
   + '<div class="padtools"><button type="button" id="padundo" aria-label="Undo">↶ Undo</button><button type="button" id="padredo" aria-label="Redo">↷ Redo</button><button type="button" id="padcopy">Copy text</button><button type="button" id="padpdf">Save as PDF</button><button type="button" id="padltx">LaTeX dictionary</button><span id="padsaved"></span></div>'
   + '<div class="padprev" id="padprev"></div></div></details>'; }
-// outside dollar signs, a bare LaTeX command (\\pi_1, \\times, \\mathbb R, \\overline{A}) is rendered as math anyway
-function padAuto(t){ return t.split(/(\$\$[\s\S]*?\$\$|\$[^$]*\$)/).map(function(seg, i){ if (i % 2) return seg;
-    return seg.replace(/\\(?:(?:mathbb|mathcal|operatorname|mathrm)\s?(?:\{[^{}]*\}|[A-Za-z])|[a-zA-Z]+(?:\{[^{}]*\})?)(?:_\{[^{}]*\}|_[A-Za-z0-9]|\^\{[^{}]*\}|\^[A-Za-z0-9])*(?:\([^()$]*\))?/g, function(m){ return '$' + m + '$'; }); }).join(''); }
+// typed math is recognised outside dollar signs too: LaTeX commands (\pi_1, \times), functions f(x), g(x, y), f^-1(V), single-letter
+// variables (X, W, U_i), "X x Y" as a product, a*b, arrows and relations (->, =>, <=>, !=, <=, >=), and Greek letters by name.
+// Pieces of math separated only by spaces or an operator are joined, so "f : X -> Y" becomes one formula.
+var PAD_MATHRE = /(\$\$[\s\S]*?\$\$|\$[^$\n]*\$)/;
+function padOnPlain(t, fn){ return t.split(PAD_MATHRE).map(function(seg, i){ return i % 2 ? seg : fn(seg); }).join(''); }
+function padAuto(t){
+  var G = 'alpha|beta|gamma|delta|epsilon|varepsilon|lambda|mu|pi|rho|sigma|tau|phi|omega|Delta|Omega|Sigma';
+  var sub = "(?:_\\{[^{}]*\\}|_[A-Za-z0-9])?", sup = "(?:\\^\\{[^{}]*\\}|\\^-?[A-Za-z0-9])?";
+  // 1. LaTeX commands
+  t = padOnPlain(t, function(x){ return x.replace(/\\(?:(?:mathbb|mathcal|operatorname|mathrm)\s?(?:\{[^{}]*\}|[A-Za-z])|[a-zA-Z]+(?:\{[^{}]*\})?)(?:_\{[^{}]*\}|_[A-Za-z0-9]|\^\{[^{}]*\}|\^[A-Za-z0-9])*(?:\([^()$]*\))?/g, function(m){ return '$' + m + '$'; }); });
+  // 2. Greek letters typed by name, with an optional subscript and argument: epsilon, pi_1(W)
+  t = padOnPlain(t, function(x){ return x.replace(new RegExp('(^|[^A-Za-z\\\\])(' + G + ')(' + sub + ')(\\([^()$]*\\))?(?![A-Za-z])', 'g'), function(m, pre, g, s1, arg){ return pre + '$\\' + (g === 'epsilon' ? 'varepsilon' : g) + s1 + (arg || '') + '$'; }); });
+  // 3. functions applied to arguments: f(x), g(x, y), f^-1(V), U_i(…)
+  t = padOnPlain(t, function(x){ return x.replace(new RegExp('(^|[^A-Za-z])([A-Za-z]' + sub + sup + ')(\\((?:[^()$]|\\([^()$]*\\))*\\))', 'g'), function(m, pre, f, arg){ return pre + '$' + f + arg + '$'; }); });
+  // 4. products and operators between operands
+  t = padOnPlain(t, function(x){ return x.replace(/(^|[\s(])([A-Z](?:_[A-Za-z0-9])?)\s+x\s+(?=[A-Z](?:_[A-Za-z0-9])?(?![A-Za-z]))/g, function(m, pre, a){ return pre + '$' + a + ' \\times$ '; })
+    .replace(/<=>/g, '$\\iff$').replace(/=>/g, '$\\Rightarrow$').replace(/->/g, '$\\to$').replace(/!=/g, '$\\neq$').replace(/<=/g, '$\\le$').replace(/>=/g, '$\\ge$')
+    .replace(/([A-Za-z0-9)])\s*\*\s*(?=[A-Za-z0-9(])/g, '$1 $\\cdot$ ').replace(/(^|[^<>=!$])([<>])(?![=>$])/g, '$1$$$2$$'); });
+  // 5. single-letter variables, with an optional subscript, prime or ^-1 (not the article "a", not a part label like "(a)")
+  t = padOnPlain(t, function(x){ return x.replace(new RegExp('(^|[\\s(,\\[{])([A-Za-z]' + sub + "'?" + sup + ')(?=$|[\\s.,;:)\\]}=])', 'g'), function(m, pre, v, off, str){
+      if (v === 'a' || v === 'A' && /(^|[.!?:]\s*|\n\s*)$/.test(str.slice(0, off) + pre)) return m;
+      if (pre === '(' && str.charAt(off + m.length) === ')' && /^[a-z]$/.test(v)) return m;
+      return pre + '$' + v.replace(/\^-1$/, '^{-1}').replace(/\^-([A-Za-z0-9])$/, '^{-$1}') + '$'; }); });
+  t = t.replace(/\^-1(?![0-9])/g, '^{-1}');
+  // numbers right next to math (only spaces or an operator between) join it: "!= 0", "> 0", "x^2 + 1"
+  t = (function(){ var ps = t.split(PAD_MATHRE); for (var q = 0; q < ps.length; q += 2){ var hasL = q > 0, hasR = q < ps.length - 1;
+      ps[q] = ps[q].replace(/^(\s*[=+\-<>]?\s*)(-?\d+(?:\.\d+)?)(?![\w])/, function(m, sp, n){ return hasL ? sp + '$' + n + '$' : m; })
+        .replace(/(^|[\s(,])(-?\d+(?:\.\d+)?)(\s*[=+\-<>]?\s*)$/, function(m, pre, n, sp){ return hasR ? pre + '$' + n + '$' + sp : m; }); } return ps.join(''); })();
+  // 6. join neighbouring pieces of math separated only by spaces or one operator
+  var parts = t.split(PAD_MATHRE), out = [parts[0]];
+  for (var k = 1; k < parts.length; k += 2){ var m = parts[k], last = out.length - 1;
+    if (k > 1 && m.charAt(1) !== '$' && out[last - 1] && out[last - 1].charAt(1) !== '$' && /^\s*[=+\-<>:,]?\s*$/.test(out[last])){ out[last - 1] = out[last - 1].slice(0, -1) + out[last] + m.slice(1); out[last] = parts[k + 1] || ''; }
+    else { out.push(m); out.push(parts[k + 1] || ''); } }
+  return out.join(''); }
 function padRender(txt){ function esc(x){ return x.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   return txt.trim() ? esc(padAuto(txt)).split(/\n\s*\n/).map(function(par){ return '<p>' + par.replace(/\n/g, '<br>') + '</p>'; }).join('') : '<p class="padempty">Your rendered write-up appears here.</p>'; }
 function padInit(id){
   var ta = document.getElementById('padin'), pv = document.getElementById('padprev'), sv = document.getElementById('padsaved'), key = 'tg-pad-' + id, tm = null;
   try { ta.value = localStorage.getItem(key) || ''; } catch(e){}
-  function draw(){ pv.innerHTML = padRender(ta.value) + (padAuto(ta.value) !== ta.value ? '<p class="padtip">Commands outside dollar signs are shown as math anyway. Put whole expressions between $ signs (for example $X \\times Y$) so the letters are set as math too.</p>' : ''); math(pv); }
+  function draw(){ pv.innerHTML = padRender(ta.value) + (padAuto(ta.value) !== ta.value ? '<p class="padtip">Math typed without dollar signs is recognised and shown as math. If something renders that should stay as words, or the other way round, put the math between $ signs.</p>' : ''); math(pv); }
   function grow(){ ta.style.height = 'auto'; ta.style.height = Math.max(120, ta.scrollHeight + 4) + 'px'; }
   draw(); grow(); math(document.querySelector('.padbar'));
   // undo and redo: our own history, because inserts from the buttons bypass the browser's undo. Typing is grouped into one step per pause.
