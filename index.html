@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Topology — Chapter 2</title>
+<title>Topology Guide</title>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
 <script>
   MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] } };
@@ -23,6 +23,7 @@
   --s16:#5fb88a; --s16-bg:#0f231c; --s16-border:#1f4536;
   --quiz:#b98ee0; --quiz-bg:#211a2c; --quiz-border:#3d2f52;
   --prac:#e0947a; --prac-bg:#2a1a14; --prac-border:#4a2e22;
+  --s22:#e0b45a; --s22-bg:#2a2210; --cards:#7aa8e0; --cards-bg:#121c2c; --meth:#c9a92f; --meth-bg:#26210c; --zoo:#9ad07a; --zoo-bg:#16220f; --hw:#e07a9a; --hw-bg:#2a1219;
 
   --thm-bg:#0e1e2c; --thm-border:#2f6fa8;
   --def-bg:#0f2318; --def-border:#2e8f5c;
@@ -45,6 +46,11 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%;}
 .nav-tab.a16{color:var(--s16);border-bottom-color:var(--s16);}
 .nav-tab.aq{color:var(--quiz);border-bottom-color:var(--quiz);}
 .nav-tab.ap{color:var(--prac);border-bottom-color:var(--prac);}
+.nav-tab.a22{color:var(--s22);border-bottom-color:var(--s22);} .nav-tab.ac{color:var(--cards);border-bottom-color:var(--cards);} .nav-tab.am{color:var(--meth);border-bottom-color:var(--meth);} .nav-tab.az{color:var(--zoo);border-bottom-color:var(--zoo);} .nav-tab.ah{color:var(--hw);border-bottom-color:var(--hw);}
+.usearch{width:100%;padding:10px 12px;margin-bottom:12px;background:var(--card);color:var(--text);border:1px solid var(--border2);border-radius:6px;font:inherit;font-size:.95rem;}
+.ucused{color:var(--muted);font-size:.85rem;} .usteps{padding-left:22px;margin:6px 0 10px;} .usteps li{margin:8px 0;font-size:.92rem;} .ureason{display:block;color:var(--muted);font-size:.82rem;}
+.uzname{font-size:1.05rem;color:var(--text);} .ufig{width:100%;max-width:560px;height:auto;display:block;border:1px solid var(--border);border-radius:6px;background:#171a20;touch-action:pan-y;}
+.ufigctl{display:flex;gap:18px;align-items:center;margin:10px 0;font-size:.9rem;color:var(--muted);flex-wrap:wrap;} .ufigctl input[type=range]{width:200px;vertical-align:middle;} .ufigmsg{font-size:.88rem;color:#c9cdd6;min-height:3em;}
 
 .page{display:none;padding-top:4px;min-height:100vh;}
 .page.active{display:block;}
@@ -96,7 +102,7 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%;}
 .tc-hdr{width:100%;display:flex;align-items:center;gap:12px;padding:13px 16px;background:none;border:none;cursor:pointer;text-align:left;transition:background .12s;-webkit-tap-highlight-color:transparent;min-height:48px;}
 .tc-hdr:hover,.tc-hdr.open{background:var(--surface);}
 .tc-rn{font-family:ui-monospace,'SF Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--subtle);flex-shrink:0;min-width:56px;}
-.tc-tt{flex:1;font-size:.95rem;font-weight:600;}
+.tc-tt{flex:1;font-size:.95rem;font-weight:600;color:var(--text);font-family:'EB Garamond',Palatino,Georgia,serif;}
 .tc-arr{font-size:.72rem;color:var(--subtle);transition:transform .15s;}
 .tc-hdr.open .tc-arr{transform:rotate(90deg);}
 .tc-body{display:none;border-top:1px solid var(--border);padding:14px 16px;}
@@ -156,6 +162,11 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%;}
     <button class="nav-tab a12" id="tab-s12" onclick="showPage('s12')">§12 Topological Spaces</button>
     <button class="nav-tab a13" id="tab-s13" onclick="showPage('s13')">§13 Basis</button>
     <button class="nav-tab a16" id="tab-s16" onclick="showPage('s16')">§16 Subspace Topology</button>
+    <button class="nav-tab a22" id="tab-s22" onclick="showPage('s22')">§22 Quotients</button>
+    <button class="nav-tab ac" id="tab-cards" onclick="showPage('cards')">Concepts</button>
+    <button class="nav-tab am" id="tab-meth" onclick="showPage('meth')">Methods</button>
+    <button class="nav-tab az" id="tab-zoo" onclick="showPage('zoo')">Examples</button>
+    <button class="nav-tab ah" id="tab-hw7" onclick="showPage('hw7')">HW 7</button>
     <button class="nav-tab aq" id="tab-quiz" onclick="showPage('quiz')">Quiz</button>
     <button class="nav-tab ap" id="tab-prac" onclick="showPage('prac')">Practice</button>
   </div>
@@ -519,6 +530,204 @@ mjx-container{overflow-x:auto;overflow-y:hidden;max-width:100%;}
 <div class="sec" id="prac-container"></div>
 </div>
 
+
+<!-- ========== Concepts ============ -->
+<div class="page" id="page-cards">
+<div class="hero" style="border-left:4px solid var(--cards);">
+  <div class="ch-badge" style="background:var(--cards-bg);color:var(--cards);">Concepts</div>
+  <h1>Every definition, one card each</h1>
+  <p class="hero-sub">The exact statement, what it means, an example, a non-example, the usual mistake, and where it is used</p>
+</div>
+<div class="sec">
+  <input id="concept-search" class="usearch" type="search" placeholder="Search: Hausdorff, saturated, basis …" aria-label="Search concepts">
+  <div id="concept-list"></div>
+</div>
+</div>
+
+<!-- ========== Methods ============ -->
+<div class="page" id="page-meth">
+<div class="hero" style="border-left:4px solid var(--meth);">
+  <div class="ch-badge" style="background:var(--meth-bg);color:var(--meth);">Methods</div>
+  <h1>How to prove things</h1>
+  <p class="hero-sub">Recipes for the kinds of claims that keep coming up, each step with the reason it is there</p>
+</div>
+<div class="sec">
+  <div class="prose"><p>Topology proofs are mostly a handful of moves done carefully. Find the kind of claim you are asked to prove, then follow its steps. The grey line under each step says why it is taken.</p></div>
+  <div id="method-list"></div>
+</div>
+</div>
+
+<!-- ========== §22 Quotients ============ -->
+<div class="page" id="page-s22">
+<div class="hero" style="border-left:4px solid var(--s22);">
+  <div class="ch-badge" style="background:var(--s22-bg);color:var(--s22);">§22</div>
+  <h1>The Quotient Topology</h1>
+  <p class="hero-sub">Gluing points together, and which open sets survive the gluing</p>
+</div>
+<div class="sec">
+  <h2><span class="sec-num">22.01</span> The idea</h2>
+  <div class="prose"><p>Start with a space $X$ and decide that some points should count as one point: glue the ends of an interval, or crush a whole set $A$ to a single point. The glued space $X^*$ is the set of pieces, and $p:X\to X^*$ sends each point to its piece.</p><p>The only question is which sets of $X^*$ are open. The answer is the most generous one that keeps $p$ continuous.</p></div>
+  <div class="box bdef"><div class="bl">Definition — Quotient topology</div>
+    $$U \subseteq X^* \text{ is open} \iff p^{-1}(U) \text{ is open in } X.$$
+    <p>With this topology $X^*$ is the <strong>quotient space</strong>, and $p$ is a <strong>quotient map</strong>.</p></div>
+</div>
+<div class="sec">
+  <h2><span class="sec-num">22.02</span> Saturated sets: how open sets get into the quotient</h2>
+  <div class="prose"><p>Pushing an open set down does not always give an open set: if it contains part of a glued piece, pulling back drags in the rest of the piece. So use open sets that contain each piece entirely or not at all.</p></div>
+  <div class="box bthm"><div class="bl">Fact</div><p>If $C\subseteq X$ is open and <strong>saturated</strong> (a union of whole pieces), then $p^{-1}(p(C))=C$ is open, so $p(C)$ is open in $X^*$.</p></div>
+  <div class="box bkey"><div class="bl">Strategy</div><p>To build open sets in a quotient, build open sets in $X$ that avoid each glued piece or swallow it whole, then push them down.</p></div>
+</div>
+<div class="sec">
+  <h2><span class="sec-num">22.03</span> Picture: crushing A, and why A must be closed</h2>
+  <div class="prose"><p>Top line: $X=\mathbb R$ with the set $A$ in orange. Bottom line: the quotient, where all of $A$ is one point $[A]$. Drag $x$. Untick <em>closed</em> and push $x$ against an end of $A$ to see the separation fail.</p></div>
+  <canvas id="qfig" width="560" height="170" class="ufig" aria-label="Quotient figure"></canvas>
+  <div class="ufigctl"><label>x <input id="qx" type="range" min="0" max="1000" value="180"></label><label><input id="qclosed" type="checkbox" checked> A closed</label></div>
+  <p id="qmsg" class="ufigmsg"></p>
+</div>
+<div class="sec">
+  <h2><span class="sec-num">22.04</span> Getting maps out of a quotient</h2>
+  <div class="box bthm"><div class="bl">Theorem 22.2 (the useful half)</div><p>A function $g:X^*\to Z$ is continuous if and only if $g\circ p:X\to Z$ is continuous.</p></div>
+  <div class="prose"><p>So to define a continuous map on a glued space, define a continuous map on $X$ that takes the same value on every point of each piece.</p></div>
+</div>
+</div>
+
+<!-- ========== Examples ============ -->
+<div class="page" id="page-zoo">
+<div class="hero" style="border-left:4px solid var(--zoo);">
+  <div class="ch-badge" style="background:var(--zoo-bg);color:var(--zoo);">Examples</div>
+  <h1>Spaces to test ideas on</h1>
+  <p class="hero-sub">When a claim looks true, try it on these first. Most counterexamples in this course are one of them.</p>
+</div>
+<div class="sec"><div id="zoo-list"></div></div>
+</div>
+
+<!-- ========== HW7 ============ -->
+<div class="page" id="page-hw7">
+<div class="hero" style="border-left:4px solid var(--hw);">
+  <div class="ch-badge" style="background:var(--hw-bg);color:var(--hw);">HW 7</div>
+  <h1>Homework 7, worked</h1>
+  <p class="hero-sub">Each problem: the concepts it uses, the method, and the write-up, built in steps</p>
+</div>
+<div class="sec">
+  <h2><span class="sec-num">Q1</span> Crushing a closed set</h2>
+  <div class="prose"><p>As set up in our session: $(X,d)$ is a metric space, $A\subseteq X$ is closed, and $x\sim_A y$ iff $x=y$ or both $x,y\in A$. Check the exact wording against the problem sheet.</p></div>
+  <div class="box bkey"><div class="bl">Concepts used</div><p>Equivalence relation and classes · quotient topology · saturated sets · closed sets · metric balls · Hausdorff. Methods M7 and M6.</p></div>
+  <div class="tc" id="hw7a"><button class="tc-hdr" onclick="toggleCard('hw7a')"><span class="tc-rn">(a)</span><span class="tc-tt">The equivalence classes</span><span class="tc-arr">▸</span></button><div class="tc-body" id="hw7a-body">
+    <p><strong>1.</strong> If $a\in A$: every $y\in A$ is related to $a$ by the "both in $A$" clause, and no $y\notin A$ is (it is not $a$, and not both in $A$). So $[a]=A$.</p>
+    <p><strong>2.</strong> If $x\notin A$: the only $y$ with $y\sim_A x$ is $y=x$, since $x$ is not in $A$. So $[x]=\{x\}$.</p>
+    $$X/{\sim_A}=\{A\}\cup\big\{\{x\} : x\in X\setminus A\big\}.$$
+  </div></div>
+  <div class="tc" id="hw7b"><button class="tc-hdr" onclick="toggleCard('hw7b')"><span class="tc-rn">(b)</span><span class="tc-tt">$X/{\sim_A}$ is Hausdorff</span><span class="tc-arr">▸</span></button><div class="tc-body" id="hw7b-body">
+    <p><strong>Setup.</strong> $\pi:X\to X/{\sim_A}$, $\pi(z)=[z]$. A set $U$ is open in $X/{\sim_A}$ iff $\pi^{-1}(U)$ is open in $X$. If $W\subseteq X$ is open and contains all of $A$ or none of it, then $\pi^{-1}(\pi(W))=W$, so $\pi(W)$ is open.</p>
+    <p><strong>Cases.</strong> Let $p\neq p'$. By (a) each is $[A]$ or $\{x\}$ with $x\notin A$.</p>
+    <p><strong>Case 1: $\{x\},\{y\}$, $x\neq y$, $x,y\notin A$.</strong> Since $A$ is closed, there are $r_x,r_y>0$ with $B(x,r_x)\cap A=\varnothing=B(y,r_y)\cap A$. Let $r=\min\big(\tfrac{d(x,y)}2,r_x,r_y\big)$. The balls $B(x,r),B(y,r)$ miss $A$, so their images are open. If $z$ were in both, $d(x,y)\le d(x,z)+d(z,y)<2r\le d(x,y)$, a contradiction; so they are disjoint, and so are the images.</p>
+    <p><strong>Case 2: $[A]$ and $\{x\}$, $x\notin A$.</strong> Choose $r>0$ with $B(x,r)\cap A=\varnothing$. Let $U=B(x,\tfrac r2)$ and $W=\{z:d(z,x)>\tfrac r2\}$. Both are open; $U$ misses $A$ and $A\subseteq W$ (each $a\in A$ has $d(a,x)\ge r$), so both are saturated; and no $z$ is in both. So $\pi(U)\ni\{x\}$ and $\pi(W)\ni[A]$ are disjoint open sets.</p>
+    <p><strong>Conclusion.</strong> Every pair of distinct points is separated, so $X/{\sim_A}$ is Hausdorff. $\blacksquare$</p>
+    <div class="box bwarn"><div class="bl">Why closed</div><p>For $A=(0,1)\subset\mathbb R$, every open set around $\{0\}$ contains $[A]$, so the quotient is not Hausdorff. See the picture in §22.</p></div>
+  </div></div>
+</div>
+<div class="sec"><div class="prose"><p>Q2–Q6 are added here as we work them.</p></div></div>
+</div>
+
+<script>
+// ===== Course units: Concepts (definitions), Methods (proof recipes), Examples (spaces to test ideas on). Rendered into their pages.
+var R = String.raw;
+var CONCEPTS = [
+  {sec:'§1–3', name:'Equivalence relation', def:R`A relation $\sim$ on $X$ that is reflexive ($x\sim x$), symmetric ($x\sim y \Rightarrow y\sim x$) and transitive ($x\sim y,\ y\sim z \Rightarrow x\sim z$).`, words:'A rule for when two points count as "the same".', ex:R`On a metric space with $A\subseteq X$: $x\sim_A y$ iff $x=y$ or both $x,y\in A$.`, non:R`$x<y$ on $\mathbb R$: not reflexive, not symmetric.`, mix:'Check all three properties; transitivity is the one most often skipped.', used:'Quotient spaces (§22); HW7 Q1.'},
+  {sec:'§1–3', name:'Equivalence class', def:R`$[x]=\{y\in X : y\sim x\}$.`, words:'Everything that counts as the same as $x$.', ex:R`For $\sim_A$: $[a]=A$ when $a\in A$, and $[x]=\{x\}$ when $x\notin A$.`, non:'', mix:R`$[x]$ is a <em>set</em> of points of $X$, but a single <em>point</em> of the quotient.`, used:'Quotient set, quotient map.'},
+  {sec:'§1–3', name:'Partition', def:R`A collection of nonempty, pairwise disjoint subsets of $X$ whose union is $X$.`, words:'Cutting $X$ into pieces with no overlaps and nothing left out.', ex:R`The classes of any equivalence relation partition $X$; conversely every partition defines one.`, non:R`$\{[0,1],[1,2]\}$ on $[0,2]$: the pieces overlap at $1$.`, mix:'', used:'Quotient spaces are built from partitions.'},
+  {sec:'§12', name:'Topology', def:R`A collection $\mathcal T$ of subsets of $X$ with (1) $\varnothing, X\in\mathcal T$; (2) any union of members is in $\mathcal T$; (3) any <em>finite</em> intersection of members is in $\mathcal T$.`, words:'A choice of which subsets are called open, closed under arbitrary unions and finite intersections.', ex:R`Discrete topology (every subset), indiscrete $\{\varnothing,X\}$, the finite-complement topology.`, non:R`On $\{a,b,c\}$: $\{\varnothing,\{a\},\{b\},X\}$ fails (2), since $\{a,b\}$ is missing.`, mix:R`Only <em>finite</em> intersections: $\bigcap_n(-\tfrac1n,\tfrac1n)=\{0\}$ is not open in $\mathbb R$.`, used:'Everything.'},
+  {sec:'§12', name:'Finer / coarser', def:R`$\mathcal T'$ is finer than $\mathcal T$ if $\mathcal T\subseteq\mathcal T'$ (every $\mathcal T$-open set is $\mathcal T'$-open).`, words:'Finer = more open sets = it can tell more points apart.', ex:R`Discrete is the finest topology; indiscrete the coarsest. $\mathbb R_\ell$ is strictly finer than standard $\mathbb R$.`, non:'', mix:'"Finer" is about containment of the collections, not size of the open sets.', used:'Comparing topologies with Lemma 13.3.'},
+  {sec:'§13', name:'Basis', def:R`A collection $\mathcal B$ of subsets of $X$ such that (1) every $x$ lies in some $B\in\mathcal B$; (2) if $x\in B_1\cap B_2$ then some $B_3\in\mathcal B$ has $x\in B_3\subseteq B_1\cap B_2$.`, words:'Building blocks: every open set is a union of them.', ex:R`Open intervals $(a,b)$ in $\mathbb R$; open balls in a metric space; $[a,b)$ for $\mathbb R_\ell$.`, non:R`Closed intervals $[a,b]$ with $a<b$ in $\mathbb R$: $[0,1]\cap[1,2]=\{1\}$ contains no such interval around $1$.`, mix:'A basis is not a topology; it generates one.', used:'Showing sets are open; Lemma 13.3; product and metric topologies.'},
+  {sec:'§13', name:'Topology generated by a basis', def:R`$U$ is open iff for every $x\in U$ there is $B\in\mathcal B$ with $x\in B\subseteq U$. Equivalently (Lemma 13.1), the open sets are exactly the unions of basis elements.`, words:'Open means: around each of its points you can fit a building block inside it.', ex:R`$U=(0,1)\cup(2,3)$ is open in $\mathbb R$.`, non:R`$[0,1)$ is not open in $\mathbb R$: no interval around $0$ stays inside.`, mix:'', used:'Method M2.'},
+  {sec:'§13', name:'Comparing topologies (Lemma 13.3)', def:R`With bases $\mathcal B,\mathcal B'$: $\mathcal T'$ is finer than $\mathcal T$ iff for each $x$ and each $B\in\mathcal B$ with $x\in B$, there is $B'\in\mathcal B'$ with $x\in B'\subseteq B$.`, words:'Every old block around $x$ contains a new block around $x$.', ex:R`$[x,b)\subseteq(a,b)$ around $x$, so $\mathbb R_\ell$ is finer than $\mathbb R$.`, non:'', mix:'Order matters: the finer topology supplies the smaller blocks.', used:'Method M8.'},
+  {sec:'§13', name:'Subbasis', def:R`A collection $\mathcal S$ whose union is $X$. The topology it generates: all unions of finite intersections of elements of $\mathcal S$.`, words:'Even smaller ingredients: intersect a few, then take unions.', ex:R`Rays $(-\infty,a)$ and $(b,\infty)$ form a subbasis for $\mathbb R$.`, non:'', mix:'', used:'Order and product topologies.'},
+  {sec:'§14', name:'Order topology', def:R`On a simply ordered set: basis of open intervals $(a,b)$, plus $[a_0,b)$ if there is a least element $a_0$ and $(a,b_0]$ if there is a greatest $b_0$.`, words:'Open intervals, with half-open ones allowed at the ends.', ex:R`$\mathbb R$ gives the standard topology; $\{1,2\}\times\mathbb Z_+$ in dictionary order.`, non:'', mix:'', used:''},
+  {sec:'§15', name:'Product topology on X × Y', def:R`Basis: all $U\times V$ with $U$ open in $X$ and $V$ open in $Y$.`, words:'Open boxes; open sets are unions of open boxes.', ex:R`On $\mathbb R^2$ this is the usual topology.`, non:R`An open disc is open in $\mathbb R^2$ but is not itself a product $U\times V$; it is a union of them.`, mix:'Not every open set is a box.', used:'Projections are continuous; §19 for infinite products.'},
+  {sec:'§16', name:'Subspace topology', def:R`$\mathcal T_Y=\{Y\cap U : U\in\mathcal T\}$.`, words:'Open in $Y$ means: what an open set of $X$ cuts out of $Y$.', ex:R`$[0,\tfrac12)$ is open in $Y=[0,1]$, as $Y\cap(-1,\tfrac12)$.`, non:'', mix:'Open in $Y$ is not open in $X$ unless $Y$ itself is open in $X$ (Lemma 16.2).', used:'Everywhere sets sit inside bigger spaces.'},
+  {sec:'§17', name:'Closed set', def:R`$A$ is closed if $X\setminus A$ is open.`, words:'Its complement is open.', ex:R`$[a,b]$, $\{x\}$ in a Hausdorff space, $\varnothing$, $X$.`, non:R`$[0,1)$ in $\mathbb R$ is neither open nor closed.`, mix:'Closed is not "not open". Sets can be both, or neither.', used:'HW7 Q1: closedness gives a ball around each $x\notin A$ missing $A$.'},
+  {sec:'§17', name:'Closure and interior', def:R`$\overline A$: intersection of all closed sets containing $A$. $\operatorname{Int}A$: union of all open sets inside $A$.`, words:'Smallest closed set around $A$; largest open set inside $A$.', ex:R`$\overline{(0,1)}=[0,1]$, $\operatorname{Int}[0,1]=(0,1)$ in $\mathbb R$; $\overline{\mathbb Q}=\mathbb R$.`, non:'', mix:R`Theorem 17.5: $x\in\overline A$ iff every open set (or basis element) containing $x$ meets $A$.`, used:'Method M4.'},
+  {sec:'§17', name:'Limit point', def:R`$x$ is a limit point of $A$ if every neighbourhood of $x$ meets $A$ in a point other than $x$.`, words:'Points of $A$ crowd in on $x$.', ex:R`$0$ is a limit point of $(0,1)$ and of $\{1/n\}$.`, non:R`In $\{0\}\cup[1,2]$, the point $0$ is not a limit point of the set.`, mix:R`A limit point need not be in $A$. Theorem 17.6: $\overline A=A\cup A'$; $A$ is closed iff it contains its limit points.`, used:'Why "closed" matters in HW7 Q1.'},
+  {sec:'§17', name:'Hausdorff space', def:R`For every $x\neq y$ there are disjoint open $U\ni x$, $V\ni y$.`, words:'Any two points can be put in separate open bubbles.', ex:R`Every metric space; subspaces and products of Hausdorff spaces; $X/{\sim_A}$ with $A$ closed (HW7).`, non:R`Finite-complement topology on $\mathbb R$; $\mathbb R/(0,1)$; the line with two origins.`, mix:'Distinct points, disjoint sets: both words matter.', used:'Limits of sequences are unique (Thm 17.10).'},
+  {sec:'§18', name:'Continuous function', def:R`$f:X\to Y$ is continuous if $f^{-1}(V)$ is open in $X$ for every open $V\subseteq Y$.`, words:'Preimages of open sets are open.', ex:R`It is enough to check basis (or subbasis) elements of $Y$. In metric spaces this is the $\varepsilon$–$\delta$ definition.`, non:R`The identity $\mathbb R\to\mathbb R_\ell$ is not continuous: $[0,1)$ pulls back to itself, not open in $\mathbb R$.`, mix:R`Images of open sets need not be open; it is <em>preimages</em>.`, used:'Method M5.'},
+  {sec:'§18', name:'Homeomorphism', def:R`A bijection $f$ with $f$ and $f^{-1}$ both continuous.`, words:'The same space, relabelled.', ex:R`$(-1,1)\cong\mathbb R$ by $x\mapsto x/(1-x^2)$; $[0,1]/\{0\sim1\}\cong S^1$.`, non:R`$[0,1)\to S^1$, $t\mapsto(\cos2\pi t,\sin2\pi t)$: a continuous bijection whose inverse is not continuous.`, mix:'Continuous and bijective is not enough.', used:''},
+  {sec:'§20', name:'Metric and metric topology', def:R`$d(x,y)\ge0$ with equality iff $x=y$; $d(x,y)=d(y,x)$; $d(x,z)\le d(x,y)+d(y,z)$. Basis: balls $B(x,\varepsilon)=\{y: d(x,y)<\varepsilon\}$.`, words:'Open = around each point there is a whole ball inside.', ex:R`Euclidean $\mathbb R^n$; the discrete metric (gives the discrete topology).`, non:'', mix:R`Inside a ball $B(x,\varepsilon)$, each $y$ has its own ball $B(y,\varepsilon-d(x,y))$; that is why balls are open.`, used:'HW7 Q1; metric spaces are Hausdorff with radius $d(x,y)/2$.'},
+  {sec:'§22', name:'Quotient map', def:R`A surjective $p:X\to Y$ with: $U\subseteq Y$ open iff $p^{-1}(U)$ open in $X$.`, words:'$Y$ gets exactly the open sets that pull back to open sets.', ex:R`$p:[0,1]\to S^1$ wrapping the interval around; any open or closed continuous surjection.`, non:'', mix:'Stronger than continuous: the "if" direction matters too.', used:''},
+  {sec:'§22', name:'Quotient topology and space', def:R`Given a partition $X^*$ of $X$ and $p:X\to X^*$ sending $x$ to its piece: $U\subseteq X^*$ is open iff $p^{-1}(U)$ is open in $X$.`, words:'Glue points together; a set of glued points is open if all the original points under it form an open set.', ex:R`$X/{\sim_A}$: crush $A$ to a single point.`, non:'', mix:R`Quotients of nice spaces can be badly behaved: $\mathbb R/(0,1)$ is not Hausdorff.`, used:'HW7 Q1; Method M7.'},
+  {sec:'§22', name:'Saturated set', def:R`$C\subseteq X$ is saturated (for $p$) if $C=p^{-1}(p(C))$, i.e. $C$ is a union of whole pieces.`, words:'It never contains part of a glued piece without the rest.', ex:R`For $\sim_A$: any set containing all of $A$ or none of it.`, non:R`$B(a,\varepsilon)$ for $a\in A$ that does not contain all of $A$.`, mix:R`For saturated open $C$: $p^{-1}(p(C))=C$ is open, so $p(C)$ is open. That is the engine of HW7 Q1(b).`, used:'Method M7.'}
+];
+var METHODS = [
+  {name:'M1 · Check that a collection is a topology', steps:[[R`Check $\varnothing$ and $X$ are in it.`, 'Axiom (1).'], ['Take an arbitrary family of members and show its union is a member.', 'Axiom (2): any number of sets, not only two.'], ['Take two members (then induct) and show the intersection is a member.', 'Axiom (3) is only for finite intersections, and two at a time is enough.']], note:'To disprove: produce one union or one finite intersection that falls outside.'},
+  {name:'M2 · Show a set U is open', steps:[[R`Take an arbitrary $x\in U$.`, 'Openness is a pointwise condition.'], [R`Produce a basis element $B$ (in a metric space, a ball $B(x,r)$) with $x\in B\subseteq U$; say how $r$ depends on $x$.`, 'Definition of the topology generated by a basis.'], [R`Prove $B\subseteq U$: take $y\in B$ and show $y\in U$, usually with the triangle inequality.`, 'This is where the work is.']], note:R`Other routes: $U$ is a union of open sets; $U=f^{-1}(V)$ for continuous $f$ and open $V$.`},
+  {name:'M3 · Show a set A is closed', steps:[[R`Show $X\setminus A$ is open (M2 on the complement).`, 'Definition.'], [R`Or: show $A$ contains all its limit points.`, 'Theorem 17.6.'], [R`Or: $A=f^{-1}(C)$ with $f$ continuous and $C$ closed.`, 'Preimages of closed sets are closed under continuous maps.']], note:'Finite unions and arbitrary intersections of closed sets are closed.'},
+  {name:'M4 · Find a closure', steps:[['Guess the answer from a picture.', ''], [R`For $x$ in your guess: every basis element around $x$ meets $A$.`, 'Theorem 17.5.'], [R`For $x$ outside your guess: find one basis element around $x$ missing $A$.`, 'Same theorem, negated.']], note:''},
+  {name:'M5 · Show a function is continuous', steps:[[R`Take a basis element $B$ of $Y$ and show $f^{-1}(B)$ is open.`, 'It suffices to check a basis (or subbasis).'], [R`In metric spaces: for $x$ and $\varepsilon>0$, give $\delta>0$ with $d(x,y)<\delta\Rightarrow d(f(x),f(y))<\varepsilon$.`, 'Equivalent to the preimage definition (§21).'], ['Or build $f$ from continuous pieces: compositions, restrictions, the pasting lemma, products of maps.', 'Theorem 18.2 and 18.3.']], note:R`Out of a quotient: $g:X^*\to Z$ is continuous iff $g\circ p$ is continuous.`},
+  {name:'M6 · Show a space is Hausdorff', steps:[[R`Take $x\neq y$. If the points come in kinds, split into cases.`, 'A different construction may be needed for each kind of pair.'], ['In each case write down two open sets, one around each point.', ''], ['Prove they are disjoint: suppose z is in both and reach a contradiction.', 'In metric spaces, radius $d(x,y)/2$ and the triangle inequality.']], note:'To disprove: find two points such that every neighbourhood of one meets every neighbourhood of the other.'},
+  {name:'M7 · Work with a quotient', steps:[['Describe the classes (the points of the quotient).', 'You need to know what you are separating or mapping.'], [R`To show $V\subseteq X^*$ is open, check $p^{-1}(V)$ is open in $X$.`, 'Definition of the quotient topology.'], [R`To produce open sets in $X^*$, take open sets in $X$ that are saturated and push them down.`, R`$p^{-1}(p(C))=C$ for saturated $C$.`]], note:'HW7 Q1(b) is exactly this method combined with M6.'},
+  {name:'M8 · Compare two topologies', steps:[['Write down bases for both.', ''], [R`For each $x$ and each basis element $B$ of the coarser candidate containing $x$, find a basis element $B'$ of the finer one with $x\in B'\subseteq B$.`, 'Lemma 13.3.'], ['For "strictly finer", exhibit one open set of the finer topology that is not open in the other.', '']], note:''},
+  {name:'M9 · Find a counterexample', steps:[['Try a small finite space with a hand-made topology.', 'You can list every open set.'], [R`Try $\mathbb R_\ell$, the finite-complement topology, or the indiscrete topology.`, 'Each breaks a different property.'], ['Try removing a hypothesis: e.g. crush a set that is not closed.', 'Shows where the hypothesis is used.']], note:''}
+];
+var ZOO = [
+  {name:R`$\mathbb R$ (standard)`, what:'Basis: open intervals.', props:'Metric, Hausdorff, connected.', why:'The baseline everything is compared with.'},
+  {name:R`$\mathbb R_\ell$ (lower limit)`, what:R`Basis: $[a,b)$.`, props:R`Strictly finer than $\mathbb R$; Hausdorff; $[a,b)$ is both open and closed.`, why:'Testing continuity and comparison.'},
+  {name:R`$\mathbb R_K$`, what:R`Basis: $(a,b)$ and $(a,b)\setminus K$, $K=\{1/n\}$.`, props:R`Finer than $\mathbb R$, not comparable with $\mathbb R_\ell$; Hausdorff but not regular.`, why:''},
+  {name:'Discrete', what:'Every subset is open.', props:'Every function out of it is continuous; Hausdorff.', why:''},
+  {name:'Indiscrete', what:R`Only $\varnothing$ and $X$.`, props:'Every function into it is continuous; not Hausdorff (more than one point).', why:''},
+  {name:R`Finite complement on $\mathbb R$`, what:'Open: complements of finite sets, and the empty set.', props:'Points are closed (T₁) but not Hausdorff: any two nonempty open sets meet.', why:'Shows T₁ is weaker than Hausdorff.'},
+  {name:R`Sierpiński space $\{0,1\}$`, what:R`Open: $\varnothing,\{1\},\{0,1\}$.`, props:'Not Hausdorff, not T₁.', why:'The smallest interesting space.'},
+  {name:R`$\mathbb R/(0,1)$`, what:R`Crush the open interval $(0,1)$ to a point.`, props:R`Not Hausdorff: $\{0\}$ and $[(0,1)]$ cannot be separated.`, why:'Why HW7 Q1 needs A closed.'},
+  {name:R`$X/{\sim_A}$, $A$ closed`, what:R`Crush a closed $A$ in a metric space.`, props:'Hausdorff (HW7 Q1).', why:''},
+  {name:R`$[0,1]/\{0\sim1\}$`, what:'Glue the ends of an interval.', props:R`Homeomorphic to the circle $S^1$.`, why:'The first quotient to picture.'},
+  {name:'Line with two origins', what:R`Two copies of $\mathbb R$, glued at every point except $0$.`, props:'Locally like ℝ but not Hausdorff: the two origins cannot be separated.', why:''}
+];
+function unitsRender(){
+  function esc(t){ return t; }
+  var cw = document.getElementById('concept-list');
+  if (cw){ cw.innerHTML = CONCEPTS.map(function(c, i){ var id = 'cc' + i;
+    return '<div class="tc ucard" id="' + id + '" data-text="' + (c.name + ' ' + c.sec).toLowerCase().replace(/"/g, '') + '"><button class="tc-hdr" onclick="toggleCard(\'' + id + '\')"><span class="tc-rn">' + c.sec + '</span><span class="tc-tt">' + c.name + '</span><span class="tc-arr">▸</span></button><div class="tc-body" id="' + id + '-body">' +
+      '<div class="box bdef"><div class="bl">Definition</div><p>' + c.def + '</p></div>' +
+      (c.words ? '<p><strong>In words.</strong> ' + c.words + '</p>' : '') + (c.ex ? '<p><strong>Example.</strong> ' + c.ex + '</p>' : '') + (c.non ? '<p><strong>Non-example.</strong> ' + c.non + '</p>' : '') +
+      (c.mix ? '<div class="box bwarn"><div class="bl">Watch out</div><p>' + c.mix + '</p></div>' : '') + (c.used ? '<p class="ucused"><strong>Used in.</strong> ' + c.used + '</p>' : '') + '</div></div>'; }).join(''); }
+  var mw = document.getElementById('method-list');
+  if (mw){ mw.innerHTML = METHODS.map(function(m, i){ var id = 'mm' + i;
+    return '<div class="tc ucard" id="' + id + '" data-text="' + m.name.toLowerCase() + '"><button class="tc-hdr" onclick="toggleCard(\'' + id + '\')"><span class="tc-rn">METHOD</span><span class="tc-tt">' + m.name + '</span><span class="tc-arr">▸</span></button><div class="tc-body" id="' + id + '-body"><ol class="usteps">' +
+      m.steps.map(function(s){ return '<li>' + s[0] + (s[1] ? '<span class="ureason">' + s[1] + '</span>' : '') + '</li>'; }).join('') + '</ol>' + (m.note ? '<div class="box bkey"><div class="bl">Note</div><p>' + m.note + '</p></div>' : '') + '</div></div>'; }).join(''); }
+  var zw = document.getElementById('zoo-list');
+  if (zw){ zw.innerHTML = ZOO.map(function(z){ return '<div class="box bthm uzoo"><div class="bl">Space</div><p class="uzname">' + z.name + '</p><p>' + z.what + '</p><p><strong>Properties.</strong> ' + z.props + '</p>' + (z.why ? '<p><em>' + z.why + '</em></p>' : '') + '</div>'; }).join(''); }
+  var q = document.getElementById('concept-search'); if (q) q.addEventListener('input', function(){ var v = q.value.trim().toLowerCase(); document.querySelectorAll('#concept-list .ucard').forEach(function(el){ el.style.display = !v || el.getAttribute('data-text').indexOf(v) >= 0 || el.textContent.toLowerCase().indexOf(v) >= 0 ? '' : 'none'; }); });
+  var els = [cw, mw, zw].filter(Boolean);
+  function ts(){ if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise(els); }
+  if (window.MathJax && MathJax.startup && MathJax.startup.promise) MathJax.startup.promise.then(ts); else setTimeout(ts, 800);
+}
+
+// ===== §22 figure: crush a set A on the line to a point and try to separate a point x from it
+function quotFig(){
+  var cv = document.getElementById('qfig'); if (!cv) return; var g = cv.getContext('2d'), xs = document.getElementById('qx'), cl = document.getElementById('qclosed'), out = document.getElementById('qmsg');
+  function draw(){ var W = cv.width, H = cv.height, L = 30, Rr = W - 30, a = 0.35, b = 0.65, x = +xs.value/1000, closed = cl.checked;
+    function X(u){ return L + (Rr - L)*u; }
+    g.fillStyle = '#171a20'; g.fillRect(0, 0, W, H);
+    var y0 = 46; g.strokeStyle = '#5c6270'; g.lineWidth = 2; g.beginPath(); g.moveTo(L, y0); g.lineTo(Rr, y0); g.stroke();
+    g.strokeStyle = '#e0947a'; g.lineWidth = 6; g.beginPath(); g.moveTo(X(a), y0); g.lineTo(X(b), y0); g.stroke();
+    [a, b].forEach(function(e){ g.beginPath(); g.arc(X(e), y0, 6, 0, 7); if (closed){ g.fillStyle = '#e0947a'; g.fill(); } else { g.fillStyle = '#171a20'; g.fill(); g.strokeStyle = '#e0947a'; g.lineWidth = 2; g.stroke(); } });
+    g.fillStyle = '#8b93a3'; g.font = '13px EB Garamond, serif'; g.fillText('X = ℝ', L, 22); g.fillText(closed ? 'A = [a, b], closed' : 'A = (a, b), not closed', X(a) - 10, 22);
+    var inA = closed ? (x >= a && x <= b) : (x > a && x < b), gap = inA ? 0 : Math.min(Math.abs(x - a), Math.abs(x - b)), touches = !inA && !closed && (Math.abs(x - a) < 0.004 || Math.abs(x - b) < 0.004);
+    g.fillStyle = '#e7e9ee'; g.beginPath(); g.arc(X(x), y0, 4, 0, 7); g.fill(); g.fillText('x', X(x) - 3, y0 + 22);
+    var y1 = 130; g.strokeStyle = '#5c6270'; g.lineWidth = 2; g.beginPath(); g.moveTo(L, y1); g.lineTo(X(a) - 2, y1); g.moveTo(X(a) + 2, y1); g.lineTo(Rr - (X(b) - X(a)), y1); g.stroke();
+    var pA = X(a); g.fillStyle = '#e0947a'; g.beginPath(); g.arc(pA, y1, 7, 0, 7); g.fill(); g.fillStyle = '#8b93a3'; g.fillText('X/∼_A : A becomes one point [A]', L, y1 - 26);
+    function down(u){ return u <= a ? X(u) : u >= b ? X(u) - (X(b) - X(a)) : pA; }
+    if (inA){ out.innerHTML = 'x is in A, so in the quotient it <em>is</em> the point [A]. Move it outside A.'; }
+    else if (touches){ var e = 0.06; g.fillStyle = 'rgba(201,73,90,.35)'; g.fillRect(X(x - e), y0 - 10, X(x + e) - X(x - e), 20); g.fillRect(Math.min(down(x - e), down(x + e)) - 2, y1 - 10, Math.abs(down(x + e) - down(x - e)) + 4, 20);
+      out.innerHTML = 'x sits at an end of A that A does not contain, so d(x, A) = 0. Every interval around x reaches into A, so its image contains [A]. No disjoint open sets: <strong>not Hausdorff</strong>.'; }
+    else { var r = gap, U = r/2; g.fillStyle = 'rgba(95,184,138,.35)'; g.fillRect(X(x - U), y0 - 10, X(x + U) - X(x), 20); g.fillRect(X(x - U), y0 - 10, X(x) - X(x - U), 20);
+      g.fillStyle = 'rgba(91,155,213,.28)'; g.fillRect(L, y0 + 8, X(x - U) - L, 6); g.fillRect(X(x + U), y0 + 8, Rr - X(x + U), 6);
+      g.fillStyle = 'rgba(95,184,138,.35)'; g.fillRect(down(x - U), y1 - 10, down(x + U) - down(x - U), 20); g.fillStyle = 'rgba(91,155,213,.28)'; g.fillRect(L, y1 + 8, down(x - U) - L, 6); g.fillRect(down(x + U), y1 + 8, Rr - (X(b) - X(a)) - down(x + U), 6);
+      out.innerHTML = 'd(x, A) = r &gt; 0. Green: U = B(x, r/2), which misses A. Blue: W = {z : d(z, x) &gt; r/2}, which contains all of A. Both are saturated, so their images are disjoint open sets around {x} and [A].'; }
+    g.fillStyle = '#e7e9ee'; if (!inA){ g.beginPath(); g.arc(down(x), y1, 4, 0, 7); g.fill(); g.fillText('{x}', down(x) - 8, y1 + 26); } }
+  xs.addEventListener('input', draw); cl.addEventListener('change', function(){ if (!cl.checked) xs.value = 350; draw(); }); draw();
+}
+document.addEventListener('DOMContentLoaded', function(){ unitsRender(); quotFig(); });
+
+</script>
 <script>
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
