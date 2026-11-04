@@ -999,6 +999,55 @@ S.splice(at('Where this sits in mathematics'), 0,
 <p>It also explains surprises. When a subspace and a quotient are taken in different orders and the topologies differ (HW7 Q5), the reason is that one construction takes the fewest open sets and the other the most, so they need not agree.</p>`]);
 })();
 
+// ===== Problem pages as hubs: the problem word for word, what it builds on, the terms, the breakdown, then the conclusion (folded).
+function steps(list){ return '<ol class="steps">' + list.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + s[0] + '</summary><div class="why"><b>Why:</b> ' + s[1] + '</div></details>' : s[0]) + '</li>'; }).join('') + '</ol>'; }
+var VERBATIM = {
+'hw7-q1': R`<p>Let $X$ be a set and $A\subset X$ a non-empty subset. Define an equivalence relation $\sim_A$ on $X$ by declaring $x\sim_A y$ if and only if the following condition holds: either $x=y$, or $x$ and $y$ are both elements of $A$.</p><p>(a) It may be used without proof that $\sim_A$ is an equivalence relation. What are the equivalence classes for $\sim_A$?</p><p>(b) Assume $X$ has the metric topology induced by $d:X\times X\to\mathbb R$ and that $A\subset X$ is closed. Prove that $X/{\sim_A}$ is Hausdorff.</p>`,
+'hw7-q2': R`<p>Let $p:\mathbb R\to\{-1,0,1\}$ be the quotient map from the previous homework. Determine whether $p$ is an open map, and whether it is a closed map. Justify your answer.</p>`,
+'hw7-q3': R`<p>Let $X$ and $Y$ be topological spaces, and let $\pi_1:X\times Y\to X$ be the projection.</p><p>(a) Prove that $\pi_1$ is an open map.</p><p>(b) Show by example that $\pi_1$ need not be a closed map.</p>`,
+'hw7-q4': R`<p>Let $\mathbb R$ have the standard topology and $\mathbb R^2=\mathbb R\times\mathbb R$ have the product topology. Let $A=[0,\infty)\times\mathbb R\ \cup\ \mathbb R\times\{0\}$ have the subspace topology from $\mathbb R^2$, and define $q:A\to\mathbb R$ as $q((x,y))=x$.</p><p>(a) Sketch $A\subset\mathbb R^2$ in a picture.</p><p>(b) Prove that $q$ is a quotient map. <em>Hint: a question from HW6 may be helpful.</em></p><p>(c) Prove that $q$ is not an open map. Then prove that $q$ is not a closed map.</p>`,
+'hw7-q5': R`<p>Let $C=[0,1]\times[0,1]\subset\mathbb R^2$ and $D=C\cup([0,1]\times\{-1\})$, and let $p:D\to C$ be defined by $p((x,y))=(x,\max(0,y))$.</p><p>(a) Prove that $p$ is a quotient map. <em>Hint: a hint from the previous question may be helpful.</em></p><p>(b) Let $B\subset D$ be the subset defined in HW6Q3, give $B$ the subspace topology, let $i:B\to D$ be the inclusion map, and write $q=p\circ i:B\to C$. Sketch a picture of the subset $q(B)\subset C$. It should be visible in your picture what points in the boundary of the square are in $q(B)$.</p><p>(c) Prove that the quotient topology on $q(B)$ induced by the surjection $q:B\to q(B)$ does not equal the subspace topology from $C$.</p><p><em>Remark (not part of the question): This gives another example where quotient and subspace topologies are combined; it matters whether we first pass to the subspace topology and then to the quotient topology, or whether we apply these constructions in the opposite order.</em></p>`,
+'hw7-q6': R`<p>(a) Let $X$ and $Y$ be topological spaces, and let $f:X\to Y$ be a bijection. Prove that $f$ is an open map if and only if $f$ is a closed map.</p><p>(b) Give an example of a bijection $f:X\to Y$ which is an open map but is not continuous.</p>`,
+'hw4-q1': R`<p>Let $J$ and $X$ and $x:\mathcal P(J)\to X$ be as in HW3Q5. As in that problem, we get for any sequence $A_1,A_2,\dots\in\mathcal P(J)$ a sequence $x(A_1),x(A_2),\dots\in X$. Assume that $A_1\supset A_2\supset\cdots$. Prove that the sequence converges, and determine its limit.</p>`,
+'hw4-q2': R`<p>Let $X_1,X_2,X_3$ be topological spaces; all products are given the product topology (for instance $(X_1\times X_2)\times X_3$ is the product of $X_1\times X_2$, itself given the product topology, with $X_3$). Let $f:(X_1\times X_2)\times X_3\to\prod_{\alpha\in\{1,2,3\}}X_\alpha$ be the function with coordinates $f_\alpha(((x_1,x_2),x_3))=x_\alpha$.</p><p>(a) Use Theorem 19.6 to prove that $f$ is continuous.</p><p>(b) Prove that $f$ is a homeomorphism.</p><p><em>Hint: in both (a) and (b), it should be possible to avoid explicitly mentioning open sets or bases.</em></p>`,
+'hw4-q3': R`<p>Let $J$ be a set. For each $\alpha\in J$ let $X_\alpha$ be a topological space and $A_\alpha$ a subset. Let $A=\prod_{\alpha\in J}A_\alpha$ and $X=\prod_{\alpha\in J}X_\alpha$. Let $\mathcal T\subset\mathcal P(A)$ be the topology arising by first giving $X$ the product topology, and then giving $A\subset X$ the subspace topology. Let $\mathcal T'\subset\mathcal P(A)$ be the topology arising by first giving each $A_\alpha\subset X_\alpha$ the subspace topology, and then giving $A=\prod A_\alpha$ the product topology. Prove that $\mathcal T=\mathcal T'$.</p>`,
+'hw4-q4': R`<p>Let $J$ be a set, let $\{0,1\}$ have the discrete topology, and let $X=\prod_{j\in J}\{0,1\}$ have the product topology. Let $\pi_j:X\to\{0,1\}$ denote the projections, and let $U_j=\pi_j^{-1}(\{0\})\subset X$. Let $z=(0)_{j\in J}\in X$.</p><p>(a) Prove that for any neighborhood $V\subset X$ of $z$, there exists a finite subset $J_V\subset J$ such that $\bigcap_{j\in J_V}U_j\subset V$.</p><p>(b) Now assume that there exists a sequence of open subsets $U_1\supset U_2\supset\cdots$ of $X$ such that $\bigcap_{n\in\mathbb Z_+}U_n=\{z\}$. Prove that there exists a sequence of subsets $J_1,J_2,\dots\subset J$, such that $J_n$ is finite for all $n$, and such that $\bigcup_n J_n=J$. Deduce that there exists an injective map $J\to\mathbb N$.</p>`
+};
+Object.keys(VERBATIM).forEach(function(id){ var a = A[id]; if (!a) return; a.sections = [['The problem', VERBATIM[id] + '<p class="foot">Word for word from the assignment PDF.</p>']].concat(a.sections || []); });
+
+// HW7 Q2, in full
+A['hw7-q2'].sections = [
+ ['The problem', VERBATIM['hw7-q2'] + '<p class="foot">Word for word from the assignment PDF.</p>'],
+ ['What it builds on: HW6 Q1', R`<p><b>The map.</b> $p:\mathbb R\to\{-1,0,1\}$ sends each real number to its sign:</p>
+$$p(x)=\begin{cases}-1 & x<0\\ \ \ 0 & x=0\\ \ \ 1 & x>0.\end{cases}$$
+<p><b>The topology on $\{-1,0,1\}$.</b> It is the [[quotient-topology]]: a subset $U$ is open exactly when $p^{-1}(U)$ is open in $\mathbb R$. Testing each subset:</p>
+<ul><li>$p^{-1}(\{-1\})=(-\infty,0)$, open, so $\{-1\}$ is open.</li><li>$p^{-1}(\{1\})=(0,\infty)$, open, so $\{1\}$ is open.</li><li>$p^{-1}(\{-1,1\})=\mathbb R\setminus\{0\}$, open, so $\{-1,1\}$ is open.</li><li>$p^{-1}(\{0\})=\{0\}$, not open, so $\{0\}$ is not open; likewise $\{-1,0\}$ ($p^{-1}=(-\infty,0]$) and $\{0,1\}$ ($p^{-1}=[0,\infty)$) are not open.</li></ul>
+$$\mathcal T=\{\varnothing,\ \{-1\},\ \{1\},\ \{-1,1\},\ \{-1,0,1\}\}.$$
+<p class="foot">Reconstructed from our HW6 session notes; the HW6 PDF is not in the guide yet.</p>`],
+ ['Concepts and method', ''],
+ ['Terms in the problem', R`<p><b>Open map.</b> $p$ is open if for every open $U\subseteq\mathbb R$, the image $p(U)$ is open in $\{-1,0,1\}$. You push sets <em>forward</em> and ask whether they stay open. See [[open-map]].</p>
+<p><b>Closed map.</b> $p$ is closed if for every closed $C\subseteq\mathbb R$, the image $p(C)$ is closed in $\{-1,0,1\}$.</p>
+<p><b>Closed sets of $\{-1,0,1\}$.</b> A set is [[closed-set|closed]] when its complement is open. Taking complements of the five open sets:</p>
+$$\{-1,0,1\},\quad\{0,1\},\quad\{-1,0\},\quad\{0\},\quad\varnothing.$$
+<p><b>"Justify".</b> To show $p$ is open you must handle <em>every</em> open $U$. To show $p$ is not closed, one closed set whose image is not closed is enough.</p>`],
+ ['Breakdown: is p an open map?', steps([
+   [R`<b>Take an arbitrary open set</b> $U\subseteq\mathbb R$. The goal is to show $p(U)\in\mathcal T$.`, R`Openness of a map is a statement about every open set, so the argument must start from an arbitrary one.`],
+   [R`<b>Split into two cases:</b> $0\in U$ or $0\notin U$.`, R`The only point of $\mathbb R$ that behaves differently under $p$ is $0$ (it is the only point sent to $0$), and the only subsets that fail to be open in $\mathcal T$ are the ones containing $0$ but not everything. So whether $U$ contains $0$ is what decides the answer.`],
+   [R`<b>Case $0\in U$.</b> Since $U$ is open in $\mathbb R$, there is $\varepsilon>0$ with $(-\varepsilon,\varepsilon)\subseteq U$. This interval contains $-\tfrac\varepsilon2<0$ and $\tfrac\varepsilon2>0$. So $p(U)$ contains $p(-\tfrac\varepsilon2)=-1$, $p(0)=0$ and $p(\tfrac\varepsilon2)=1$: $p(U)=\{-1,0,1\}$, which is open.`, R`An open set of $\mathbb R$ cannot contain $0$ without containing numbers on both sides of $0$ (definition of open in $\mathbb R$: [[m-open]]). That forces the image to be everything.`],
+   [R`<b>Case $0\notin U$.</b> Then every point of $U$ is negative or positive, so $p(U)\subseteq\{-1,1\}$. The subsets of $\{-1,1\}$ are $\varnothing,\{-1\},\{1\},\{-1,1\}$, and all four are in $\mathcal T$.`, R`Every possible image is on the list of open sets, whatever $U$ is.`]
+ ])],
+ ['Breakdown: is p a closed map?', steps([
+   [R`<b>Look for a closed set of $\mathbb R$ that avoids $0$.</b>`, R`The closed sets of $\{-1,0,1\}$ listed above all contain $0$, except $\varnothing$. So an image that misses $0$ and is nonempty cannot be closed.`],
+   [R`<b>Take $C=\{5\}$.</b> A single point is closed in $\mathbb R$ (its complement $(-\infty,5)\cup(5,\infty)$ is open).`, R`Any closed set of positive numbers would do; a single point is the simplest.`],
+   [R`<b>Compute the image:</b> $p(C)=\{1\}$.`, ''],
+   [R`<b>Check whether $\{1\}$ is closed:</b> its complement is $\{-1,0\}$, which is not in $\mathcal T$. So $\{1\}$ is not closed.`, R`Closed means the complement is open ([[closed-set]]); $\{-1,0\}$ was shown not open in HW6 Q1, since $p^{-1}(\{-1,0\})=(-\infty,0]$ is not open in $\mathbb R$.`]
+ ])],
+ ['Conclusion', R`<p>$p$ <b>is an open map</b> (every open $U$ either contains $0$, and then $p(U)=\{-1,0,1\}$, or misses $0$, and then $p(U)\subseteq\{-1,1\}$, and every such set is open). $p$ <b>is not a closed map</b>: $\{5\}$ is closed in $\mathbb R$ but $p(\{5\})=\{1\}$ is not closed in $\{-1,0,1\}$.</p>`],
+ ['Why the answer makes sense', R`<p>In the quotient, the point $0$ is <em>stuck to</em> both $-1$ and $1$: the [[closure]] of $\{1\}$ is $\{0,1\}$, because every open set containing $0$ is the whole space and so meets $\{1\}$. A closed set of positive numbers, far from $0$, lands on $\{1\}$ alone, and $\{1\}$ is missing the point $0$ it is stuck to. That is why pushing closed sets forward fails.</p>
+<p>Pushing open sets forward works because an open set either avoids $0$ (and lands among the open points $\pm1$) or contains $0$ together with points on both sides (and lands on everything).</p>
+<p>It also shows that a [[quotient-map]] need not be closed: $p$ is a quotient map by construction, open, and not closed.</p>`]
+];
+
 </script>
 <script>
 // ===== The encyclopedia: home page, articles, link previews, a trail of where you have been, search.
@@ -1040,7 +1089,7 @@ function article(id){
   if (a.steps) h += '<details class="sec" open><summary>Steps</summary><div class="secb"><ol class="steps">' + a.steps.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + wiki(s[0]) + '</summary><div class="why"><b>Why:</b> ' + wiki(s[1]) + '</div></details>' : wiki(s[0])) + '</li>'; }).join('') + '</ol></div></details>';
   (a.sections || []).forEach(function(s, i){ var body = s[1];
     if (s[0] === 'Concepts and method') body = '<p><b>Concepts:</b></p><div class="chips">' + (a.pre || []).map(chip).join('') + '</div><p style="margin-top:10px"><b>Method:</b></p><div class="chips">' + (a.method || []).map(chip).join('') + '</div>';
-    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method') : (i === 0 && !a.steps); if (s[0] === 'Picture' || s[0] === 'Reading the definition' || s[0] === 'Reading the statement' || s[0] === 'What it is' || (s[0] === 'Definition' && i === 1) || (a.where === 'Start here') || a.kind === 'idea') open = true;
+    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method' || s[0] === 'The problem' || s[0].indexOf('What it builds on') === 0 || s[0] === 'Terms in the problem') : (i === 0 && !a.steps); if (s[0] === 'Picture' || s[0] === 'Reading the definition' || s[0] === 'Reading the statement' || s[0] === 'What it is' || (s[0] === 'Definition' && i === 1) || (a.where === 'Start here') || a.kind === 'idea') open = true;
     h += '<details class="sec"' + (open ? ' open' : '') + '><summary>' + s[0] + '</summary><div class="secb">' + wiki(body) + '</div></details>'; });
   if (a.kind === 'method' && (USEDIN[id] || []).length) h += '<div class="links"><h3>Used in these problems</h3><div class="chips">' + USEDIN[id].map(chip).join('') + '</div></div>';
   h += '<div class="links">';
