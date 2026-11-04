@@ -78,6 +78,7 @@ a.wl:hover{border-bottom-style:solid;}
 details.topic{margin:0;border-bottom:1px solid var(--border);}
 details.topic>summary{list-style:none;cursor:pointer;padding:11px 0;font:600 14px -apple-system,system-ui,sans-serif;display:flex;justify-content:space-between;}
 details.topic>summary::-webkit-details-marker{display:none;}
+.glab{font:600 11px -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:12px 0 2px;}
 .cnt{font-weight:normal;color:var(--muted);font-size:12px;}
 details.topic .tlist{padding-left:10px;}
 .topic h2{font:600 13px -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:6px;}
@@ -524,12 +525,168 @@ Object.assign(A, {
 A['hw7-q1'].kind = 'problem'; A['hw7-q1'].method = ['m-quotient', 'm-hausdorff']; A['hw7-q1'].where = 'Homework 7 · §22';
 A['hw7-q1'].lede = R`(a) The classes of $\sim_A$. (b) If $X$ is a metric space and $A$ is closed, $X/{\sim_A}$ is Hausdorff.`;
 
+// ===== Book order: every section holds its concepts, then its methods, then its problems. Plus the articles that fill the gaps.
+Object.assign(A, {
+// ---------- Chapter 1
+'de-morgan': {title: 'Unions, intersections, complements (De Morgan)', kind: 'idea', where: 'Ch. 1, §1', pre: [],
+  lede: R`$X\setminus\bigcup A_\alpha=\bigcap(X\setminus A_\alpha)$ and $X\setminus\bigcap A_\alpha=\bigcup(X\setminus A_\alpha)$.`,
+  sections: [['Statement', R`<p>Complement turns unions into intersections and back. It holds for any indexed family.</p>`],
+    ['Why it matters', R`<p>It converts every fact about [[open-set|open sets]] into one about [[closed-set|closed sets]]: arbitrary unions of open sets become arbitrary intersections of closed sets (Theorem 17.1). MT Q5 is a direct use.</p>`]]},
+'functions': {title: 'Injective, surjective, bijective', kind: 'definition', where: 'Ch. 1, §2', pre: ['image-preimage'],
+  lede: 'One-to-one, onto, and both; a bijection has an inverse function.',
+  sections: [['Definition', R`<p>$f:X\to Y$ is <b>injective</b> if $f(x)=f(x')\Rightarrow x=x'$, <b>surjective</b> if $f(X)=Y$, <b>bijective</b> if both; then $f^{-1}:Y\to X$ exists.</p>`],
+    ['Useful identities', R`<p>$f(f^{-1}(B))\subseteq B$ with equality when $f$ is surjective; $A\subseteq f^{-1}(f(A))$ with equality when $f$ is injective. The second is the [[saturated]] condition in disguise.</p>`],
+    ['Where it appears', R`<p>MT Q4 (injective maps), [[homeomorphism|homeomorphisms]], HW7 Q6 (bijections).</p>`]]},
+'indexed-products': {title: 'Cartesian products of indexed families', kind: 'definition', where: 'Ch. 1, §5', pre: ['functions'],
+  lede: R`$\prod_{\alpha\in J}X_\alpha$ is the set of $J$-tuples $(x_\alpha)$ with $x_\alpha\in X_\alpha$, i.e. functions $J\to\bigcup X_\alpha$.`,
+  sections: [['Definition', R`<p>A point of $\prod X_\alpha$ is a choice of one $x_\alpha\in X_\alpha$ for each index $\alpha$. The projection $\pi_\beta$ reads off the $\beta$ coordinate.</p>`],
+    ['Example', R`<p>$\prod_{j\in J}\{0,1\}$ is the set of functions $J\to\{0,1\}$, equivalently of subsets of $J$ ($x(A)_j=1$ iff $j\in A$; HW3 Q5, HW4 Q1).</p>`],
+    ['Topologies on it', R`<p>[[product-vs-box]].</p>`]]},
+'countable': {title: 'Countable sets', kind: 'definition', where: 'Ch. 1, §7', pre: ['functions'],
+  lede: R`$J$ is countable if there is an injection $J\to\mathbb N$; a countable union of finite sets is countable.`,
+  sections: [['Definition', R`<p>$J$ is <b>countable</b> if it is finite or in bijection with $\mathbb Z_+$; equivalently, there is an injective map $J\to\mathbb N$.</p>`],
+    ['Facts', R`<p>Subsets and countable unions of countable sets are countable; $\mathbb Q$ is countable; $\mathbb R$ and $\mathcal P(\mathbb N)$ are not.</p>`],
+    ['Where it appears', R`<p>HW4 Q4: if the point $z$ of $\prod_J\{0,1\}$ has a countable neighbourhood base, $J$ is countable. Hence $\prod_{\mathbb R}\{0,1\}$ is not [[metrizable]].</p>`]]},
+// ---------- the connecting idea
+'defining-by-maps': {title: 'Subspace, product, quotient: topologies defined by maps', kind: 'idea', where: '§15–22', pre: ['continuous'],
+  lede: 'Each new topology is the one that makes a natural map continuous, and no more (or no less) than needed.',
+  sections: [['The pattern', R`<p><b>[[subspace-topology|Subspace]]:</b> the coarsest topology on $Y$ making the inclusion $Y\hookrightarrow X$ continuous.<br><b>[[product-vs-box|Product]]:</b> the coarsest topology on $\prod X_\alpha$ making every projection continuous.<br><b>[[quotient-topology|Quotient]]:</b> the finest topology on $X^*$ making $p:X\to X^*$ continuous.</p>`],
+    ['What it buys you', R`<p>Each comes with a rule for maps. Into a subspace: $f:Z\to Y$ is continuous iff it is continuous into $X$. Into a product: iff every coordinate is ([[maps-into-products|Theorem 19.6]]). Out of a quotient: iff the composite with $p$ is ([[maps-out-of-quotients|Theorem 22.2]]).</p>`],
+    ['Why coarsest or finest', R`<p>Maps <em>out of</em> $Y$ or the product pull open sets back, so the fewest open sets that still make them continuous. The map <em>into</em> the quotient must pull open sets back to open sets, so the most open sets possible.</p>`],
+    ['Order matters', R`<p>Taking a subspace and a quotient in different orders can give different topologies (HW6 Q3, HW7 Q5). Taking subspaces and products in either order gives the same one ([[products-and-subspaces]]).</p>`]]},
+// ---------- §19 fill-in
+'maps-into-products': {title: 'Maps into products (Theorem 19.6)', kind: 'theorem', where: '§19', pre: ['product-vs-box', 'continuous'],
+  lede: R`$f:A\to\prod X_\alpha$ is continuous iff every coordinate function $f_\alpha=\pi_\alpha\circ f$ is.`,
+  sections: [['Statement', R`<p>In the product topology, $f=(f_\alpha)$ is continuous iff each $f_\alpha$ is. (For two factors this is Theorem 18.4.) It fails for the box topology.</p>`],
+    ['Why', R`<p>Projections are continuous, so $f$ continuous gives each $f_\alpha$ continuous. Conversely the product topology has [[subbasis]] $\pi_\alpha^{-1}(U)$, and $f^{-1}(\pi_\alpha^{-1}(U))=f_\alpha^{-1}(U)$ is open.</p>`],
+    ['Use', R`<p>HW4 Q2: rearranging $(X_1\times X_2)\times X_3\to\prod X_\alpha$ is continuous because each coordinate is a composite of projections; the inverse likewise, so it is a [[homeomorphism]], without mentioning open sets. Method: [[m-product-maps]].</p>`]]},
+'products-and-subspaces': {title: 'Products of subspaces (Theorem 19.3)', kind: 'theorem', where: '§19', pre: ['product-vs-box', 'subspace-topology'],
+  lede: R`If $A_\alpha\subseteq X_\alpha$, then $\prod A_\alpha$ gets the same topology as a subspace of $\prod X_\alpha$ or as a product of subspaces.`,
+  sections: [['Statement', R`<p>For both the product and the box topology. For two factors this is Theorem 16.3; HW4 Q3 asks for the proof in general.</p>`],
+    ['Why', R`<p>Compare bases. A basis element of the subspace topology is $(\prod U_\alpha)\cap\prod A_\alpha=\prod(U_\alpha\cap A_\alpha)$, with $U_\alpha$ open and $U_\alpha=X_\alpha$ for all but finitely many $\alpha$; for those, $U_\alpha\cap A_\alpha=A_\alpha$. That is exactly a basis element of the product of the subspaces, and every such element arises this way. The bases are the same collection, so the topologies are equal ([[generated-topology]]).</p>`]]},
+'products-hausdorff-closure': {title: 'Hausdorff and closures in products (Theorems 19.4, 19.5)', kind: 'theorem', where: '§19', pre: ['product-vs-box', 'hausdorff', 'closure'],
+  lede: R`Products of Hausdorff spaces are Hausdorff, and $\overline{\prod A_\alpha}=\prod\overline{A_\alpha}$.`,
+  sections: [['Statements', R`<p>Both hold in the product and the box topology. In particular a product of closed sets is closed (MT Q5).</p>`],
+    ['Why Hausdorff', R`<p>Distinct points differ in some coordinate $\beta$; separate there by $U,V$ and use $\pi_\beta^{-1}(U),\pi_\beta^{-1}(V)$.</p>`]]},
+'product-convergence': {title: 'Convergence in a product', kind: 'theorem', where: '§19', pre: ['product-vs-box', 'convergence'],
+  lede: 'In the product topology a sequence converges exactly when every coordinate converges.',
+  sections: [['Statement', R`<p>$x_n\to x$ in $\prod X_\alpha$ (product topology) iff $\pi_\alpha(x_n)\to\pi_\alpha(x)$ for every $\alpha$ (Munkres §19, exercise).</p>`],
+    ['Why', R`<p>A basis element around $x$ restricts finitely many coordinates; each of those is eventually satisfied, and finitely many "eventually"s have a common tail.</p>`],
+    ['Use', R`<p>HW3 Q5 and HW4 Q1: each coordinate of $x(A_n)$ is eventually constant, so the sequence converges to the set of indices eventually in the $A_n$.</p>`]]},
+// ---------- §21 fill-in
+'first-countable': {title: 'Countable neighbourhood bases', kind: 'definition', where: '§21, §30', pre: ['basis', 'countable'],
+  lede: R`$x$ has a countable basis at $x$ if countably many neighbourhoods $U_1\supseteq U_2\supseteq\cdots$ fit inside every neighbourhood of $x$.`,
+  sections: [['Definition', R`<p>A countable collection of neighbourhoods of $x$ such that every neighbourhood of $x$ contains one of them. Every metric space has one: the [[ball|balls]] $B(x,1/n)$.</p>`],
+    ['Why it matters', R`<p>It makes sequences enough: the [[sequence-lemma]] needs it. Failing it is a quick proof that a space is not [[metrizable]] (HW4 Q4 with uncountable $J$).</p>`]]},
+'sequence-lemma': {title: 'The sequence lemma (Lemma 21.2)', kind: 'theorem', where: '§21', pre: ['closure', 'convergence'],
+  lede: R`If a sequence in $A$ converges to $x$, then $x\in\overline A$; the converse holds in metric spaces.`,
+  sections: [['Statement', R`<p>If $x_n\in A$ and $x_n\to x$ then $x\in\overline A$. If $X$ is metrizable (more generally has [[first-countable|countable bases at points]]) the converse holds: pick $x_n\in B(x,1/n)\cap A$.</p>`],
+    ['Theorem 21.3', R`<p>In the same setting, $f$ is continuous iff $x_n\to x$ implies $f(x_n)\to f(x)$.</p>`]]},
+'metrizable': {title: 'Metrizable spaces', kind: 'definition', where: '§20–21', pre: ['metric-topology'],
+  lede: 'A space whose topology comes from some metric.',
+  sections: [['Necessary conditions', R`<p>Metrizable spaces are [[hausdorff|Hausdorff]] and have [[first-countable|countable bases at points]]. So the [[ex-finite-complement|cofinite]] line, $\mathbb R^\omega$ in the box topology, and $\prod_{\mathbb R}\{0,1\}$ are not metrizable.</p>`],
+    ['Positive examples', R`<p>$\mathbb R^n$; countable products of metric spaces (Theorem 20.5 for $\mathbb R^\omega$).</p>`]]},
+'uniform-limit': {title: 'Uniform limits (Theorem 21.6)', kind: 'theorem', where: '§21', pre: ['epsilon-delta'],
+  lede: 'A uniform limit of continuous functions into a metric space is continuous.',
+  sections: [['Statement', R`<p>If $f_n:X\to Y$ are continuous, $Y$ is metric, and $f_n\to f$ uniformly, then $f$ is continuous.</p>`], ['Why', R`<p>The $\varepsilon/3$ argument: $d(f(x),f(y))\le d(f(x),f_N(x))+d(f_N(x),f_N(y))+d(f_N(y),f(y))$.</p>`]]},
+// ---------- Chapter 3
+'connected': {title: 'Connected space', kind: 'definition', where: '§23', pre: ['open-set'],
+  lede: 'A space that cannot be split into two disjoint nonempty open sets.',
+  sections: [['Definition', R`<p>A <b>separation</b> of $X$ is a pair of disjoint nonempty open sets $U,V$ with $U\cup V=X$. $X$ is <b>connected</b> if it has none; equivalently, the only sets both open and closed are $\varnothing$ and $X$.</p>`],
+    ['Theorems', R`<p>Continuous images of connected spaces are connected (23.5); a union of connected sets with a common point is connected (23.3); finite products of connected spaces are connected (23.6); if $A$ is connected and $A\subseteq B\subseteq\overline A$, then $B$ is connected (23.4).</p>`],
+    ['Examples', R`<p>Intervals in $\mathbb R$ ([[connected-reals]]). Not connected: $\mathbb Q$; [[ex-lower-limit|ℝ_ℓ]] ($[a,b)$ is open and closed).</p>`],
+    ['Method', R`<p>[[m-connected]].</p>`]]},
+'connected-reals': {title: 'Connected subsets of ℝ; intermediate values (§24)', kind: 'theorem', where: '§24', pre: ['connected'],
+  lede: R`Intervals are connected, and so a continuous real function on a connected space takes every intermediate value.`,
+  sections: [['Statements', R`<p>The connected subspaces of $\mathbb R$ are exactly the intervals and rays (Theorem 24.1 and its converse). <b>Intermediate value theorem (24.3):</b> if $f:X\to\mathbb R$ is continuous and $X$ connected, $f$ takes every value between any two of its values.</p>`],
+    ['Path connected', R`<p>$X$ is path connected if any two points are joined by a continuous path $[0,1]\to X$. Path connected implies connected; the topologist's sine curve is connected but not path connected.</p>`]]},
+'components': {title: 'Components and local connectedness (§25)', kind: 'definition', where: '§25', pre: ['connected'],
+  lede: 'The maximal connected pieces of a space; they partition it.',
+  sections: [['Definition', R`<p>Define $x\sim y$ if some connected subspace contains both; its classes are the <b>components</b>. They are connected, disjoint, and closed. Path components are defined with paths.</p>`],
+    ['Link', R`<p>An [[relation-equivalence|equivalence relation]] again: components form a [[partition]] of $X$.</p>`]]},
+'compact': {title: 'Compact space', kind: 'definition', where: '§26', pre: ['open-set'],
+  lede: 'Every open cover has a finite subcover.',
+  sections: [['Definition', R`<p>$X$ is <b>compact</b> if every collection of open sets whose union is $X$ has a finite subcollection whose union is $X$.</p>`],
+    ['Theorems', R`<p>A closed subspace of a compact space is compact (26.2). A compact subspace of a Hausdorff space is closed (26.3). The continuous image of a compact space is compact (26.5). A continuous bijection from a compact space to a Hausdorff space is a [[homeomorphism]] (26.6). Finite products of compact spaces are compact (26.7, via the tube lemma).</p>`],
+    ['Connections', R`<p>26.6 finishes [[gluing-examples|the circle as a quotient of an interval]]. Compare 26.3 with [[t1]]: in a Hausdorff space compact sets behave like points.</p>`],
+    ['Method', R`<p>[[m-compact]].</p>`]]},
+'compact-reals': {title: 'Compact subsets of ℝⁿ; extreme values (§27)', kind: 'theorem', where: '§27', pre: ['compact', 'metric'],
+  lede: R`In $\mathbb R^n$ compact means closed and bounded, and continuous real functions on compact spaces attain a maximum and a minimum.`,
+  sections: [['Statements', R`<p>$[a,b]$ is compact (27.1). <b>Heine–Borel (27.3):</b> $A\subseteq\mathbb R^n$ is compact iff closed and bounded. <b>Extreme value theorem (27.4).</b> <b>Lebesgue number lemma (27.5)</b> and <b>uniform continuity (27.6)</b> for maps out of compact metric spaces.</p>`]]},
+'limit-point-compact': {title: 'Limit point and sequential compactness (§28)', kind: 'definition', where: '§28', pre: ['compact', 'limit-point'],
+  lede: 'Every infinite set has a limit point; every sequence has a convergent subsequence. In metric spaces both equal compactness.',
+  sections: [['Statements', R`<p>Compact implies limit point compact (28.1). For metrizable spaces, compact, limit point compact and sequentially compact are equivalent (28.2).</p>`]]},
+'local-compact': {title: 'Local compactness and one-point compactification (§29)', kind: 'definition', where: '§29', pre: ['compact', 'hausdorff'],
+  lede: R`Every point has a compact set containing a neighbourhood; such Hausdorff spaces embed in a compact space by adding one point.`,
+  sections: [['Example', R`<p>$\mathbb R$ is locally compact; its one-point compactification is the circle. $\mathbb Q$ is not locally compact.</p>`]]},
+'m-connected': {title: 'Show a space is (not) connected', kind: 'method', where: '§23–24', pre: ['connected'],
+  lede: 'Not connected: exhibit a separation. Connected: assume a separation and reach a contradiction, or build the space from connected pieces.',
+  steps: [['To disprove: find disjoint nonempty open $U,V$ covering $X$.', R`E.g. $\mathbb Q=(\mathbb Q\cap(-\infty,\sqrt2))\cup(\mathbb Q\cap(\sqrt2,\infty))$.`], ['To prove: suppose $U,V$ separate $X$ and contradict something known to be connected.', 'A connected subspace lies entirely in $U$ or in $V$ (Lemma 23.2).'], ['Or assemble it: continuous images, unions through a common point, closures, finite products.', R`Theorems 23.3–23.6; [[connected]].`]],
+  sections: []},
+'m-compact': {title: 'Show a space is (not) compact', kind: 'method', where: '§26–27', pre: ['compact'],
+  lede: 'Not compact: an open cover with no finite subcover. Compact: closed in a compact space, a continuous image, a product, or closed and bounded in ℝⁿ.',
+  steps: [['To disprove: give an open cover with no finite subcover.', R`$(0,1)=\bigcup(\tfrac1n,1)$.`], ['To prove directly: take any open cover and extract finitely many sets.', 'Often via a point or a compact piece that needs only one set.'], ['Or reduce: closed subset of compact; image of compact; finite product; Heine–Borel.', R`[[compact]], [[compact-reals]].`]],
+  sections: []},
+'m-product-maps': {title: 'Work with maps into products', kind: 'method', where: '§19', pre: ['maps-into-products'],
+  lede: 'Check coordinates instead of open sets.',
+  steps: [[R`Write the map as $f=(f_\alpha)$ and identify each coordinate as a composite of known continuous maps.`, R`[[maps-into-products|Theorem 19.6]].`], [R`For a homeomorphism, do the same for the inverse.`, R`[[homeomorphism]].`], ['For sequences, check coordinatewise convergence.', R`[[product-convergence]].`]],
+  sections: [['Where it appears', R`<p>HW4 Q2, HW3 Q1.</p>`]]},
+// ---------- Homework 4
+'hw4-q1': PB('HW4 Q1 · Decreasing sets in ∏{0,1}', 'Homework 4 · §19', R`If $A_1\supseteq A_2\supseteq\cdots$, then $x(A_n)$ converges; find the limit.`, ['product-convergence', 'indexed-products'], ['m-product-maps'], R`<p>Coordinate $j$ is $1$ while $j\in A_n$ and $0$ once it leaves, so it is eventually constant. The limit is $x(\bigcap_n A_n)$.</p>`),
+'hw4-q2': PB('HW4 Q2 · Regrouping a triple product', 'Homework 4 · §19', R`$((x_1,x_2),x_3)\mapsto(x_1,x_2,x_3)$ is continuous and a homeomorphism.`, ['maps-into-products', 'homeomorphism'], ['m-product-maps'], R`<p>Each coordinate is a composite of projections, so continuous by Theorem 19.6; the inverse $(x_\alpha)\mapsto((x_1,x_2),x_3)$ has continuous coordinates by Theorem 18.4 twice. No open sets needed.</p>`),
+'hw4-q3': PB('HW4 Q3 · Subspace of a product = product of subspaces', 'Homework 4 · §19', R`The two topologies on $\prod A_\alpha$ agree.`, ['products-and-subspaces', 'set-equality'], ['m-compare', 'm-set-equality'], R`<p>Their bases are the same collection: $(\prod U_\alpha)\cap\prod A_\alpha=\prod(U_\alpha\cap A_\alpha)$, with all but finitely many $U_\alpha=X_\alpha$.</p>`),
+'hw4-q4': PB('HW4 Q4 · Neighbourhoods of 0 in ∏{0,1}', 'Homework 4 · §19', R`(a) Every neighbourhood of $z=(0)$ contains a finite intersection $\bigcap_{j\in J_V}U_j$. (b) A countable decreasing neighbourhood base at $z$ forces $J$ countable.`, ['product-vs-box', 'first-countable', 'countable'], ['m-open'], R`<p>(a) A basis element around $z$ restricts finitely many coordinates, each to $\{0\}$. (b) Take $J_n$ for $U_n$. If $j\notin\bigcup J_n$, the point with a single $1$ at $j$ lies in every $\bigcap_{J_n}U_i\subseteq U_n$, hence in $\bigcap U_n=\{z\}$, a contradiction. So $J=\bigcup J_n$, a countable union of finite sets.</p>`)
+});
+// connections added to existing articles
+A['saturated'].sections.push(['Connections', R`<p>The quotient analogue of the subspace move: a subspace intersects open sets with $Y$; a quotient keeps only open sets that are unions of whole classes. See [[defining-by-maps]].</p>`]);
+A['continuous'].sections.push(['Connections', R`<p>Preimages are the common thread of the course: the subspace, product and quotient topologies are each defined by which maps should be continuous ([[defining-by-maps]]).</p>`]);
+A['closed-set'].sections.push(['Connections', R`<p>Closed is to [[limit-point|limit points]] what open is to "room around every point". Under [[continuous]] maps, preimages of closed sets are closed; in a [[compact]] Hausdorff setting, images of closed sets are closed too.</p>`]);
+A['hausdorff'].sections.push(['Connections', R`<p>Hausdorff makes limits unique, makes points closed, makes compact sets closed ([[compact|26.3]]), and is what quotients can destroy ([[crushing-a-set]]).</p>`]);
+A['quotient-topology'].sections.push(['Connections', R`<p>The finest topology making $p$ continuous, as the subspace and product topologies are the coarsest making their maps continuous: [[defining-by-maps]].</p>`]);
+A['product-vs-box'].sections.push(['Connections', R`<p>The product topology is the coarsest making all projections continuous ([[defining-by-maps]]); that is why [[maps-into-products]] and [[product-convergence]] work for it and fail for the box topology.</p>`]);
+A['homeomorphism'].sections.push(['Connections', R`<p>Checking the inverse is often the hard part; [[compact|Theorem 26.6]] removes it when the domain is compact and the target Hausdorff.</p>`]);
+
+// ---------- the book, in order
+BOOK = [
+  ['Chapter 1 · Set Theory and Logic', [
+    ['§1 · Fundamental concepts', ['set-equality', 'de-morgan', 'm-set-equality']],
+    ['§2 · Functions', ['image-preimage', 'functions']],
+    ['§3 · Relations', ['relation-equivalence', 'equivalence-class', 'partition']],
+    ['§5 · Cartesian products', ['indexed-products']],
+    ['§7 · Countable and uncountable sets', ['countable']]]],
+  ['Chapter 2 · Topological Spaces and Continuous Functions', [
+    ['§12 · Topological spaces', ['topology', 'open-set', 'standard-topologies', 'finer-coarser', 'm-topology', 'm-finite', 'hw1-q1']],
+    ['§13 · Basis for a topology', ['basis', 'generated-topology', 'lemma-13-3', 'subbasis', 'm-open', 'm-compare', 'hw1-q2', 'hw1-q3']],
+    ['§14 · The order topology', ['order-topology']],
+    ['§15 · The product topology on X × Y', ['product-topology', 'projections', 'hw2-q1', 'hw2-q2']],
+    ['§16 · The subspace topology', ['subspace-topology', 'hw1-q4', 'hw1-q5', 'hw1-q6', 'mt-q1']],
+    ['§17 · Closed sets and limit points', ['closed-set', 'closure', 'interior', 'closure-test', 'limit-point', 'closure-limit-points', 'dense', 'hausdorff', 't1', 'convergence', 'm-closed', 'm-closure', 'm-hausdorff', 'm-true-false', 'hw2-q3', 'hw2-q4', 'hw2-q5', 'hw2-q6', 'mt-q2', 'mt-q3']],
+    ['§18 · Continuous functions', ['continuous', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'embedding', 'open-map', 'm-continuous', 'm-open-map', 'hw3-q1', 'hw3-q2', 'hw3-q3', 'hw3-q4', 'mt-q4']],
+    ['§19 · The product topology', ['product-vs-box', 'maps-into-products', 'products-and-subspaces', 'products-hausdorff-closure', 'product-convergence', 'm-product-maps', 'hw3-q5', 'hw3-q6', 'mt-q5', 'hw4-q1', 'hw4-q2', 'hw4-q3', 'hw4-q4']],
+    ['§20 · The metric topology', ['metric', 'ball', 'metric-topology', 'metric-hausdorff', 'mt-q6']],
+    ['§21 · The metric topology (continued)', ['epsilon-delta', 'first-countable', 'sequence-lemma', 'metrizable', 'uniform-limit']],
+    ['§22 · The quotient topology', ['quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples', 'm-quotient-map', 'm-not-quotient', 'm-quotient', 'hw6-q1', 'hw6-q2', 'hw6-q3', 'hw6-q4', 'hw6-q5', 'hw7-q1', 'hw7-q2', 'hw7-q3', 'hw7-q4', 'hw7-q5', 'hw7-q6']],
+    ['Across the chapter', ['defining-by-maps', 'm-counterexample']]]],
+  ['Chapter 3 · Connectedness and Compactness', [
+    ['§23 · Connected spaces', ['connected', 'm-connected']],
+    ['§24 · Connected subspaces of the real line', ['connected-reals']],
+    ['§25 · Components and local connectedness', ['components']],
+    ['§26 · Compact spaces', ['compact', 'm-compact']],
+    ['§27 · Compact subspaces of the real line', ['compact-reals']],
+    ['§28 · Limit point compactness', ['limit-point-compact']],
+    ['§29 · Local compactness', ['local-compact']]]],
+  ['Later in the course (Ch. 9, 12, 13)', [
+    ['Ch. 9 · The fundamental group', []], ['Ch. 12 · Classification of surfaces', []], ['Ch. 13 · Covering spaces', []]]]
+];
+PROBSETS = [['Homework 1', ['hw1-q1', 'hw1-q2', 'hw1-q3', 'hw1-q4', 'hw1-q5', 'hw1-q6']], ['Homework 2', ['hw2-q1', 'hw2-q2', 'hw2-q3', 'hw2-q4', 'hw2-q5', 'hw2-q6']], ['Homework 3', ['hw3-q1', 'hw3-q2', 'hw3-q3', 'hw3-q4', 'hw3-q5', 'hw3-q6']], ['Midterm 1 practice', ['mt-q1', 'mt-q2', 'mt-q3', 'mt-q4', 'mt-q5', 'mt-q6']], ['Homework 4', ['hw4-q1', 'hw4-q2', 'hw4-q3', 'hw4-q4']], ['Homework 6 (file header "Homework 5")', ['hw6-q1', 'hw6-q2', 'hw6-q3', 'hw6-q4', 'hw6-q5']], ['Homework 7', ['hw7-q1', 'hw7-q2', 'hw7-q3', 'hw7-q4', 'hw7-q5', 'hw7-q6']]];
+METHODS = ['m-set-equality', 'm-topology', 'm-finite', 'm-open', 'm-compare', 'm-closed', 'm-closure', 'm-hausdorff', 'm-true-false', 'm-continuous', 'm-open-map', 'm-product-maps', 'm-quotient-map', 'm-not-quotient', 'm-quotient', 'm-counterexample', 'm-connected', 'm-compact'];
+
 </script>
 <script>
 // ===== The encyclopedia: home page, articles, link previews, a trail of where you have been, search.
 var KIND = {definition: 'Definition', theorem: 'Theorem', method: 'Method', example: 'Example', idea: 'Idea', worked: 'Worked problem', problem: 'Problem'};
 // reading order follows the book; problems step through their own set
-ORDER = []; BOOK.forEach(function(c){ c[1].forEach(function(sx){ sx[1].forEach(function(id){ if (ORDER.indexOf(id) < 0) ORDER.push(id); }); }); });
+ORDER = []; var SECOF = {}; BOOK.forEach(function(c){ c[1].forEach(function(sx){ sx[1].forEach(function(id){ SECOF[id] = sx[0]; if (A[id].kind !== 'problem' && ORDER.indexOf(id) < 0) ORDER.push(id); }); }); });
 var USEDIN = {}; Object.keys(A).forEach(function(id){ (A[id].method || []).forEach(function(m){ (USEDIN[m] = USEDIN[m] || []).push(id); }); });
 var SETOF = {}; PROBSETS.forEach(function(ps){ ps[1].forEach(function(id){ SETOF[id] = ps[1]; }); });
 var BACK = {}, MENTION = {};
@@ -542,23 +699,26 @@ function chip(id){ var a = A[id]; return a ? '<a class="chip" href="#a/' + id + 
 var TRAIL = []; try { TRAIL = JSON.parse(sessionStorage.getItem('tg-trail') || '[]'); } catch(e){}
 function home(){
   var recent = []; try { recent = JSON.parse(localStorage.getItem('tg-recent') || '[]'); } catch(e){}
-  var h = '<h1>Topology Reference Guide</h1><p class="intro">An encyclopedia of the course, arranged by the chapters of Munkres: one article per concept, the methods the homework and tests ask for, and every assigned problem linked to both. Each article opens to a one-line summary and its definition; everything else unfolds when you want it. Underlined terms are links: tap one for a preview, then read on or stay where you are. At the end of each article you will find what it depends on and what builds on it, and the next article in Munkres order.</p>';
+  var h = '<h1>Topology Reference Guide</h1><p class="intro">An encyclopedia of the course in the order of Munkres. Each section holds its concepts, the methods its problems call for, and the assigned problems themselves, all linked to each other. Each article opens to a one-line summary and its definition; everything else unfolds when you want it. Underlined terms are links: tap one for a preview, then read on or stay where you are. At the end of each article you will find what it depends on and what builds on it, and the next article in the book.</p>';
   h += '<div class="start"><a class="chip" href="#a/image-preimage">Start at Chapter 1</a><a class="chip" href="#a/quotient-topology">Now: §22 quotients</a><a class="chip" href="#a/hw7-q2">Homework 7</a><a class="chip" href="tabs/">Quick-reference tabs</a></div>';
   if (recent.length) h += '<div class="topic"><h2>Recently read</h2><div class="chips">' + recent.slice(0, 8).map(chip).join('') + '</div></div>';
   function row(id){ var a = A[id]; return '<a href="#a/' + id + '"><b>' + a.title + '</b><span class="kind">' + KIND[a.kind] + '</span><i>' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }
-  BOOK.forEach(function(ch){ h += '<h2 class="chap">' + ch[0] + '</h2>'; ch[1].forEach(function(sx){ h += '<details class="topic"' + (sx[1].length ? '' : ' open') + '><summary>' + sx[0] + '<span class="cnt">' + (sx[1].length ? sx[1].length + ' articles' : 'coming') + '</span></summary><div class="tlist">' + (sx[1].length ? sx[1].map(row).join('') : '<p class="foot">Added as the course reaches it.</p>') + '</div></details>'; }); });
-  h += '<h2 class="chap">Methods · how the homework and tests are solved</h2><div class="tlist">' + METHODS.map(function(id){ var a = A[id], n = (USEDIN[id] || []).length; return '<a href="#a/' + id + '"><b>' + a.title + '</b>' + (n ? '<span class="kind">' + n + ' problem' + (n > 1 ? 's' : '') + '</span>' : '') + '<i>' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }).join('') + '</div>';
-  h += '<h2 class="chap">Problems · homework and midterm</h2>'; PROBSETS.forEach(function(ps){ h += '<details class="topic"><summary>' + ps[0] + '<span class="cnt">' + ps[1].length + '</span></summary><div class="tlist">' + ps[1].map(row).join('') + '</div></details>'; });
-  h += '<p class="foot">Homework 4 is not here yet: send the PDF and it gets added.</p>';
-  h += '<h2 class="chap">Example spaces</h2><div class="tlist">' + EXAMPLES.map(row).join('') + '</div>';
+  function group(ids){ var g = {c: [], m: [], p: []}; ids.forEach(function(id){ var k = A[id].kind; (k === 'method' ? g.m : k === 'problem' ? g.p : g.c).push(id); });
+    return (g.c.length ? '<div class="glab">Concepts</div>' + g.c.map(row).join('') : '') + (g.m.length ? '<div class="glab">Methods</div>' + g.m.map(row).join('') : '') + (g.p.length ? '<div class="glab">Problems</div>' + g.p.map(row).join('') : ''); }
+  BOOK.forEach(function(ch){ h += '<h2 class="chap">' + ch[0] + '</h2>'; ch[1].forEach(function(sx){ var n = sx[1].length, np = sx[1].filter(function(id){ return A[id].kind === 'problem'; }).length;
+    h += '<details class="topic"><summary>' + sx[0] + '<span class="cnt">' + (n ? (n - np) + (np ? ' · ' + np + ' problems' : '') : 'coming') + '</span></summary><div class="tlist">' + (n ? group(sx[1]) : '<p class="foot">Added as the course reaches it.</p>') + '</div></details>'; }); });
+  h += '<h2 class="chap">Indexes</h2>';
+  h += '<details class="topic"><summary>All methods<span class="cnt">' + METHODS.length + '</span></summary><div class="tlist">' + METHODS.map(function(id){ var a = A[id], n = (USEDIN[id] || []).length; return '<a href="#a/' + id + '"><b>' + a.title + '</b>' + (n ? '<span class="kind">' + n + ' problem' + (n > 1 ? 's' : '') + '</span>' : '') + '<i>' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }).join('') + '</div></details>';
+  PROBSETS.forEach(function(ps){ h += '<details class="topic"><summary>' + ps[0] + '<span class="cnt">' + ps[1].length + '</span></summary><div class="tlist">' + ps[1].map(row).join('') + '</div></details>'; });
+  h += '<details class="topic"><summary>Example spaces<span class="cnt">' + EXAMPLES.length + '</span></summary><div class="tlist">' + EXAMPLES.map(row).join('') + '</div></details>';
   h += '<p class="foot">Theorem numbers follow Munkres, <em>Topology</em>, 2nd ed.; check them against your copy. Earlier notes and quiz: <a href="classic/">classic</a>.</p>';
   return h;
 }
 function article(id){
   var a = A[id]; if (!a) return '<p>No article called “' + id + '”.</p>';
-  TRAIL = TRAIL.filter(function(x){ return x !== id; }); TRAIL.push(id); TRAIL = TRAIL.slice(-4); try { sessionStorage.setItem('tg-trail', JSON.stringify(TRAIL)); var r = JSON.parse(localStorage.getItem('tg-recent') || '[]').filter(function(x){ return x !== id; }); r.unshift(id); localStorage.setItem('tg-recent', JSON.stringify(r.slice(0, 12))); } catch(e){}
+  TRAIL = TRAIL.filter(function(x){ return x !== id; }); TRAIL.push(id); TRAIL = TRAIL.slice(-3); try { sessionStorage.setItem('tg-trail', JSON.stringify(TRAIL)); var r = JSON.parse(localStorage.getItem('tg-recent') || '[]').filter(function(x){ return x !== id; }); r.unshift(id); localStorage.setItem('tg-recent', JSON.stringify(r.slice(0, 12))); } catch(e){}
   var h = '<div class="trail"><a href="#">Home</a>' + TRAIL.slice(0, -1).map(function(t){ return '<span class="sep">›</span><a href="#a/' + t + '">' + A[t].title + '</a>'; }).join('') + '<span class="sep">›</span>' + a.title + '</div>';
-  h += '<div class="meta">' + KIND[a.kind] + ' · ' + a.where + '</div><h1>' + a.title + '</h1><div class="lede">' + wiki(a.lede) + '</div>';
+  h += '<div class="meta">' + KIND[a.kind] + ' · ' + (SECOF[id] || a.where) + '</div><h1>' + a.title + '</h1><div class="lede">' + wiki(a.lede) + '</div>';
   if (a.steps) h += '<details class="sec" open><summary>Steps</summary><div class="secb"><ol class="steps">' + a.steps.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + wiki(s[0]) + '</summary><div class="why"><b>Why:</b> ' + wiki(s[1]) + '</div></details>' : wiki(s[0])) + '</li>'; }).join('') + '</ol></div></details>';
   (a.sections || []).forEach(function(s, i){ var body = s[1];
     if (s[0] === 'Concepts and method') body = '<p><b>Concepts:</b></p><div class="chips">' + (a.pre || []).map(chip).join('') + '</div><p style="margin-top:10px"><b>Method:</b></p><div class="chips">' + (a.method || []).map(chip).join('') + '</div>';
