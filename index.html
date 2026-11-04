@@ -101,15 +101,41 @@ details.topic .tlist{padding-left:10px;}
 .figmsg{font-size:.92em;color:var(--text2);min-height:3em;}
 .katex{font-size:1.04em;}
 .katex-display{overflow-x:auto;overflow-y:hidden;}
+#fp{position:fixed;left:0;right:0;top:56px;bottom:0;z-index:45;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;padding:14px max(16px, calc((100vw - 760px)/2)) calc(60px + env(safe-area-inset-bottom));}
+#fp.on{display:block;} body.fpon{overflow:hidden;}
+.fhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.seg{display:inline-flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden;}
+.seg button{background:var(--card);color:var(--text2);border:0;padding:8px 16px;font:14px -apple-system,system-ui,sans-serif;cursor:pointer;}
+.seg button.on{background:var(--text);color:var(--bg);}
+#fq{width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--card);color:var(--text);font:16px -apple-system,system-ui,sans-serif;}
+.fk{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;}
+.fk button{border:1px solid var(--border2);border-radius:999px;padding:5px 12px;font:13px -apple-system,system-ui,sans-serif;background:var(--card);color:var(--muted);cursor:pointer;}
+.fk button.on{background:var(--text);color:var(--bg);border-color:var(--text);}
+.fsel{display:flex;gap:10px;flex-wrap:wrap;}
+.fsel label{flex:1;min-width:150px;display:flex;flex-direction:column;font:600 11px -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.fsel select{margin-top:5px;padding:8px 10px;border:1px solid var(--border2);border-radius:8px;background:var(--card);color:var(--text);font:15px -apple-system,system-ui,sans-serif;letter-spacing:0;text-transform:none;}
+.fcount{font:12px -apple-system,system-ui,sans-serif;color:var(--muted);margin:16px 0 2px;}
+.fnote{color:var(--muted);font-size:.92rem;margin-bottom:12px;}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:8px;}
+.sgrid button{border:1px solid var(--border2);background:var(--card);color:var(--text);border-radius:10px;padding:10px 6px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;min-height:78px;}
+.sgrid button.on{border-color:var(--text);background:var(--card2);}
+.sm{font-size:1.15rem;} .sn{font:11px/1.3 -apple-system,system-ui,sans-serif;color:var(--muted);text-align:center;}
+.scard{border:1px solid var(--border2);border-radius:12px;padding:14px 16px 16px;margin:0 0 14px;background:var(--card);}
+.sbig{font-size:1.7rem;margin:2px 0 4px;}
+.scard h2{font-weight:normal;font-size:1.3rem;margin-bottom:6px;} .scard p{color:var(--text2);}
+.scard h3{font:600 12px -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px;}
+#sugg a.sall{color:var(--muted);font:13px -apple-system,system-ui,sans-serif;}
 </style>
 </head>
 <body>
 <div class="top"><div class="toprow">
   <a class="logo" href="#" aria-label="Home">𝒯</a>
   <div class="search"><input id="q" type="search" placeholder="Search the guide" autocomplete="off" aria-label="Search"><div id="sugg"></div></div>
+  <button class="tb" id="findBtn" aria-label="Browse and symbols">Browse</button>
   <button class="tb" id="themeBtn" aria-label="Light or dark">Light</button>
 </div></div>
 <div class="wrap" id="view"></div>
+<div id="fp" aria-label="Browse and symbols"></div>
 <div id="pv" role="dialog" aria-modal="false"><div class="pm"></div><div class="pt"></div><div class="pl"></div><div class="pb"><a class="pgo" href="#">Read article →</a><button class="px">Close</button></div></div>
 <script>
 // ===== The articles. Each: title, kind, where (Munkres §), lede (one sentence), sections [[label, html], ...], pre (prerequisite ids).
@@ -1273,10 +1299,99 @@ document.addEventListener('click', function(e){
 var IDX = Object.keys(A).map(function(id){ var a = A[id]; return {id: id, t: a.title.toLowerCase(), l: plain(a.lede).toLowerCase(), b: plain(JSON.stringify(a.sections || []) + JSON.stringify(a.steps || [])).toLowerCase()}; });
 function search(q){ q = q.trim().toLowerCase(); if (!q) return []; return IDX.map(function(e){ var s = e.t.indexOf(q) === 0 ? 0 : e.t.indexOf(q) >= 0 ? 1 : e.l.indexOf(q) >= 0 ? 2 : e.b.indexOf(q) >= 0 ? 3 : 9; return [s, e.id]; }).filter(function(x){ return x[0] < 9; }).sort(function(a, b){ return a[0] - b[0]; }).slice(0, 8).map(function(x){ return x[1]; }); }
 var q = document.getElementById('q'), sg = document.getElementById('sugg');
-q.addEventListener('input', function(){ var r = search(q.value); sg.innerHTML = r.map(function(id){ return '<a href="#a/' + id + '"><span class="sk">' + KIND[A[id].kind] + '</span>' + A[id].title + '</a>'; }).join('') || (q.value ? '<a href="#"><span class="sk">no match</span>Try another word</a>' : ''); sg.classList.toggle('on', !!q.value); });
+q.addEventListener('input', function(){ var r = search(q.value); sg.innerHTML = r.map(function(id){ return '<a href="#a/' + id + '"><span class="sk">' + KIND[A[id].kind] + '</span>' + A[id].title + '</a>'; }).join('') + (q.value ? '<a href="#" class="sall" data-all="1">All results, filters and sorting ›</a>' : ''); if (q.value && !r.length) sg.innerHTML = '<a href="#"><span class="sk">no match</span>Try another word, or Browse › Symbols</a>' + sg.innerHTML; sg.classList.toggle('on', !!q.value); });
 q.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ var r = search(q.value); if (r.length){ location.hash = 'a/' + r[0]; q.value = ''; sg.classList.remove('on'); q.blur(); } } if (e.key === 'Escape'){ q.value = ''; sg.classList.remove('on'); } });
-sg.addEventListener('click', function(){ setTimeout(function(){ q.value = ''; sg.classList.remove('on'); }, 0); });
+sg.addEventListener('click', function(e){ var al = e.target.closest('[data-all]'); if (al){ e.preventDefault(); var v = q.value; q.value = ''; sg.classList.remove('on'); q.blur(); openFind('browse', v); return; } setTimeout(function(){ q.value = ''; sg.classList.remove('on'); }, 0); });
 document.addEventListener('click', function(e){ if (!e.target.closest('.search')) sg.classList.remove('on'); });
+// ===== Find: a browser with filters and sorting, and a notation finder that leads from a symbol to its concept.
+var BOOKPOS = {}; (function(){ var n = 0; BOOK.forEach(function(c){ c[1].forEach(function(sx){ sx[1].forEach(function(id){ if (!(id in BOOKPOS)) BOOKPOS[id] = n++; }); }); }); PROBSETS.forEach(function(ps){ ps[1].forEach(function(id){ if (!(id in BOOKPOS)) BOOKPOS[id] = n++; }); }); Object.keys(A).forEach(function(id){ if (!(id in BOOKPOS)) BOOKPOS[id] = n++; }); })();
+var KGROUP = {definition: 'c', idea: 'c', theorem: 't', method: 'm', example: 'e', worked: 'e', problem: 'p'};
+var KGLAB = [['c', 'Concepts'], ['t', 'Theorems'], ['m', 'Methods'], ['e', 'Examples'], ['p', 'Problems']];
+var RAW = {}; Object.keys(A).forEach(function(id){ var a = A[id]; RAW[id] = [a.title, a.lede].concat((a.sections || []).map(function(s){ return s[1]; }), (a.steps || []).map(function(s){ return s.join(' '); })).join(' '); });
+// each symbol: how it is written, what it is called, what it means, the article that defines it, and a pattern that finds it in the text
+var SYMS = [
+  ['\\mathcal T', 'Topology', 'A collection of subsets of $X$ (the open sets) containing $\\varnothing$ and $X$, closed under unions and finite intersections.', 'topology', /\\mathcal\s*\{?T\}?/],
+  ['\\mathcal B', 'Basis', 'A collection of basis elements: every open set is a union of them.', 'basis', /\\mathcal\s*\{?B\}?/],
+  ['\\mathcal S', 'Subbasis', 'A collection whose finite intersections form a basis.', 'subbasis', /\\mathcal\s*\{?S\}?/],
+  ['\\overline{A}', 'Closure of A', 'The smallest closed set containing $A$: $A$ together with its limit points.', 'closure', /\\overline|\\bar\s*\{/],
+  ['\\operatorname{Int}A', 'Interior of A', 'The largest open set inside $A$: the union of all open sets contained in $A$.', 'interior', /\\operatorname\{Int\}|\\mathrm\{Int\}|\binterior/i],
+  ["A'", 'Limit points of A', "The set of all limit points of $A$ (points every neighbourhood of which meets $A$ in a point other than itself).", 'limit-point', /[A-Z]'(?![a-z])/],
+  ['\\operatorname{Bd}A', 'Boundary of A', 'The closure of $A$ minus its interior: $\\overline{A} - \\operatorname{Int}A$.', 'interior', /\\partial|Bd\b|boundary/],
+  ['X - A', 'Complement', 'The points of $X$ not in $A$. A set is closed when its complement is open.', 'closed-set', /X\s*-\s*[A-Z]|\\setminus|complement/],
+  ['\\cup\\ \\cap', 'Union, intersection', 'Points in at least one set; points in every set. De Morgan swaps them under complements.', 'de-morgan', /\\bigcup|\\cup|\\bigcap|\\cap/],
+  ['\\subset', 'Subset', 'Every point of the first set is in the second. Equality of sets is shown by proving $\\subset$ both ways.', 'set-equality', /\\subset/],
+  ['f^{-1}(V)', 'Preimage', 'All points that $f$ sends into $V$. Continuity is stated with preimages.', 'image-preimage', /\^\s*\{-1\}/],
+  ['f(A)', 'Image', 'All values $f(a)$ for $a$ in $A$.', 'image-preimage', /f\(A\)|image/],
+  ['g\\circ f', 'Composition', 'Do $f$, then $g$. A composite of continuous maps is continuous.', 'continuous', /\\circ/],
+  ['\\cong', 'Homeomorphic', 'There is a continuous bijection with continuous inverse: the two spaces are topologically the same.', 'homeomorphism', /\\cong|homeomorphic/],
+  ['X\\times Y', 'Product', 'Ordered pairs; the product topology has the sets $U\\times V$ as a basis.', 'product-topology', /\\times/],
+  ['\\prod X_\\alpha', 'Indexed product', 'Product of a family of spaces; product versus box topology.', 'product-vs-box', /\\prod/],
+  ['\\pi_1,\\ \\pi_2', 'Projections', 'The maps $(x, y)\\mapsto x$ and $(x, y)\\mapsto y$.', 'projections', /\\pi_/],
+  ['\\mathbb R^\\omega', 'Countable product', 'Sequences of reals; the product and box topologies differ here.', 'product-vs-box', /\^\s*\\omega|\{0,\s*1\}\^/],
+  ['Y\\cap U', 'Subspace open set', 'The open sets of a subspace $Y$ are the sets $Y\\cap U$ with $U$ open in $X$.', 'subspace-topology', /Y\s*\\cap\s*U|U\s*\\cap\s*Y/],
+  ['\\sim', 'Equivalence relation', 'A relation that is reflexive, symmetric and transitive.', 'relation-equivalence', /\\sim/],
+  ['[x]', 'Equivalence class', 'All points equivalent to $x$; in a quotient it becomes one point.', 'equivalence-class', /\[x\]|\[A\]/],
+  ['X/{\\sim}', 'Quotient space', 'The set of classes, with $U$ open exactly when its preimage is open.', 'quotient-topology', /\/\s*\{?\\sim|X\s*\/\s*A|\/\(0,\s*1\)/],
+  ['p^{-1}(p(U))', 'Saturation', 'Everything glued to a point of $U$. $U$ is saturated when this equals $U$.', 'saturated', /p\^\s*\{-1\}\s*\(\s*p\s*\(|saturat/],
+  ['d(x,y)', 'Metric', 'The distance between $x$ and $y$.', 'metric', /d\(x,\s*y\)|\\rho/],
+  ['B_d(x,\\varepsilon)', 'Open ball', 'The points within distance $\\varepsilon$ of $x$.', 'ball', /B_\s*\{?d|B\(x/],
+  ['\\varepsilon,\\ \\delta', 'Epsilon and delta', 'The ε–δ form of continuity in metric spaces.', 'epsilon-delta', /\\varepsilon|\\delta/],
+  ['x_n\\to x', 'Convergence', 'Every neighbourhood of $x$ contains all but finitely many $x_n$.', 'convergence', /x_n|\\to\s*x/],
+  ['\\mathbb R_\\ell', 'Lower limit line', 'The real line with the basis $[a, b)$.', 'ex-lower-limit', /\\mathbb\s*\{?R\}?_\s*\{?\\ell|ℝ_ℓ/],
+  ['\\mathbb R_K', 'K-topology', 'The real line with basis $(a, b)$ and $(a, b) - K$, $K = \\{1/n\\}$.', 'ex-k-topology', /\\mathbb\s*\{?R\}?_\s*K|ℝ_K/],
+  ['T_1', 'T₁ space', 'Every one-point set is closed.', 't1', /T_1|T₁/],
+  ['\\mathbb Q,\\ \\mathbb Z', 'Countable sets', 'Sets that can be listed; the rationals and integers.', 'countable', /\\mathbb\s*\{?[QZ]\}?|countabl/]
+];
+var SYMUSE = SYMS.map(function(s){ return Object.keys(A).filter(function(id){ return s[4].test(RAW[id]); }).sort(function(x, y){ return BOOKPOS[x] - BOOKPOS[y]; }); });
+var FS = {tab: 'browse', kinds: {c: 1, t: 1, m: 1, e: 1, p: 1}, sec: '', sort: 'book', q: '', sym: -1};
+try { var _fs = JSON.parse(localStorage.getItem('tg-find') || 'null'); if (_fs){ FS.kinds = _fs.kinds || FS.kinds; FS.sec = _fs.sec || ''; FS.sort = _fs.sort || 'book'; FS.tab = _fs.tab || 'browse'; } } catch(e){}
+function fsSave(){ try { localStorage.setItem('tg-find', JSON.stringify({kinds: FS.kinds, sec: FS.sec, sort: FS.sort, tab: FS.tab})); } catch(e){} }
+function inSec(id){ if (!FS.sec) return true; if (FS.sec.indexOf('s:') === 0) return SECOF[id] === FS.sec.slice(2) || (!SECOF[id] && A[id].where === FS.sec.slice(2)); var ps = PROBSETS[+FS.sec.slice(2)]; return ps && ps[1].indexOf(id) >= 0; }
+function score(id, q){ var e = IDX.filter(function(x){ return x.id === id; })[0]; return e.t.indexOf(q) === 0 ? 0 : e.t.indexOf(q) >= 0 ? 1 : e.l.indexOf(q) >= 0 ? 2 : e.b.indexOf(q) >= 0 ? 3 : 9; }
+function findList(){
+  var q = FS.q.trim().toLowerCase(), recent = []; try { recent = JSON.parse(localStorage.getItem('tg-recent') || '[]'); } catch(e){}
+  var ids = Object.keys(A).filter(function(id){ return FS.kinds[KGROUP[A[id].kind]] && inSec(id) && (!q || score(id, q) < 9); });
+  var by = FS.sort === 'az' ? function(a, b){ return A[a].title.replace(/^[^A-Za-z0-9ℝ]+/, '').localeCompare(A[b].title.replace(/^[^A-Za-z0-9ℝ]+/, '')); }
+    : FS.sort === 'match' && q ? function(a, b){ return score(a, q) - score(b, q) || BOOKPOS[a] - BOOKPOS[b]; }
+    : FS.sort === 'recent' ? function(a, b){ var x = recent.indexOf(a), y = recent.indexOf(b); x = x < 0 ? 99 : x; y = y < 0 ? 99 : y; return x - y || BOOKPOS[a] - BOOKPOS[b]; }
+    : function(a, b){ return BOOKPOS[a] - BOOKPOS[b]; };
+  return ids.sort(by);
+}
+function findRow(id){ var a = A[id]; return '<a href="#a/' + id + '"><b>' + a.title + '</b><span class="kind">' + KIND[a.kind] + '</span><i>' + (SECOF[id] || a.where) + ' — ' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }
+function renderFind(){
+  var p = document.getElementById('fp'), h = '<div class="fhead"><div class="seg"><button data-tab="browse"' + (FS.tab === 'browse' ? ' class="on"' : '') + '>Browse</button><button data-tab="symbols"' + (FS.tab === 'symbols' ? ' class="on"' : '') + '>Symbols</button></div><button class="tb fdone">Done</button></div>';
+  if (FS.tab === 'browse'){
+    h += '<input id="fq" type="search" placeholder="Filter by words (optional)" autocomplete="off" value="' + FS.q.replace(/"/g, '&quot;') + '">';
+    h += '<div class="fk">' + KGLAB.map(function(k){ return '<button data-k="' + k[0] + '"' + (FS.kinds[k[0]] ? ' class="on"' : '') + '>' + k[1] + '</button>'; }).join('') + '</div>';
+    h += '<div class="fsel"><label>Section<select id="fsec"><option value="">All sections</option>' + BOOK.map(function(c){ return '<optgroup label="' + c[0].replace(/"/g, '') + '">' + c[1].filter(function(sx){ return sx[1].length; }).map(function(sx){ return '<option value="s:' + sx[0] + '"' + (FS.sec === 's:' + sx[0] ? ' selected' : '') + '>' + sx[0] + '</option>'; }).join('') + '</optgroup>'; }).join('')
+      + '<optgroup label="Problem sets">' + PROBSETS.map(function(ps, i){ return '<option value="p:' + i + '"' + (FS.sec === 'p:' + i ? ' selected' : '') + '>' + ps[0] + '</option>'; }).join('') + '</optgroup></select></label>';
+    h += '<label>Sort<select id="fsort">' + [['book', 'Book order'], ['az', 'A–Z'], ['match', 'Best match'], ['recent', 'Recently read']].map(function(o){ return '<option value="' + o[0] + '"' + (FS.sort === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></label></div>';
+    var L = findList(); h += '<div class="fcount">' + L.length + ' article' + (L.length === 1 ? '' : 's') + '</div><div class="tlist" id="flist">' + L.map(findRow).join('') + '</div>';
+  } else {
+    var card = '';
+    if (FS.sym >= 0){ var s = SYMS[FS.sym], used = SYMUSE[FS.sym].filter(function(id){ return id !== s[3]; }), con = used.filter(function(id){ return A[id].kind !== 'problem'; }), pr = used.filter(function(id){ return A[id].kind === 'problem'; });
+      card = '<div class="scard" id="scard"><div class="meta">Notation</div><div class="sbig">$' + s[0] + '$</div><h2>' + s[1] + '</h2><p>' + s[2] + '</p><h3>Defined in</h3><div class="chips">' + chip(s[3]) + '</div>'
+        + (con.length ? '<h3>Also used in</h3><div class="chips">' + con.map(chip).join('') + '</div>' : '') + (pr.length ? '<h3>Problems that use it</h3><div class="chips">' + pr.map(chip).join('') + '</div>' : '') + '</div>'; }
+    h += '<p class="fnote">Tap a symbol to see what it means, where it is defined, and the pages that use it.</p>' + card + '<div class="sgrid">' + SYMS.map(function(s, i){ return '<button data-s="' + i + '"' + (FS.sym === i ? ' class="on"' : '') + '><span class="sm">$' + s[0] + '$</span><span class="sn">' + s[1] + '</span></button>'; }).join('') + '</div>';
+  }
+  p.innerHTML = h; math(p);
+  var fq = document.getElementById('fq'); if (fq) fq.addEventListener('input', function(){ FS.q = fq.value; var L = findList(); document.getElementById('flist').innerHTML = L.map(findRow).join(''); p.querySelector('.fcount').textContent = L.length + ' article' + (L.length === 1 ? '' : 's'); math(document.getElementById('flist')); });
+  var fsec = document.getElementById('fsec'); if (fsec) fsec.addEventListener('change', function(){ FS.sec = fsec.value; fsSave(); renderFind(); });
+  var fso = document.getElementById('fsort'); if (fso) fso.addEventListener('change', function(){ FS.sort = fso.value; fsSave(); renderFind(); });
+}
+function openFind(tab, qv){ var fp = document.getElementById('fp'); fp.style.top = document.querySelector('.top').offsetHeight + 'px'; if (tab) FS.tab = tab; if (qv != null){ FS.q = qv; if (qv) FS.sort = 'match'; } renderFind(); document.getElementById('fp').classList.add('on'); document.body.classList.add('fpon'); }
+function closeFind(){ document.getElementById('fp').classList.remove('on'); document.body.classList.remove('fpon'); }
+document.getElementById('findBtn').addEventListener('click', function(){ if (document.getElementById('fp').classList.contains('on')) closeFind(); else openFind(); });
+document.getElementById('fp').addEventListener('click', function(e){
+  var t = e.target.closest('button');
+  if (e.target.closest('a[href^="#a/"]')){ closeFind(); return; }
+  if (!t) return;
+  if (t.classList.contains('fdone')){ closeFind(); return; }
+  if (t.dataset.tab){ FS.tab = t.dataset.tab; fsSave(); renderFind(); return; }
+  if (t.dataset.k){ FS.kinds[t.dataset.k] = FS.kinds[t.dataset.k] ? 0 : 1; if (!KGLAB.some(function(k){ return FS.kinds[k[0]]; })) FS.kinds[t.dataset.k] = 1; fsSave(); renderFind(); return; }
+  if (t.dataset.s){ var i = +t.dataset.s; FS.sym = FS.sym === i ? -1 : i; renderFind(); document.getElementById('fp').scrollTo({top: 0, behavior: 'smooth'}); return; }
+});
+window.addEventListener('hashchange', closeFind);
 // theme
 var tb = document.getElementById('themeBtn'); function setTb(){ tb.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? 'Dark' : 'Light'; } setTb();
 tb.addEventListener('click', function(){ var l = document.documentElement.getAttribute('data-theme') === 'light'; if (l) document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', 'light'); try { localStorage.setItem('tg-theme', l ? 'dark' : 'light'); } catch(e){} setTb(); if (document.getElementById('qfig')) quotFig(); });
