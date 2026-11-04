@@ -1048,6 +1048,112 @@ $$\{-1,0,1\},\quad\{0,1\},\quad\{-1,0\},\quad\{0\},\quad\varnothing.$$
 <p>It also shows that a [[quotient-map]] need not be closed: $p$ is a quotient map by construction, open, and not closed.</p>`]
 ];
 
+// ===== Homework 7, complete guides: problem, what it builds on, terms, breakdown, clean solution (folded), why it makes sense.
+var PDF = '<p class="foot">Word for word from the assignment PDF.</p>';
+function hub(id, parts){ A[id].sections = [['The problem', VERBATIM[id] + PDF]].concat(parts); }
+
+// ---------- Q1
+hub('hw7-q1', [
+ ['Concepts and method', ''],
+ ['Terms in the problem', R`<p><b>Equivalence relation and classes.</b> A relation that is reflexive, symmetric and transitive; the class $[x]$ is everything related to $x$ ([[relation-equivalence]], [[equivalence-class]]).</p>
+<p><b>$X/{\sim_A}$.</b> The set of classes, with the [[quotient-topology]]: $U\subseteq X/{\sim_A}$ is open iff $\pi^{-1}(U)$ is open in $X$, where $\pi(z)=[z]$.</p>
+<p><b>Metric topology.</b> Open sets are unions of balls $B(x,r)=\{z: d(x,z)<r\}$ ([[metric-topology]]).</p>
+<p><b>$A$ closed.</b> $X\setminus A$ is open, so every $x\notin A$ has a ball around it missing $A$ ([[closed-set]]).</p>
+<p><b>Hausdorff.</b> Distinct points have disjoint open neighbourhoods ([[hausdorff]]).</p>`],
+ ['Breakdown', steps([
+  [R`<b>(a) Find the class of a point of $A$.</b> For $a\in A$: any $y\in A$ satisfies "both in $A$", so $y\sim_A a$; any $y\notin A$ is neither equal to $a$ nor in $A$. So $[a]=A$.`, R`Read the condition literally: one of its two clauses must hold.`],
+  [R`<b>(a) Find the class of a point outside $A$.</b> For $x\notin A$ the "both in $A$" clause never holds, so only $y=x$ works: $[x]=\{x\}$.`, ''],
+  [R`<b>(b) Record the tool:</b> if $W\subseteq X$ is open and contains all of $A$ or none of it, then $\pi^{-1}(\pi(W))=W$, so $\pi(W)$ is open.`, R`$W$ is [[saturated]]: it never contains part of the class $A$ without the rest, and the other classes are single points.`],
+  [R`<b>(b) Split the pairs of distinct points into two kinds:</b> two singletons, or $[A]$ and a singleton.`, R`By (a) those are the only points of the quotient, and two copies of $[A]$ would not be distinct. Method: [[m-hausdorff]].`],
+  [R`<b>(b) Two singletons $\{x\},\{y\}$:</b> use balls of radius $r=\min(\tfrac{d(x,y)}2,r_x,r_y)$, where $B(x,r_x)$ and $B(y,r_y)$ miss $A$.`, R`$r\le r_x,r_y$ keeps the balls out of $A$ (so saturated); $r\le d(x,y)/2$ keeps them apart (triangle inequality).`],
+  [R`<b>(b) $[A]$ and $\{x\}$:</b> with $B(x,r)\cap A=\varnothing$, use $U=B(x,\tfrac r2)$ and $W=\{z:d(z,x)>\tfrac r2\}$.`, R`$U$ misses $A$; $W$ contains all of $A$ since points of $A$ are at distance $\ge r$; no point is both nearer and farther than $\tfrac r2$. A ball around $A$ would not work, since $A$ may be large.`]])],
+ ['Clean solution', R`<p><b>(a)</b> Let $a\in A$. If $y\in A$, then $y\sim_A a$ since both lie in $A$. If $y\notin A$, then $y\ne a$ and $y,a$ are not both in $A$, so $y\not\sim_A a$. Hence $[a]=A$. Let $x\notin A$. If $y\sim_A x$, then since $x\notin A$ the second clause fails, so $y=x$. Hence $[x]=\{x\}$. The classes are $A$ and the singletons $\{x\}$, $x\in X\setminus A$.</p>
+<p><b>(b)</b> Let $\pi:X\to X/{\sim_A}$, $\pi(z)=[z]$. If $W\subseteq X$ is open and either $A\subseteq W$ or $A\cap W=\varnothing$, then $W$ is a union of classes, so $\pi^{-1}(\pi(W))=W$ is open and $\pi(W)$ is open in $X/{\sim_A}$.</p>
+<p>Let $p\ne p'$ be points of $X/{\sim_A}$. By (a), each is $[A]$ or $\{x\}$ with $x\notin A$.</p>
+<p><em>Case 1: $p=\{x\}$, $p'=\{y\}$, $x\ne y$, $x,y\notin A$.</em> Since $X\setminus A$ is open, there are $r_x,r_y>0$ with $B(x,r_x)\cap A=\varnothing=B(y,r_y)\cap A$. Let $r=\min(\tfrac{d(x,y)}2,r_x,r_y)>0$. Then $B(x,r)$ and $B(y,r)$ are open and miss $A$, so $\pi(B(x,r))\ni\{x\}$ and $\pi(B(y,r))\ni\{y\}$ are open. If $z\in B(x,r)\cap B(y,r)$, then $d(x,y)\le d(x,z)+d(z,y)<2r\le d(x,y)$, a contradiction; so the balls are disjoint, and since they are unions of classes, so are their images.</p>
+<p><em>Case 2: $p=[A]$, $p'=\{x\}$, $x\notin A$.</em> Choose $r>0$ with $B(x,r)\cap A=\varnothing$. Let $U=B(x,\tfrac r2)$ and $W=\{z\in X: d(z,x)>\tfrac r2\}$. $U$ is open; $W$ is open since for $z\in W$, $B(z,d(z,x)-\tfrac r2)\subseteq W$ by the triangle inequality. $U\cap A=\varnothing$, and every $a\in A$ has $d(a,x)\ge r>\tfrac r2$, so $A\subseteq W$. Thus $\pi(U)\ni\{x\}$ and $\pi(W)\ni[A]$ are open. $U\cap W=\varnothing$, and both are unions of classes, so $\pi(U)\cap\pi(W)=\varnothing$.</p>
+<p>Every pair of distinct points is separated, so $X/{\sim_A}$ is Hausdorff. $\blacksquare$</p>`],
+ ['Why closed is needed', R`<p>For $A=(0,1)\subset\mathbb R$, every open set around $\{0\}$ contains $[A]$: the quotient is not Hausdorff ([[ex-crush-open]], [[crushing-a-set]]).</p>`]]);
+
+// ---------- Q2: add the clean solution
+(function(){ var S = A['hw7-q2'].sections, k = -1; S.forEach(function(s, i){ if (s[0] === 'Conclusion') k = i; });
+ S.splice(k, 1, ['Clean solution', R`<p>Recall from HW6 that $\{-1,0,1\}$ has the quotient topology $\mathcal T=\{\varnothing,\{-1\},\{1\},\{-1,1\},\{-1,0,1\}\}$, where $p(x)$ is the sign of $x$. Its closed sets are $\{-1,0,1\},\{0,1\},\{-1,0\},\{0\},\varnothing$.</p>
+<p><b>$p$ is open.</b> Let $U\subseteq\mathbb R$ be open. If $0\in U$, there is $\varepsilon>0$ with $(-\varepsilon,\varepsilon)\subseteq U$, so $-\tfrac\varepsilon2,0,\tfrac\varepsilon2\in U$ and $p(U)=\{-1,0,1\}\in\mathcal T$. If $0\notin U$, then $p(U)\subseteq\{-1,1\}$, and every subset of $\{-1,1\}$ lies in $\mathcal T$. In either case $p(U)$ is open.</p>
+<p><b>$p$ is not closed.</b> The set $\{5\}$ is closed in $\mathbb R$, but $p(\{5\})=\{1\}$, whose complement $\{-1,0\}$ is not in $\mathcal T$. So $\{1\}$ is not closed, and $p$ is not a closed map. $\blacksquare$</p>`]); })();
+
+// ---------- Q3
+hub('hw7-q3', [
+ ['What it builds on: HW2 Q2', R`<p>HW2 Q2 asked you to prove: if $W\subseteq X\times Y$ is open, then $\pi_1(W)$ is open in $X$. That is exactly part (a). Part (b) asks for the failure of the closed version.</p>`],
+ ['Concepts and method', ''],
+ ['Terms in the problem', R`<p><b>Projection.</b> $\pi_1(x,y)=x$ ([[projections]]).</p>
+<p><b>Product topology.</b> Open sets are unions of boxes $U\times V$ with $U$ open in $X$, $V$ open in $Y$. So around each point of an open $W$ there is a box inside $W$ ([[product-topology]]).</p>
+<p><b>Open map / closed map.</b> Images of open (closed) sets are open (closed) ([[open-map]]).</p>
+<p><b>"Show by example".</b> Choose specific spaces and one closed set whose image is not closed.</p>`],
+ ['Breakdown', steps([
+  [R`<b>(a) Take open $W\subseteq X\times Y$ and a point $x\in\pi_1(W)$.</b> Then $x=\pi_1(x,y)$ for some $(x,y)\in W$.`, R`To show $\pi_1(W)$ is open, show every one of its points has an open set around it inside it ([[m-open]]).`],
+  [R`<b>(a) Fit a box around $(x,y)$ inside $W$:</b> $U\times V$ with $(x,y)\in U\times V\subseteq W$.`, R`Definition of the product topology: boxes form a basis.`],
+  [R`<b>(a) Project the box:</b> $x\in U$, and $U=\pi_1(U\times V)\subseteq\pi_1(W)$.`, R`$V$ is nonempty since it contains $y$, so every $u\in U$ is $\pi_1(u,y)$ with $(u,y)\in W$.`],
+  [R`<b>(b) Choose $X=Y=\mathbb R$ and a closed set that approaches the $y$-axis without touching it.</b>`, R`A projection loses the second coordinate; a closed set can creep toward $x=0$ as $y\to\infty$, so its shadow approaches $0$ but never contains it.`],
+  [R`<b>(b) Take $C=\{(x,y): xy=1\}$.</b> It is closed: it is $f^{-1}(\{1\})$ for the continuous $f(x,y)=xy$.`, R`Preimages of closed sets under continuous maps are closed ([[continuity-equivalents]]).`],
+  [R`<b>(b) Its image is $\pi_1(C)=\mathbb R\setminus\{0\}$, which is not closed.</b>`, R`$0$ is a [[limit-point]] of $\mathbb R\setminus\{0\}$ not in it.`]])],
+ ['Clean solution', R`<p><b>(a)</b> Let $W\subseteq X\times Y$ be open and $x\in\pi_1(W)$. Choose $y$ with $(x,y)\in W$. Since the boxes $U\times V$ ($U$ open in $X$, $V$ open in $Y$) form a basis for the product topology, there are such $U,V$ with $(x,y)\in U\times V\subseteq W$. For $u\in U$, $(u,y)\in U\times V\subseteq W$, so $u=\pi_1(u,y)\in\pi_1(W)$. Hence $x\in U\subseteq\pi_1(W)$ with $U$ open. Since $x$ was arbitrary, $\pi_1(W)$ is open, and $\pi_1$ is an open map.</p>
+<p><b>(b)</b> Let $X=Y=\mathbb R$ and $C=\{(x,y)\in\mathbb R^2: xy=1\}$. The map $f(x,y)=xy$ is continuous (a product of the continuous projections), and $\{1\}$ is closed in $\mathbb R$, so $C=f^{-1}(\{1\})$ is closed in $\mathbb R^2$. But $\pi_1(C)=\{x: x\ne0\}=\mathbb R\setminus\{0\}$, which is not closed: every interval around $0$ meets it, so $0$ is in its closure but not in the set. Hence $\pi_1$ is not a closed map. $\blacksquare$</p>`],
+ ['Why it makes sense', R`<p>Room survives projection (a box of room projects onto an interval of room), but edges do not: the hyperbola's edge at $x=0$ is at infinite height, so its shadow has an edge point it never reaches.</p>`]]);
+
+// ---------- Q4
+hub('hw7-q4', [
+ ['What it builds on: HW6 Q2', R`<p>HW6 Q2 showed: if $r:B\to A$ and there is a continuous $i:A\to B$ with $r\circ i=\mathrm{id}_A$, and $r$ is a continuous surjection, then $r$ is a quotient map, because if $r^{-1}(U)$ is open then $U=i^{-1}(r^{-1}(U))$ is open. This is the "section trick" in [[m-quotient-map]], and it is the hint for (b).</p>`],
+ ['Concepts and method', ''],
+ ['Terms in the problem', R`<p><b>The set $A$.</b> $[0,\infty)\times\mathbb R$ is the closed right half-plane (all points with $x\ge0$). $\mathbb R\times\{0\}$ is the whole $x$-axis. So $A$ is the right half-plane together with the left half of the $x$-axis sticking out to the left.</p>
+<p><b>Subspace topology on $A$.</b> Open sets of $A$ are $A\cap O$ with $O$ open in $\mathbb R^2$ ([[subspace-topology]]). On the left part, $A$ is just a line, so small open sets there are open intervals of the axis.</p>
+<p><b>$q(x,y)=x$.</b> The first projection, restricted to $A$.</p>
+<p><b>Quotient map.</b> Surjective, continuous, and $q^{-1}(U)$ open $\Rightarrow U$ open ([[quotient-map]]).</p>`],
+ ['Breakdown', steps([
+  [R`<b>(a) Sketch:</b> shade everything with $x\ge0$; then draw the negative $x$-axis as a single line attached on the left.`, ''],
+  [R`<b>(b) Surjective:</b> for $x\in\mathbb R$, $(x,0)\in A$ and $q(x,0)=x$.`, R`The axis is in $A$ for every $x$, including negatives.`],
+  [R`<b>(b) Continuous:</b> $q$ is the restriction of $\pi_1:\mathbb R^2\to\mathbb R$ to the subspace $A$.`, R`Restrictions of continuous maps to subspaces are continuous (Theorem 18.2).`],
+  [R`<b>(b) Reverse direction via a section:</b> $j:\mathbb R\to A$, $j(x)=(x,0)$, is continuous and $q\circ j=\mathrm{id}_{\mathbb R}$.`, R`$j$ is continuous into $\mathbb R^2$ (coordinates $x$ and $0$, Theorem 18.4), and its image lies in $A$, so it is continuous into $A$ (Theorem 18.2). Then $U=(q\circ j)^{-1}(U)=j^{-1}(q^{-1}(U))$.`],
+  [R`<b>(c) Not open: find an open set of $A$ touching the edge $x=0$ from the right only.</b> Take $W=A\cap B((0,1),\tfrac12)$.`, R`$W$ is open in $A$ by definition of the subspace topology. The disc lies above the axis, so inside $A$ only its part with $x\ge0$ survives.`],
+  [R`<b>(c) Its image is $q(W)=[0,\tfrac12)$, not open in $\mathbb R$.</b>`, R`$0$ has no room to the left in $q(W)$.`],
+  [R`<b>(c) Not closed: use a closed set approaching $x=0$ without reaching it.</b> Take $C=\{(x,\tfrac1x): x>0\}\subseteq A$.`, R`$C$ is closed in $\mathbb R^2$ (preimage of $\{1\}$ under $xy$, intersected with the closed set $x\ge0$), hence $C=C\cap A$ is closed in $A$ (Theorem 17.2).`],
+  [R`<b>(c) Its image is $q(C)=(0,\infty)$, not closed in $\mathbb R$.</b>`, R`$0$ is a limit point not in it. Compare [[hw7-q3]](b).`]])],
+ ['Clean solution', R`<p><b>(a)</b> $A$ is the closed right half-plane $\{x\ge0\}$ together with the negative $x$-axis $\{(x,0):x<0\}$.</p>
+<p><b>(b)</b> <em>Surjective:</em> for $x\in\mathbb R$, $(x,0)\in A$ and $q(x,0)=x$. <em>Continuous:</em> $q=\pi_1|_A$, the restriction of the continuous projection $\pi_1:\mathbb R^2\to\mathbb R$ to a subspace. <em>Reverse direction:</em> define $j:\mathbb R\to A$ by $j(x)=(x,0)$. Its coordinate functions $x\mapsto x$ and $x\mapsto0$ are continuous, so $j$ is continuous into $\mathbb R^2$ (Theorem 18.4), and since $j(\mathbb R)\subseteq A$, $j$ is continuous into $A$ (Theorem 18.2). Moreover $q\circ j=\mathrm{id}_{\mathbb R}$. If $U\subseteq\mathbb R$ and $q^{-1}(U)$ is open in $A$, then $U=(q\circ j)^{-1}(U)=j^{-1}(q^{-1}(U))$ is open. So $q$ is a quotient map.</p>
+<p><b>(c)</b> <em>Not open:</em> let $W=A\cap B((0,1),\tfrac12)$, open in $A$. Points of the disc have $y>\tfrac12>0$, so $W=\{(x,y)\in B((0,1),\tfrac12): x\ge0\}$ and $q(W)=[0,\tfrac12)$, which is not open in $\mathbb R$ (no interval around $0$ lies in it). <em>Not closed:</em> let $C=\{(x,y): x>0,\ xy=1\}$. Since $C=\{xy=1\}\cap\{x\ge0\}$ is an intersection of closed subsets of $\mathbb R^2$, it is closed in $\mathbb R^2$, and $C=C\cap A$ is closed in $A$. But $q(C)=(0,\infty)$ is not closed in $\mathbb R$, since $0$ is a limit point of it. $\blacksquare$</p>`],
+ ['Why it makes sense', R`<p>$q$ is a quotient map because of the section along the axis: openness can be carried back down the axis. It is not open because $A$ has an edge at $x=0$ above the axis, where open sets of $A$ stop abruptly, and projecting keeps that edge. This shows a quotient map need not be open or closed ([[open-map]]).</p>`]]);
+
+// ---------- Q5 (parts b, c depend on HW6 Q3's set B)
+hub('hw7-q5', [
+ ['What it builds on', R`<p><b>HW7 Q4 hint (section trick).</b> If a continuous surjection $p$ has a continuous $j$ with $p\circ j=\mathrm{id}$, it is a quotient map ([[m-quotient-map]]).</p>
+<p><b>HW6 Q3.</b> Defined a subset $B$ of $D$ and showed a map was not a quotient map using an open saturated set whose image is not open ([[m-not-quotient]]). The exact definition of $B$ is in the HW6 PDF, which is not in the guide yet.</p>`],
+ ['Concepts and method', ''],
+ ['Terms in the problem', R`<p><b>$C$ and $D$.</b> $C$ is the unit square. $D$ is the square together with a separate copy of its bottom edge at height $-1$: the segment $[0,1]\times\{-1\}$.</p>
+<p><b>$p(x,y)=(x,\max(0,y))$.</b> On the square ($y\ge0$) it does nothing. On the lower segment ($y=-1$) it sends $(x,-1)$ to $(x,0)$, gluing the lower segment onto the bottom edge of the square.</p>
+<p><b>Quotient topology on $q(B)$ vs subspace topology from $C$.</b> Two topologies on the same set; (c) asks to show they differ, by finding a set open in one but not the other.</p>`],
+ ['Breakdown of (a)', steps([
+  [R`<b>Surjective:</b> $p$ is the identity on $C\subseteq D$, so every point of $C$ is hit.`, ''],
+  [R`<b>Continuous:</b> $p$ is the restriction to $D$ of $(x,y)\mapsto(x,\max(0,y))$, whose coordinates are continuous.`, R`$\max(0,y)$ is continuous (pasting lemma on $y\le0$, $y\ge0$; [[pasting-lemma]]); then Theorem 18.4 and restriction to a subspace.`],
+  [R`<b>Section:</b> the inclusion $j:C\to D$ is continuous and $p\circ j=\mathrm{id}_C$.`, R`Inclusions of subspaces are continuous. Then the reverse direction follows as in Q4.`]])],
+ ['Clean solution of (a)', R`<p>Let $j:C\to D$ be the inclusion. For $(x,y)\in C$, $y\ge0$, so $p(j(x,y))=(x,y)$: $p\circ j=\mathrm{id}_C$, and in particular $p$ is surjective. The map $F(x,y)=(x,\max(0,y))$ on $\mathbb R^2$ has continuous coordinates ($\max(0,y)$ is continuous by the pasting lemma applied to $y\le0$ and $y\ge0$), so $F$ is continuous, and $p=F|_D$ is continuous as a map into $\mathbb R^2$ with image in $C$, hence into $C$. If $p^{-1}(U)$ is open in $D$, then $U=(p\circ j)^{-1}(U)=j^{-1}(p^{-1}(U))$ is open in $C$ since $j$ is continuous. So $p$ is a quotient map. $\blacksquare$</p>`],
+ ['Parts (b) and (c)', R`<p>These use the set $B$ from HW6 Q3. The method for (c) is [[m-not-quotient]]: find a set open in the quotient topology on $q(B)$ (an open saturated set of $B$, pushed down) that is not open in the subspace topology from $C$, typically at a boundary point of the square that $q(B)$ approaches from one side only. Send the HW6 PDF and these are filled in exactly.</p>`]]);
+
+// ---------- Q6
+hub('hw7-q6', [
+ ['What it builds on: HW3 Q2', R`<p>HW3 Q2: the identity $i:(X,\mathcal T)\to(X,\mathcal T')$ is continuous iff $\mathcal T\supseteq\mathcal T'$ ($\mathcal T$ is finer). The same calculation for images gives part (b).</p>`],
+ ['Concepts and method', ''],
+ ['Terms in the problem', R`<p><b>Bijection.</b> Injective and surjective ([[functions]]).</p>
+<p><b>Open / closed map.</b> Images of open (closed) sets are open (closed) ([[open-map]]).</p>
+<p><b>Continuous.</b> Preimages of open sets are open ([[continuous]]).</p>`],
+ ['Breakdown', steps([
+  [R`<b>(a) Prove the identity $f(X\setminus U)=Y\setminus f(U)$ for a bijection.</b>`, R`It converts open sets to closed sets across $f$. "$\subseteq$": if $x\notin U$ and $f(x)=f(u)$ with $u\in U$, injectivity gives $x=u\in U$, impossible. "$\supseteq$": a $y\notin f(U)$ equals $f(x)$ for some $x$ by surjectivity, and $x\notin U$.`],
+  [R`<b>(a) Open $\Rightarrow$ closed:</b> for closed $C$, $X\setminus C$ is open, so $f(X\setminus C)=Y\setminus f(C)$ is open, so $f(C)$ is closed.`, ''],
+  [R`<b>(a) Closed $\Rightarrow$ open:</b> the same with the roles of open and closed exchanged.`, ''],
+  [R`<b>(b) Take the identity from a coarser topology to a finer one:</b> $f=\mathrm{id}:\mathbb R\to\mathbb R_\ell$.`, R`Images under the identity are the same sets, so it is open iff every open set of the domain is open in the target, i.e. the target is finer. Continuity would need the reverse ([[hw3-q2]]).`],
+  [R`<b>(b) Check:</b> open in $\mathbb R$ ⇒ open in $\mathbb R_\ell$; but $[0,1)$ is open in $\mathbb R_\ell$ and $f^{-1}([0,1))=[0,1)$ is not open in $\mathbb R$.`, R`[[ex-lower-limit]] is strictly finer than ℝ ([[lemma-13-3]]).`]])],
+ ['Clean solution', R`<p><b>(a)</b> Let $f$ be a bijection. For any $U\subseteq X$, $f(X\setminus U)=Y\setminus f(U)$: if $x\notin U$ and $f(x)\in f(U)$, then $f(x)=f(u)$ for some $u\in U$, and injectivity gives $x=u\in U$, a contradiction; conversely if $y\notin f(U)$, by surjectivity $y=f(x)$ for some $x$, and $x\notin U$. Suppose $f$ is open and $C\subseteq X$ is closed. Then $X\setminus C$ is open, so $f(X\setminus C)=Y\setminus f(C)$ is open, so $f(C)$ is closed: $f$ is closed. Suppose $f$ is closed and $U$ is open. Then $X\setminus U$ is closed, so $Y\setminus f(U)=f(X\setminus U)$ is closed, so $f(U)$ is open: $f$ is open.</p>
+<p><b>(b)</b> Let $f:\mathbb R\to\mathbb R_\ell$ be the identity, where $\mathbb R$ has the standard topology and $\mathbb R_\ell$ the lower limit topology. It is a bijection. It is open: an open set of $\mathbb R$ is a union of intervals $(a,b)=\bigcup_{a<c<b}[c,b)$, each open in $\mathbb R_\ell$, so $f(U)=U$ is open in $\mathbb R_\ell$. It is not continuous: $[0,1)$ is open in $\mathbb R_\ell$, but $f^{-1}([0,1))=[0,1)$ is not open in $\mathbb R$, since no interval around $0$ lies in it. $\blacksquare$</p>`],
+ ['Why it makes sense', R`<p>A bijection matches points one to one, so complements correspond exactly; open and closed are complements, so they correspond too. For a bijection, "open" is the same as "the inverse is continuous", so (b) is a bijection whose inverse is continuous but which is not itself continuous.</p>`]]);
+
 </script>
 <script>
 // ===== The encyclopedia: home page, articles, link previews, a trail of where you have been, search.
@@ -1089,7 +1195,7 @@ function article(id){
   if (a.steps) h += '<details class="sec" open><summary>Steps</summary><div class="secb"><ol class="steps">' + a.steps.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + wiki(s[0]) + '</summary><div class="why"><b>Why:</b> ' + wiki(s[1]) + '</div></details>' : wiki(s[0])) + '</li>'; }).join('') + '</ol></div></details>';
   (a.sections || []).forEach(function(s, i){ var body = s[1];
     if (s[0] === 'Concepts and method') body = '<p><b>Concepts:</b></p><div class="chips">' + (a.pre || []).map(chip).join('') + '</div><p style="margin-top:10px"><b>Method:</b></p><div class="chips">' + (a.method || []).map(chip).join('') + '</div>';
-    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method' || s[0] === 'The problem' || s[0].indexOf('What it builds on') === 0 || s[0] === 'Terms in the problem') : (i === 0 && !a.steps); if (s[0] === 'Picture' || s[0] === 'Reading the definition' || s[0] === 'Reading the statement' || s[0] === 'What it is' || (s[0] === 'Definition' && i === 1) || (a.where === 'Start here') || a.kind === 'idea') open = true;
+    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method' || s[0] === 'The problem' || s[0].indexOf('What it builds on') === 0 || s[0] === 'Terms in the problem' || s[0].indexOf('Breakdown') === 0) : (i === 0 && !a.steps); if (s[0] === 'Picture' || s[0] === 'Reading the definition' || s[0] === 'Reading the statement' || s[0] === 'What it is' || (s[0] === 'Definition' && i === 1) || (a.where === 'Start here') || a.kind === 'idea') open = true;
     h += '<details class="sec"' + (open ? ' open' : '') + '><summary>' + s[0] + '</summary><div class="secb">' + wiki(body) + '</div></details>'; });
   if (a.kind === 'method' && (USEDIN[id] || []).length) h += '<div class="links"><h3>Used in these problems</h3><div class="chips">' + USEDIN[id].map(chip).join('') + '</div></div>';
   h += '<div class="links">';
