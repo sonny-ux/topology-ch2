@@ -187,6 +187,20 @@ details.pad>summary{color:var(--text);}
 .padref h4{font:600 11px -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:12px 0 4px;}
 .padref p{margin-bottom:.6em;} .padref ol,.padref ul{padding-left:22px;}
 #padreft{margin-right:6px;}
+.padlink{font:14px -apple-system,system-ui,sans-serif;color:var(--text2);text-decoration:underline;align-self:center;}
+#padadd.on{border-color:#5fae7a;color:#5fae7a;}
+.docform{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 4px;}
+.docform label{flex:1;min-width:180px;display:flex;flex-direction:column;font:600 11px -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.docform input{margin-top:5px;padding:8px 10px;border:1px solid var(--border2);border-radius:8px;background:var(--card);color:var(--text);font:15px -apple-system,system-ui,sans-serif;letter-spacing:0;text-transform:none;}
+.dnote{font:12px -apple-system,system-ui,sans-serif;color:var(--muted);}
+.docview{border:1px solid var(--border2);border-radius:10px;background:var(--card);padding:16px 18px;color:var(--text);}
+.dochead{display:flex;flex-direction:column;gap:2px;margin-bottom:12px;font-size:.95em;color:var(--text2);} .dochead b{color:var(--text);font-size:1.05em;}
+.docq{border-top:1px solid var(--border);padding-top:10px;margin-top:12px;} .docq h2{font-size:1.1rem;font-weight:normal;margin-bottom:6px;display:flex;gap:10px;align-items:baseline;}
+.docq h3{font:600 11px -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 4px;}
+.docq .pq{border-left:3px solid var(--border2);padding-left:10px;color:var(--text2);font-size:.95em;}
+.docedit,.docrm{font:12px -apple-system,system-ui,sans-serif;color:var(--muted);background:none;border:0;text-decoration:underline;cursor:pointer;padding:0;}
+button.chip{cursor:pointer;font:inherit;}
+@media print{ #padprint, #padprint *{color:#000;} #padprint .padempty{color:#777!important;} #padprint .dochead{display:block;margin-bottom:14pt;color:#000;} #padprint .dochead b,#padprint .dochead span{display:block;} #padprint .docq{border-top:0.5pt solid #999;padding-top:8pt;margin-top:12pt;} #padprint .docq h2{font-size:13pt;font-weight:bold;margin:0 0 6pt;} #padprint .docq h3{font-size:10pt;text-transform:uppercase;letter-spacing:.06em;margin:8pt 0 4pt;color:#333;} #padprint .pq{border-left:2pt solid #999;padding-left:8pt;color:#222;break-inside:avoid;} #padprint .padempty{color:#777;} }
 </style>
 </head>
 <body>
@@ -1565,6 +1579,7 @@ function home(){
   h += '<h2 class="chap">Indexes</h2>';
   h += '<details class="topic"><summary>All methods<span class="cnt">' + METHODS.length + '</span></summary><div class="tlist">' + METHODS.map(function(id){ var a = A[id], n = (USEDIN[id] || []).length; return '<a href="#a/' + id + '"><b>' + a.title + '</b>' + (n ? '<span class="kind">' + n + ' problem' + (n > 1 ? 's' : '') + '</span>' : '') + '<i>' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }).join('') + '</div></details>';
   PROBSETS.forEach(function(ps){ h += '<details class="topic"><summary>' + ps[0] + '<span class="cnt">' + ps[1].length + '</span></summary><div class="tlist">' + ps[1].map(row).join('') + '</div></details>'; });
+  h += '<details class="topic"><summary>Your homework documents<span class="cnt">' + PROBSETS.filter(function(ps, i){ return docGet(i).length; }).length + '</span></summary><div class="tlist">' + PROBSETS.map(function(ps, i){ var n = docGet(i).length; return '<a href="#doc/' + i + '"><b>' + ps[0].replace(/ \(file header.*\)/, '') + '</b><span class="kind">' + n + ' of ' + ps[1].length + '</span><i>' + (n ? 'Your write-ups, in order, ready to save as one PDF.' : 'Nothing added yet.') + '</i></a>'; }).join('') + '</div></details>';
   h += '<details class="topic"><summary>Example spaces<span class="cnt">' + EXAMPLES.length + '</span></summary><div class="tlist">' + EXAMPLES.map(row).join('') + '</div></details>';
   h += '<p class="foot">Theorem numbers follow Munkres, <em>Topology</em>, 2nd ed.; check them against your copy. Earlier notes and quiz: <a href="classic/">classic</a>.</p>';
   return h;
@@ -1596,8 +1611,9 @@ function route(){
   var hsh = location.hash.replace(/^#/, ''), v = document.getElementById('view');
   closePv();
   if (hsh.indexOf('a/') === 0){ var id = hsh.slice(2); v.innerHTML = article(id); document.title = (A[id] ? A[id].title + ' · ' : '') + 'Topology Reference Guide'; }
+  else if (hsh.indexOf('doc/') === 0){ v.innerHTML = docPage(+hsh.slice(4)); document.title = 'Document · Topology Reference Guide'; }
   else { v.innerHTML = home(); document.title = 'Topology Reference Guide'; }
-  math(v); window.scrollTo(0, 0); if (document.getElementById('qfig')) quotFig(); if (document.getElementById('satfig')) satFig(); if (document.getElementById('drill')) drill(); if (document.getElementById('padin')) padInit(location.hash.slice(3));
+  math(v); window.scrollTo(0, 0); if (document.getElementById('qfig')) quotFig(); if (document.getElementById('satfig')) satFig(); if (document.getElementById('drill')) drill(); if (document.getElementById('padin')) padInit(location.hash.slice(3)); if (document.getElementById('docview')) docInit(+location.hash.slice(5));
 }
 // previews: a tap on an underlined term inside an article shows its summary first
 function closePv(){ document.getElementById('pv').classList.remove('on'); }
@@ -1793,7 +1809,7 @@ function padHtml(id){ return '<details class="sec pad" open><summary>Your write-
   + '<button type="button" class="padsymt" id="padsymt" aria-expanded="true">Symbols <span>▾</span></button>'
   + '<div class="padbar" id="padbar">' + PADSYM.map(function(b, i){ return '<button type="button" data-p="' + i + '">' + (i === 0 ? 'inline math' : b[0] === 'display' ? 'display math' : '$' + b[0] + '$') + '</button>'; }).join('') + '</div>'
   + '<textarea id="padin" spellcheck="false" autocapitalize="sentences" placeholder="Let $W$ be open in $X \\times Y$. …"></textarea>'
-  + '<div class="padtools"><button type="button" id="padundo" aria-label="Undo">↶ Undo</button><button type="button" id="padredo" aria-label="Redo">↷ Redo</button><button type="button" id="padcopy">Copy text</button><button type="button" id="padpdf">Save as PDF</button><button type="button" id="padltx">LaTeX dictionary</button><span id="padsaved"></span></div>'
+  + '<div class="padtools"><button type="button" id="padundo" aria-label="Undo">↶ Undo</button><button type="button" id="padredo" aria-label="Redo">↷ Redo</button><button type="button" id="padcopy">Copy text</button><button type="button" id="padpdf">Save as PDF</button><button type="button" id="padltx">LaTeX dictionary</button><button type="button" id="padadd">+ Add to document</button><a id="padopendoc" class="padlink" href="#">Open document</a><span id="padsaved"></span></div>'
   + '<div class="padprev" id="padprev"></div></div></details>'; }
 // typed math is recognised outside dollar signs too: LaTeX commands (\pi_1, \times), functions f(x), g(x, y), f^-1(V), single-letter
 // variables (X, W, U_i), "X x Y" as a product, a*b, arrows and relations (->, =>, <=>, !=, <=, >=), and Greek letters by name.
@@ -1803,8 +1819,10 @@ function padOnPlain(t, fn){ return t.split(PAD_MATHRE).map(function(seg, i){ ret
 function padAuto(t){
   var G = 'alpha|beta|gamma|delta|epsilon|varepsilon|lambda|mu|pi|rho|sigma|tau|phi|omega|Delta|Omega|Sigma';
   var sub = "(?:_\\{[^{}]*\\}|_[A-Za-z0-9])?", sup = "(?:\\^\\{[^{}]*\\}|\\^-?[A-Za-z0-9])?";
+  // 0. braces typed as sets: {x}, {(x, y) : xy = 1}, {1/n : n in N} become set notation
+  t = padOnPlain(t, function(x){ return x.replace(/(^|[^\\A-Za-z_^}])\{([^{}$\n]*)\}/g, function(m, pre, inner){ return pre + '$\\{' + inner.replace(/\bin\b/g, '\\in') + '\\}$'; }); });
   // 1. LaTeX commands
-  t = padOnPlain(t, function(x){ return x.replace(/\\(?:(?:mathbb|mathcal|operatorname|mathrm)\s?(?:\{[^{}]*\}|[A-Za-z])|[a-zA-Z]+(?:\{[^{}]*\})?)(?:_\{[^{}]*\}|_[A-Za-z0-9]|\^\{[^{}]*\}|\^[A-Za-z0-9])*(?:\([^()$]*\))?/g, function(m){ return '$' + m + '$'; }); });
+  t = padOnPlain(t, function(x){ return x.replace(/\\(?:(?:mathbb|mathcal|operatorname|mathrm)\s?(?:\{[^{}]*\}|[A-Za-z])|[a-zA-Z]+(?:\{[^{}]*\})*)(?:_\{[^{}]*\}|_[A-Za-z0-9]|\^\{[^{}]*\}|\^[A-Za-z0-9])*(?:\([^()$]*\))?/g, function(m){ return '$' + m + '$'; }); });
   // 2. Greek letters typed by name, with an optional subscript and argument: epsilon, pi_1(W)
   t = padOnPlain(t, function(x){ return x.replace(new RegExp('(^|[^A-Za-z\\\\])(' + G + ')(' + sub + ')(\\([^()$]*\\))?(?![A-Za-z])', 'g'), function(m, pre, g, s1, arg){ return pre + '$\\' + (g === 'epsilon' ? 'varepsilon' : g) + s1 + (arg || '') + '$'; }); });
   // 3. functions applied to arguments: f(x), g(x, y), f^-1(V), U_i(…)
@@ -1848,6 +1866,7 @@ function padInit(id){
   ta.addEventListener('beforeinput', function(e){ if (e.inputType === 'insertText' && e.data === '$' && ta.selectionStart === ta.selectionEnd && ta.value.charAt(ta.selectionStart) === '$'){ var b4 = ta.value.slice(0, ta.selectionStart); if (((b4.match(/\$/g) || []).length) % 2 === 1){ e.preventDefault(); var c = ta.selectionStart + 1; ta.setSelectionRange(c, c); PADSEL = [c, c]; } } });
   ta.addEventListener('keydown', function(e){ if ((e.metaKey || e.ctrlKey) && (e.key === 'z' || e.key === 'Z')){ e.preventDefault(); go(e.shiftKey ? 1 : -1); } else if ((e.metaKey || e.ctrlKey) && (e.key === 'y' || e.key === 'Y')){ e.preventDefault(); go(1); } });
   ['keyup', 'mouseup', 'select', 'input', 'blur'].forEach(function(ev){ ta.addEventListener(ev, function(){ PADSEL = [ta.selectionStart, ta.selectionEnd]; }); }); PADSEL = [ta.value.length, ta.value.length];
+  docButtonInit(id);
   var rt = document.getElementById('padreft'), rb = document.getElementById('padref');
   if (rt){ var refShow = function(on){ rb.hidden = !on; rt.setAttribute('aria-expanded', on); rt.querySelector('span').textContent = on ? '▾' : '▸'; try { localStorage.setItem('tg-padref', on ? '1' : ''); } catch(e){} };
     try { refShow(!!localStorage.getItem('tg-padref')); } catch(e){} rt.addEventListener('mousedown', function(e){ e.preventDefault(); }); rt.onclick = function(){ refShow(rb.hidden); }; }
@@ -1920,6 +1939,36 @@ function padInsert(code, off){ var ta = document.getElementById('padin'); if (!t
     if (vm){ var vs = a0 - vm[2].length - vm[3].length; pos = vs; ins = '$' + vm[2] + ' ' + code + '$'; caret = vs + 1 + vm[2].length + 1 + off; }
     else { pos = a0; ins = '$' + code + '$'; caret = a0 + 1 + off; } }
   ta.value = v.slice(0, pos) + ins + v.slice(a1); ta.focus({preventScroll: true}); ta.setSelectionRange(caret, caret); PADSEL = [caret, caret]; ta.dispatchEvent(new Event('input')); ltxKeep(); }
+// ===== The homework document: write-ups added from each problem page, gathered in problem order with the questions,
+// a header (name, course, assignment, date), and one "Save as PDF" for the whole set. It reads the live drafts, so later edits show up.
+function docSetOf(id){ for (var i = 0; i < PROBSETS.length; i++) if (PROBSETS[i][1].indexOf(id) >= 0) return i; return -1; }
+function docGet(si){ try { return JSON.parse(localStorage.getItem('tg-doc-' + si) || '[]'); } catch(e){ return []; } }
+function docPut(si, ids){ try { localStorage.setItem('tg-doc-' + si, JSON.stringify(ids)); } catch(e){} }
+function docHead(){ try { return JSON.parse(localStorage.getItem('tg-dochead') || '{}'); } catch(e){ return {}; } }
+function docDraft(id){ try { return localStorage.getItem('tg-pad-' + id) || ''; } catch(e){ return ''; } }
+function docQ(id){ var m = A[id].title.match(/Q(\d+)/); return m ? 'Question ' + m[1] : A[id].title; }
+function docStatement(id){ var pr = (A[id].sections || []).filter(function(x){ return x[0] === 'The problem'; })[0]; return pr ? wiki(pr[1]).replace(/<a [^>]*>|<\/a>/g, '').replace(/<p class="foot">[\s\S]*?<\/p>/g, '') : ''; }
+function docBody(si, forPrint){ var ps = PROBSETS[si], inc = docGet(si), hd = docHead(), ids = ps[1].filter(function(id){ return inc.indexOf(id) >= 0; });
+  var h = '<div class="dochead"><b>' + (hd.name || '') + '</b><span>' + (hd.course || 'MATH GU4051 · Introduction to Topology') + '</span><span>' + ps[0].replace(/ \(file header.*\)/, '') + '</span><span>' + (hd.date || '') + '</span></div>';
+  ids.forEach(function(id){ var d = docDraft(id); h += '<section class="docq"><h2>' + docQ(id) + (forPrint ? '' : ' <a class="docedit" href="#a/' + id + '">edit</a> <button type="button" class="docrm" data-id="' + id + '">remove</button>') + '</h2><div class="pq">' + docStatement(id) + '</div><h3>Solution</h3>' + (d.trim() ? padRender(d) : '<p class="padempty">No write-up yet.</p>') + '</section>'; });
+  if (!ids.length) h += '<p class="padempty">Nothing added yet. On a problem page, tap "Add to document" under your write-up.</p>';
+  return h; }
+function docPage(si){ var ps = PROBSETS[si]; if (!ps) return '<p>No such document.</p>'; var inc = docGet(si), hd = docHead(), rest = ps[1].filter(function(id){ return inc.indexOf(id) < 0; });
+  return '<div class="trail"><a href="#">Home</a><span class="sep">›</span>' + ps[0] + ' document</div><div class="meta">Document · ' + ps[0] + '</div><h1>' + ps[0].replace(/ \(file header.*\)/, '') + ': your write-up</h1>'
+    + '<div class="docform"><label>Name<input id="dname" value="' + (hd.name || '').replace(/"/g, '&quot;') + '" placeholder="Your name"></label><label>Course<input id="dcourse" value="' + (hd.course || 'MATH GU4051 · Introduction to Topology').replace(/"/g, '&quot;') + '"></label><label>Date<input id="ddate" value="' + (hd.date || '').replace(/"/g, '&quot;') + '" placeholder="e.g. November 4, 2026"></label></div>'
+    + '<div class="padtools"><button type="button" id="docpdf">Save document as PDF</button><span class="dnote">' + inc.length + ' of ' + ps[1].length + ' problems added · uses your latest drafts</span></div>'
+    + '<div class="docview" id="docview">' + docBody(si) + '</div>'
+    + (rest.length ? '<div class="links"><h3>Not in the document yet</h3><div class="chips">' + rest.map(function(id){ return '<button type="button" class="chip docadd" data-id="' + id + '">+ ' + docQ(id) + (docDraft(id).trim() ? '' : ' (no draft)') + '</button>'; }).join('') + '</div></div>' : ''); }
+function docInit(si){ var view = document.getElementById('docview'); math(view);
+  ['dname', 'dcourse', 'ddate'].forEach(function(k){ document.getElementById(k).addEventListener('input', function(){ var hd = docHead(); hd[{dname: 'name', dcourse: 'course', ddate: 'date'}[k]] = this.value; try { localStorage.setItem('tg-dochead', JSON.stringify(hd)); } catch(e){} view.innerHTML = docBody(si); math(view); }); });
+  document.getElementById('view').onclick = function(e){ var b = e.target.closest('.docrm, .docadd'); if (!b) return; var inc = docGet(si), id = b.dataset.id;
+    if (b.classList.contains('docrm')) inc = inc.filter(function(x){ return x !== id; }); else if (inc.indexOf(id) < 0) inc.push(id); docPut(si, inc); route(); };
+  document.getElementById('docpdf').onclick = function(){ var box = document.createElement('div'); box.id = 'padprint'; box.innerHTML = docBody(si, true); document.body.appendChild(box); math(box); document.body.classList.add('printing');
+    setTimeout(function(){ window.print(); setTimeout(function(){ document.body.classList.remove('printing'); box.remove(); }, 500); }, 300); }; }
+function docButtonInit(id){ var b = document.getElementById('padadd'), si = docSetOf(id); if (!b) return; if (si < 0){ b.remove(); return; }
+  function lab(){ var on = docGet(si).indexOf(id) >= 0; b.textContent = on ? '✓ In ' + PROBSETS[si][0].replace(/ \(file header.*\)/, '') + ' document' : '+ Add to document'; b.classList.toggle('on', on); }
+  lab(); b.onclick = function(){ var inc = docGet(si); if (inc.indexOf(id) >= 0) inc = inc.filter(function(x){ return x !== id; }); else inc.push(id); docPut(si, inc); lab(); };
+  var o = document.getElementById('padopendoc'); if (o) o.setAttribute('href', '#doc/' + si); }
 window.addEventListener('hashchange', route);
 window.addEventListener('load', route);
 </script>
