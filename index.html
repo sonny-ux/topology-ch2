@@ -12,1154 +12,451 @@
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="manifest" href="manifest.json">
 <title>Topology Reference Guide</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-  onload="document.addEventListener('DOMContentLoaded', () => { renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$', right: '$', display: false}
-    ],
-    throwOnError: false
-  }); })"></script>
-<script>
-(function(){try{if(localStorage.getItem('tg-theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();
-function cycleTheme(){
-  var r=document.documentElement, light=r.getAttribute('data-theme')==='light';
-  if(light)r.removeAttribute('data-theme');else r.setAttribute('data-theme','light');
-  try{localStorage.setItem('tg-theme',light?'dark':'light');}catch(e){}
-  setThemeLabel();
-}
-function setThemeLabel(){var b=document.getElementById('themeBtn');if(!b)return;b.textContent=document.documentElement.getAttribute('data-theme')==='light'?'Dark':'Light';}
-document.addEventListener('DOMContentLoaded',setThemeLabel);
-</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>(function(){try{if(localStorage.getItem('tg-theme')==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
 <style>
-:root {
-  --bg: #f4f5f9;
-  --surf: #ffffff;
-  --card: #ffffff;
-  --card2: #f0f1f7;
-  --border: #e2e4ef;
-  --border2: #cdd0e3;
-  --accent: #6d28d9;
-  --adim: #ede9fe;
-  --blue: #047857;
-  --bdim: #d1fae5;
-  --amber: #b45309;
-  --amdim: #fef9c3;
-  --rose: #be123c;
-  --rdim: #ffe4e6;
-  --text: #111827;
-  --text2: #374151;
-  --muted: #9ca3af;
-}
-/* ===== Black-and-white theme: white on black by default, black on white with data-theme="light". Card layout unchanged; equations large. ===== */
-:root {
-  --bg: #000; --surf: #000; --card: #0c0c0c; --card2: #161616;
-  --border: #2a2a2a; --border2: #3d3d3d;
-  --accent: #fff; --adim: #1c1c1c; --blue: #fff; --bdim: #161616;
-  --amber: #e6e6e6; --amdim: #161616; --rose: #e6e6e6; --rdim: #161616;
-  --text: #f4f4f4; --text2: #c4c4c4; --muted: #808080;
-  color-scheme: dark;
-}
-:root[data-theme="light"] {
-  --bg: #fff; --surf: #fff; --card: #fff; --card2: #f4f4f4;
-  --border: #dedede; --border2: #c8c8c8;
-  --accent: #000; --adim: #ededed; --blue: #000; --bdim: #f4f4f4;
-  --amber: #222; --amdim: #f4f4f4; --rose: #222; --rdim: #f4f4f4;
-  --text: #111; --text2: #444; --muted: #8a8a8a;
-  color-scheme: light;
-}
-body { -webkit-font-smoothing: antialiased; }
-.header, .tab-nav { background: var(--bg) !important; }
-.badge { background: none !important; color: var(--muted) !important; border: 1px solid var(--border2) !important; }
-.stab.active { color: var(--text) !important; border-bottom-color: var(--text) !important; }
-.method { border-left: 3px solid var(--text) !important; }
-.concept .eqnum { border: 1px solid var(--border2); }
-.method .eqnum, .eqnum { background: var(--card2) !important; color: var(--text2) !important; }
-.howto { background: var(--card) !important; border: 1px solid var(--border) !important; }
-.xref { color: var(--text) !important; text-decoration: underline !important; text-decoration-color: var(--muted) !important; text-underline-offset: 3px; }
-.toc a { color: var(--text) !important; }
-details.deeper > summary { color: var(--text) !important; }
-.theme-btn { border-radius: 6px !important; }
-/* Large equations */
-.eqhdr { align-items: center; }
-.eqdisp { font-size: 1.55em !important; line-height: 1.5; margin: 4px 0 6px !important; color: var(--text); }
-.eqdisp .katex-display { margin: 0.2em 0 !important; text-align: left; }
-.eqdisp .katex-display > .katex { text-align: left; }
-.eqbody .katex-display { font-size: 1.25em; margin: 0.6em 0; }
-.eqbody .katex { font-size: 1.12em; }
-.qtable td.qe { font-size: 1.3em; padding-top: 10px !important; padding-bottom: 10px !important; }
-.mtitle { font-size: 1.15rem !important; }
-.tab-nav { position: sticky; top: 0; z-index: 20; }
-.tab-nav-inner { flex-direction: column; flex-wrap: nowrap !important; align-items: stretch !important; gap: 6px !important; padding-top: 10px !important; }
-.tools { display: flex; gap: 6px; align-items: center; }
-#q { flex: 1; min-width: 0; background: var(--card); color: var(--text); border: 1px solid var(--border2); border-radius: 6px; padding: 7px 10px; font: inherit; font-size: 15px; }
-#q:focus { outline: none; border-color: var(--text); }
-.tbtn { background: var(--card); color: var(--text2); border: 1px solid var(--border2); border-radius: 6px; padding: 7px 10px; font: inherit; font-size: 13px; cursor: pointer; white-space: nowrap; }
-.tbtn:hover { color: var(--text); border-color: var(--text); }
-.tabs { display: flex; flex-wrap: wrap; gap: 2px; }
-.howto { display: none; }
-body.show-help .howto { display: block; }
-body.searching .panel { display: block !important; }
-body.searching .intro, body.searching .toc, body.searching .howto { display: none !important; }
-.hit-none { display: none !important; }
-.noresults { color: var(--muted); padding: 20px 0; display: none; }
-body.searching .noresults.on { display: block; }
-@media print { .tab-nav { display: none !important; } }
-.term { border-bottom: 1px dotted var(--muted); cursor: pointer; }
-.term:hover { border-bottom-color: var(--text); }
-#gpop { position: fixed; left: 50%; transform: translateX(-50%); bottom: 16px; width: min(560px, calc(100% - 32px)); background: var(--card); color: var(--text2); border: 1px solid var(--border2); border-radius: 10px; padding: 14px 16px; z-index: 50; box-shadow: 0 8px 30px rgba(0,0,0,.5); display: none; font-size: 16px; }
-#gpop.on { display: block; }
-#gpop .gt { color: var(--text); font-weight: 600; margin-bottom: 4px; font-size: 17px; }
-#gpop .gx { position: absolute; top: 8px; right: 12px; background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; }
-#gpop .gsee { margin-top: 8px; font-size: 14px; }
-details.step > summary { cursor: pointer; list-style: none; }
-details.step > summary::-webkit-details-marker { display: none; }
-details.step > summary::after { content: " ＋"; color: var(--muted); font-size: .8em; }
-details.step[open] > summary::after { content: " －"; }
-.stepx p { margin: 0 0 6px; }
-.stepx p:last-child { margin-bottom: 0; }
-.stepx b { color: var(--text); font-weight: 600; }
-.stepx { margin: 6px 0 10px; padding: 8px 12px; border-left: 2px solid var(--border2); color: var(--text2); font-size: 16px; }
-.gloss td { font-size: 15px !important; }
-@media print { details.step .stepx { display: block; } #gpop { display: none !important; } }
-.fig { margin: 12px 0 6px; }
-.fig svg { width: 100%; max-width: 560px; height: auto; display: block; }
-.fig figcaption { color: var(--muted); font-size: 14px; margin-top: 4px; }
-.fig figcaption b { color: var(--text2); font-weight: 600; }
-.fig .ax { stroke: var(--muted); stroke-width: 1.2; }
-.fig .gd { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; }
-.fig .dm { stroke: var(--text2); stroke-width: 1.2; }
-.fig .c1 { fill: none; stroke: var(--text); stroke-width: 2.4; }
-.fig .c2 { fill: none; stroke: var(--text2); stroke-width: 2; stroke-dasharray: 7 5; }
-.fig .c3 { fill: none; stroke: var(--text2); stroke-width: 2; stroke-dasharray: 2 4; stroke-linecap: round; }
-.fig .env { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 1 3; }
-.fig .dot { fill: var(--text); }
-.fig .lb { fill: var(--text2); font-size: 14px; }
-.fig .it { font-style: italic; font-family: 'Times New Roman', serif; font-size: 17px; }
-.fig .k1 { fill: var(--text); } .fig .k2, .fig .k3 { fill: var(--text2); } .fig .ke { fill: var(--muted); }
-.ah { fill: var(--text2); }
-@media print { .fig { break-inside: avoid; } }
-.method .block-label + p .xref[href^="#eq-ps"] { font-weight: 600; }
-.kb { padding: 6px 0 4px; }
-.kbkeys { display: flex; flex-wrap: wrap; gap: 5px; }
-.kk { min-width: 40px; padding: 6px 8px; background: var(--card); color: var(--text); border: 1px solid var(--border2); border-radius: 6px; font: italic 18px 'Times New Roman', 'KaTeX_Math', serif; cursor: pointer; }
-.kk:hover, .kk.on { border-color: var(--text); background: var(--card2); }
-.kbout:empty, .sugg:empty { display: none; }
-.kbout, .sugg { margin-top: 8px; background: var(--card); border: 1px solid var(--border2); border-radius: 8px; padding: 6px 0; max-height: 50vh; overflow-y: auto; }
-.kbout a, .sugg a { display: flex; gap: 10px; align-items: baseline; padding: 7px 12px; color: var(--text); text-decoration: none; font-size: 15px; }
-.kbout a:hover, .sugg a:hover { background: var(--card2); }
-.kbout .ks { font: italic 19px 'Times New Roman', serif; min-width: 34px; color: var(--text); }
-.sugg .st { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); min-width: 64px; }
-#kbBtn.on { border-color: var(--text); color: var(--text); }
-@media print { .kb { display: none !important; } }
-.kk { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; min-height: 48px; font-family: 'KaTeX_Math', 'Times New Roman', serif !important; }
-.kk .kn { font: 10px 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-style: normal; color: var(--muted); margin-top: 2px; letter-spacing: .02em; }
-.params li .pdesc { flex: 1; min-width: 0; }
-.params .psym { flex: 0 0 auto; }
-.block-label .katex, .sec-title .katex { text-transform: none; }
-.kbsel { font-size: 14px; color: var(--text2); margin-top: 8px; }
-.kbsel:empty { display: none; }
-.kbsel b { color: var(--text); font-family: 'KaTeX_Math', 'Times New Roman', serif; font-style: italic; font-weight: 400; font-size: 1.1em; }
-.kbsel a { color: var(--muted); }
-/* ===== Phone and tablet ===== */
-.tab-nav-inner { padding-left: max(16px, env(safe-area-inset-left)) !important; padding-right: max(16px, env(safe-area-inset-right)) !important; padding-top: max(10px, env(safe-area-inset-top)) !important; }
-.main { padding-left: max(16px, env(safe-area-inset-left)) !important; padding-right: max(16px, env(safe-area-inset-right)) !important; padding-bottom: max(70px, calc(env(safe-area-inset-bottom) + 40px)) !important; }
-#gpop { bottom: max(16px, calc(env(safe-area-inset-bottom) + 8px)); }
-.tbtn, .kk, .stab { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-#q { font-size: 16px !important; } /* 16px stops iOS zooming in on focus */
-.eqdisp, .qtable, .fig { -webkit-overflow-scrolling: touch; }
-@media (max-width: 640px) {
-  .tools { flex-wrap: wrap; min-width: 0; }
-  .tab-nav { overflow-x: hidden !important; }
-  #q { flex: 1 1 100%; order: 0; }
-  .tools .tbtn { flex: 1 1 0; text-align: center; padding: 8px 6px; }
-  .tabs { min-width: 0; flex-wrap: nowrap !important; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px; }
-  .tabs::-webkit-scrollbar { display: none; }
-  .stab { white-space: nowrap; flex: 0 0 auto; font-size: 14px !important; padding: 8px 10px !important; }
-  .eqhdr { flex-wrap: wrap !important; align-items: flex-start !important; gap: 4px 10px !important; padding: 12px 12px !important; }
-  .eqnum { order: 0; }
-  .eqmain { flex: 1 1 100% !important; order: 1; min-width: 0; }
-  .eqarrow { position: absolute; right: 12px; top: 12px; }
-  .eqcard { position: relative; }
-  .eqdisp { font-size: 1.4em !important; }
-  .eqbody { padding-left: 12px !important; padding-right: 12px !important; }
-  .eqbody .katex-display { font-size: 1.12em; }
-  .main { padding-top: 14px !important; }
-  /* Basics table: one stacked block per row */
-  .qtable thead { display: none; }
-  .qtable table, .qtable tbody, .qtable tr, .qtable td { display: block; width: 100%; }
-  .qtable tr { padding: 10px 12px; border-bottom: 1px solid var(--border); }
-  .qtable td { border: none !important; padding: 2px 0 !important; }
-  .qtable td.qe { white-space: normal; font-size: 1.35em; padding-bottom: 4px !important; }
-  .qtable td:empty { display: none; }
-  .gloss td { display: block; }
-  .kk { min-width: 44px; min-height: 48px; }
-  .kbout, .sugg { max-height: 45vh; }
-  .intro { font-size: 15px; }
-  .toc .tnum { min-width: 4.5em; }
-}
-.mph { font-family: 'KaTeX_Math', 'Times New Roman', serif; font-style: italic; }
-html, body { background: var(--bg); }
-.theme-btn { background: var(--card2); color: var(--text2); border: 1px solid var(--border); border-radius: 999px; padding: 4px 10px; font: 500 12px 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; cursor: pointer; }
-.theme-btn:hover { color: var(--text); }
-.box.blue { border-color: var(--blue) !important; }
-.box.amber { border-color: var(--amber) !important; }
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-text-size-adjust: 100%; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 15px;
-  line-height: 1.65;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-.header {
-  background: var(--surf);
-  border-bottom: 1px solid var(--border);
-  padding: 18px 24px 16px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-.header-inner {
-  max-width: 780px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-.badge {
-  font-family: 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  background: var(--adim);
-  color: var(--accent);
-  border: 1px solid var(--border2);
-  border-radius: 5px;
-  padding: 3px 8px;
-  white-space: nowrap;
-}
-.header-text { flex: 1; min-width: 160px; }
-.header-title {
-  font-family: 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  letter-spacing: 0.01em;
-}
-.header-sub {
-  font-family: 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 10.5px;
-  color: var(--text2);
-  margin-top: 2px;
-  letter-spacing: 0.02em;
-}
-.tab-nav {
-  background: var(--surf);
-  border-bottom: 1px solid var(--border);
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.tab-nav::-webkit-scrollbar { display: none; }
-.tab-nav-inner {
-  max-width: 780px;
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px;
-  padding: 8px 16px 0;
-}
-.stab {
-  font-family: 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  color: var(--text2);
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  padding: 8px 14px 10px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: color 0.18s, border-color 0.18s;
-  -webkit-tap-highlight-color: transparent;
-}
-.stab:hover { color: var(--text); }
-.stab.active { color: var(--accent); border-bottom-color: var(--accent); }
-.main { max-width: 780px; margin: 0 auto; padding: 24px 16px 70px; }
-.panel { display: none; }
-.panel.active { display: block; }
-.intro {
-  background: var(--card2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 16px 18px;
-  margin-bottom: 20px;
-  font-size: 13.5px;
-  color: var(--text2);
-}
-.sec-title {
-  font-family: 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 12px;
-  margin-top: 26px;
-}
-.sec-title:first-of-type { margin-top: 0; }
-.eqcard {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  margin-bottom: 10px;
-  overflow: hidden;
-}
-.eqhdr {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  min-height: 48px;
-}
-.eqhdr:hover { background: var(--card2); }
-.eqnum {
-  font-family: 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 10.5px;
-  font-weight: 600;
-  color: var(--accent);
-  background: var(--adim);
-  border-radius: 4px;
-  padding: 3px 7px;
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-.eqmain { flex: 1; min-width: 0; }
-.eqdisp { font-size: 1.05em; margin-bottom: 2px; overflow-x: auto; }
-.eqname { font-size: 12.5px; color: var(--text2); }
-.eqarrow {
-  font-size: 11px;
-  color: var(--muted);
-  transition: transform 0.2s;
-  flex-shrink: 0;
-}
-.eqhdr.open .eqarrow { transform: rotate(90deg); }
-.eqbody {
-  display: none;
-  padding: 4px 16px 16px;
-  border-top: 1px solid var(--border);
-}
-.eqbody.open { display: block; padding-top: 14px; }
-.eqbody .block { margin-bottom: 12px; }
-.eqbody .block:last-child { margin-bottom: 0; }
-.block-label {
-  font-family: 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 6px;
-}
-.params { list-style: none; }
-.params li {
-  display: flex;
-  gap: 8px;
-  padding: 3px 0;
-  font-size: 13.5px;
-  color: var(--text2);
-}
-.params .psym { flex-shrink: 0; min-width: 34px; color: var(--text); font-weight: 500; }
-.box {
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin: 8px 0;
-  font-size: 13.5px;
-  color: var(--text2);
-}
-.box.accent { background: var(--adim); border: 1px solid var(--border2); }
-.box.blue { background: var(--bdim); border: 1px solid #1e4a38; }
-.box.amber { background: var(--amdim); border: 1px solid #3a2808; }
-.box p { margin-bottom: 5px; }
-.box p:last-child { margin-bottom: 0; }
-.box .katex-display { margin: 6px 0; }
-.derivstep { margin: 4px 0; font-size: 13.5px; color: var(--text2); }
-.footer-note {
-  text-align: center;
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 30px;
-  font-family: 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-@media (max-width: 480px) {
-  .header { padding: 14px 16px 12px; }
-  .main { padding: 18px 12px 60px; }
-  .eqhdr { padding: 12px 12px; }
-  .eqbody { padding: 4px 12px 14px; }
-  .eqbody.open { padding-top: 12px; }
-}
-.toc { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; margin: 0 0 22px; }
-.toc-label { font-family: 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-.toc ol { padding-left: 1.3em; }
-.toc > ol > li { margin: 6px 0; font-weight: 600; }
-.toc a { color: var(--accent); text-decoration: none; }
-.toc a:hover { text-decoration: underline; }
-.toc ul { list-style: none; padding-left: 0; margin: 2px 0 0; font-weight: 400; font-size: .9em; color: var(--text2); }
-.toc ul li { margin: 1px 0; }
-.toc ul a { color: var(--text2); }
-.toc .tnum { font-family: 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: .85em; color: var(--muted); display: inline-block; min-width: 5.5em; }
-.method { border-left: 4px solid var(--blue); }
-.method .eqnum { background: var(--bdim); color: var(--blue); }
-.mtitle { font-weight: 600; font-size: 1.02rem; color: var(--text); margin-bottom: 2px; }
-ol.steps { padding-left: 1.3em; } ol.steps li { margin: 5px 0; }
-ul.mist { padding-left: 1.2em; } ul.mist li { margin: 3px 0; }
-.xref { color: var(--blue); text-decoration: none; font-weight: 500; } .xref:hover { text-decoration: underline; }
-details.deeper { margin-top: 10px; background: var(--card2); border-radius: 8px; padding: 0 12px; }
-details.deeper > summary { cursor: pointer; padding: 8px 0; font-weight: 600; color: var(--accent); font-size: .92rem; }
-details.deeper[open] { padding-bottom: 10px; }
-.howto { background: var(--bdim); color: var(--text2); border-radius: 10px; padding: 10px 14px; margin: 0 0 18px; font-size: .92rem; }
-.qtable { overflow-x: auto; margin: 0 0 18px; }
-.qtable table { border-collapse: collapse; width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 10px; font-size: .9rem; }
-.qtable th { text-align: left; font-family: 'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--border); }
-.qtable td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--text2); }
-.qtable tr:last-child td { border-bottom: none; }
-.qtable td.qe { color: var(--text); white-space: nowrap; min-width: 9em; }
-.qtable td.qs { white-space: nowrap; }
-@media print { .qtable tr { break-inside: avoid; } }
-@media print { details.deeper { display: block; } details.deeper > summary { list-style: none; } }
-@media print {
-  :root, :root[data-theme="dark"] { --bg:#fff; --surf:#fff; --card:#fff; --card2:#f0f1f7; --border:#e2e4ef; --text:#111827; --text2:#374151; --muted:#6b7280; --accent:#6d28d9; --blue:#047857; --bdim:#d1fae5; --adim:#ede9fe; color-scheme: light; }
-  body { background: #fff !important; }
-  .theme-btn { display: none; }
-  .tab-nav, .eqarrow { display: none !important; }
-  .panel { display: block !important; }
-  .panel + .panel { break-before: page; }
-  .eqbody { display: block !important; padding-top: 10px; }
-  .eqcard { break-inside: avoid; box-shadow: none !important; }
-  .header { position: static !important; }
-}
-@media print {
-  :root, :root[data-theme="light"] { --bg:#fff; --surf:#fff; --card:#fff; --card2:#f6f6f6; --border:#ddd; --border2:#bbb; --accent:#000; --blue:#000; --text:#000; --text2:#333; --muted:#666; color-scheme: light; }
-  body { background:#fff !important; }
-  .theme-btn, .howto { display: none !important; }
-}
-
+:root{--bg:#000;--surf:#0c0c0c;--card:#0f0f0f;--card2:#171717;--border:#262626;--border2:#3a3a3a;--text:#f2f2f2;--text2:#c2c2c2;--muted:#7d7d7d;--link:#f2f2f2;color-scheme:dark;}
+:root[data-theme="light"]{--bg:#fff;--surf:#fff;--card:#fafafa;--card2:#f1f1f1;--border:#e2e2e2;--border2:#cfcfcf;--text:#111;--text2:#3f3f3f;--muted:#8a8a8a;--link:#111;color-scheme:light;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;}
+body{background:var(--bg);color:var(--text);font:17px/1.65 Georgia,'Times New Roman',serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:var(--link);}
+.top{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--border);padding:10px 16px calc(10px);padding-top:max(10px, env(safe-area-inset-top));}
+.toprow{display:flex;align-items:center;gap:10px;max-width:760px;margin:0 auto;}
+.logo{font-size:26px;line-height:1;text-decoration:none;font-style:italic;font-family:'KaTeX_Caligraphic',Georgia,serif;width:34px;text-align:center;}
+.brand{font:600 12px/1.2 -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.search{flex:1;position:relative;min-width:0;}
+#q{width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--card);color:var(--text);font:16px -apple-system,system-ui,sans-serif;}
+.tb{border:1px solid var(--border2);background:var(--card);color:var(--text2);border-radius:8px;padding:8px 10px;font:13px -apple-system,system-ui,sans-serif;cursor:pointer;}
+#sugg{position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--card);border:1px solid var(--border2);border-radius:8px;overflow:hidden;display:none;z-index:60;}
+#sugg.on{display:block;}
+#sugg a{display:block;padding:9px 12px;text-decoration:none;border-bottom:1px solid var(--border);}
+#sugg a:last-child{border-bottom:none;}
+#sugg .sk{font:11px -apple-system,system-ui,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-right:8px;}
+.wrap{max-width:760px;margin:0 auto;padding:18px 16px 80px;}
+.trail{font:13px -apple-system,system-ui,sans-serif;color:var(--muted);margin-bottom:14px;line-height:1.8;}
+.trail a{color:var(--muted);text-decoration:none;}
+.trail a:hover{color:var(--text);}
+.trail .sep{margin:0 6px;opacity:.6;}
+.meta{font:12px -apple-system,system-ui,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+h1{font-size:1.75rem;line-height:1.25;font-weight:normal;margin-bottom:10px;}
+.lede{font-size:1.12rem;color:var(--text);border-left:3px solid var(--text);padding:2px 0 2px 14px;margin:6px 0 18px;}
+details.sec{border-top:1px solid var(--border);}
+details.sec:last-of-type{border-bottom:1px solid var(--border);}
+details.sec>summary{list-style:none;cursor:pointer;padding:13px 2px;font:600 14px -apple-system,system-ui,sans-serif;letter-spacing:.02em;display:flex;justify-content:space-between;align-items:center;}
+details.sec>summary::-webkit-details-marker{display:none;}
+details.sec>summary::after{content:'+';color:var(--muted);font-size:18px;}
+details.sec[open]>summary::after{content:'−';}
+.secb{padding:0 2px 16px;color:var(--text2);}
+.secb p{margin-bottom:.7em;} .secb ul,.secb ol{padding-left:22px;margin-bottom:.7em;} .secb li{margin:.25em 0;}
+.steps{counter-reset:s;list-style:none;padding-left:0!important;}
+.steps>li{counter-increment:s;position:relative;padding-left:30px;margin:10px 0;}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:1px;width:21px;height:21px;border:1px solid var(--border2);border-radius:50%;font:12px/21px -apple-system,system-ui,sans-serif;text-align:center;color:var(--text2);}
+.steps details summary{cursor:pointer;color:var(--text);list-style:none;}
+.steps details summary::-webkit-details-marker{display:none;}
+.steps details summary::after{content:' why ›';font:12px -apple-system,system-ui,sans-serif;color:var(--muted);white-space:nowrap;}
+.steps details[open] summary::after{content:' why ⌄';}
+.steps .why{font-size:.93em;color:var(--text2);padding:6px 0 2px;}
+a.wl{text-decoration:none;border-bottom:1px dotted var(--text2);color:var(--text);}
+a.wl:hover{border-bottom-style:solid;}
+.links{margin-top:22px;}
+.links h3{font:600 12px -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:16px 0 8px;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{display:inline-block;border:1px solid var(--border2);border-radius:999px;padding:4px 11px;font-size:.88rem;text-decoration:none;color:var(--text2);background:var(--card);}
+.chip:hover{color:var(--text);border-color:var(--text2);}
+.pn{display:flex;justify-content:space-between;gap:10px;margin-top:26px;font:13px -apple-system,system-ui,sans-serif;}
+.pn a{text-decoration:none;color:var(--text2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;flex:1;}
+.pn a span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;}
+.pn a.nx{text-align:right;}
+/* home */
+.intro{color:var(--text2);margin-bottom:20px;}
+.start{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 24px;}
+.topic{margin:22px 0;}
+.topic h2{font:600 13px -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:6px;}
+.tlist a{display:block;text-decoration:none;padding:9px 0;border-bottom:1px solid var(--border);}
+.tlist a b{font-weight:normal;color:var(--text);}
+.tlist a i{display:block;font-style:normal;color:var(--muted);font-size:.9rem;line-height:1.45;}
+.kind{font:10px -apple-system,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border:1px solid var(--border2);border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:2px;}
+.foot{color:var(--muted);font-size:.85rem;margin-top:30px;}
+/* preview sheet */
+#pv{position:fixed;left:0;right:0;bottom:0;z-index:80;background:var(--card);border-top:1px solid var(--border2);box-shadow:0 -10px 30px rgba(0,0,0,.35);padding:16px 18px calc(18px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .22s ease;max-width:760px;margin:0 auto;border-radius:14px 14px 0 0;}
+#pv.on{transform:none;}
+#pv .pm{font:11px -apple-system,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
+#pv .pt{font-size:1.25rem;margin:2px 0 6px;}
+#pv .pl{color:var(--text2);margin-bottom:12px;}
+#pv .pb{display:flex;gap:8px;}
+#pv .pb a,#pv .pb button{flex:1;text-align:center;border:1px solid var(--border2);border-radius:8px;padding:10px;font:14px -apple-system,system-ui,sans-serif;background:var(--card2);color:var(--text);text-decoration:none;cursor:pointer;}
 .figc{width:100%;max-width:560px;height:auto;display:block;border:1px solid var(--border);border-radius:6px;touch-action:pan-y;}
 .figctl{display:flex;gap:18px;align-items:center;margin:10px 0;font-size:.92em;color:var(--text2);flex-wrap:wrap;}
 .figctl input[type=range]{width:200px;vertical-align:middle;}
 .figmsg{font-size:.92em;color:var(--text2);min-height:3em;}
-.classic{font-size:.9em;color:var(--muted);margin:6px 0 0;}
+.katex{font-size:1.04em;}
+.katex-display{overflow-x:auto;overflow-y:hidden;}
 </style>
 </head>
 <body>
-
-<div class="tab-nav">
-  <div class="tab-nav-inner">
-    <div class="tools">
-      <input id="q" type="search" placeholder="Search, or tap 𝒯ℬ for symbols" aria-label="Search the guide" autocomplete="off">
-      <button class="tbtn" id="kbBtn" aria-label="Symbol keyboard" onclick="toggleKb()">𝒯ℬ</button>
-      <button class="tbtn" id="expBtn" onclick="toggleAll()">Expand all</button>
-      <button class="tbtn" onclick="document.body.classList.toggle('show-help')" aria-label="How to use this guide">?</button>
-      <button class="tbtn" id="themeBtn" onclick="cycleTheme()" aria-label="Switch light or dark mode">Light</button>
-    </div>
-<div class="kb" id="kb" hidden>
-  <div class="kbkeys"><button class="kk" data-i="0">𝒯<span class="kn">script T</span></button><button class="kk" data-i="1">ℬ<span class="kn">script B</span></button><button class="kk" data-i="2">Ā<span class="kn">closure</span></button><button class="kk" data-i="3">A′<span class="kn">derived set</span></button><button class="kk" data-i="4">∼<span class="kn">sim</span></button><button class="kk" data-i="5">X*</button><button class="kk" data-i="6">p</button><button class="kk" data-i="7">f⁻¹<span class="kn">preimage</span></button><button class="kk" data-i="8">B(x,ε)</button><button class="kk" data-i="9">d</button><button class="kk" data-i="10">×</button><button class="kk" data-i="11">ε δ</button><button class="kk" data-i="12">ℝ_ℓ</button></div>
-  <div class="kbsel" id="kbsel"></div>
-  <div class="kbout" id="kbout"></div>
-</div>
-<div class="sugg" id="sugg"></div>
-    <div class="tabs">
-    <button class="stab active" onclick="switchTab('basics')">Basics · Quick Reference</button>
-    <button class="stab" onclick="switchTab('concepts')">Concepts</button>
-    <button class="stab" onclick="switchTab('spaces')">§12–16 · Spaces & Bases</button>
-    <button class="stab" onclick="switchTab('closed')">§17 · Closed Sets & Hausdorff</button>
-    <button class="stab" onclick="switchTab('maps')">§18–21 · Continuity & Metrics</button>
-    <button class="stab" onclick="switchTab('quot')">§22 · Quotients</button>
-    <button class="stab" onclick="switchTab('zoo')">Examples</button>
-    </div>
-  </div>
-</div>
-
-<div id="gpop" role="dialog"><button class="gx" aria-label="Close">×</button><div class="gt"></div><div class="gd"></div><div class="gsee"></div></div>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><marker id="fa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs></svg>
-<div class="main">
-<div class="noresults" id="noRes">No matches.</div>
-
-<div class="howto"><b>How to use this guide.</b> <em>Quick:</em> the Basics tab (every definition and key fact), the Contents box, and the Steps in each Method. <em>Depth:</em> open any card for its symbols, statement and why it holds, and open “Go deeper” where there is one. Underlined links jump to the card they name; dotted terms show a short definition.</div>
-<div id="basics" class="panel active">
-<div class="intro">Every definition and key fact in one line each: the ones you reach for inside proofs without thinking. Each row links to the card where it is explained. Theorem numbers follow Munkres, <em>Topology</em> (2nd ed.); check them against your copy.<p class="classic">The earlier §12–16 notes, quiz and practice are kept at <a href="classic/">classic</a>.</p></div>
-<div class="sec-title">Open sets and bases</div><div class="qtable"><table><thead><tr><th>Statement</th><th>What it is</th><th>Symbols</th><th>See</th></tr></thead><tbody><tr><td class="qe">$\varnothing,X\in\mathcal T$; unions; finite $\cap$</td><td>Axioms for a topology</td><td>$\mathcal T$ topology on $X$</td><td class="qs"><a class="xref" href="#d-top">topology</a></td></tr><tr><td class="qe">$U$ open $\iff \forall x\in U\ \exists B\in\mathcal B:\ x\in B\subseteq U$</td><td>Open in the topology generated by a basis</td><td>$\mathcal B$ basis</td><td class="qs"><a class="xref" href="#d-basis">basis</a></td></tr><tr><td class="qe">$U$ open $\iff U=\bigcup B_\alpha$</td><td>Open sets are unions of basis elements (Lemma 13.1)</td><td></td><td class="qs"><a class="xref" href="#d-basis">basis</a></td></tr><tr><td class="qe">$\mathcal T\subseteq\mathcal T'$</td><td>$\mathcal T'$ finer than $\mathcal T$</td><td></td><td class="qs"><a class="xref" href="#t-13-3">13.3</a></td></tr><tr><td class="qe">$\forall x\in B\ \exists B'\!:\ x\in B'\subseteq B$</td><td>Lemma 13.3: $\mathcal B'$ generates a finer topology</td><td>$B\in\mathcal B$, $B'\in\mathcal B'$</td><td class="qs"><a class="xref" href="#t-13-3">13.3</a></td></tr><tr><td class="qe">$\{U\times V\}$</td><td>Basis of the product topology</td><td>$U$ open in $X$, $V$ open in $Y$</td><td class="qs"><a class="xref" href="#d-prod">product</a></td></tr><tr><td class="qe">$\mathcal T_Y=\{Y\cap U\}$</td><td>Subspace topology</td><td>$Y\subseteq X$</td><td class="qs"><a class="xref" href="#d-sub">subspace</a></td></tr></tbody></table></div>
-<div class="sec-title">Closed sets, closure, limit points</div><div class="qtable"><table><thead><tr><th>Statement</th><th>What it is</th><th>Symbols</th><th>See</th></tr></thead><tbody><tr><td class="qe">$A$ closed $\iff X\setminus A$ open</td><td>Closed set</td><td></td><td class="qs"><a class="xref" href="#d-closed">closed</a></td></tr><tr><td class="qe">$\bigcap$ any, $\bigcup$ finite</td><td>Closed sets are closed under these (Thm 17.1)</td><td></td><td class="qs"><a class="xref" href="#d-closed">closed</a></td></tr><tr><td class="qe">$x\in\overline A\iff$ every open $U\ni x$ meets $A$</td><td>Closure test (Thm 17.5); a basis suffices</td><td>$\overline A$ closure</td><td class="qs"><a class="xref" href="#t-17-5">17.5</a></td></tr><tr><td class="qe">$\overline A=A\cup A'$</td><td>Closure is $A$ plus its limit points (Thm 17.6)</td><td>$A'$ limit points</td><td class="qs"><a class="xref" href="#t-17-6">17.6</a></td></tr><tr><td class="qe">$A$ closed $\iff A'\subseteq A$</td><td>Closed means it contains its limit points (Cor 17.7)</td><td></td><td class="qs"><a class="xref" href="#t-17-6">17.6</a></td></tr><tr><td class="qe">$\overline A^{\,Y}=\overline A\cap Y$</td><td>Closure in a subspace (Thm 17.4)</td><td></td><td class="qs"><a class="xref" href="#d-closed">closed</a></td></tr></tbody></table></div>
-<div class="sec-title">Hausdorff</div><div class="qtable"><table><thead><tr><th>Statement</th><th>What it is</th><th>Symbols</th><th>See</th></tr></thead><tbody><tr><td class="qe">$x\ne y\Rightarrow\exists U\ni x,\,V\ni y,\ U\cap V=\varnothing$</td><td>Hausdorff</td><td></td><td class="qs"><a class="xref" href="#d-haus">Hausdorff</a></td></tr><tr><td class="qe">finite sets closed</td><td>In a Hausdorff space (Thm 17.8)</td><td></td><td class="qs"><a class="xref" href="#d-haus">Hausdorff</a></td></tr><tr><td class="qe">$x_n\to x,\ x_n\to y\Rightarrow x=y$</td><td>Limits are unique (Thm 17.10)</td><td></td><td class="qs"><a class="xref" href="#d-haus">Hausdorff</a></td></tr><tr><td class="qe">$B(x,\tfrac{d(x,y)}2)\cap B(y,\tfrac{d(x,y)}2)=\varnothing$</td><td>Every metric space is Hausdorff</td><td></td><td class="qs"><a class="xref" href="#d-metric">metric</a></td></tr></tbody></table></div>
-<div class="sec-title">Continuity</div><div class="qtable"><table><thead><tr><th>Statement</th><th>What it is</th><th>Symbols</th><th>See</th></tr></thead><tbody><tr><td class="qe">$V$ open $\Rightarrow f^{-1}(V)$ open</td><td>Continuous; basis elements of $Y$ suffice</td><td></td><td class="qs"><a class="xref" href="#d-cont">continuous</a></td></tr><tr><td class="qe">$f(\overline A)\subseteq\overline{f(A)}$</td><td>Equivalent form (Thm 18.1)</td><td></td><td class="qs"><a class="xref" href="#t-18-1">18.1</a></td></tr><tr><td class="qe">$C$ closed $\Rightarrow f^{-1}(C)$ closed</td><td>Equivalent form (Thm 18.1)</td><td></td><td class="qs"><a class="xref" href="#t-18-1">18.1</a></td></tr><tr><td class="qe">$f|_A,\,f|_B$ continuous, $A,B$ closed</td><td>Pasting lemma (Thm 18.3)</td><td>$X=A\cup B$</td><td class="qs"><a class="xref" href="#t-18-3">18.3</a></td></tr><tr><td class="qe">$d(x,y)\lt \delta\Rightarrow d(f(x),f(y))\lt \varepsilon$</td><td>Continuity between metric spaces (Thm 21.1)</td><td>$\varepsilon,\delta>0$</td><td class="qs"><a class="xref" href="#t-21-1">21.1</a></td></tr><tr><td class="qe">$f,\,f^{-1}$ continuous bijection</td><td>Homeomorphism</td><td></td><td class="qs"><a class="xref" href="#d-homeo">homeo</a></td></tr></tbody></table></div>
-<div class="sec-title">Quotients</div><div class="qtable"><table><thead><tr><th>Statement</th><th>What it is</th><th>Symbols</th><th>See</th></tr></thead><tbody><tr><td class="qe">$U$ open $\iff p^{-1}(U)$ open</td><td>Quotient topology</td><td>$p:X\to X^*$</td><td class="qs"><a class="xref" href="#d-quot">quotient</a></td></tr><tr><td class="qe">$C=p^{-1}(p(C))$</td><td>Saturated set</td><td></td><td class="qs"><a class="xref" href="#d-sat">saturated</a></td></tr><tr><td class="qe">$C$ open, saturated $\Rightarrow p(C)$ open</td><td>How open sets get into a quotient</td><td></td><td class="qs"><a class="xref" href="#d-sat">saturated</a></td></tr><tr><td class="qe">$g$ continuous $\iff g\circ p$ continuous</td><td>Maps out of a quotient (Thm 22.2)</td><td>$g:X^*\to Z$</td><td class="qs"><a class="xref" href="#t-22-2">22.2</a></td></tr></tbody></table></div>
-</div><div id="concepts" class="panel">
-<div class="intro">One entry per idea, to read in depth: the exact definition, the intuition, an example and a non-example, what it is often confused with, and where it appears. Tap a dotted term anywhere in the guide for a short definition.</div>
-<div class="sec-title">Sets and relations (Ch. 1)</div>
-<div class="eqcard concept" id="c-eqrel">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">concept</span>
-    <div class="eqmain"><div class="eqdisp">$x\sim y$</div><div class="eqname">Equivalence relation</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Definition</div><p>A relation $\sim$ on $X$ that is <b>reflexive</b> ($x\sim x$), <b>symmetric</b> ($x\sim y\Rightarrow y\sim x$) and <b>transitive</b> ($x\sim y,\ y\sim z\Rightarrow x\sim z$).</p></div><div class="block"><div class="block-label">Intuition</div><p>A rule for which points count as "the same".</p></div><div class="block"><div class="block-label">Example</div><p>On a metric space with $A\subseteq X$: $x\sim_A y$ iff $x=y$ or both $x,y\in A$.</p></div><div class="block"><div class="block-label">Non-example</div><p>$x\lt y$ on $\mathbb R$ is neither reflexive nor symmetric.</p></div><div class="block"><div class="block-label">Often confused with</div><p>A partition: each one determines the other.</p></div><div class="block"><div class="block-label">Where it appears</div><p><a class="xref" href="#d-quot">Quotient topology</a>; HW7 Q1.</p></div></div>
-</div>
-<div class="eqcard concept" id="c-class">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">concept</span>
-    <div class="eqmain"><div class="eqdisp">$[x]=\{y:y\sim x\}$</div><div class="eqname">Equivalence class</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Definition</div><p>The set of everything related to $x$.</p></div><div class="block"><div class="block-label">Intuition</div><p>Everything that counts as the same as $x$.</p></div><div class="block"><div class="block-label">Example</div><p>For $\sim_A$: $[a]=A$ for $a\in A$; $[x]=\{x\}$ for $x\notin A$.</p></div><div class="block"><div class="block-label">Often confused with</div><p>$[x]$ is a <em>set</em> of points of $X$ but a single <em>point</em> of the quotient.</p></div><div class="block"><div class="block-label">Where it appears</div><p><a class="xref" href="#d-quot">Quotients</a>.</p></div></div>
-</div>
-<div class="eqcard concept" id="c-part">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">concept</span>
-    <div class="eqmain"><div class="eqdisp">$X=\textstyle\bigsqcup_\alpha P_\alpha$</div><div class="eqname">Partition</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Definition</div><p>A collection of nonempty, pairwise disjoint subsets of $X$ whose union is $X$.</p></div><div class="block"><div class="block-label">Intuition</div><p>Cut $X$ into pieces, no overlaps, nothing left out.</p></div><div class="block"><div class="block-label">Example</div><p>The classes of any equivalence relation.</p></div><div class="block"><div class="block-label">Non-example</div><p>$\{[0,1],[1,2]\}$ on $[0,2]$: the pieces overlap at $1$.</p></div><div class="block"><div class="block-label">Where it appears</div><p>Munkres builds quotient spaces from partitions (§22).</p></div></div>
-</div>
-<div class="sec-title">Topologies and bases</div>
-<div class="eqcard concept" id="c-open">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">concept</span>
-    <div class="eqmain"><div class="eqdisp">$U\in\mathcal T$</div><div class="eqname">Open set</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Definition</div><p>A member of the topology $\mathcal T$.</p></div><div class="block"><div class="block-label">Intuition</div><p>What "open" means depends entirely on the chosen topology; there is no open set without a topology.</p></div><div class="block"><div class="block-label">Example</div><p>$(0,1)$ in $\mathbb R$; $[0,1)$ in $\mathbb R_\ell$.</p></div><div class="block"><div class="block-label">Non-example</div><p>$[0,1)$ in standard $\mathbb R$.</p></div><div class="block"><div class="block-label">Often confused with</div><p>"Not closed". Sets can be open, closed, both, or neither.</p></div><div class="block"><div class="block-label">Where it appears</div><p>Every definition in the course.</p></div></div>
-</div>
-<div class="eqcard concept" id="c-basis">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">concept</span>
-    <div class="eqmain"><div class="eqdisp">$x\in B\subseteq U$</div><div class="eqname">Basis</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Definition</div><p>A collection $\mathcal B$ with (1) every point in some $B$, and (2) if $x\in B_1\cap B_2$ then some $B_3$ has $x\in B_3\subseteq B_1\cap B_2$.</p></div><div class="block"><div class="block-label">Intuition</div><p>Building blocks: you only need to understand small open sets around each point.</p></div><div class="block"><div class="block-label">Example</div><p>Open intervals; open balls; $[a,b)$ for $\mathbb R_\ell$.</p></div><div class="block"><div class="block-label">Non-example</div><p>Closed intervals in $\mathbb R$: $[0,1]\cap[1,2]=\{1\}$.</p></div><div class="block"><div class="block-label">Often confused with</div><p>A topology. A basis generates one; it is not itself closed under unions.</p></div><div class="block"><div class="block-label">Where it appears</div><p><a class="xref" href="#d-basis">Basis card</a>, <a class="xref" href="#m-open">Method: show a set is open</a>.</p></div></div>
-</div>
-<div class="eqcard concept" id="c-finer">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">concept</span>
-    <div class="eqmain"><div class="eqdisp">$\mathcal T\subseteq\mathcal T'$</div><div class="eqname">Finer and coarser</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Definition</div><p>$\mathcal T'$ is finer than $\mathcal T$ if every $\mathcal T$-open set is $\mathcal T'$-open.</p></div><div class="block"><div class="block-label">Intuition</div><p>Finer means more open sets, so it can tell more points apart and fewer sequences converge.</p></div><div class="block"><div class="block-label">Example</div><p>$\mathbb R_\ell$ is finer than $\mathbb R$; discrete is finest, indiscrete coarsest.</p></div><div class="block"><div class="block-label">Often confused with</div><p>Size of the open sets: a finer topology has more open sets, not bigger ones.</p></div><div class="block"><div class="block-label">Where it appears</div><p><a class="xref" href="#t-13-3">Lemma 13.3</a>.</p></div></div>
-</div>
-<div class="sec-title">Closed sets and separation</div>
-<div class="eqcard concept" id="c-closed">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">concept</span>
-    <div class="eqmain"><div class="eqdisp">$X\setminus A\in\mathcal T$</div><div class="eqname">Closed set</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Definition</div><p>A set whose complement is open.</p></div><div class="block"><div class="block-label">Intuition</div><p>It contains all the points its own points crowd toward.</p></div><div class="block"><div class="block-label">Example</div><p>$[a,b]$; single points in a Hausdorff space.</p></div><div class="block"><div class="block-label">Non-example</div><p>$[0,1)$ and $\mathbb Q$ in $\mathbb R$.</p></div><div class="block"><div class="block-label">Often confused with</div><p>"Not open".</p></div><div class="block"><div class="block-label">Where it appears</div><p>HW7 Q1: closedness gives every outside point a ball missing $A$.</p></div></div>
-</div>
-<div class="eqcard concept" id="c-limit">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">concept</span>
-    <div class="eqmain"><div class="eqdisp">$x\in A'$</div><div class="eqname">Limit point</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Definition</div><p>$x$ is a limit point of $A$ if every neighbourhood of $x$ contains a point of $A$ other than $x$.</p></div><div class="block"><div class="block-label">Intuition</div><p>Points of $A$ crowd in on $x$; $x$ itself may or may not be in $A$.</p></div><div class="block"><div class="block-label">Example</div><p>$0$ for $(0,1)$ and for $\{1/n\}$.</p></div><div class="block"><div class="block-label">Non-example</div><p>An isolated point of $A$, like $0$ in $\{0\}\cup[1,2]$.</p></div><div class="block"><div class="block-label">Often confused with</div><p>A point of the closure: closure points include isolated points; limit points need not.</p></div><div class="block"><div class="block-label">Where it appears</div><p><a class="xref" href="#t-17-6">Theorem 17.6</a>; why A must be closed in HW7.</p></div></div>
-</div>
-<div class="eqcard concept" id="c-haus">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">concept</span>
-    <div class="eqmain"><div class="eqdisp">$U\cap V=\varnothing$</div><div class="eqname">Hausdorff</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Definition</div><p>Any two distinct points have disjoint open neighbourhoods.</p></div><div class="block"><div class="block-label">Intuition</div><p>Points can be put in separate bubbles, so limits are unique.</p></div><div class="block"><div class="block-label">Example</div><p>Metric spaces; subspaces and products of Hausdorff spaces; $X/{\sim_A}$ with $A$ closed.</p></div><div class="block"><div class="block-label">Non-example</div><p>The finite-complement topology on $\mathbb R$; $\mathbb R/(0,1)$; the line with two origins.</p></div><div class="block"><div class="block-label">Often confused with</div><p>T₁ (points are closed): weaker. The finite-complement topology is T₁ but not Hausdorff.</p></div><div class="block"><div class="block-label">Where it appears</div><p><a class="xref" href="#d-haus">Hausdorff card</a>, <a class="xref" href="#m-haus">Method: show a space is Hausdorff</a>.</p></div></div>
-</div>
-<div class="sec-title">Maps and quotients</div>
-<div class="eqcard concept" id="c-cont">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">concept</span>
-    <div class="eqmain"><div class="eqdisp">$f^{-1}(V)\in\mathcal T_X$</div><div class="eqname">Continuous</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Definition</div><p>Preimages of open sets are open.</p></div><div class="block"><div class="block-label">Intuition</div><p>Nearby points of $X$ go to nearby points of $Y$, phrased with open sets instead of distances.</p></div><div class="block"><div class="block-label">Example</div><p>Any map out of a discrete space.</p></div><div class="block"><div class="block-label">Non-example</div><p>The identity $\mathbb R\to\mathbb R_\ell$.</p></div><div class="block"><div class="block-label">Often confused with</div><p>Open map (images of open sets open): a different, independent property.</p></div><div class="block"><div class="block-label">Where it appears</div><p><a class="xref" href="#d-cont">Continuity card</a>, <a class="xref" href="#m-cont">Method</a>.</p></div></div>
-</div>
-<div class="eqcard concept" id="c-quot">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">concept</span>
-    <div class="eqmain"><div class="eqdisp">$X\to X^*$</div><div class="eqname">Quotient (gluing)</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Definition</div><p>Given a partition $X^*$ of $X$ and $p:X\to X^*$ sending each point to its piece, give $X^*$ the topology in which $U$ is open iff $p^{-1}(U)$ is open.</p></div><div class="block"><div class="block-label">Intuition</div><p>Glue points together. A set of glued points is open exactly when everything lying over it is open upstairs.</p></div><div class="block"><div class="block-label">Example</div><p>$[0,1]$ with ends glued is a circle; crush a closed set to a point.</p></div><div class="block"><div class="block-label">Non-example</div><p>Crushing a non-closed set can destroy Hausdorff: $\mathbb R/(0,1)$.</p></div><div class="block"><div class="block-label">Often confused with</div><p>The subspace topology: that restricts to a subset; the quotient glues.</p></div><div class="block"><div class="block-label">Where it appears</div><p><a class="xref" href="#d-quot">Quotient card</a>, <a class="xref" href="#m-quot">Method</a>.</p></div></div>
-</div>
-<div class="eqcard concept" id="c-sat">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">concept</span>
-    <div class="eqmain"><div class="eqdisp">$p^{-1}(p(C))=C$</div><div class="eqname">Saturated set</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Definition</div><p>A set that is a union of whole pieces of the partition.</p></div><div class="block"><div class="block-label">Intuition</div><p>It never contains part of a glued piece without the rest.</p></div><div class="block"><div class="block-label">Example</div><p>For $\sim_A$: any set containing all of $A$ or none of it.</p></div><div class="block"><div class="block-label">Non-example</div><p>A small ball around a point of $A$, when $A$ is bigger than the ball.</p></div><div class="block"><div class="block-label">Where it appears</div><p>The engine of HW7 Q1(b): open saturated sets push down to open sets.</p></div></div>
-</div>
-</div><div id="spaces" class="panel">
-<div class="intro">A topology is a choice of which sets are open. Almost everything here is a way to describe that choice economically (a basis) or to build new spaces from old ones (subspaces, products).</div>
-<div class="sec-title">Methods · how problems here are solved</div>
-<div class="eqcard method" id="m-top">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">method</span>
-    <div class="eqmain"><div class="mtitle">Check that a collection is a topology</div><div class="eqname">“Show that 𝒯 is a topology on X”</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Recognize it</div><p>You are handed a collection of subsets and asked whether it satisfies the axioms.</p></div><div class="block"><div class="block-label">Steps</div><ol class="steps"><li><details class="step"><summary><b>Check $\varnothing$ and $X$</b> are in it.</summary><div class="stepx"><p><b>Why:</b> axiom (1). Easy to forget when the collection is described by a rule.</p></div></details></li><li><details class="step"><summary><b>Unions:</b> take an arbitrary family $\{U_\alpha\}$ of members and show $\bigcup U_\alpha$ is a member.</summary><div class="stepx"><p><b>Why arbitrary:</b> axiom (2) is for any number of sets, even uncountably many. Checking two at a time is not enough.</p></div></details></li><li><details class="step"><summary><b>Finite intersections:</b> show $U_1\cap U_2$ is a member.</summary><div class="stepx"><p><b>Why two suffice:</b> induction then gives any finite number.</p><p><b>Why not infinite:</b> $\bigcap_n(-\tfrac1n,\tfrac1n)=\{0\}$ is not open in $\mathbb R$.</p></div></details></li></ol></div><div class="block"><div class="block-label">Uses</div><p><a class="xref" href="#d-top">Topology</a>.</p></div><div class="block"><div class="block-label">Common mistakes</div><ul class="mist"><li>Checking only pairwise unions.</li><li>Forgetting the empty set in a rule such as "complements are finite".</li></ul></div><details class="deeper"><summary>Go deeper</summary><p>For the finite-complement topology the axioms reduce to De Morgan: $X\setminus\bigcup U_\alpha=\bigcap(X\setminus U_\alpha)$ is finite, and $X\setminus(U_1\cap U_2)=(X\setminus U_1)\cup(X\setminus U_2)$ is finite.</p></details></div>
-</div>
-<div class="eqcard method" id="m-open">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">method</span>
-    <div class="eqmain"><div class="mtitle">Show a set is open</div><div class="eqname">“Show U is open”, in a space given by a basis or a metric</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Recognize it</div><p>The topology comes from a basis (intervals, balls, boxes) and you must show a particular set is open.</p></div><div class="block"><div class="block-label">Steps</div><ol class="steps"><li><details class="step"><summary><b>Take an arbitrary point</b> $x\in U$.</summary><div class="stepx"><p><b>Why:</b> openness is a condition at every point.</p></div></details></li><li><details class="step"><summary><b>Produce a basis element</b> $B$ with $x\in B\subseteq U$. In a metric space this is a ball $B(x,r)$; say how $r$ depends on $x$.</summary><div class="stepx"><p><b>Why:</b> this is the definition of the topology generated by the basis.</p></div></details></li><li><details class="step"><summary><b>Prove $B\subseteq U$:</b> take $y\in B$ and show $y\in U$.</summary><div class="stepx"><p><b>How:</b> usually the triangle inequality: $d(z,y)\le d(z,x)+d(x,y)$.</p></div></details></li></ol></div><div class="block"><div class="block-label">Uses</div><p><a class="xref" href="#d-basis">Basis</a> · <a class="xref" href="#d-metric">Metric</a>.</p></div><div class="block"><div class="block-label">Common mistakes</div><ul class="mist"><li>Choosing one radius for all points: $r$ may depend on $x$.</li><li>Showing $x\in B$ but not $B\subseteq U$.</li></ul></div><details class="deeper"><summary>Go deeper</summary><p>Other routes: write $U$ as a union of open sets, or as $f^{-1}(V)$ for a continuous $f$ and open $V$.</p></details></div>
-</div>
-<div class="eqcard method" id="m-compare">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">method</span>
-    <div class="eqmain"><div class="mtitle">Compare two topologies</div><div class="eqname">“Show 𝒯′ is finer than 𝒯”, “are these topologies the same?”</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Recognize it</div><p>Two topologies on the same set, each given by a basis.</p></div><div class="block"><div class="block-label">Steps</div><ol class="steps"><li><details class="step"><summary><b>Write down bases</b> for both.</summary><div class="stepx"><p><b>Why:</b> Lemma 13.3 only needs bases.</p></div></details></li><li><details class="step"><summary><b>For each $x$ and each $B\ni x$ from the coarser candidate,</b> find $B'$ from the finer one with $x\in B'\subseteq B$.</summary><div class="stepx"><p><b>Why:</b> Lemma 13.3.</p></div></details></li><li><details class="step"><summary><b>For "strictly finer":</b> exhibit one open set of the finer topology that is not open in the other.</summary><div class="stepx"><p><b>Example:</b> $[0,1)$ is open in $\mathbb R_\ell$ but not in $\mathbb R$.</p></div></details></li></ol></div><div class="block"><div class="block-label">Uses</div><p><a class="xref" href="#t-13-3">Lemma 13.3</a>.</p></div><div class="block"><div class="block-label">Common mistakes</div><ul class="mist"><li>Getting the direction backwards: the finer topology supplies the smaller sets.</li></ul></div></div>
-</div>
-<div class="sec-title">§12 · Topological spaces</div>
-<div class="eqcard" id="d-top">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">§12</span>
-    <div class="eqmain"><div class="eqdisp">$\varnothing,X\in\mathcal T,\ \ \bigcup U_\alpha\in\mathcal T,\ \ U_1\cap\dots\cap U_n\in\mathcal T$</div><div class="eqname">Topology — the three axioms</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Symbols</div><ul class="params"><li><span class="psym">$X$</span><span class="pdesc">the underlying set</span></li><li><span class="psym">$\mathcal T$</span><span class="pdesc">the topology: the collection of open sets</span></li><li><span class="psym">$U_\alpha$</span><span class="pdesc">any family of members, of any size</span></li><li><span class="psym">$U_1,\dots,U_n$</span><span class="pdesc">finitely many members</span></li></ul></div><div class="block"><div class="block-label">Origin</div><p>These are the properties of open sets in $\mathbb R$ that the rest of analysis actually uses. Taking them as the definition lets the same arguments run in spaces with no distance at all.</p></div><div class="block"><div class="block-label">Examples</div><p>Discrete (every subset), indiscrete ($\{\varnothing,X\}$), finite complement ($U$ open iff $X\setminus U$ finite, or $U=\varnothing$).</p></div></div>
-</div>
-<div class="sec-title">§13 · Basis for a topology</div>
-<div class="eqcard" id="d-basis">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">§13</span>
-    <div class="eqmain"><div class="eqdisp">$x\in B_1\cap B_2\ \Rightarrow\ \exists B_3:\ x\in B_3\subseteq B_1\cap B_2$</div><div class="eqname">Basis — and the topology it generates</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Symbols</div><ul class="params"><li><span class="psym">$\mathcal B$</span><span class="pdesc">the basis: a collection of subsets of $X$</span></li><li><span class="psym">$B_1,B_2,B_3$</span><span class="pdesc">basis elements</span></li></ul></div><div class="block"><div class="block-label">Definition</div><p>$\mathcal B$ is a basis if every $x$ lies in some $B\in\mathcal B$, and the intersection condition above holds. The topology generated: $U$ is open iff for each $x\in U$ there is $B\in\mathcal B$ with $x\in B\subseteq U$.</p></div><div class="block"><div class="block-label">Lemma 13.1</div><p>The open sets are exactly the unions of basis elements.</p></div><div class="block"><div class="block-label">Lemma 13.2</div><p>Conversely, if $\mathcal C$ is a collection of open sets such that every open $U$ and $x\in U$ have some $C\in\mathcal C$ with $x\in C\subseteq U$, then $\mathcal C$ is a basis for the topology.</p></div></div>
-</div>
-<div class="eqcard" id="t-13-3">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">Lemma 13.3</span>
-    <div class="eqmain"><div class="eqdisp">$\forall x\in B\in\mathcal B\ \ \exists B'\in\mathcal B':\ x\in B'\subseteq B$</div><div class="eqname">Comparing topologies through bases</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Statement</div><p>$\mathcal T'$ (from $\mathcal B'$) is finer than $\mathcal T$ (from $\mathcal B$) if and only if the condition above holds.</p></div><div class="block"><div class="block-label">Why</div><p>If $U$ is $\mathcal T$-open and $x\in U$, there is $B$ with $x\in B\subseteq U$, then $B'$ with $x\in B'\subseteq B\subseteq U$. So $U$ is $\mathcal T'$-open.</p></div><div class="block"><div class="block-label">Lemma 13.4</div><p>$\mathbb R_\ell$ and $\mathbb R_K$ are each strictly finer than $\mathbb R$, and not comparable with each other.</p></div></div>
-</div>
-<div class="sec-title">§15–16 · Products and subspaces</div>
-<div class="eqcard" id="d-prod">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">§15</span>
-    <div class="eqmain"><div class="eqdisp">$\mathcal B=\{U\times V:\ U\in\mathcal T_X,\ V\in\mathcal T_Y\}$</div><div class="eqname">Product topology on X × Y</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Statement</div><p>The product topology is generated by open boxes. Theorem 15.1: products $B\times C$ of basis elements also form a basis.</p></div><div class="block"><div class="block-label">Watch out</div><p>Not every open set is a box: an open disc in $\mathbb R^2$ is a union of boxes.</p></div></div>
-</div>
-<div class="eqcard" id="d-sub">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">§16</span>
-    <div class="eqmain"><div class="eqdisp">$\mathcal T_Y=\{\,Y\cap U : U\in\mathcal T\,\}$</div><div class="eqname">Subspace topology</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Statement</div><p>Open in $Y$ means: what an open set of $X$ cuts out of $Y$. Lemma 16.1: $\{B\cap Y\}$ is a basis for it.</p></div><div class="block"><div class="block-label">Lemma 16.2</div><p>If $Y$ is open in $X$, sets open in $Y$ are open in $X$. Otherwise not: $[0,\tfrac12)$ is open in $[0,1]$ but not in $\mathbb R$.</p></div><div class="block"><div class="block-label">Theorem 16.3</div><p>The product of subspaces carries the subspace topology of the product.</p></div></div>
-</div>
-</div><div id="closed" class="panel">
-<div class="intro">Closed sets, closures and limit points describe what a set "reaches toward". Hausdorff is the first separation property: distinct points can be pulled apart.</div>
-<div class="sec-title">Methods · how problems here are solved</div>
-<div class="eqcard method" id="m-closed">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">method</span>
-    <div class="eqmain"><div class="mtitle">Show a set is closed</div><div class="eqname">“Show A is closed”</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Recognize it</div><p>You must show a set is closed, or decide whether it is.</p></div><div class="block"><div class="block-label">Steps</div><ol class="steps"><li><details class="step"><summary><b>Show $X\setminus A$ is open</b> (the method for open sets).</summary><div class="stepx"><p><b>Why:</b> the definition.</p></div></details></li><li><details class="step"><summary><b>Or show $A$ contains its limit points.</b></summary><div class="stepx"><p><b>Why:</b> Corollary 17.7.</p></div></details></li><li><details class="step"><summary><b>Or write $A=f^{-1}(C)$</b> with $f$ continuous and $C$ closed.</summary><div class="stepx"><p><b>Example:</b> $\{z: d(z,x)\ge r\}$ is $f^{-1}([r,\infty))$ for $f(z)=d(z,x)$.</p></div></details></li></ol></div><div class="block"><div class="block-label">Uses</div><p><a class="xref" href="#d-closed">Closed sets</a> · <a class="xref" href="#t-17-6">17.6</a>.</p></div><div class="block"><div class="block-label">Common mistakes</div><ul class="mist"><li>Concluding "closed" from "not open".</li></ul></div></div>
-</div>
-<div class="eqcard method" id="m-closure">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">method</span>
-    <div class="eqmain"><div class="mtitle">Find a closure</div><div class="eqname">“Find the closure of A”, “find the limit points”</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Recognize it</div><p>A specific set in a specific space.</p></div><div class="block"><div class="block-label">Steps</div><ol class="steps"><li><details class="step"><summary><b>Guess</b> from a picture.</summary><div class="stepx"><p></p></div></details></li><li><details class="step"><summary><b>For $x$ in the guess,</b> show every basis element around $x$ meets $A$.</summary><div class="stepx"><p><b>Why:</b> Theorem 17.5.</p></div></details></li><li><details class="step"><summary><b>For $x$ outside the guess,</b> find one basis element around $x$ missing $A$.</summary><div class="stepx"><p><b>Why:</b> the same theorem, negated.</p></div></details></li></ol></div><div class="block"><div class="block-label">Uses</div><p><a class="xref" href="#t-17-5">17.5</a>.</p></div><div class="block"><div class="block-label">Common mistakes</div><ul class="mist"><li>Forgetting the topology: $\overline{(0,1)}$ is $[0,1]$ in $\mathbb R$ but $[0,1)$ in $\mathbb R_\ell$.</li></ul></div></div>
-</div>
-<div class="eqcard method" id="m-haus">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">method</span>
-    <div class="eqmain"><div class="mtitle">Show a space is Hausdorff</div><div class="eqname">“Show X is Hausdorff”, often for a subspace, product or quotient</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Recognize it</div><p>You must separate every pair of distinct points.</p></div><div class="block"><div class="block-label">Steps</div><ol class="steps"><li><details class="step"><summary><b>Take $x\neq y$.</b> If points come in kinds, split into cases.</summary><div class="stepx"><p><b>Why:</b> different kinds of pairs may need different constructions (in a quotient: two ordinary points, or an ordinary point and a glued one).</p></div></details></li><li><details class="step"><summary><b>In each case write down two open sets,</b> one around each point.</summary><div class="stepx"><p><b>In metric spaces:</b> balls of radius $d(x,y)/2$, made smaller if they must also avoid something.</p></div></details></li><li><details class="step"><summary><b>Prove they are disjoint:</b> suppose $z$ is in both and reach a contradiction.</summary><div class="stepx"><p><b>Typical:</b> $d(x,y)\le d(x,z)+d(z,y)\lt 2r\le d(x,y)$.</p></div></details></li></ol></div><div class="block"><div class="block-label">Uses</div><p><a class="xref" href="#d-haus">Hausdorff</a> · <a class="xref" href="#m-quot">Quotients</a>.</p></div><div class="block"><div class="block-label">Common mistakes</div><ul class="mist"><li>Separating only one pair, or only pairs of one kind.</li></ul></div><details class="deeper"><summary>Go deeper</summary><p>To show a space is not Hausdorff, find two points such that every neighbourhood of one meets every neighbourhood of the other.</p></details></div>
-</div>
-<div class="sec-title">§17 · Closed sets and limit points</div>
-<div class="eqcard" id="d-closed">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">§17</span>
-    <div class="eqmain"><div class="eqdisp">$A\text{ closed}\iff X\setminus A\in\mathcal T$</div><div class="eqname">Closed sets</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Theorem 17.1</div><p>$\varnothing$ and $X$ are closed; arbitrary intersections and finite unions of closed sets are closed.</p></div><div class="block"><div class="block-label">Theorems 17.2–17.4</div><p>In a subspace $Y$: $A$ is closed in $Y$ iff $A=C\cap Y$ for a closed $C$ in $X$; if $Y$ is closed in $X$, closed in $Y$ implies closed in $X$; the closure of $A$ in $Y$ is $\overline A\cap Y$.</p></div></div>
-</div>
-<div class="eqcard" id="t-17-5">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">Thm 17.5</span>
-    <div class="eqmain"><div class="eqdisp">$x\in\overline A\iff\text{every open }U\ni x\text{ meets }A$</div><div class="eqname">The closure test</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Statement</div><p>Also with "every basis element containing $x$". This is the working definition of closure.</p></div><div class="block"><div class="block-label">Why</div><p>If some open $U\ni x$ misses $A$, then $X\setminus U$ is a closed set containing $A$ but not $x$, so $x\notin\overline A$. Conversely each closed $C\supseteq A$ with $x\notin C$ gives the open $X\setminus C\ni x$ missing $A$.</p></div></div>
-</div>
-<div class="eqcard" id="t-17-6">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">Thm 17.6</span>
-    <div class="eqmain"><div class="eqdisp">$\overline A=A\cup A'$</div><div class="eqname">Closure = the set plus its limit points</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Corollary 17.7</div><p>$A$ is closed iff it contains all its limit points.</p></div><div class="block"><div class="block-label">Example</div><p>$A=(0,1)$: $A'=[0,1]$, so $\overline A=[0,1]$. The missing limit points $0,1$ are why crushing $(0,1)$ breaks Hausdorff (<a class="xref" href="#d-quot">§22</a>).</p></div></div>
-</div>
-<div class="eqcard" id="d-haus">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">§17</span>
-    <div class="eqmain"><div class="eqdisp">$x\neq y\ \Rightarrow\ \exists\,U\ni x,\ V\ni y:\ U\cap V=\varnothing$</div><div class="eqname">Hausdorff spaces</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Theorem 17.8</div><p>Every finite set in a Hausdorff space is closed.</p></div><div class="block"><div class="block-label">Theorem 17.10</div><p>In a Hausdorff space a sequence converges to at most one point.</p></div><div class="block"><div class="block-label">Theorem 17.11</div><p>Order topologies are Hausdorff; products and subspaces of Hausdorff spaces are Hausdorff.</p></div></div>
-</div>
-</div><div id="maps" class="panel">
-<div class="intro">A continuous map pulls open sets back to open sets. Metric spaces are where intuition comes from: open means "a whole ball fits".</div>
-<div class="sec-title">Methods · how problems here are solved</div>
-<div class="eqcard method" id="m-cont">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">method</span>
-    <div class="eqmain"><div class="mtitle">Show a function is continuous</div><div class="eqname">“Show f is continuous”, “show f is a homeomorphism”</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Recognize it</div><p>A map between spaces given by bases or metrics.</p></div><div class="block"><div class="block-label">Steps</div><ol class="steps"><li><details class="step"><summary><b>Take a basis element</b> $B$ of $Y$ and show $f^{-1}(B)$ is open.</summary><div class="stepx"><p><b>Why:</b> every open set is a union of basis elements, and preimages preserve unions.</p></div></details></li><li><details class="step"><summary><b>In metric spaces,</b> for $x$ and $\varepsilon>0$ give $\delta>0$ with $d(x,y)\lt \delta\Rightarrow d(f(x),f(y))\lt \varepsilon$.</summary><div class="stepx"><p><b>Why:</b> Theorem 21.1, the same condition in the language of balls.</p></div></details></li><li><details class="step"><summary><b>Or build $f$ from continuous pieces:</b> compositions, restrictions, the pasting lemma, maps into products.</summary><div class="stepx"><p><b>Why:</b> Theorems 18.2–18.4.</p></div></details></li></ol></div><div class="block"><div class="block-label">Uses</div><p><a class="xref" href="#d-cont">Continuity</a> · <a class="xref" href="#t-18-3">Pasting</a>.</p></div><div class="block"><div class="block-label">Common mistakes</div><ul class="mist"><li>Checking images instead of preimages.</li><li>For a homeomorphism, forgetting the inverse.</li></ul></div><details class="deeper"><summary>Go deeper</summary><p>Out of a quotient: $g:X^*\to Z$ is continuous iff $g\circ p$ is (<a class="xref" href="#t-22-2">Thm 22.2</a>).</p></details></div>
-</div>
-<div class="sec-title">§18 · Continuous functions</div>
-<div class="eqcard" id="d-cont">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">§18</span>
-    <div class="eqmain"><div class="eqdisp">$V\in\mathcal T_Y\ \Rightarrow\ f^{-1}(V)\in\mathcal T_X$</div><div class="eqname">Continuous function</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Symbols</div><ul class="params"><li><span class="psym">$f:X\to Y$</span><span class="pdesc">the map</span></li><li><span class="psym">$f^{-1}(V)$</span><span class="pdesc">preimage: all $x$ with $f(x)\in V$</span></li></ul></div><div class="block"><div class="block-label">Example</div><p>Constant maps, the identity, inclusions of subspaces, projections from products.</p></div></div>
-</div>
-<div class="eqcard" id="t-18-1">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">Thm 18.1</span>
-    <div class="eqmain"><div class="eqdisp">$f(\overline A)\subseteq\overline{f(A)}$</div><div class="eqname">Equivalent forms of continuity</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Statement</div><p>For $f:X\to Y$ these are equivalent: (1) $f$ is continuous; (2) $f(\overline A)\subseteq\overline{f(A)}$ for all $A$; (3) preimages of closed sets are closed; (4) for each $x$ and each neighbourhood $V$ of $f(x)$ there is a neighbourhood $U$ of $x$ with $f(U)\subseteq V$.</p></div></div>
-</div>
-<div class="eqcard" id="t-18-3">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">Thm 18.3</span>
-    <div class="eqmain"><div class="eqdisp">$X=A\cup B,\ A,B\text{ closed}$</div><div class="eqname">Pasting lemma</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Statement</div><p>If $f:A\to Y$ and $g:B\to Y$ are continuous and agree on $A\cap B$, then the combined map $h:X\to Y$ is continuous.</p></div><div class="block"><div class="block-label">Why</div><p>For closed $C$: $h^{-1}(C)=f^{-1}(C)\cup g^{-1}(C)$, a union of two sets closed in $A$ and $B$, hence closed in $X$.</p></div></div>
-</div>
-<div class="eqcard" id="d-homeo">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">§18</span>
-    <div class="eqmain"><div class="eqdisp">$f,\ f^{-1}\text{ continuous}$</div><div class="eqname">Homeomorphism</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Definition</div><p>A bijection $f:X\to Y$ with $f$ and $f^{-1}$ both continuous. Homeomorphic spaces are the same space with the points renamed.</p></div><div class="block"><div class="block-label">Watch out</div><p>$[0,1)\to S^1$, $t\mapsto(\cos2\pi t,\sin2\pi t)$ is a continuous bijection, but its inverse tears the circle open, so it is not a homeomorphism.</p></div></div>
-</div>
-<div class="sec-title">§20–21 · Metric spaces</div>
-<div class="eqcard" id="d-metric">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">§20</span>
-    <div class="eqmain"><div class="eqdisp">$d(x,z)\le d(x,y)+d(y,z)$</div><div class="eqname">Metric and the metric topology</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Definition</div><p>$d(x,y)\ge0$ with equality iff $x=y$; $d(x,y)=d(y,x)$; the triangle inequality above. Basis: balls $B(x,\varepsilon)=\{y:d(x,y)\lt \varepsilon\}$.</p></div><div class="block"><div class="block-label">Why balls are open</div><p>If $y\in B(x,\varepsilon)$, set $\delta=\varepsilon-d(x,y)$. Then $B(y,\delta)\subseteq B(x,\varepsilon)$ by the triangle inequality.</p></div><div class="block"><div class="block-label">Hausdorff</div><p>For $x\neq y$ the balls of radius $d(x,y)/2$ are disjoint, so every metric space is Hausdorff.</p></div></div>
-</div>
-<div class="eqcard" id="t-21-1">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">Thm 21.1</span>
-    <div class="eqmain"><div class="eqdisp">$d(x,y)\lt \delta\Rightarrow d(f(x),f(y))\lt \varepsilon$</div><div class="eqname">ε–δ continuity</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Statement</div><p>Between metric spaces, $f$ is continuous iff for every $x$ and $\varepsilon>0$ there is $\delta>0$ with the property above.</p></div></div>
-</div>
-</div><div id="quot" class="panel">
-<div class="intro">A quotient glues points together. The topology is the most generous one that keeps the gluing map continuous, and the way to build its open sets is through saturated sets.</div>
-<div class="sec-title">Methods · how problems here are solved</div>
-<div class="eqcard method" id="m-quot">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">method</span>
-    <div class="eqmain"><div class="mtitle">Work with a quotient</div><div class="eqname">“Show X/∼ is Hausdorff”, “show the quotient is homeomorphic to …”</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Recognize it</div><p>A space built by gluing: an equivalence relation, a partition, or a map $p$.</p></div><div class="block"><div class="block-label">Steps</div><ol class="steps"><li><details class="step"><summary><b>Describe the classes</b>: the points of the quotient.</summary><div class="stepx"><p><b>Why:</b> you need to know what you are separating or mapping. For $\sim_A$: the set $A$, and each $\{x\}$ with $x\notin A$.</p></div></details></li><li><details class="step"><summary><b>To show $V\subseteq X^*$ is open,</b> check that $p^{-1}(V)$ is open in $X$.</summary><div class="stepx"><p><b>Why:</b> the definition of the quotient topology.</p></div></details></li><li><details class="step"><summary><b>To produce open sets in $X^*$,</b> take open sets of $X$ that are saturated and push them down.</summary><div class="stepx"><p><b>Why:</b> for saturated $C$, $p^{-1}(p(C))=C$, which is open.</p><p>For a crushed set $A$: use open sets that miss $A$ or contain all of it.</p></div></details></li><li><details class="step"><summary><b>To map out of $X^*$,</b> define a continuous map on $X$ that is constant on each class.</summary><div class="stepx"><p><b>Why:</b> Theorem 22.2.</p></div></details></li></ol></div><div class="block"><div class="block-label">Picture</div><canvas id="qfig" class="figc" width="560" height="170" aria-label="Crushing A to a point"></canvas><div class="figctl"><label>x <input id="qx" type="range" min="0" max="1000" value="180"></label><label><input id="qclosed" type="checkbox" checked> A closed</label></div><p id="qmsg" class="figmsg"></p><p>Top: $\mathbb R$ with $A$. Bottom: the quotient, where $A$ is one point $[A]$. Untick <em>A closed</em> and push $x$ against an end of $A$.</p></div><div class="block"><div class="block-label">Uses</div><p><a class="xref" href="#d-quot">Quotient</a> · <a class="xref" href="#d-sat">Saturated</a> · <a class="xref" href="#m-haus">Hausdorff</a>.</p></div><div class="block"><div class="block-label">Common mistakes</div><ul class="mist"><li>Pushing down an open set that contains part of a class.</li><li>Assuming quotients of nice spaces stay nice.</li></ul></div><details class="deeper"><summary>Go deeper</summary><p>HW7 Q1(b) is this method with the Hausdorff method: Case 1 uses two small balls missing $A$; Case 2 uses $U=B(x,\tfrac r2)$, missing $A$, and $W=\{z:d(z,x)>\tfrac r2\}$, containing all of $A$.</p></details></div>
-</div>
-<div class="sec-title">§22 · The quotient topology</div>
-<div class="eqcard" id="d-quot">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">§22</span>
-    <div class="eqmain"><div class="eqdisp">$U\subseteq X^*\text{ open}\iff p^{-1}(U)\text{ open in }X$</div><div class="eqname">Quotient topology and quotient map</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Symbols</div><ul class="params"><li><span class="psym">$X^*$</span><span class="pdesc">the set of pieces (classes)</span></li><li><span class="psym">$p:X\to X^*$</span><span class="pdesc">sends each point to its piece</span></li><li><span class="psym">$p^{-1}(U)$</span><span class="pdesc">everything lying over $U$</span></li></ul></div><div class="block"><div class="block-label">Quotient map</div><p>More generally a surjection $p:X\to Y$ is a quotient map if $U\subseteq Y$ is open exactly when $p^{-1}(U)$ is open.</p></div><div class="block"><div class="block-label">Why A must be closed (HW7)</div><p>Crush $A=(0,1)\subset\mathbb R$. Every open set around $\{0\}$ pulls back to an open set containing $0$, which contains some $(-\varepsilon,\varepsilon)$ and so points of $A$; so its image contains $[A]$. The two points cannot be separated.</p></div></div>
-</div>
-<div class="eqcard" id="d-sat">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">§22</span>
-    <div class="eqmain"><div class="eqdisp">$C=p^{-1}(p(C))$</div><div class="eqname">Saturated sets</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Statement</div><p>$C$ is saturated if it is a union of whole classes. Then $p^{-1}(p(C))=C$; if $C$ is also open, $p(C)$ is open in $X^*$.</p></div><div class="block"><div class="block-label">For a crushed set</div><p>Any set containing all of $A$ or none of it.</p></div></div>
-</div>
-<div class="eqcard" id="t-22-2">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">Thm 22.2</span>
-    <div class="eqmain"><div class="eqdisp">$g\circ p\text{ continuous}\iff g\text{ continuous}$</div><div class="eqname">Maps out of a quotient</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">Statement</div><p>If $p:X\to X^*$ is a quotient map and $h:X\to Z$ is continuous and constant on each class, then $h$ induces $g:X^*\to Z$ with $g\circ p=h$, and $g$ is continuous.</p></div><div class="block"><div class="block-label">Use</div><p>To show $[0,1]/\{0\sim1\}\cong S^1$: $h(t)=(\cos2\pi t,\sin2\pi t)$ is constant on $\{0,1\}$, so it induces a continuous bijection onto $S^1$; compactness then gives a homeomorphism (Ch. 3).</p></div></div>
-</div>
-</div><div id="zoo" class="panel">
-<div class="intro">Spaces to test claims on. When something looks true, try it on these first; most counterexamples in the course are one of them.</div>
-<div class="eqcard concept" id="z-r">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">space</span>
-    <div class="eqmain"><div class="eqdisp">$\mathbb R$</div><div class="eqname">Standard line</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">What it is</div><p>Basis: open intervals.</p></div><div class="block"><div class="block-label">Properties</div><p>Metric, Hausdorff, connected.</p></div></div>
-</div>
-<div class="eqcard concept" id="z-rl">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">space</span>
-    <div class="eqmain"><div class="eqdisp">$\mathbb R_\ell$</div><div class="eqname">Lower limit line</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">What it is</div><p>Basis: $[a,b)$.</p></div><div class="block"><div class="block-label">Properties</div><p>Strictly finer than $\mathbb R$; Hausdorff; $[a,b)$ is open and closed.</p></div></div>
-</div>
-<div class="eqcard concept" id="z-rk">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">space</span>
-    <div class="eqmain"><div class="eqdisp">$\mathbb R_K$</div><div class="eqname">K-topology</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">What it is</div><p>Basis: $(a,b)$ and $(a,b)\setminus K$, $K=\{1/n\}$.</p></div><div class="block"><div class="block-label">Properties</div><p>Finer than $\mathbb R$; not comparable with $\mathbb R_\ell$; Hausdorff.</p></div></div>
-</div>
-<div class="eqcard concept" id="z-fc">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">space</span>
-    <div class="eqmain"><div class="eqdisp">$\mathcal T_f$</div><div class="eqname">Finite complement topology</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">What it is</div><p>Open: complements of finite sets, and the empty set.</p></div><div class="block"><div class="block-label">Properties</div><p>Points closed (T₁) but not Hausdorff on an infinite set: any two nonempty open sets meet.</p></div></div>
-</div>
-<div class="eqcard concept" id="z-disc">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">space</span>
-    <div class="eqmain"><div class="eqdisp">$\mathcal P(X)$</div><div class="eqname">Discrete</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">What it is</div><p>Every subset is open.</p></div><div class="block"><div class="block-label">Properties</div><p>Every map out of it is continuous.</p></div></div>
-</div>
-<div class="eqcard concept" id="z-ind">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">space</span>
-    <div class="eqmain"><div class="eqdisp">$\{\varnothing,X\}$</div><div class="eqname">Indiscrete</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">What it is</div><p>Only the empty set and $X$.</p></div><div class="block"><div class="block-label">Properties</div><p>Every map into it is continuous; not Hausdorff.</p></div></div>
-</div>
-<div class="eqcard concept" id="z-sier">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">space</span>
-    <div class="eqmain"><div class="eqdisp">$\{0,1\}$</div><div class="eqname">Sierpiński space</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">What it is</div><p>Open: $\varnothing,\{1\},\{0,1\}$.</p></div><div class="block"><div class="block-label">Properties</div><p>Not T₁: the point 0 is not closed.</p></div></div>
-</div>
-<div class="eqcard concept" id="z-crush">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">space</span>
-    <div class="eqmain"><div class="eqdisp">$\mathbb R/(0,1)$</div><div class="eqname">Crushing a non-closed set</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">What it is</div><p>Glue $(0,1)$ to a point.</p></div><div class="block"><div class="block-label">Properties</div><p>Not Hausdorff: $\{0\}$ and $[(0,1)]$ cannot be separated.</p></div></div>
-</div>
-<div class="eqcard concept" id="z-circle">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">space</span>
-    <div class="eqmain"><div class="eqdisp">$[0,1]/\{0\sim1\}$</div><div class="eqname">Circle from an interval</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">What it is</div><p>Glue the two ends.</p></div><div class="block"><div class="block-label">Properties</div><p>Homeomorphic to $S^1$.</p></div></div>
-</div>
-<div class="eqcard concept" id="z-two">
-  <div class="eqhdr" onclick="toggle(this)">
-    <span class="eqnum">space</span>
-    <div class="eqmain"><div class="eqdisp">$\mathbb R\sqcup\mathbb R/\!\sim$</div><div class="eqname">Line with two origins</div></div>
-    <span class="eqarrow">▸</span>
-  </div>
-  <div class="eqbody"><div class="block"><div class="block-label">What it is</div><p>Two copies of ℝ glued at every point except 0.</p></div><div class="block"><div class="block-label">Properties</div><p>Looks like ℝ near every point, but the two origins cannot be separated.</p></div></div>
-</div>
-</div>
-</div>
+<div class="top"><div class="toprow">
+  <a class="logo" href="#" aria-label="Home">𝒯</a>
+  <div class="search"><input id="q" type="search" placeholder="Search the guide" autocomplete="off" aria-label="Search"><div id="sugg"></div></div>
+  <button class="tb" id="themeBtn" aria-label="Light or dark">Light</button>
+</div></div>
+<div class="wrap" id="view"></div>
+<div id="pv" role="dialog" aria-modal="false"><div class="pm"></div><div class="pt"></div><div class="pl"></div><div class="pb"><a class="pgo" href="#">Read article →</a><button class="px">Close</button></div></div>
 <script>
-function switchTab(id) {
-  var q=document.getElementById('q'); if(q && q.value){ q.value=''; runSearch(); }
-  var eb=document.getElementById('expBtn'); if(eb) eb.textContent='Expand all';
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
-  window.scrollTo(0, 0);
-}
-function toggle(hdr) {
-  var body = hdr.nextElementSibling;
-  hdr.classList.toggle('open');
-  body.classList.toggle('open');
-}
-function openCard(hdr) {
-  if (!hdr.classList.contains('open')) toggle(hdr);
-}
-document.addEventListener('click', function (e) {
-  var a = e.target.closest('.xref');
-  if (!a) return;
-  var card = document.querySelector(a.getAttribute('href'));
-  if (!card) return;
-  var panel = card.closest('.panel');
-  if (panel && !panel.classList.contains('active')) {
-    document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('active'); });
-    panel.classList.add('active');
-    document.querySelectorAll('.stab').forEach(function (t) { t.classList.toggle('active', (t.getAttribute('onclick') || '').indexOf("'" + panel.id + "'") >= 0); });
-  }
-  var h = card.querySelector('.eqhdr');
-  if (h && !h.classList.contains('open')) toggle(h);
-});
-window.addEventListener('beforeprint', function () { document.querySelectorAll('details.deeper').forEach(function (d) { d.open = true; }); });
-var SYMNAME = {"𝒯": "script T", "ℬ": "script B", "Ā": "closure", "A′": "derived set", "∼": "sim", "f⁻¹": "preimage"};
-var SYMPAT = {"𝒯": "\\mathcal\s*\{?T", "ℬ": "\\mathcal\s*\{?B", "Ā": "\\overline", "A′": "A'", "∼": "\\sim", "X*": "X\^\*", "p": "(?<![\\A-Za-z])p(?![A-Za-z])", "f⁻¹": "\^\{-1\}", "B(x,ε)": "B\(", "d": "(?<![\\A-Za-z])d\(", "×": "\\times", "ε δ": "\\varepsilon|\\delta", "ℝ_ℓ": "_\\ell"};
-var SYMS = [["𝒯", [["a topology", "d-top"]]], ["ℬ", [["a basis", "d-basis"]]], ["Ā", [["closure", "t-17-5"]]], ["A′", [["limit points", "t-17-6"]]], ["∼", [["equivalence relation", "c-eqrel"]]], ["X*", [["quotient space", "d-quot"]]], ["p", [["quotient map", "d-quot"]]], ["f⁻¹", [["preimage", "d-cont"]]], ["B(x,ε)", [["ball", "d-metric"]]], ["d", [["metric", "d-metric"]]], ["×", [["product", "d-prod"]]], ["ε δ", [["epsilon, delta", "t-21-1"]]], ["ℝ_ℓ", [["lower limit topology", "z-rl"]]]];
-function toggleKb(force){
-  var kb=document.getElementById('kb'), on = force===undefined ? kb.hidden : force;
-  kb.hidden=!on; document.getElementById('kbBtn').classList.toggle('on', on);
-  if(!on){ document.getElementById('kbout').innerHTML=''; document.querySelectorAll('.kk.on').forEach(function(b){b.classList.remove('on');}); symFilter(); }
-}
-function goTo(href){
-  var card=document.querySelector(href); if(!card) return;
-  var q=document.getElementById('q'); if(q.value){ q.value=''; runSearch(); }
-  var panel=card.closest('.panel');
-  document.querySelectorAll('.panel').forEach(function(p){p.classList.toggle('active', p===panel);});
-  document.querySelectorAll('.stab').forEach(function(t){ t.classList.toggle('active', (t.getAttribute('onclick')||'').indexOf("'"+panel.id+"'")>=0); });
-  var h=card.querySelector('.eqhdr'); if(h && !h.classList.contains('open')) toggle(h);
-  document.getElementById('sugg').innerHTML=''; toggleKb(false);
-  setTimeout(function(){ var y=card.getBoundingClientRect().top+window.scrollY-document.querySelector('.tab-nav').offsetHeight-8; window.scrollTo({top:y,behavior:'smooth'}); },30);
-}
-var INDEX=null;
-function buildIndex(){
-  INDEX=[];
-  document.querySelectorAll('.eqcard').forEach(function(c){
-    if(!c.id) return;
-    var name=(c.querySelector('.mtitle')||c.querySelector('.eqname')||{}).textContent||'';
-    var type=c.classList.contains('method')?'method':c.classList.contains('concept')?'concept':'equation';
-    var extra=c.classList.contains('concept') ? '' : (c.querySelector('.eqnum')||{}).textContent||'';
-    INDEX.push({t:name.trim(), type:type, tag:extra, href:'#'+c.id, hay:(name+' '+extra+' '+(c.querySelector('.eqhdr annotation')||{textContent:''}).textContent).toLowerCase()});
-  });
-  GLOSS.forEach(function(g){ if(g.c||g.see) INDEX.push({t:g.t, type:'term', tag:'', href:'#'+(g.c||g.see), hay:(g.t+' '+g.k.join(' ')).toLowerCase()}); });
-}
-function suggest(){
-  if(!INDEX) buildIndex();
-  var q=document.getElementById('q').value.trim().toLowerCase(), box=document.getElementById('sugg');
-  if(!q){ box.innerHTML=''; return; }
-  var rank={concept:0, term:1, method:2, equation:3};
-  var hits=INDEX.filter(function(e){return e.hay.indexOf(q)>=0;})
-    .sort(function(a,b){ var sa=a.t.toLowerCase().indexOf(q)===0?0:1, sb=b.t.toLowerCase().indexOf(q)===0?0:1; return sa-sb || rank[a.type]-rank[b.type]; });
-  var seen={}, out=[];
-  hits.forEach(function(e){ if(out.length<7 && !seen[e.href+e.t]){ seen[e.href+e.t]=1; out.push(e);} });
-  box.innerHTML=out.map(function(e){ return '<a href="'+e.href+'" data-go="'+e.href+'"><span class="st">'+e.type+'</span><span>'+e.t+(e.tag&&e.type==='equation'?' <span style="color:var(--muted)">· '+e.tag+'</span>':'')+'</span></a>'; }).join('');
-}
-document.addEventListener('click', function(e){
-  var go=e.target.closest('[data-go]'); if(go){ e.preventDefault(); goTo(go.dataset.go); return; }
-  var kk=e.target.closest('.kk');
-  if(kk){
-    kk.classList.toggle('on');
-    symFilter();
-    var s=SYMS[+kk.dataset.i];
-    if(!kk.classList.contains('on')){ document.getElementById('kbout').innerHTML=''; return; }
-    document.getElementById('kbout').innerHTML=s[1].map(function(m){return '<a href="#'+m[1]+'" data-go="#'+m[1]+'"><span class="ks">'+s[0]+'</span><span>'+(SYMNAME[s[0]]?'<span style="color:var(--muted)">'+SYMNAME[s[0]]+' · </span>':'')+m[0]+'</span></a>';}).join('');
-  }
-});
-document.addEventListener('DOMContentLoaded', function(){
-  var q=document.getElementById('q');
-  q.addEventListener('input', function(){ if(document.querySelector('.kk.on')){ document.querySelectorAll('.kk.on').forEach(function(b){b.classList.remove('on');}); document.getElementById('kbsel').textContent=''; document.body.classList.remove('symsearch'); } suggest(); });
-  q.addEventListener('keydown', function(e){ if(e.key==='Enter'){ var a=document.querySelector('#sugg a'); if(a){ e.preventDefault(); goTo(a.dataset.go); q.blur(); } } });
-});
-function texOf(el){ return [].map.call(el.querySelectorAll('annotation'), function(a){return a.textContent;}).join(' '); }
-function symFilter(){
-  var on=[].map.call(document.querySelectorAll('.kk.on'), function(b){ return SYMS[+b.dataset.i][0]; });
-  var info=document.getElementById('kbsel');
-  if(!on.length){ document.body.classList.remove('searching','symsearch'); document.querySelectorAll('.hit-none').forEach(function(e){e.classList.remove('hit-none');}); info.textContent=''; return; }
-  var res=on.map(function(sym){ return new RegExp(SYMPAT[sym]); });
-  document.getElementById('q').value='';
-  document.body.classList.add('searching','symsearch');
-  var n=0;
-  document.querySelectorAll('.eqcard').forEach(function(c){
-    var d=c.querySelector('.eqdisp'); var tex=d?texOf(d):'';
-    var hit=!!tex && res.every(function(r){return r.test(tex);});
-    c.classList.toggle('hit-none', !hit); if(hit) n++;
-  });
-  document.querySelectorAll('.qtable tbody tr').forEach(function(r){
-    var q=r.querySelector('td.qe'); var tex=q?texOf(q):'';
-    var hit=!!tex && res.every(function(re){return re.test(tex);});
-    r.classList.toggle('hit-none', !hit); if(hit) n++;
-  });
-  document.querySelectorAll('.sec-title').forEach(function(t){
-    var el=t.nextElementSibling, any=false;
-    while(el && !el.classList.contains('sec-title')){
-      if(el.classList.contains('eqcard') && !el.classList.contains('hit-none')) any=true;
-      if(el.classList.contains('qtable') && el.querySelector('tbody tr:not(.hit-none)')) any=true;
-      el=el.nextElementSibling;
-    }
-    t.classList.toggle('hit-none', !any);
-    var tb=t.nextElementSibling; if(tb && tb.classList.contains('qtable')) tb.classList.toggle('hit-none', !any);
-  });
-  info.innerHTML='Equations containing <b>'+on.join('</b>, <b>')+'</b>: '+n+(n?'':' — none yet')+' &nbsp;<a href="#" id="kbclear">clear</a>';
-  document.getElementById('noRes').classList.toggle('on', n===0);
-}
-document.addEventListener('click', function(e){ if(e.target.id==='kbclear'){ e.preventDefault(); document.querySelectorAll('.kk.on').forEach(function(b){b.classList.remove('on');}); document.getElementById('kbout').innerHTML=''; symFilter(); } });
-function toggleAll(){
-  var hs=[].slice.call(document.querySelectorAll('.panel.active .eqhdr, body.searching .eqhdr'));
-  var anyClosed=hs.some(function(h){return !h.classList.contains('open');});
-  hs.forEach(function(h){ if(h.classList.contains('open')!==anyClosed) toggle(h); });
-  document.querySelectorAll('.panel.active details.deeper, body.searching details.deeper').forEach(function(d){d.open=anyClosed;});
-  document.getElementById('expBtn').textContent=anyClosed?'Collapse all':'Expand all';
-}
-function runSearch(){
-  var q=document.getElementById('q').value.trim().toLowerCase();
-  document.body.classList.toggle('searching', !!q);
-  var items=document.querySelectorAll('.eqcard, .qtable tbody tr');
-  var n=0;
-  items.forEach(function(el){
-    var hit=!q || el.textContent.toLowerCase().indexOf(q)>=0 || [].some.call(el.querySelectorAll('annotation'),function(a){return a.textContent.toLowerCase().indexOf(q)>=0;});
-    el.classList.toggle('hit-none', !hit); if(hit&&q) n++;
-  });
-  document.querySelectorAll('.sec-title').forEach(function(t){
-    var el=t.nextElementSibling, any=false;
-    while(el && !el.classList.contains('sec-title')){
-      if(el.classList.contains('eqcard') && !el.classList.contains('hit-none')) any=true;
-      if(el.classList.contains('qtable') && el.querySelector('tbody tr:not(.hit-none)')) any=true;
-      el=el.nextElementSibling;
-    }
-    t.classList.toggle('hit-none', !!q && !any);
-    var tb=t.nextElementSibling; if(tb && tb.classList.contains('qtable')) tb.classList.toggle('hit-none', !!q && !any);
-  });
-  document.getElementById('noRes').classList.toggle('on', !!q && n===0);
-}
-document.addEventListener('DOMContentLoaded', function(){
-  var q=document.getElementById('q'); q.addEventListener('input', runSearch);
-  q.addEventListener('keydown', function(e){ if(e.key==='Escape'){ q.value=''; runSearch(); q.blur(); } });
-});
-var GLOSS = [{"t": "topology", "k": ["topology", "topologies"], "d": "A collection of subsets (the open sets) containing $\varnothing$ and $X$, closed under unions and finite intersections.", "see": "d-top", "c": null}, {"t": "open set", "k": ["open set", "open sets"], "d": "A member of the topology.", "see": "d-top", "c": "c-open"}, {"t": "basis", "k": ["basis", "bases", "basis element", "basis elements"], "d": "Building blocks: every open set is a union of them.", "see": "d-basis", "c": "c-basis"}, {"t": "finer", "k": ["finer", "coarser"], "d": "$\mathcal T'$ is finer than $\mathcal T$ if it contains every $\mathcal T$-open set.", "see": "t-13-3", "c": "c-finer"}, {"t": "subspace", "k": ["subspace", "subspaces"], "d": "A subset $Y$ with open sets $Y\cap U$.", "see": "d-sub", "c": null}, {"t": "closed set", "k": ["closed set", "closed sets", "closedness"], "d": "A set whose complement is open.", "see": "d-closed", "c": "c-closed"}, {"t": "closure", "k": ["closure"], "d": "$\overline A$: the smallest closed set containing $A$; $x\in\overline A$ iff every open set around $x$ meets $A$.", "see": "t-17-5", "c": null}, {"t": "limit point", "k": ["limit point", "limit points"], "d": "Every neighbourhood of $x$ meets $A$ in a point other than $x$.", "see": "t-17-6", "c": "c-limit"}, {"t": "neighbourhood", "k": ["neighbourhood", "neighbourhoods"], "d": "An open set containing the point.", "see": null, "c": null}, {"t": "Hausdorff", "k": ["Hausdorff"], "d": "Distinct points have disjoint open neighbourhoods.", "see": "d-haus", "c": "c-haus"}, {"t": "continuous", "k": ["continuous", "continuity"], "d": "Preimages of open sets are open.", "see": "d-cont", "c": "c-cont"}, {"t": "homeomorphism", "k": ["homeomorphism", "homeomorphic"], "d": "A continuous bijection with continuous inverse.", "see": "d-homeo", "c": null}, {"t": "metric", "k": ["metric", "metric space", "metric spaces"], "d": "A distance function: positive, symmetric, triangle inequality.", "see": "d-metric", "c": null}, {"t": "triangle inequality", "k": ["triangle inequality"], "d": "$d(x,z)\le d(x,y)+d(y,z)$.", "see": "d-metric", "c": null}, {"t": "quotient", "k": ["quotient", "quotient topology", "quotient map", "quotient space", "gluing"], "d": "$U$ is open in $X^*$ iff $p^{-1}(U)$ is open in $X$.", "see": "d-quot", "c": "c-quot"}, {"t": "saturated", "k": ["saturated"], "d": "A union of whole classes: $C=p^{-1}(p(C))$.", "see": "d-sat", "c": "c-sat"}, {"t": "equivalence relation", "k": ["equivalence relation"], "d": "Reflexive, symmetric, transitive.", "see": null, "c": "c-eqrel"}, {"t": "class", "k": ["equivalence class", "classes"], "d": "$[x]$: everything related to $x$.", "see": null, "c": "c-class"}, {"t": "partition", "k": ["partition"], "d": "Disjoint nonempty pieces covering $X$.", "see": null, "c": "c-part"}, {"t": "preimage", "k": ["preimage", "preimages"], "d": "$f^{-1}(V)=\{x: f(x)\in V\}$.", "see": "d-cont", "c": null}];
-function gEsc(x){return x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
-function linkTerms(){
-  var keys=[]; GLOSS.forEach(function(g,i){g.k.forEach(function(k){keys.push({k:k,i:i});});});
-  keys.sort(function(a,b){return b.k.length-a.k.length;});
-  var re=new RegExp('\\b('+keys.map(function(x){return gEsc(x.k);}).join('|')+')\\b','i');
-  var lookup={}; keys.forEach(function(x){lookup[x.k.toLowerCase()]=x.i;});
-  document.querySelectorAll('.eqbody .block, .stepx, details.deeper, .eqname, .intro').forEach(function(root){
-    if(root.closest('.gloss')) return;
-    var used={};
-    var walker=document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {acceptNode:function(n){
-      var p=n.parentElement; if(!p) return NodeFilter.FILTER_REJECT;
-      if(p.closest('svg, figure, .katex, a, .term, details.step > summary, details.deeper > summary, .block-label, script')) return NodeFilter.FILTER_REJECT;
-      return re.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;}});
-    var nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
-    nodes.forEach(function(n){
-      var m=n.nodeValue.match(re); if(!m) return;
-      var gi=lookup[m[1].toLowerCase()]; if(gi===undefined||used[gi]) return; used[gi]=1;
-      var after=n.splitText(m.index); after.splitText(m[1].length);
-      var sp=document.createElement('span'); sp.className='term'; sp.dataset.g=gi; sp.textContent=after.nodeValue;
-      after.parentNode.replaceChild(sp, after);
-    });
-  });
-}
-function showGloss(i){
-  var g=GLOSS[i], pop=document.getElementById('gpop');
-  pop.querySelector('.gt').textContent=g.t;
-  var d=pop.querySelector('.gd'); d.innerHTML=g.d;
-  if(window.renderMathInElement) renderMathInElement(d,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
-  var see=pop.querySelector('.gsee'); var h=[]; if(g.c) h.push('<a class="xref" href="#'+g.c+'">Read the full entry →</a>'); if(g.see) h.push('<a class="xref" href="#'+g.see+'">Open the card →</a>'); see.innerHTML=h.join(' &nbsp;·&nbsp; ');
-  pop.classList.add('on');
-}
-document.addEventListener('click', function(e){
-  var t=e.target.closest('.term');
-  if(t){ e.preventDefault(); e.stopPropagation(); showGloss(+t.dataset.g); return; }
-  var pop=document.getElementById('gpop');
-  if(pop && pop.classList.contains('on') && (e.target.closest('.gx') || (!e.target.closest('#gpop')) || e.target.closest('.xref'))) pop.classList.remove('on');
-}, true);
-window.addEventListener('load', function(){ setTimeout(linkTerms, 50); });
-function linkSymbols(){
-  document.querySelectorAll('.params li').forEach(function(li){
-    var t=li.querySelector('.term'), sym=li.querySelector('.psym');
-    if(t && sym){ sym.classList.add('term'); sym.dataset.g=t.dataset.g; }
-  });
-}
-window.addEventListener('load', function(){ setTimeout(linkSymbols, 120); });
+// ===== The articles. Each: title, kind, where (Munkres §), lede (one sentence), sections [[label, html], ...], pre (prerequisite ids).
+// Links inside text: [[id]] or [[id|shown text]]. The first section opens by default; the rest stay folded.
+var R = String.raw;
+var TOPICS = [
+  ['Foundations', ['relation-equivalence', 'equivalence-class', 'partition', 'image-preimage']],
+  ['Open sets and bases', ['topology', 'open-set', 'standard-topologies', 'finer-coarser', 'basis', 'generated-topology', 'lemma-13-3', 'subbasis']],
+  ['Building new spaces', ['order-topology', 'product-topology', 'subspace-topology', 'quotient-topology']],
+  ['Closed sets and limits', ['closed-set', 'closure', 'interior', 'limit-point', 'closure-test', 'closure-limit-points', 'convergence']],
+  ['Separation', ['hausdorff', 't1']],
+  ['Continuous maps', ['continuous', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism']],
+  ['Metric spaces', ['metric', 'ball', 'metric-topology', 'metric-hausdorff', 'epsilon-delta']],
+  ['Quotients', ['quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples']],
+  ['Methods', ['m-topology', 'm-open', 'm-closed', 'm-closure', 'm-continuous', 'm-hausdorff', 'm-quotient', 'm-compare', 'm-counterexample']],
+  ['Example spaces', ['ex-real-line', 'ex-lower-limit', 'ex-k-topology', 'ex-finite-complement', 'ex-discrete', 'ex-indiscrete', 'ex-sierpinski', 'ex-crush-open', 'ex-circle', 'ex-two-origins']],
+  ['Worked problems', ['hw7-q1']]
+];
+// reading order, roughly following Munkres
+var ORDER = ['relation-equivalence', 'equivalence-class', 'partition', 'image-preimage', 'topology', 'open-set', 'standard-topologies', 'finer-coarser', 'basis', 'generated-topology', 'lemma-13-3', 'subbasis', 'order-topology', 'product-topology', 'subspace-topology', 'closed-set', 'closure', 'interior', 'closure-test', 'limit-point', 'closure-limit-points', 'hausdorff', 't1', 'convergence', 'continuous', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'metric', 'ball', 'metric-topology', 'metric-hausdorff', 'epsilon-delta', 'quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples'];
+var A = {
+// ---------- foundations
+'relation-equivalence': {title: 'Equivalence relation', kind: 'definition', where: 'Ch. 1, §3', pre: [],
+  lede: R`A rule for when two points count as "the same": reflexive, symmetric and transitive.`,
+  sections: [['Definition', R`<p>A relation $\sim$ on $X$ is an <b>equivalence relation</b> if for all $x,y,z\in X$:</p><ul><li><b>reflexive:</b> $x\sim x$;</li><li><b>symmetric:</b> $x\sim y\Rightarrow y\sim x$;</li><li><b>transitive:</b> $x\sim y$ and $y\sim z\Rightarrow x\sim z$.</li></ul>`],
+    ['Example', R`<p>On a metric space with $A\subseteq X$: $x\sim_A y$ iff $x=y$ or both $x,y\in A$. This crushes $A$ to a point; see [[crushing-a-set]].</p>`],
+    ['Non-example', R`<p>$x<y$ on $\mathbb R$: not reflexive ($x<x$ fails) and not symmetric.</p>`],
+    ['Why it matters', R`<p>Its [[equivalence-class|classes]] form a [[partition]], and a partition is exactly what a [[quotient-topology|quotient space]] is built from.</p>`]]},
+'equivalence-class': {title: 'Equivalence class', kind: 'definition', where: 'Ch. 1, §3', pre: ['relation-equivalence'],
+  lede: R`$[x]=\{y\in X: y\sim x\}$, everything that counts as the same as $x$.`,
+  sections: [['Definition', R`<p>For an [[relation-equivalence|equivalence relation]] $\sim$ on $X$ and $x\in X$, the class of $x$ is $[x]=\{y\in X : y\sim x\}$. Two classes are either equal or disjoint.</p>`],
+    ['Example', R`<p>For $\sim_A$: if $a\in A$ then $[a]=A$ (every point of $A$ is related to $a$ by the "both in $A$" clause); if $x\notin A$ then $[x]=\{x\}$.</p>`],
+    ['Watch out', R`<p>$[x]$ is a <em>set</em> of points of $X$, but a single <em>point</em> of the quotient $X/{\sim}$.</p>`]]},
+'partition': {title: 'Partition', kind: 'definition', where: 'Ch. 1, §3', pre: ['equivalence-class'],
+  lede: R`Cutting a set into nonempty pieces with no overlaps and nothing left out.`,
+  sections: [['Definition', R`<p>A collection of nonempty, pairwise disjoint subsets of $X$ whose union is $X$.</p>`],
+    ['Relation to equivalence', R`<p>The [[equivalence-class|classes]] of any equivalence relation form a partition; conversely, "being in the same piece" is an equivalence relation. They are two descriptions of one thing.</p>`],
+    ['Non-example', R`<p>$\{[0,1],[1,2]\}$ on $[0,2]$: the pieces overlap at $1$.</p>`]]},
+'image-preimage': {title: 'Image and preimage', kind: 'definition', where: 'Ch. 1, §2', pre: [],
+  lede: R`$f(A)$ is where $A$ goes; $f^{-1}(B)$ is everything that lands in $B$.`,
+  sections: [['Definition', R`<p>For $f:X\to Y$: $f(A)=\{f(a):a\in A\}$ and $f^{-1}(B)=\{x\in X: f(x)\in B\}$. The preimage makes sense even when $f$ has no inverse.</p>`],
+    ['Why preimages', R`<p>Preimages preserve unions, intersections and complements: $f^{-1}(\bigcup B_\alpha)=\bigcup f^{-1}(B_\alpha)$, $f^{-1}(Y\setminus B)=X\setminus f^{-1}(B)$. Images do not preserve intersections. That is why [[continuous|continuity]] is defined with preimages.</p>`]]},
+// ---------- open sets and bases
+'topology': {title: 'Topology', kind: 'definition', where: '§12', pre: [],
+  lede: R`A choice of which subsets of $X$ are called open, closed under unions and finite intersections.`,
+  sections: [['Definition', R`<p>A <b>topology</b> on $X$ is a collection $\mathcal T$ of subsets with</p><ol><li>$\varnothing, X\in\mathcal T$;</li><li>any union of members of $\mathcal T$ is in $\mathcal T$;</li><li>any <em>finite</em> intersection of members is in $\mathcal T$.</li></ol><p>The members are the [[open-set|open sets]]; $(X,\mathcal T)$ is a topological space.</p>`],
+    ['Intuition', R`<p>These are exactly the properties of open sets in $\mathbb R$ that analysis uses. Taking them as the definition lets the same arguments run where there is no distance at all.</p>`],
+    ['Why only finite intersections', R`<p>$\bigcap_n(-\tfrac1n,\tfrac1n)=\{0\}$ is not open in $\mathbb R$, so infinite intersections cannot be allowed.</p>`],
+    ['Examples', R`<p>See [[standard-topologies]]. To check a candidate, follow [[m-topology]].</p>`]]},
+'open-set': {title: 'Open set', kind: 'definition', where: '§12', pre: ['topology'],
+  lede: R`A member of the topology. What "open" means depends entirely on which topology you chose.`,
+  sections: [['Definition', R`<p>$U\subseteq X$ is open if $U\in\mathcal T$.</p>`],
+    ['In practice', R`<p>Topologies are usually given by a [[basis]], and then $U$ is open iff around each point of $U$ a basis element fits inside $U$ ([[generated-topology]]). In a metric space: a whole [[ball]] fits.</p>`],
+    ['Watch out', R`<p>Open is not the opposite of [[closed-set|closed]]. $[0,1)$ is neither in $\mathbb R$; $\varnothing$ and $X$ are both.</p>`]]},
+'standard-topologies': {title: 'Discrete, indiscrete and finite-complement topologies', kind: 'example', where: '§12', pre: ['topology'],
+  lede: R`The extreme topologies, and one in between that is useful for counterexamples.`,
+  sections: [['Discrete', R`<p>Every subset is open. The finest possible topology. See [[ex-discrete]].</p>`],
+    ['Indiscrete', R`<p>Only $\varnothing$ and $X$. The coarsest possible. See [[ex-indiscrete]].</p>`],
+    ['Finite complement', R`<p>$U$ is open iff $X\setminus U$ is finite, or $U=\varnothing$. On an infinite set any two nonempty open sets meet, so it is [[t1|T₁]] but not [[hausdorff|Hausdorff]]. See [[ex-finite-complement]].</p>`]]},
+'finer-coarser': {title: 'Finer and coarser', kind: 'definition', where: '§12', pre: ['topology'],
+  lede: R`$\mathcal T'$ is finer than $\mathcal T$ if it has every $\mathcal T$-open set, and possibly more.`,
+  sections: [['Definition', R`<p>$\mathcal T'$ is <b>finer</b> than $\mathcal T$ (and $\mathcal T$ <b>coarser</b>) if $\mathcal T\subseteq\mathcal T'$.</p>`],
+    ['Intuition', R`<p>More open sets means the topology can tell more points apart, and fewer sequences converge.</p>`],
+    ['How to check', R`<p>With bases, use [[lemma-13-3]]; the recipe is [[m-compare]]. Example: [[ex-lower-limit]] is strictly finer than [[ex-real-line|ℝ]].</p>`]]},
+'basis': {title: 'Basis', kind: 'definition', where: '§13', pre: ['topology'],
+  lede: R`A collection of building blocks: every open set is a union of them.`,
+  sections: [['Definition', R`<p>A collection $\mathcal B$ of subsets of $X$ is a <b>basis</b> if</p><ol><li>every $x\in X$ lies in some $B\in\mathcal B$;</li><li>if $x\in B_1\cap B_2$, there is $B_3\in\mathcal B$ with $x\in B_3\subseteq B_1\cap B_2$.</li></ol><p>It generates a topology: see [[generated-topology]].</p>`],
+    ['Examples', R`<p>Open intervals in $\mathbb R$; [[ball|open balls]] in a metric space; $[a,b)$ for [[ex-lower-limit]]; open boxes for the [[product-topology]].</p>`],
+    ['Non-example', R`<p>Closed intervals $[a,b]$ in $\mathbb R$: $[0,1]\cap[1,2]=\{1\}$ contains no closed interval of positive length around $1$.</p>`],
+    ['Watch out', R`<p>A basis is not a topology. It is not closed under unions; its unions are the topology.</p>`]]},
+'generated-topology': {title: 'Topology generated by a basis (Lemmas 13.1, 13.2)', kind: 'theorem', where: '§13', pre: ['basis'],
+  lede: R`$U$ is open iff around each of its points a basis element fits inside it; equivalently, iff $U$ is a union of basis elements.`,
+  sections: [['Statement', R`<p>$U$ is open in the topology generated by $\mathcal B$ iff for every $x\in U$ there is $B\in\mathcal B$ with $x\in B\subseteq U$. <b>Lemma 13.1:</b> these are exactly the unions of elements of $\mathcal B$.</p><p><b>Lemma 13.2:</b> conversely, a collection $\mathcal C$ of open sets is a basis for a given topology if every open $U$ and every $x\in U$ have some $C\in\mathcal C$ with $x\in C\subseteq U$.</p>`],
+    ['Why', R`<p>If each $x\in U$ has $B_x$ with $x\in B_x\subseteq U$, then $U=\bigcup_x B_x$. Conversely a union of basis elements has, at each of its points, the basis element that point came from.</p>`],
+    ['Use', R`<p>This is the definition used in [[m-open]].</p>`]]},
+'lemma-13-3': {title: 'Comparing topologies through bases (Lemma 13.3)', kind: 'theorem', where: '§13', pre: ['basis', 'finer-coarser'],
+  lede: R`$\mathcal T'$ is finer than $\mathcal T$ iff every basis element of $\mathcal T$ around $x$ contains a basis element of $\mathcal T'$ around $x$.`,
+  sections: [['Statement', R`<p>Let $\mathcal B,\mathcal B'$ generate $\mathcal T,\mathcal T'$. Then $\mathcal T'$ is finer than $\mathcal T$ iff for each $x$ and each $B\in\mathcal B$ with $x\in B$, there is $B'\in\mathcal B'$ with $x\in B'\subseteq B$.</p>`],
+    ['Why', R`<p>If $U$ is $\mathcal T$-open and $x\in U$: pick $B$ with $x\in B\subseteq U$, then $B'$ with $x\in B'\subseteq B\subseteq U$. So $U$ is $\mathcal T'$-open by [[generated-topology]].</p>`],
+    ['Lemma 13.4', R`<p>[[ex-lower-limit|ℝ_ℓ]] and [[ex-k-topology|ℝ_K]] are each strictly finer than ℝ and not comparable with each other.</p>`]]},
+'subbasis': {title: 'Subbasis', kind: 'definition', where: '§13', pre: ['basis'],
+  lede: R`Smaller ingredients still: intersect finitely many, then take unions.`,
+  sections: [['Definition', R`<p>A collection $\mathcal S$ of subsets whose union is $X$. The topology it generates consists of all unions of finite intersections of elements of $\mathcal S$.</p>`],
+    ['Examples', R`<p>Rays $(-\infty,a)$ and $(b,\infty)$ for $\mathbb R$; preimages $\pi_1^{-1}(U),\pi_2^{-1}(V)$ for the [[product-topology]] (Theorem 15.2).</p>`],
+    ['Use', R`<p>To check [[continuous|continuity]] it suffices to check preimages of subbasis elements.</p>`]]},
+// ---------- building spaces
+'order-topology': {title: 'Order topology', kind: 'definition', where: '§14', pre: ['basis'],
+  lede: R`On an ordered set, the topology of open intervals (half-open at an end point).`,
+  sections: [['Definition', R`<p>Basis: open intervals $(a,b)$; plus $[a_0,b)$ if there is a least element $a_0$, and $(a,b_0]$ if there is a greatest $b_0$.</p>`],
+    ['Examples', R`<p>$\mathbb R$ with its order gives the standard topology. Order topologies are [[hausdorff|Hausdorff]] (Theorem 17.11).</p>`]]},
+'product-topology': {title: 'Product topology on X × Y', kind: 'definition', where: '§15', pre: ['basis'],
+  lede: R`Open sets are unions of open boxes $U\times V$.`,
+  sections: [['Definition', R`<p>The topology on $X\times Y$ with [[basis]] all $U\times V$, $U$ open in $X$, $V$ open in $Y$. Theorem 15.1: products of basis elements also form a basis.</p>`],
+    ['Watch out', R`<p>Not every open set is a box: an open disc in $\mathbb R^2$ is a union of boxes.</p>`],
+    ['Facts', R`<p>The projections are [[continuous]]; a map into a product is continuous iff its components are (Theorem 18.4); products of Hausdorff spaces are [[hausdorff|Hausdorff]].</p>`]]},
+'subspace-topology': {title: 'Subspace topology', kind: 'definition', where: '§16', pre: ['topology'],
+  lede: R`Open in $Y$ means: what an open set of $X$ cuts out of $Y$.`,
+  sections: [['Definition', R`<p>For $Y\subseteq X$: $\mathcal T_Y=\{Y\cap U : U\in\mathcal T\}$. Lemma 16.1: $\{B\cap Y\}$ is a basis when $\mathcal B$ is.</p>`],
+    ['Watch out', R`<p>Open in $Y$ is not open in $X$: $[0,\tfrac12)$ is open in $[0,1]$ but not in $\mathbb R$. Lemma 16.2: it is, if $Y$ itself is open in $X$.</p>`],
+    ['Related', R`<p>Closed sets of $Y$ are $C\cap Y$ with $C$ closed in $X$, and closures in $Y$ are $\overline A\cap Y$ (Theorems 17.2, 17.4); see [[closed-set]].</p>`]]},
+// ---------- closed sets
+'closed-set': {title: 'Closed set', kind: 'definition', where: '§17', pre: ['open-set'],
+  lede: R`A set whose complement is open.`,
+  sections: [['Definition', R`<p>$A$ is <b>closed</b> if $X\setminus A$ is open.</p>`],
+    ['Properties (Theorem 17.1)', R`<p>$\varnothing$ and $X$ are closed; arbitrary intersections and finite unions of closed sets are closed. (De Morgan turns the axioms for open sets into these.)</p>`],
+    ['Characterization', R`<p>$A$ is closed iff it contains all its [[limit-point|limit points]] ([[closure-limit-points|Corollary 17.7]]).</p>`],
+    ['In subspaces', R`<p>Closed in $Y$ iff of the form $C\cap Y$, $C$ closed in $X$ (17.2); if $Y$ is closed in $X$, closed in $Y$ implies closed in $X$ (17.3).</p>`],
+    ['Where it matters', R`<p>Closedness of $A$ is what makes [[crushing-a-set]] give a Hausdorff space. Recipe: [[m-closed]].</p>`]]},
+'closure': {title: 'Closure', kind: 'definition', where: '§17', pre: ['closed-set'],
+  lede: R`$\overline A$: the smallest closed set containing $A$.`,
+  sections: [['Definition', R`<p>$\overline A$ is the intersection of all closed sets containing $A$. It is closed, and $A\subseteq\overline A$.</p>`],
+    ['Working test', R`<p>$x\in\overline A$ iff every open set (or basis element) containing $x$ meets $A$: the [[closure-test]].</p>`],
+    ['Examples', R`<p>$\overline{(0,1)}=[0,1]$ in $\mathbb R$, but $[0,1)$ in [[ex-lower-limit|ℝ_ℓ]]. $\overline{\mathbb Q}=\mathbb R$.</p>`],
+    ['Related', R`<p>[[closure-limit-points|$\overline A = A\cup A'$]]; recipe [[m-closure]]; the dual notion is [[interior]].</p>`]]},
+'interior': {title: 'Interior', kind: 'definition', where: '§17', pre: ['open-set'],
+  lede: R`$\operatorname{Int}A$: the largest open set inside $A$.`,
+  sections: [['Definition', R`<p>The union of all open sets contained in $A$.</p>`], ['Example', R`<p>$\operatorname{Int}[0,1]=(0,1)$ in $\mathbb R$; $\operatorname{Int}\mathbb Q=\varnothing$.</p>`], ['Relation to closure', R`<p>$X\setminus\operatorname{Int}A=\overline{X\setminus A}$.</p>`]]},
+'closure-test': {title: 'The closure test (Theorem 17.5)', kind: 'theorem', where: '§17', pre: ['closure'],
+  lede: R`$x\in\overline A$ iff every open set containing $x$ meets $A$.`,
+  sections: [['Statement', R`<p>$x\in\overline A$ iff every open $U\ni x$ intersects $A$. If the topology is given by a [[basis]], "every basis element containing $x$" suffices.</p>`],
+    ['Why', R`<p>If some open $U\ni x$ misses $A$, then $X\setminus U$ is a closed set containing $A$ and not $x$, so $x\notin\overline A$. If $x\notin\overline A$, some closed $C\supseteq A$ misses $x$, and $X\setminus C$ is an open set around $x$ missing $A$.</p>`],
+    ['Use', R`<p>The main tool in [[m-closure]].</p>`]]},
+'limit-point': {title: 'Limit point', kind: 'definition', where: '§17', pre: ['open-set'],
+  lede: R`Points of $A$ crowd in on $x$: every neighbourhood of $x$ meets $A$ somewhere other than $x$.`,
+  sections: [['Definition', R`<p>$x$ is a <b>limit point</b> of $A$ if every neighbourhood of $x$ contains a point of $A$ other than $x$. $A'$ denotes the set of limit points.</p>`],
+    ['Examples', R`<p>$0$ is a limit point of $(0,1)$ and of $\{1/n\}$. In $\{0\}\cup[1,2]$, the point $0$ is not a limit point (it is isolated).</p>`],
+    ['In a metric space', R`<p>For $x\notin A$: $x$ is a limit point iff $d(x,A)=\inf_{a\in A}d(x,a)=0$. This is the gap that closedness guarantees in [[crushing-a-set]].</p>`],
+    ['Related', R`<p>[[closure-limit-points]]; in [[t1|T₁]] spaces every neighbourhood then meets $A$ in infinitely many points (Theorem 17.9).</p>`]]},
+'closure-limit-points': {title: 'Closure = set plus limit points (Theorem 17.6)', kind: 'theorem', where: '§17', pre: ['closure', 'limit-point'],
+  lede: R`$\overline A=A\cup A'$, so $A$ is closed exactly when it contains its limit points.`,
+  sections: [['Statement', R`<p>$\overline A=A\cup A'$. <b>Corollary 17.7:</b> $A$ is closed iff $A'\subseteq A$.</p>`],
+    ['Why', R`<p>Both sides consist of the points every neighbourhood of which meets $A$ ([[closure-test]]): either the point is in $A$, or the neighbourhoods meet $A$ elsewhere.</p>`],
+    ['Example', R`<p>$A=(0,1)$: $A'=[0,1]$, so $A$ is not closed; its missing limit points $0,1$ are what break [[ex-crush-open]].</p>`]]},
+'convergence': {title: 'Convergence of sequences', kind: 'definition', where: '§17', pre: ['open-set'],
+  lede: R`$x_n\to x$ if every neighbourhood of $x$ contains all but finitely many $x_n$.`,
+  sections: [['Definition', R`<p>$x_n\to x$ if for every open $U\ni x$ there is $N$ with $x_n\in U$ for all $n\ge N$.</p>`],
+    ['Uniqueness (Theorem 17.10)', R`<p>In a [[hausdorff|Hausdorff]] space a sequence has at most one limit: disjoint neighbourhoods of two limits cannot both contain the tail.</p>`],
+    ['Non-example', R`<p>In the [[ex-indiscrete|indiscrete]] topology every sequence converges to every point.</p>`]]},
+// ---------- separation
+'hausdorff': {title: 'Hausdorff space', kind: 'definition', where: '§17', pre: ['open-set'],
+  lede: R`Any two distinct points have disjoint open neighbourhoods.`,
+  sections: [['Definition', R`<p>$X$ is <b>Hausdorff</b> if for all $x\neq y$ there are open $U\ni x$, $V\ni y$ with $U\cap V=\varnothing$.</p>`],
+    ['Intuition', R`<p>Points can be put in separate bubbles. This is what makes limits unique ([[convergence|Theorem 17.10]]) and single points closed (Theorem 17.8).</p>`],
+    ['Examples', R`<p>[[metric-hausdorff|Every metric space]]; [[order-topology|order topologies]], subspaces and [[product-topology|products]] of Hausdorff spaces (17.11); a [[crushing-a-set|closed set crushed to a point]].</p>`],
+    ['Non-examples', R`<p>[[ex-finite-complement]], [[ex-indiscrete]], [[ex-crush-open]], [[ex-two-origins]].</p>`],
+    ['How to prove it', R`<p>[[m-hausdorff]].</p>`]]},
+'t1': {title: 'T₁ space', kind: 'definition', where: '§17', pre: ['closed-set'],
+  lede: R`Every single point is a closed set. Weaker than Hausdorff.`,
+  sections: [['Definition', R`<p>$X$ is T₁ if every finite set (equivalently every point) is closed.</p>`],
+    ['Relation', R`<p>[[hausdorff|Hausdorff]] implies T₁ (Theorem 17.8). Not conversely: [[ex-finite-complement]] is T₁ but not Hausdorff.</p>`]]},
+// ---------- continuity
+'continuous': {title: 'Continuous function', kind: 'definition', where: '§18', pre: ['open-set', 'image-preimage'],
+  lede: R`Preimages of open sets are open.`,
+  sections: [['Definition', R`<p>$f:X\to Y$ is <b>continuous</b> if $f^{-1}(V)$ is open in $X$ for every open $V\subseteq Y$. It is enough to check [[basis]] (or [[subbasis]]) elements of $Y$.</p>`],
+    ['Intuition', R`<p>Points near $x$ go near $f(x)$, said with open sets instead of distances. In metric spaces it is exactly [[epsilon-delta]].</p>`],
+    ['Examples', R`<p>Constants, the identity, inclusions of subspaces, projections from products, compositions of continuous maps (Theorem 18.2).</p>`],
+    ['Non-example', R`<p>The identity $\mathbb R\to\mathbb R_\ell$: $[0,1)$ is open in [[ex-lower-limit|ℝ_ℓ]] but its preimage is not open in $\mathbb R$.</p>`],
+    ['Related', R`<p>[[continuity-equivalents]], [[pasting-lemma]], [[homeomorphism]], recipe [[m-continuous]].</p>`]]},
+'continuity-equivalents': {title: 'Equivalent forms of continuity (Theorem 18.1)', kind: 'theorem', where: '§18', pre: ['continuous', 'closure'],
+  lede: R`Continuity can be checked with closures, closed sets, or neighbourhoods.`,
+  sections: [['Statement', R`<p>For $f:X\to Y$ these are equivalent: (1) $f$ is continuous; (2) $f(\overline A)\subseteq\overline{f(A)}$ for every $A\subseteq X$; (3) preimages of [[closed-set|closed sets]] are closed; (4) for each $x$ and each open $V\ni f(x)$ there is an open $U\ni x$ with $f(U)\subseteq V$.</p>`],
+    ['Why (1)⇔(3)', R`<p>$f^{-1}(Y\setminus C)=X\setminus f^{-1}(C)$; see [[image-preimage]].</p>`]]},
+'pasting-lemma': {title: 'Pasting lemma (Theorem 18.3)', kind: 'theorem', where: '§18', pre: ['continuous', 'closed-set'],
+  lede: R`Two continuous pieces on closed sets that agree on the overlap glue into a continuous map.`,
+  sections: [['Statement', R`<p>If $X=A\cup B$ with $A,B$ closed, and $f:A\to Y$, $g:B\to Y$ are continuous and agree on $A\cap B$, then $h=f\cup g:X\to Y$ is continuous.</p>`],
+    ['Why', R`<p>For closed $C$: $h^{-1}(C)=f^{-1}(C)\cup g^{-1}(C)$. Each piece is closed in $A$ or $B$, hence in $X$ (Theorem 17.3), and a finite union of closed sets is closed.</p>`],
+    ['Watch out', R`<p>It fails for non-closed pieces: $f=0$ on $(-\infty,0)$ and $g=1$ on $[0,\infty)$.</p>`]]},
+'homeomorphism': {title: 'Homeomorphism', kind: 'definition', where: '§18', pre: ['continuous'],
+  lede: R`A bijection that is continuous both ways: the same space with the points renamed.`,
+  sections: [['Definition', R`<p>A bijection $f:X\to Y$ with $f$ and $f^{-1}$ both [[continuous]].</p>`],
+    ['Examples', R`<p>$(-1,1)\cong\mathbb R$ via $x\mapsto x/(1-x^2)$. [[ex-circle|An interval with ends glued]] is a circle.</p>`],
+    ['Watch out', R`<p>$[0,1)\to S^1$, $t\mapsto(\cos2\pi t,\sin2\pi t)$, is a continuous bijection whose inverse is not continuous: it tears the circle open at $(1,0)$.</p>`]]},
+// ---------- metric
+'metric': {title: 'Metric', kind: 'definition', where: '§20', pre: [],
+  lede: R`A distance function: positive, symmetric, with the triangle inequality.`,
+  sections: [['Definition', R`<p>$d:X\times X\to\mathbb R$ with $d(x,y)\ge0$, equality iff $x=y$; $d(x,y)=d(y,x)$; and the <b>triangle inequality</b> $d(x,z)\le d(x,y)+d(y,z)$.</p>`],
+    ['What it gives', R`<p>[[ball|Balls]], and from them the [[metric-topology]].</p>`],
+    ['Examples', R`<p>Euclidean distance on $\mathbb R^n$; the discrete metric ($d=1$ for distinct points), which gives the [[ex-discrete|discrete topology]].</p>`]]},
+'ball': {title: 'Open ball', kind: 'definition', where: '§20', pre: ['metric'],
+  lede: R`$B(x,\varepsilon)=\{y: d(x,y)<\varepsilon\}$.`,
+  sections: [['Definition', R`<p>The set of points at distance less than $\varepsilon$ from $x$.</p>`],
+    ['Balls are open', R`<p>If $y\in B(x,\varepsilon)$, set $\delta=\varepsilon-d(x,y)>0$. For $z\in B(y,\delta)$: $d(x,z)\le d(x,y)+d(y,z)<d(x,y)+\delta=\varepsilon$. So $B(y,\delta)\subseteq B(x,\varepsilon)$.</p>`],
+    ['Use', R`<p>The basis of the [[metric-topology]]; the standard tool in [[m-open]] and [[m-hausdorff]].</p>`]]},
+'metric-topology': {title: 'Metric topology', kind: 'definition', where: '§20', pre: ['ball', 'basis'],
+  lede: R`Open means: around each point, a whole ball fits inside.`,
+  sections: [['Definition', R`<p>The topology with [[basis]] the open balls. $U$ is open iff for each $x\in U$ some $B(x,\varepsilon)\subseteq U$.</p>`],
+    ['Metrizable', R`<p>A space is metrizable if its topology comes from some metric. Metrizable spaces are [[hausdorff|Hausdorff]], so [[ex-finite-complement]] is not metrizable.</p>`]]},
+'metric-hausdorff': {title: 'Every metric space is Hausdorff', kind: 'theorem', where: '§20', pre: ['metric-topology', 'hausdorff'],
+  lede: R`Balls of radius $d(x,y)/2$ around $x$ and $y$ are disjoint.`,
+  sections: [['Proof', R`<p>Let $x\neq y$ and $r=d(x,y)/2>0$. If $z\in B(x,r)\cap B(y,r)$, then $d(x,y)\le d(x,z)+d(z,y)<2r=d(x,y)$, a contradiction.</p>`],
+    ['Where it is used', R`<p>Case 1 of [[hw7-q1]] is this argument with the radius also shrunk to avoid $A$.</p>`]]},
+'epsilon-delta': {title: 'ε–δ continuity (Theorem 21.1)', kind: 'theorem', where: '§21', pre: ['continuous', 'metric-topology'],
+  lede: R`Between metric spaces, continuity is the familiar ε–δ condition.`,
+  sections: [['Statement', R`<p>$f:X\to Y$ between metric spaces is [[continuous]] iff for every $x$ and $\varepsilon>0$ there is $\delta>0$ with $d(x,y)<\delta\Rightarrow d(f(x),f(y))<\varepsilon$.</p>`],
+    ['Why', R`<p>The condition says $f(B(x,\delta))\subseteq B(f(x),\varepsilon)$: form (4) of [[continuity-equivalents]] with [[ball|balls]] as neighbourhoods.</p>`]]},
+// ---------- quotients
+'quotient-topology': {title: 'Quotient topology', kind: 'definition', where: '§22', pre: ['partition', 'open-set'],
+  lede: R`Glue points together; a set of glued points is open iff everything lying over it is open.`,
+  sections: [['Definition', R`<p>Let $X^*$ be a [[partition]] of $X$ and $p:X\to X^*$ send each point to its piece. Then $U\subseteq X^*$ is open iff $p^{-1}(U)$ is open in $X$. $X^*$ is the <b>quotient space</b>.</p>`],
+    ['Intuition', R`<p>It is the largest topology for which $p$ is [[continuous]]. Openness upstairs is decided entirely downstairs.</p>`],
+    ['Getting open sets in', R`<p>Push down open sets that are [[saturated]]. Recipe: [[m-quotient]].</p>`],
+    ['Watch out', R`<p>Quotients of nice spaces can be badly behaved: [[ex-crush-open]] is not Hausdorff.</p>`],
+    ['Examples', R`<p>[[crushing-a-set]], [[gluing-examples]].</p>`]]},
+'saturated': {title: 'Saturated set', kind: 'definition', where: '§22', pre: ['quotient-topology'],
+  lede: R`A union of whole pieces; it never contains part of a glued piece without the rest.`,
+  sections: [['Definition', R`<p>$C\subseteq X$ is saturated if $C=p^{-1}(p(C))$.</p>`],
+    ['Key fact', R`<p>If $C$ is open and saturated, then $p^{-1}(p(C))=C$ is open, so $p(C)$ is open in $X^*$. This is how open sets of a quotient are built.</p>`],
+    ['Why pulling back can grow a set', R`<p>$p^{-1}(p(C))$ is everything equivalent to something in $C$. If $C$ contains part of a piece, the pullback drags in the rest.</p>`],
+    ['Example', R`<p>For a crushed set $A$: any set containing all of $A$ or none of it. Used in both cases of [[hw7-q1]].</p>`]]},
+'quotient-map': {title: 'Quotient map', kind: 'definition', where: '§22', pre: ['quotient-topology', 'continuous'],
+  lede: R`A surjection for which $U$ is open exactly when $p^{-1}(U)$ is open.`,
+  sections: [['Definition', R`<p>A surjective $p:X\to Y$ such that $U\subseteq Y$ is open iff $p^{-1}(U)$ is open in $X$. Stronger than [[continuous]], which is only the "if $U$ open then $p^{-1}(U)$ open" half.</p>`],
+    ['Sufficient conditions', R`<p>A continuous surjection that is an open map, or a closed map, is a quotient map.</p>`]]},
+'maps-out-of-quotients': {title: 'Maps out of a quotient (Theorem 22.2)', kind: 'theorem', where: '§22', pre: ['quotient-map'],
+  lede: R`A map on $X$ that is constant on each piece descends to a continuous map on the quotient.`,
+  sections: [['Statement', R`<p>Let $p:X\to Y$ be a quotient map and $h:X\to Z$ continuous and constant on each $p^{-1}(\{y\})$. Then $h$ induces $g:Y\to Z$ with $g\circ p=h$, and $g$ is continuous.</p>`],
+    ['Use', R`<p>Define maps on a glued space by defining them upstairs. Example in [[gluing-examples]].</p>`]]},
+'crushing-a-set': {title: 'Crushing a set to a point', kind: 'idea', where: '§22 · HW7', pre: ['quotient-topology', 'saturated', 'closed-set'],
+  lede: R`Collapse $A\subseteq X$ to one point. The result is Hausdorff when $A$ is closed in a metric space, and can fail otherwise.`,
+  sections: [['Setup', R`<p>$x\sim_A y$ iff $x=y$ or both in $A$. The points of $X/{\sim_A}$ are $[A]$ and $\{x\}$ for $x\notin A$ ([[equivalence-class]]).</p>`],
+    ['Picture', '<canvas id="qfig" class="figc" width="560" height="170" aria-label="Crushing A to a point"></canvas><div class="figctl"><label>x <input id="qx" type="range" min="0" max="1000" value="180"></label><label><input id="qclosed" type="checkbox" checked> A closed</label></div><p id="qmsg" class="figmsg"></p>'],
+    ['Why closed matters', R`<p>For $x\notin A$ with $A$ closed there is $r>0$ with $B(x,r)\cap A=\varnothing$, a gap. For $A=(0,1)$ and $x=0$ there is no gap: $d(0,A)=0$, every open set around $\{0\}$ contains $[A]$, and the quotient is not Hausdorff ([[ex-crush-open]]).</p>`],
+    ['The proof', R`<p>Written out in [[hw7-q1]].</p>`]]},
+'gluing-examples': {title: 'Gluing examples', kind: 'example', where: '§22', pre: ['quotient-topology', 'homeomorphism'],
+  lede: R`Circles, cones and tori come from gluing simple pieces.`,
+  sections: [['Circle', R`<p>$[0,1]/\{0\sim1\}\cong S^1$: $h(t)=(\cos2\pi t,\sin2\pi t)$ is constant on $\{0,1\}$, so it induces a continuous bijection $[0,1]/{\sim}\to S^1$ ([[maps-out-of-quotients]]); compactness (Ch. 3) makes it a [[homeomorphism]]. See [[ex-circle]].</p>`],
+    ['Torus', R`<p>The square with opposite sides glued (both pairs, same direction) is the torus.</p>`],
+    ['Line with two origins', R`<p>See [[ex-two-origins]]: a quotient that is not Hausdorff even though it looks like $\mathbb R$ near every point.</p>`]]},
+// ---------- methods
+'m-topology': {title: 'Check that a collection is a topology', kind: 'method', where: '§12', pre: ['topology'],
+  lede: 'Check the three axioms, with arbitrary unions and finite intersections.',
+  steps: [[R`Check $\varnothing$ and $X$ are in it.`, 'Axiom (1); easy to forget when the collection is given by a rule.'], [R`Take an arbitrary family and show its union is in it.`, 'Axiom (2) is for any number of sets.'], ['Take two members and show their intersection is in it.', R`Two suffice by induction; infinite intersections are not required ([[topology]]).`]],
+  sections: [['To disprove', R`<p>Produce one union or one finite intersection that falls outside.</p>`]]},
+'m-open': {title: 'Show a set is open', kind: 'method', where: '§13, §20', pre: ['generated-topology'],
+  lede: 'Take a point, fit a basis element (a ball) around it inside the set.',
+  steps: [[R`Take an arbitrary $x\in U$.`, 'Openness is a condition at every point.'], [R`Produce a [[basis]] element $B$, in a metric space a [[ball]] $B(x,r)$, with $x\in B\subseteq U$. Say how $r$ depends on $x$.`, R`This is the definition ([[generated-topology]]).`], [R`Prove $B\subseteq U$: take $y\in B$ and show $y\in U$.`, 'Usually with the triangle inequality.']],
+  sections: [['Other routes', R`<p>Write $U$ as a union of open sets, or as $f^{-1}(V)$ for a [[continuous]] $f$ and open $V$.</p>`], ['Common mistakes', R`<p>Using one radius for all points; showing $x\in B$ but not $B\subseteq U$.</p>`]]},
+'m-closed': {title: 'Show a set is closed', kind: 'method', where: '§17', pre: ['closed-set'],
+  lede: 'Complement open, or contains its limit points, or a preimage of a closed set.',
+  steps: [[R`Show $X\setminus A$ is open ([[m-open]]).`, 'The definition.'], ['Or show $A$ contains its limit points.', R`[[closure-limit-points|Corollary 17.7]].`], [R`Or write $A=f^{-1}(C)$ with $f$ continuous and $C$ closed.`, R`[[continuity-equivalents|Theorem 18.1]]. Example: $\{z: d(z,x)\ge r\}$.`]],
+  sections: [['Common mistake', R`<p>Concluding closed from "not open".</p>`]]},
+'m-closure': {title: 'Find a closure', kind: 'method', where: '§17', pre: ['closure-test'],
+  lede: 'Guess from a picture, then confirm each point with the closure test.',
+  steps: [['Guess the answer from a picture.', ''], [R`For $x$ in the guess: every basis element around $x$ meets $A$.`, R`[[closure-test]].`], [R`For $x$ outside the guess: find one basis element around $x$ that misses $A$.`, 'The same theorem, negated.']],
+  sections: [['Watch out', R`<p>The answer depends on the topology: $\overline{(0,1)}$ is $[0,1]$ in $\mathbb R$ and $[0,1)$ in [[ex-lower-limit|ℝ_ℓ]].</p>`]]},
+'m-continuous': {title: 'Show a function is continuous', kind: 'method', where: '§18, §21', pre: ['continuous'],
+  lede: 'Pull back basis elements, or use ε–δ, or build it from continuous pieces.',
+  steps: [[R`Take a basis element $B$ of $Y$ and show $f^{-1}(B)$ is open.`, R`Preimages preserve unions ([[image-preimage]]).`], [R`In metric spaces: given $x$ and $\varepsilon$, produce $\delta$.`, R`[[epsilon-delta]].`], ['Or assemble $f$ from continuous pieces: compositions, restrictions, the pasting lemma, maps into products.', R`Theorems 18.2–18.4; [[pasting-lemma]].`]],
+  sections: [['Out of a quotient', R`<p>$g$ on $X^*$ is continuous iff $g\circ p$ is ([[maps-out-of-quotients]]).</p>`], ['Common mistakes', R`<p>Checking images instead of preimages; for a [[homeomorphism]], forgetting the inverse.</p>`]]},
+'m-hausdorff': {title: 'Show a space is Hausdorff', kind: 'method', where: '§17', pre: ['hausdorff'],
+  lede: 'Take two points, split into cases if they come in kinds, and build disjoint open sets in each case.',
+  steps: [[R`Take $x\neq y$; if the points come in kinds, split into cases.`, 'Different kinds of pairs may need different constructions.'], ['In each case write down two open sets, one around each point.', R`In a metric space, balls of radius $d(x,y)/2$ ([[metric-hausdorff]]).`], [R`Prove they are disjoint: suppose $z$ is in both and reach a contradiction.`, R`Typically $d(x,y)\le d(x,z)+d(z,y)<2r\le d(x,y)$.`]],
+  sections: [['To disprove', R`<p>Find two points such that every neighbourhood of one meets every neighbourhood of the other, as in [[ex-crush-open]].</p>`], ['Worked', R`<p>[[hw7-q1]].</p>`]]},
+'m-quotient': {title: 'Work with a quotient', kind: 'method', where: '§22', pre: ['quotient-topology', 'saturated'],
+  lede: 'Describe the classes, test openness by pulling back, and build open sets from saturated ones.',
+  steps: [['Describe the classes: the points of the quotient.', R`You need to know what you are separating or mapping ([[equivalence-class]]).`], [R`To show $V\subseteq X^*$ is open, check $p^{-1}(V)$ is open in $X$.`, R`The definition ([[quotient-topology]]).`], [R`To produce open sets in $X^*$, take open [[saturated]] sets of $X$ and push them down.`, R`$p^{-1}(p(C))=C$ is open.`], [R`To map out of $X^*$, define a continuous map on $X$ constant on each class.`, R`[[maps-out-of-quotients]].`]],
+  sections: [['Worked', R`<p>[[hw7-q1]] combines this with [[m-hausdorff]].</p>`]]},
+'m-compare': {title: 'Compare two topologies', kind: 'method', where: '§13', pre: ['lemma-13-3'],
+  lede: 'Inside every old basis element around a point, find a new one around the same point.',
+  steps: [['Write down bases for both.', ''], [R`For each $x$ and each basis element $B\ni x$ of the coarser candidate, find $B'\ni x$ of the finer one with $B'\subseteq B$.`, R`[[lemma-13-3]].`], ['For "strictly finer", exhibit one open set of the finer topology not open in the other.', R`E.g. $[0,1)$ in [[ex-lower-limit|ℝ_ℓ]].`]],
+  sections: [['Common mistake', R`<p>Reversing the direction: the finer topology supplies the smaller sets.</p>`]]},
+'m-counterexample': {title: 'Find a counterexample', kind: 'method', where: 'all', pre: [],
+  lede: 'Try a small finite space, one of the standard odd topologies, or drop a hypothesis.',
+  steps: [['Try a small finite space with a hand-made topology.', 'You can list every open set.'], [R`Try [[ex-lower-limit|ℝ_ℓ]], [[ex-finite-complement]], [[ex-indiscrete]], [[ex-sierpinski]].`, 'Each breaks a different property.'], ['Drop a hypothesis, e.g. crush a set that is not closed.', R`[[ex-crush-open]] shows exactly where closedness is used.`]],
+  sections: []},
+// ---------- examples
+'ex-real-line': {title: 'ℝ, the standard line', kind: 'example', where: '§13', pre: ['basis'], lede: 'Basis: open intervals. Metric, Hausdorff, connected: the baseline.', sections: [['Facts', R`<p>Its topology is the [[order-topology]] and the [[metric-topology]] of $|x-y|$.</p>`]]},
+'ex-lower-limit': {title: 'ℝ_ℓ, the lower limit topology', kind: 'example', where: '§13', pre: ['basis'], lede: R`Basis: $[a,b)$. Strictly finer than ℝ.`, sections: [['Facts', R`<p>[[hausdorff|Hausdorff]]; $[a,b)$ is both open and closed; strictly finer than ℝ by [[lemma-13-3]]. The identity $\mathbb R\to\mathbb R_\ell$ is not [[continuous]].</p>`]]},
+'ex-k-topology': {title: 'ℝ_K, the K-topology', kind: 'example', where: '§13', pre: ['basis'], lede: R`Basis: $(a,b)$ and $(a,b)\setminus K$ with $K=\{1/n\}$.`, sections: [['Facts', R`<p>Strictly finer than ℝ, not comparable with ℝ_ℓ (Lemma 13.4); Hausdorff. $K$ is closed in ℝ_K.</p>`]]},
+'ex-finite-complement': {title: 'Finite complement topology', kind: 'example', where: '§12', pre: ['standard-topologies'], lede: 'Open sets: complements of finite sets. T₁ but not Hausdorff on an infinite set.', sections: [['Why not Hausdorff', R`<p>Two nonempty open sets have finite complements; on an infinite set their complements cannot cover $X$, so the sets meet.</p>`], ['Convergence', R`<p>A sequence of distinct points converges to every point.</p>`]]},
+'ex-discrete': {title: 'Discrete space', kind: 'example', where: '§12', pre: ['standard-topologies'], lede: 'Every subset is open; every map out of it is continuous.', sections: [['Facts', R`<p>Metrizable by the discrete metric; Hausdorff.</p>`]]},
+'ex-indiscrete': {title: 'Indiscrete space', kind: 'example', where: '§12', pre: ['standard-topologies'], lede: R`Only $\varnothing$ and $X$; every map into it is continuous.`, sections: [['Facts', R`<p>Not Hausdorff if it has two points; every sequence converges to every point.</p>`]]},
+'ex-sierpinski': {title: 'Sierpiński space', kind: 'example', where: '§12', pre: ['topology'], lede: R`$\{0,1\}$ with open sets $\varnothing,\{1\},\{0,1\}$.`, sections: [['Facts', R`<p>Not [[t1|T₁]]: $\{1\}$ is open, so $\{0\}$ is closed, but $\{1\}$ is not closed. The smallest space that is neither discrete nor indiscrete.</p>`]]},
+'ex-crush-open': {title: 'ℝ/(0,1): crushing a set that is not closed', kind: 'example', where: '§22', pre: ['quotient-topology', 'limit-point'], lede: R`Collapsing $(0,1)$ to a point gives a non-Hausdorff space.`, sections: [['Why', R`<p>Any open $V\ni\{0\}$ has $p^{-1}(V)$ open in $\mathbb R$ containing $0$, so containing $(-\varepsilon,\varepsilon)$, which meets $(0,1)$. So $[(0,1)]\in V$. Every neighbourhood of $\{0\}$ contains the crushed point.</p>`], ['Also', R`<p>$\{[(0,1)]\}$ is not closed, since its preimage $(0,1)$ is not closed: the space is not even [[t1|T₁]].</p>`]]},
+'ex-circle': {title: 'Circle from an interval', kind: 'example', where: '§22', pre: ['gluing-examples'], lede: R`$[0,1]$ with $0\sim1$ is homeomorphic to $S^1$.`, sections: [['Why', R`<p>See [[gluing-examples]].</p>`]]},
+'ex-two-origins': {title: 'Line with two origins', kind: 'example', where: '§22', pre: ['quotient-topology'], lede: 'Two copies of ℝ glued everywhere except 0. Looks like ℝ near each point but is not Hausdorff.', sections: [['Why not Hausdorff', R`<p>Any neighbourhoods of the two origins contain intervals $(-\varepsilon,0)\cup(0,\varepsilon)$ that are glued together, so they meet.</p>`]]},
+// ---------- worked
+'hw7-q1': {title: 'HW7 Q1: crushing a closed set', kind: 'worked', where: 'Homework 7', pre: ['crushing-a-set', 'm-quotient', 'm-hausdorff'],
+  lede: R`For a closed $A$ in a metric space, $X/{\sim_A}$ is Hausdorff. Set up as in our session; check the wording on the sheet.`,
+  sections: [['(a) The classes', R`<p>If $a\in A$: every $y\in A$ is related to $a$ by the "both in $A$" clause, and no $y\notin A$ is. So $[a]=A$. If $x\notin A$, only $y=x$ is related, so $[x]=\{x\}$. Hence $X/{\sim_A}=\{A\}\cup\{\{x\}:x\in X\setminus A\}$.</p>`],
+    ['(b) Setup', R`<p>$\pi:X\to X/{\sim_A}$, $\pi(z)=[z]$. $U$ is open in $X/{\sim_A}$ iff $\pi^{-1}(U)$ is open in $X$. If $W\subseteq X$ is open and contains all of $A$ or none of it, it is [[saturated]], so $\pi(W)$ is open.</p>`],
+    ['(b) Case 1: two singletons', R`<p>$\{x\},\{y\}$ with $x\ne y$, $x,y\notin A$. Since $A$ is closed there are $r_x,r_y>0$ with $B(x,r_x)\cap A=\varnothing=B(y,r_y)\cap A$. Let $r=\min(\tfrac{d(x,y)}2,r_x,r_y)$. The balls $B(x,r),B(y,r)$ miss $A$, so their images are open; if $z$ were in both, $d(x,y)<2r\le d(x,y)$. So the images are disjoint open sets around $\{x\},\{y\}$.</p>`],
+    ['(b) Case 2: [A] and a singleton', R`<p>Choose $r>0$ with $B(x,r)\cap A=\varnothing$. Let $U=B(x,\tfrac r2)$ and $W=\{z: d(z,x)>\tfrac r2\}$. Both are open; $U$ misses $A$ and $A\subseteq W$, so both are saturated; they are disjoint. So $\pi(U)\ni\{x\}$ and $\pi(W)\ni[A]$ separate the points.</p>`],
+    ['Conclusion', R`<p>Every pair of distinct points is separated, so $X/{\sim_A}$ is [[hausdorff|Hausdorff]]. $\blacksquare$</p>`],
+    ['Why the hypothesis', R`<p>Without closedness it fails: [[ex-crush-open]].</p>`]]}
+};
 
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.panel').forEach(function (panel) {
-    var titles = panel.querySelectorAll('.sec-title');
-    if (!titles.length) return;
-    var toc = document.createElement('nav');
-    toc.className = 'toc';
-    toc.innerHTML = '<div class="toc-label">Contents</div>';
-    var ol = document.createElement('ol');
-    titles.forEach(function (t, i) {
-      t.id = t.id || panel.id + '-s' + (i + 1);
-      var li = document.createElement('li');
-      li.innerHTML = '<a href="#' + t.id + '">' + t.textContent + '</a>';
-      var ul = document.createElement('ul');
-      var el = t.nextElementSibling;
-      var n = 0;
-      while (el && !el.classList.contains('sec-title')) {
-        if (el.classList.contains('eqcard')) {
-          n++;
-          el.id = el.id || t.id + '-e' + n;
-          var num = el.querySelector('.eqnum'), name = el.querySelector('.eqname');
-          var item = document.createElement('li');
-          item.innerHTML = '<a href="#' + el.id + '"><span class="tnum">' + (num ? num.textContent : '') + '</span>' + (name ? name.textContent : '') + '</a>';
-          (function (card) {
-            item.querySelector('a').addEventListener('click', function () { openCard(card.querySelector('.eqhdr')); });
-          })(el);
-          ul.appendChild(item);
-        }
-        el = el.nextElementSibling;
-      }
-      if (n) li.appendChild(ul);
-      ol.appendChild(li);
-    });
-    toc.appendChild(ol);
-    var intro = panel.querySelector('.intro');
-    if (intro) intro.after(toc); else panel.prepend(toc);
-  });
-});
 </script>
 <script>
-// the crushing picture in the quotient method: a set A on the line, a point x, and either the two separating sets or the failure
+// ===== The encyclopedia: home page, articles, link previews, a trail of where you have been, search.
+var KIND = {definition: 'Definition', theorem: 'Theorem', method: 'Method', example: 'Example', idea: 'Idea', worked: 'Worked problem'};
+var BACK = {}, MENTION = {};
+Object.keys(A).forEach(function(id){ (A[id].pre || []).forEach(function(p){ (BACK[p] = BACK[p] || []).push(id); });
+  var txt = JSON.stringify(A[id]); (txt.match(/\[\[([a-z0-9-]+)/g) || []).forEach(function(m){ var t = m.slice(2); if (t !== id){ MENTION[t] = MENTION[t] || []; if (MENTION[t].indexOf(id) < 0) MENTION[t].push(id); } }); });
+function wiki(h){ return h.replace(/\[\[([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g, function(_, id, label){ var a = A[id]; return '<a class="wl" href="#a/' + id + '" data-id="' + id + '">' + (label || (a ? a.title : id)) + '</a>'; }); }
+function plain(h){ return h.replace(/\[\[([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g, function(_, id, l){ return l || (A[id] ? A[id].title : id); }).replace(/<[^>]+>/g, ''); }
+function math(el){ if (window.renderMathInElement) renderMathInElement(el, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}], throwOnError: false}); }
+function chip(id){ var a = A[id]; return a ? '<a class="chip" href="#a/' + id + '">' + a.title + '</a>' : ''; }
+var TRAIL = []; try { TRAIL = JSON.parse(sessionStorage.getItem('tg-trail') || '[]'); } catch(e){}
+function home(){
+  var recent = []; try { recent = JSON.parse(localStorage.getItem('tg-recent') || '[]'); } catch(e){}
+  var h = '<h1>Topology Reference Guide</h1><p class="intro">An encyclopedia of the course, one article per idea. Each article opens to a one-line summary and its definition; everything else unfolds when you want it. Underlined terms are links: tap one for a preview, then read on or stay where you are. At the end of each article you will find what it depends on and what builds on it, and the next article in Munkres order.</p>';
+  h += '<div class="start"><a class="chip" href="#a/topology">Start at the beginning</a><a class="chip" href="#a/crushing-a-set">Current: quotients</a><a class="chip" href="#a/hw7-q1">HW7 Q1</a><a class="chip" href="tabs/">Quick-reference tabs</a></div>';
+  if (recent.length) h += '<div class="topic"><h2>Recently read</h2><div class="chips">' + recent.slice(0, 8).map(chip).join('') + '</div></div>';
+  TOPICS.forEach(function(tp){ h += '<div class="topic"><h2>' + tp[0] + '</h2><div class="tlist">' + tp[1].map(function(id){ var a = A[id]; return '<a href="#a/' + id + '"><b>' + a.title + '</b><span class="kind">' + KIND[a.kind] + '</span><i>' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }).join('') + '</div></div>'; });
+  h += '<p class="foot">Theorem numbers follow Munkres, <em>Topology</em>, 2nd ed.; check them against your copy. Earlier notes and quiz: <a href="classic/">classic</a>.</p>';
+  return h;
+}
+function article(id){
+  var a = A[id]; if (!a) return '<p>No article called “' + id + '”.</p>';
+  TRAIL = TRAIL.filter(function(x){ return x !== id; }); TRAIL.push(id); TRAIL = TRAIL.slice(-4); try { sessionStorage.setItem('tg-trail', JSON.stringify(TRAIL)); var r = JSON.parse(localStorage.getItem('tg-recent') || '[]').filter(function(x){ return x !== id; }); r.unshift(id); localStorage.setItem('tg-recent', JSON.stringify(r.slice(0, 12))); } catch(e){}
+  var h = '<div class="trail"><a href="#">Home</a>' + TRAIL.slice(0, -1).map(function(t){ return '<span class="sep">›</span><a href="#a/' + t + '">' + A[t].title + '</a>'; }).join('') + '<span class="sep">›</span>' + a.title + '</div>';
+  h += '<div class="meta">' + KIND[a.kind] + ' · ' + a.where + '</div><h1>' + a.title + '</h1><div class="lede">' + wiki(a.lede) + '</div>';
+  if (a.steps) h += '<details class="sec" open><summary>Steps</summary><div class="secb"><ol class="steps">' + a.steps.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + wiki(s[0]) + '</summary><div class="why"><b>Why:</b> ' + wiki(s[1]) + '</div></details>' : wiki(s[0])) + '</li>'; }).join('') + '</ol></div></details>';
+  (a.sections || []).forEach(function(s, i){ h += '<details class="sec"' + (i === 0 && !a.steps ? ' open' : '') + (s[0] === 'Picture' ? ' open' : '') + '><summary>' + s[0] + '</summary><div class="secb">' + wiki(s[1]) + '</div></details>'; });
+  h += '<div class="links">';
+  if ((a.pre || []).length) h += '<h3>Depends on</h3><div class="chips">' + a.pre.map(chip).join('') + '</div>';
+  if ((BACK[id] || []).length) h += '<h3>Builds toward</h3><div class="chips">' + BACK[id].map(chip).join('') + '</div>';
+  var men = (MENTION[id] || []).filter(function(m){ return (BACK[id] || []).indexOf(m) < 0 && (a.pre || []).indexOf(m) < 0; });
+  if (men.length) h += '<h3>Mentioned in</h3><div class="chips">' + men.map(chip).join('') + '</div>';
+  h += '</div>';
+  var k = ORDER.indexOf(id);
+  if (k >= 0) h += '<div class="pn">' + (k > 0 ? '<a href="#a/' + ORDER[k - 1] + '"><span>Previous</span>' + A[ORDER[k - 1]].title + '</a>' : '<span style="flex:1"></span>') + (k < ORDER.length - 1 ? '<a class="nx" href="#a/' + ORDER[k + 1] + '"><span>Next in Munkres order</span>' + A[ORDER[k + 1]].title + '</a>' : '') + '</div>';
+  return h;
+}
+function route(){
+  var hsh = location.hash.replace(/^#/, ''), v = document.getElementById('view');
+  closePv();
+  if (hsh.indexOf('a/') === 0){ var id = hsh.slice(2); v.innerHTML = article(id); document.title = (A[id] ? A[id].title + ' · ' : '') + 'Topology Reference Guide'; }
+  else { v.innerHTML = home(); document.title = 'Topology Reference Guide'; }
+  math(v); window.scrollTo(0, 0); if (document.getElementById('qfig')) quotFig();
+}
+// previews: a tap on an underlined term inside an article shows its summary first
+function closePv(){ document.getElementById('pv').classList.remove('on'); }
+document.addEventListener('click', function(e){
+  var l = e.target.closest('a.wl');
+  if (l && !e.metaKey && !e.ctrlKey){ e.preventDefault(); var a = A[l.dataset.id]; if (!a) return; var pv = document.getElementById('pv');
+    pv.querySelector('.pm').textContent = KIND[a.kind] + ' · ' + a.where; pv.querySelector('.pt').textContent = a.title; pv.querySelector('.pl').innerHTML = wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '');
+    pv.querySelector('.pgo').setAttribute('href', '#a/' + l.dataset.id); math(pv); pv.classList.add('on'); return; }
+  if (e.target.closest('#pv .px')) closePv();
+  else if (!e.target.closest('#pv')) closePv();
+});
+// search: titles, summaries and text
+var IDX = Object.keys(A).map(function(id){ var a = A[id]; return {id: id, t: a.title.toLowerCase(), l: plain(a.lede).toLowerCase(), b: plain(JSON.stringify(a.sections || []) + JSON.stringify(a.steps || [])).toLowerCase()}; });
+function search(q){ q = q.trim().toLowerCase(); if (!q) return []; return IDX.map(function(e){ var s = e.t.indexOf(q) === 0 ? 0 : e.t.indexOf(q) >= 0 ? 1 : e.l.indexOf(q) >= 0 ? 2 : e.b.indexOf(q) >= 0 ? 3 : 9; return [s, e.id]; }).filter(function(x){ return x[0] < 9; }).sort(function(a, b){ return a[0] - b[0]; }).slice(0, 8).map(function(x){ return x[1]; }); }
+var q = document.getElementById('q'), sg = document.getElementById('sugg');
+q.addEventListener('input', function(){ var r = search(q.value); sg.innerHTML = r.map(function(id){ return '<a href="#a/' + id + '"><span class="sk">' + KIND[A[id].kind] + '</span>' + A[id].title + '</a>'; }).join('') || (q.value ? '<a href="#"><span class="sk">no match</span>Try another word</a>' : ''); sg.classList.toggle('on', !!q.value); });
+q.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ var r = search(q.value); if (r.length){ location.hash = 'a/' + r[0]; q.value = ''; sg.classList.remove('on'); q.blur(); } } if (e.key === 'Escape'){ q.value = ''; sg.classList.remove('on'); } });
+sg.addEventListener('click', function(){ setTimeout(function(){ q.value = ''; sg.classList.remove('on'); }, 0); });
+document.addEventListener('click', function(e){ if (!e.target.closest('.search')) sg.classList.remove('on'); });
+// theme
+var tb = document.getElementById('themeBtn'); function setTb(){ tb.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? 'Dark' : 'Light'; } setTb();
+tb.addEventListener('click', function(){ var l = document.documentElement.getAttribute('data-theme') === 'light'; if (l) document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', 'light'); try { localStorage.setItem('tg-theme', l ? 'dark' : 'light'); } catch(e){} setTb(); if (document.getElementById('qfig')) quotFig(); });
+// the crushing picture
 function quotFig(){
   var cv = document.getElementById('qfig'); if (!cv) return; var g = cv.getContext('2d'), xs = document.getElementById('qx'), cl = document.getElementById('qclosed'), out = document.getElementById('qmsg');
   function col(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim() || '#888'; }
@@ -1181,10 +478,10 @@ function quotFig(){
       g.fillStyle = 'rgba(91,155,213,.4)'; g.fillRect(L, y0 + 9, X(x - U) - L, 6); g.fillRect(X(x + U), y0 + 9, Rr - X(x + U), 6); g.fillRect(L, y1 + 9, down(x - U) - L, 6); g.fillRect(down(x + U), y1 + 9, Rr - shift - down(x + U), 6);
       out.innerHTML = 'r = d(x, A) > 0. Green: U = B(x, r/2), missing A. Blue: W = {z : d(z, x) > r/2}, containing all of A. Both are saturated, so their images are disjoint open sets around {x} and [A].'; }
     g.fillStyle = fg; g.beginPath(); g.arc(X(x), y0, 4, 0, 7); g.fill(); g.fillText('x', X(x) - 3, y0 + 26); if (!inA){ g.beginPath(); g.arc(down(x), y1, 4, 0, 7); g.fill(); g.fillText('{x}', down(x) - 8, y1 + 28); } }
-  xs.addEventListener('input', draw); cl.addEventListener('change', function(){ if (!cl.checked) xs.value = 350; draw(); }); draw();
-  new MutationObserver(draw).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
+  xs.oninput = draw; cl.onchange = function(){ if (!cl.checked) xs.value = 350; draw(); }; draw();
 }
-document.addEventListener('DOMContentLoaded', quotFig);
+window.addEventListener('hashchange', route);
+window.addEventListener('load', route);
 </script>
 </body>
 </html>
