@@ -155,6 +155,7 @@ details.pad>summary{color:var(--text);}
 .padbar button{border:1px solid var(--border2);background:var(--card);color:var(--text);border-radius:7px;padding:5px 8px;min-width:38px;font:14px Georgia,serif;cursor:pointer;}
 #padin{width:100%;min-height:120px;resize:vertical;border:1px solid var(--border2);border-radius:8px;background:var(--card);color:var(--text);padding:10px 12px;font:16px/1.5 ui-monospace,Menlo,monospace;}
 .padtools{display:flex;gap:8px;align-items:center;margin:8px 0 12px;flex-wrap:wrap;}
+.padtools button:disabled{opacity:.4;cursor:default;}
 .padtools button{border:1px solid var(--border2);background:var(--card2);color:var(--text);border-radius:8px;padding:8px 12px;font:14px -apple-system,system-ui,sans-serif;cursor:pointer;}
 #padsaved{font:12px -apple-system,system-ui,sans-serif;color:var(--muted);}
 .padprev{border:1px solid var(--border);border-radius:10px;padding:12px 14px;background:var(--card);color:var(--text);}
@@ -1774,7 +1775,7 @@ function padHtml(id){ return '<details class="sec pad" open><summary>Your write-
   + '<p class="padnote">Type your answer. Put math between dollar signs, like $\\pi_1(W)$, or use the buttons. It renders below as you type and is kept on this device.</p>'
   + '<div class="padbar">' + PADSYM.map(function(b, i){ return '<button type="button" data-p="' + i + '">' + (i === 0 ? 'inline math' : b[0] === 'display' ? 'display math' : '$' + b[0] + '$') + '</button>'; }).join('') + '</div>'
   + '<textarea id="padin" spellcheck="false" autocapitalize="sentences" placeholder="Let $W$ be open in $X \\times Y$. …"></textarea>'
-  + '<div class="padtools"><button type="button" id="padcopy">Copy text</button><button type="button" id="padpdf">Save as PDF</button><button type="button" id="padltx">LaTeX dictionary</button><span id="padsaved"></span></div>'
+  + '<div class="padtools"><button type="button" id="padundo" aria-label="Undo">↶ Undo</button><button type="button" id="padredo" aria-label="Redo">↷ Redo</button><button type="button" id="padcopy">Copy text</button><button type="button" id="padpdf">Save as PDF</button><button type="button" id="padltx">LaTeX dictionary</button><span id="padsaved"></span></div>'
   + '<div class="padprev" id="padprev"></div></div></details>'; }
 function padRender(txt){ function esc(x){ return x.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   return txt.trim() ? esc(txt).split(/\n\s*\n/).map(function(par){ return '<p>' + par.replace(/\n/g, '<br>') + '</p>'; }).join('') : '<p class="padempty">Your rendered write-up appears here.</p>'; }
@@ -1784,6 +1785,15 @@ function padInit(id){
   function draw(){ pv.innerHTML = padRender(ta.value); math(pv); }
   function grow(){ ta.style.height = 'auto'; ta.style.height = Math.max(120, ta.scrollHeight + 4) + 'px'; }
   draw(); grow(); math(document.querySelector('.padbar'));
+  // undo and redo: our own history, because inserts from the buttons bypass the browser's undo. Typing is grouped into one step per pause.
+  var HIST = [{v: ta.value, c: ta.value.length}], HI = 0, typing = null, restoring = false, ub = document.getElementById('padundo'), rb = document.getElementById('padredo');
+  function btns(){ ub.disabled = HI === 0; rb.disabled = HI >= HIST.length - 1; }
+  function snap(){ if (restoring) return; var v = ta.value; if (v === HIST[HI].v) return; HIST = HIST.slice(0, HI + 1); HIST.push({v: v, c: ta.selectionStart}); if (HIST.length > 300) HIST.shift(); HI = HIST.length - 1; btns(); }
+  function go(k){ snap(); var n = HI + k; if (n < 0 || n >= HIST.length) return; HI = n; restoring = true; ta.value = HIST[HI].v; ta.setSelectionRange(HIST[HI].c, HIST[HI].c); PADSEL = [HIST[HI].c, HIST[HI].c]; ta.dispatchEvent(new Event('input')); restoring = false; btns(); ta.focus({preventScroll: true}); }
+  ta.addEventListener('input', function(e){ if (restoring) return; clearTimeout(typing); if (e.isTrusted && e.inputType && /^insert(Text|CompositionText)$/.test(e.inputType)) typing = setTimeout(snap, 700); else snap(); });
+  ub.addEventListener('mousedown', function(e){ e.preventDefault(); }); rb.addEventListener('mousedown', function(e){ e.preventDefault(); });
+  ub.onclick = function(){ go(-1); }; rb.onclick = function(){ go(1); }; btns();
+  ta.addEventListener('keydown', function(e){ if ((e.metaKey || e.ctrlKey) && (e.key === 'z' || e.key === 'Z')){ e.preventDefault(); go(e.shiftKey ? 1 : -1); } else if ((e.metaKey || e.ctrlKey) && (e.key === 'y' || e.key === 'Y')){ e.preventDefault(); go(1); } });
   ['keyup', 'mouseup', 'select', 'input', 'blur'].forEach(function(ev){ ta.addEventListener(ev, function(){ PADSEL = [ta.selectionStart, ta.selectionEnd]; }); }); PADSEL = [ta.value.length, ta.value.length];
   document.getElementById('padltx').onclick = function(){ ltxShow(!document.body.classList.contains('ltxon')); };
   try { if (localStorage.getItem('tg-ltx')) ltxShow(true); } catch(e){}
