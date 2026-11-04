@@ -74,6 +74,12 @@ a.wl:hover{border-bottom-style:solid;}
 .intro{color:var(--text2);margin-bottom:20px;}
 .start{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 24px;}
 .topic{margin:22px 0;}
+.chap{font-size:1.2rem;font-weight:normal;margin:30px 0 8px;border-bottom:1px solid var(--border2);padding-bottom:6px;}
+details.topic{margin:0;border-bottom:1px solid var(--border);}
+details.topic>summary{list-style:none;cursor:pointer;padding:11px 0;font:600 14px -apple-system,system-ui,sans-serif;display:flex;justify-content:space-between;}
+details.topic>summary::-webkit-details-marker{display:none;}
+.cnt{font-weight:normal;color:var(--muted);font-size:12px;}
+details.topic .tlist{padding-left:10px;}
 .topic h2{font:600 13px -apple-system,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:6px;}
 .tlist a{display:block;text-decoration:none;padding:9px 0;border-bottom:1px solid var(--border);}
 .tlist a b{font-weight:normal;color:var(--text);}
@@ -390,10 +396,142 @@ var A = {
     ['Why the hypothesis', R`<p>Without closedness it fails: [[ex-crush-open]].</p>`]]}
 };
 
+// ===== Book structure, extra concepts and methods the homework needs, and the problems themselves.
+var BOOK = [
+  ['Chapter 1 · Set Theory and Logic', [
+    ['§1–2 · Sets and functions', ['image-preimage', 'set-equality']],
+    ['§3 · Relations', ['relation-equivalence', 'equivalence-class', 'partition']]]],
+  ['Chapter 2 · Topological Spaces and Continuous Functions', [
+    ['§12 · Topological spaces', ['topology', 'open-set', 'standard-topologies', 'finer-coarser']],
+    ['§13 · Basis for a topology', ['basis', 'generated-topology', 'lemma-13-3', 'subbasis']],
+    ['§14 · The order topology', ['order-topology']],
+    ['§15 · The product topology on X × Y', ['product-topology', 'projections']],
+    ['§16 · The subspace topology', ['subspace-topology']],
+    ['§17 · Closed sets and limit points', ['closed-set', 'closure', 'interior', 'closure-test', 'limit-point', 'closure-limit-points', 'dense', 'hausdorff', 't1', 'convergence']],
+    ['§18 · Continuous functions', ['continuous', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'embedding', 'open-map']],
+    ['§19 · The product topology (infinite)', ['product-vs-box']],
+    ['§20–21 · The metric topology', ['metric', 'ball', 'metric-topology', 'metric-hausdorff', 'epsilon-delta']],
+    ['§22 · The quotient topology', ['quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples']]]],
+  ['Chapter 3 · Connectedness and Compactness', [
+    ['After the midterm', []]]]
+];
+var PROBSETS = [['Homework 1', ['hw1-q1', 'hw1-q2', 'hw1-q3', 'hw1-q4', 'hw1-q5', 'hw1-q6']], ['Homework 2', ['hw2-q1', 'hw2-q2', 'hw2-q3', 'hw2-q4', 'hw2-q5', 'hw2-q6']], ['Homework 3', ['hw3-q1', 'hw3-q2', 'hw3-q3', 'hw3-q4', 'hw3-q5', 'hw3-q6']], ['Midterm 1 practice', ['mt-q1', 'mt-q2', 'mt-q3', 'mt-q4', 'mt-q5', 'mt-q6']], ['Homework 6 (file header "Homework 5")', ['hw6-q1', 'hw6-q2', 'hw6-q3', 'hw6-q4', 'hw6-q5']], ['Homework 7', ['hw7-q1', 'hw7-q2', 'hw7-q3', 'hw7-q4', 'hw7-q5', 'hw7-q6']]];
+var METHODS = ['m-set-equality', 'm-finite', 'm-topology', 'm-open', 'm-compare', 'm-closed', 'm-closure', 'm-hausdorff', 'm-continuous', 'm-open-map', 'm-quotient-map', 'm-not-quotient', 'm-quotient', 'm-true-false', 'm-counterexample'];
+var EXAMPLES = ['ex-real-line', 'ex-lower-limit', 'ex-k-topology', 'ex-finite-complement', 'ex-discrete', 'ex-indiscrete', 'ex-sierpinski', 'ex-crush-open', 'ex-circle', 'ex-two-origins'];
+Object.assign(A, {
+'set-equality': {title: 'Proving two sets are equal', kind: 'idea', where: 'Ch. 1, §1', pre: [],
+  lede: R`$S=T$ means $S\subseteq T$ and $T\subseteq S$: two separate arguments, each starting from an arbitrary element.`,
+  sections: [['How', R`<p>Let $x\in S$; unwind what that means; show $x\in T$. Then the reverse. A topology is a set of sets, so "two topologies are equal" is the same two-inclusion argument on open sets.</p>`],
+    ['Where it appears', R`<p>HW1 Q3(b), HW1 Q4, HW2 Q5, HW3 Q4(a). Method: [[m-set-equality]].</p>`]]},
+'projections': {title: 'Projections', kind: 'definition', where: '§15', pre: ['product-topology'],
+  lede: R`$\pi_1(x,y)=x$: continuous, and an open map, but not always a closed map.`,
+  sections: [['Continuous', R`<p>$\pi_1^{-1}(U)=U\times Y$ is open, so $\pi_1$ is [[continuous]].</p>`],
+    ['Open (HW2 Q2, HW7 Q3a)', R`<p>If $W$ is open and $(x,y)\in W$, a box $U\times V\ni(x,y)$ fits in $W$; then $x\in U\subseteq\pi_1(W)$. So $\pi_1(W)$ is open: an [[open-map]].</p>`],
+    ['Not closed (HW7 Q3b)', R`<p>The hyperbola $\{xy=1\}\subset\mathbb R^2$ is closed, but its projection $\mathbb R\setminus\{0\}$ is not closed.</p>`]]},
+'dense': {title: 'Dense set', kind: 'definition', where: '§17', pre: ['closure'],
+  lede: R`$A$ is dense in $X$ if $\overline A=X$: every nonempty open set meets $A$.`,
+  sections: [['Example', R`<p>$\mathbb Q$ is dense in $\mathbb R$.</p>`],
+    ['Use (HW3 Q3)', R`<p>Two continuous maps into a [[hausdorff|Hausdorff]] space that agree on a dense set agree everywhere: the set where they agree is closed and contains $A$, so it contains $\overline A=X$.</p>`]]},
+'embedding': {title: 'Embedding', kind: 'definition', where: '§18', pre: ['homeomorphism', 'subspace-topology'],
+  lede: R`An injective continuous map that is a homeomorphism onto its image.`,
+  sections: [['Definition', R`<p>$f:X\to Y$ is an embedding if $f:X\to f(X)$ is a [[homeomorphism]], with $f(X)$ given the [[subspace-topology]].</p>`],
+    ['Where it appears', R`<p>HW3 Q4(b): with $g\circ f=\mathrm{id}_X$, $g|_{f(X)}$ is the continuous inverse.</p>`]]},
+'open-map': {title: 'Open and closed maps', kind: 'definition', where: '§18, §22', pre: ['continuous', 'image-preimage'],
+  lede: R`$f$ is open if images of open sets are open; closed if images of closed sets are closed. Neither implies continuity.`,
+  sections: [['Definition', R`<p>$f:X\to Y$ is an <b>open map</b> if $f(U)$ is open for every open $U\subseteq X$, and a <b>closed map</b> if $f(C)$ is closed for every closed $C$.</p>`],
+    ['Independent of continuity', R`<p>A constant map is continuous but usually not open. A bijection onto a finer topology can be open without being continuous (HW7 Q6b).</p>`],
+    ['For bijections (HW7 Q6a)', R`<p>If $f$ is a bijection, $f(X\setminus U)=Y\setminus f(U)$, so $f$ is open iff it is closed.</p>`],
+    ['Relation to quotient maps', R`<p>A continuous surjective open (or closed) map is a [[quotient-map]]; the converse fails (HW7 Q2, Q4c).</p>`],
+    ['Method', R`<p>[[m-open-map]].</p>`]]},
+'product-vs-box': {title: 'Product versus box topology', kind: 'definition', where: '§19', pre: ['product-topology', 'subbasis'],
+  lede: R`For infinite products, the product topology allows only finitely many restricted coordinates in a basis element; the box topology allows all.`,
+  sections: [['Definition', R`<p>On $\prod X_j$: the <b>box</b> topology has basis $\prod U_j$ with each $U_j$ open; the <b>product</b> topology has basis $\prod U_j$ with $U_j=X_j$ for all but finitely many $j$.</p>`],
+    ['Why the product one', R`<p>A map into $\prod X_j$ is continuous iff each coordinate is (Theorem 19.6), and a sequence converges iff each coordinate converges. Both fail for the box topology.</p>`],
+    ['Where it appears', R`<p>HW3 Q5 (convergence in $\prod\{0,1\}$), HW3 Q6 (the max function), MT Q5 (products of closed sets).</p>`]]},
+// ---------- methods the homework needs
+'m-set-equality': {title: 'Prove two sets (or topologies) are equal', kind: 'method', where: 'Ch. 1', pre: ['set-equality'],
+  lede: 'Two inclusions, each from an arbitrary element.',
+  steps: [[R`Write "Let $x\in S$." and unwind what membership in $S$ means.`, 'Arbitrary element: the argument must work for every $x$.'], [R`Use the definitions until you can conclude $x\in T$.`, 'This proves $S\subseteq T$.'], [R`Repeat starting from $x\in T$.`, R`This proves $T\subseteq S$; together, $S=T$.`]],
+  sections: [['For topologies', R`<p>Elements are open sets: "Let $U$ be open in $\mathcal T$; show $U$ is open in $\mathcal T'$", and conversely.</p>`]]},
+'m-finite': {title: 'Compute in a finite space', kind: 'method', where: '§12–17', pre: ['topology', 'closure'],
+  lede: 'List the open sets, then read off closures, interiors and subspace topologies directly.',
+  steps: [['List every open set.', 'On a finite set everything can be checked by hand.'], [R`Subspace topology on $A$: intersect each open set with $A$ and list the distinct results.`, R`[[subspace-topology]].`], [R`Closure of $B$: the complement of the largest open set missing $B$; or the points every open neighbourhood of which meets $B$.`, R`[[closure-test]].`], [R`Interior of $B$: the union of the open sets inside $B$.`, R`[[interior]].`]],
+  sections: [['Where it appears', R`<p>HW1 Q1, Q2, Q6; HW2 Q4; MT Q2; HW6 Q1.</p>`]]},
+'m-open-map': {title: 'Decide whether a map is open or closed', kind: 'method', where: '§18, §22', pre: ['open-map'],
+  lede: 'To prove open: image of an open set, point by point. To disprove: one open (closed) set with a non-open (non-closed) image.',
+  steps: [[R`To prove $f$ is open, take open $U$ and $y=f(x)\in f(U)$; find an open set around $y$ inside $f(U)$.`, R`Often a basis element, as for [[projections]].`], [R`To prove $f$ is closed, take closed $C$ and show $Y\setminus f(C)$ is open, or that $f(C)$ contains its limit points.`, R`[[closed-set]].`], ['To disprove, find one set whose image fails.', R`Candidates: the hyperbola for $\pi_1$; a single point or an interval mapping onto a non-open set; finite spaces where you can list everything.`]],
+  sections: [['For bijections', R`<p>Open iff closed: $f(X\setminus U)=Y\setminus f(U)$ (HW7 Q6a).</p>`]]},
+'m-quotient-map': {title: 'Prove a map is a quotient map', kind: 'method', where: '§22', pre: ['quotient-map'],
+  lede: R`Three claims: surjective, continuous, and the reverse direction ($p^{-1}(U)$ open $\Rightarrow U$ open).`,
+  steps: [[R`<b>Surjective:</b> for each $y$, name a preimage.`, ''], [R`<b>Continuous:</b> $U$ open $\Rightarrow p^{-1}(U)$ open.`, R`Usually from known continuous maps (projections, sums, restrictions).`], [R`<b>Reverse direction:</b> assume $p^{-1}(U)$ is open and prove $U$ is open.`, R`Do not use continuity of $p$ here: that would be circular.`], [R`<b>The section trick:</b> find a continuous $j:Y\to X$ with $p\circ j=\mathrm{id}_Y$. Then $U=j^{-1}(p^{-1}(U))$ is open.`, R`$(p\circ j)^{-1}(U)=U$. Openness only travels backward, so you need a map out of $Y$.`]],
+  sections: [['Alternatives', R`<p>If $p$ is a continuous surjective [[open-map|open or closed map]], it is a quotient map.</p>`], ['Where it appears', R`<p>HW6 Q2 ($p(x,y)=x+y$; $\pi_1$), HW7 Q4(b), HW7 Q5(a).</p>`], ['Common mistakes', R`<p>Writing "$p$ is continuous so $p^{-1}(U)$ is open" in the reverse direction; writing $p^{-1}(a)$ instead of $p^{-1}(\{a\})$; making the helper map go the wrong way.</p>`]]},
+'m-not-quotient': {title: 'Prove a map is not a quotient map', kind: 'method', where: '§22', pre: ['quotient-map', 'saturated'],
+  lede: 'Find an open saturated set upstairs whose image is not open downstairs.',
+  steps: [['Understand the fibres $p^{-1}(\{y\})$.', 'You need to know which sets are saturated.'], ['Decide which claim fails; usually the reverse direction.', ''], ['Find where the domain has more room than the target: a point alone upstairs but crowded downstairs.', R`E.g. a point cut off from a square upstairs, attached downstairs.`], [R`Build open saturated $W$ upstairs, set $U=p(W)$, check $p^{-1}(U)=W$, $W$ open, $U$ not open.`, R`Then $p^{-1}(U)$ is open but $U$ is not.`]],
+  sections: [['Where it appears', R`<p>HW6 Q3, HW7 Q5(c).</p>`]]},
+'m-true-false': {title: 'Answer true / false quickly', kind: 'method', where: 'tests', pre: [],
+  lede: 'Test the claim on a short list of standard examples before trying to prove it.',
+  steps: [[R`Try $\mathbb Z$, $\{1/n\}$, $\mathbb Q$, intervals, and finite sets in $\mathbb R$.`, 'Most claims about subspaces of $\mathbb R$ break on one of these.'], [R`Try the [[ex-finite-complement|cofinite]], [[ex-indiscrete|indiscrete]], [[ex-discrete|discrete]] topologies.`, 'They break separation and continuity claims.'], ['If nothing breaks it, look for the one-line reason it is true.', '']],
+  sections: [['Where it appears', R`<p>MT Q3.</p>`]]}
+});
+// add homework references to existing methods
+A['m-topology'].sections.push(['Where it appears', '<p>HW1 Q1.</p>']);
+A['m-open'].sections.push(['Where it appears', '<p>HW1 Q3, HW1 Q5, HW2 Q2, MT Q1.</p>']);
+A['m-compare'].sections.push(['Where it appears', '<p>HW1 Q3(b), HW3 Q2, HW6 Q4(a).</p>']);
+A['m-closed'].sections.push(['Where it appears', '<p>MT Q5, MT Q6, HW3 Q4(b).</p>']);
+A['m-closure'].sections.push(['Where it appears', '<p>HW2 Q3, HW2 Q4, HW2 Q5, MT Q2.</p>']);
+A['m-hausdorff'].sections.push(['Where it appears', '<p>HW2 Q6, HW3 Q3, HW6 Q4(b), HW6 Q5(b), HW7 Q1(b).</p>']);
+A['m-continuous'].sections.push(['Where it appears', '<p>HW3 Q1, HW3 Q2, HW3 Q6, MT Q4.</p>']);
+A['m-quotient'].sections.push(['Where it appears', '<p>HW6 Q5, HW7 Q1.</p>']);
+// ---------- the problems
+function PB(title, where, stmt, pre, meth, idea, extra){ return {title: title, kind: 'problem', where: where, pre: pre, method: meth, lede: stmt, sections: [['Concepts and method', ''], ['Key idea', idea]].concat(extra || [])}; }
+Object.assign(A, {
+'hw1-q1': PB('HW1 Q1 · Topology axioms on a 3-point set', 'Homework 1 · §12', R`$X=\{a,b,c\}$, $\mathcal T=\{\{b\},\{a,b\},\{b,c\}\}$: which topology axioms hold?`, ['topology'], ['m-topology', 'm-finite'], R`<p>Axiom (1) fails: $\varnothing$ and $X$ are missing. Check unions and intersections pair by pair; $\{a,b\}\cup\{b,c\}=X\notin\mathcal T$.</p>`),
+'hw1-q2': PB('HW1 Q2 · Basis axioms on a 3-point set', 'Homework 1 · §13', R`Same $X$; does $\mathcal B=\{\{b\},\{a,b\},\{b,c\}\}$ satisfy the basis axioms?`, ['basis'], ['m-finite'], R`<p>Every point lies in some element; for the intersection axiom, $\{a,b\}\cap\{b,c\}=\{b\}$ is itself in $\mathcal B$. Both hold.</p>`),
+'hw1-q3': PB('HW1 Q3 · Rational intervals generate ℝ', 'Homework 1 · §13', R`Intervals with rational endpoints form a basis that generates the standard topology.`, ['basis', 'lemma-13-3'], ['m-compare', 'm-open'], R`<p>Between any two reals there is a rational, so inside any $(a,b)\ni x$ there is a rational interval around $x$: [[lemma-13-3]] in both directions.</p>`),
+'hw1-q4': PB('HW1 Q4 · Subspace of a subspace', 'Homework 1 · §16', R`For $A\subseteq Y\subseteq X$, the topology $A$ inherits from $Y$ equals the one from $X$.`, ['subspace-topology', 'set-equality'], ['m-set-equality'], R`<p>$A\cap(Y\cap U)=A\cap U$ because $A\subseteq Y$. Two inclusions of topologies.</p>`),
+'hw1-q5': PB('HW1 Q5 · Open in ℝ versus open in [−1, 1]', 'Homework 1 · §16', R`Decide which sets defined by $\tfrac12<|x|<1$ and variants are open in $\mathbb R$ and in $Y=[-1,1]$.`, ['subspace-topology', 'open-set'], ['m-open'], R`<p>An endpoint $\pm1$ is harmless in $Y$ (nothing beyond it), but not in $\mathbb R$. Write each set as $Y\cap U$ when it is open in $Y$.</p>`),
+'hw1-q6': PB('HW1 Q6 · A subspace topology on a finite set', 'Homework 1 · §16', R`Compute $\mathcal T_A$ for $A=\{0,1,3\}$ in a 4-point space.`, ['subspace-topology'], ['m-finite'], R`<p>Intersect each of the five open sets with $A$ and list the distinct results.</p>`),
+'hw2-q1': PB('HW2 Q1 · Products of discrete and indiscrete spaces', 'Homework 2 · §15', R`Products of discrete spaces are discrete; of indiscrete spaces, indiscrete.`, ['product-topology', 'standard-topologies'], ['m-open'], R`<p>Discrete: each point $\{(x,y)\}=\{x\}\times\{y\}$ is a basis element. Indiscrete: the only boxes are $\varnothing$ and $X\times Y$.</p>`),
+'hw2-q2': PB('HW2 Q2 · Projections are open', 'Homework 2 · §15', R`If $W\subseteq X\times Y$ is open, then $\pi_1(W)$ is open.`, ['projections'], ['m-open-map'], R`<p>Around each $(x,y)\in W$ fits a box $U\times V$; then $x\in U\subseteq\pi_1(W)$.</p>`),
+'hw2-q3': PB('HW2 Q3 · Closure in the cofinite topology', 'Homework 2 · §17', R`On an infinite set with the finite complement topology, describe $\overline A$.`, ['closure', 'ex-finite-complement'], ['m-closure'], R`<p>Closed sets are the finite sets and $X$. So $\overline A=A$ if $A$ is finite, and $\overline A=X$ if $A$ is infinite.</p>`),
+'hw2-q4': PB('HW2 Q4 · Closure and interior in a finite space', 'Homework 2 · §17', R`Closure and interior of $B=\{1,3\}$ in $X$, and in the subspace $A$.`, ['closure', 'interior', 'subspace-topology'], ['m-finite', 'm-closure'], R`<p>Compute in $X$ first; in $A$ use $\mathcal T_A$, or $\overline B^{\,A}=\overline B\cap A$ (Theorem 17.4).</p>`),
+'hw2-q5': PB('HW2 Q5 · Closure of a union', 'Homework 2 · §17', R`$\bigcup\overline{A_j}\subseteq\overline{\bigcup A_j}$, with equality for finite unions but not in general.`, ['closure', 'set-equality'], ['m-set-equality', 'm-closure'], R`<p>Finite unions of closed sets are closed, which gives the reverse inclusion when $J$ is finite. Counterexample: $A_n=\{1/n\}$, whose closures miss $0$.</p>`),
+'hw2-q6': PB('HW2 Q6 · Products and subspaces of Hausdorff spaces', 'Homework 2 · §17', R`Products and subspaces of Hausdorff spaces are Hausdorff (prove Theorem 17.11, do not cite it).`, ['hausdorff', 'product-topology', 'subspace-topology'], ['m-hausdorff'], R`<p>Product: points differ in some coordinate; separate there and take boxes. Subspace: intersect the separating sets with $Y$.</p>`),
+'hw3-q1': PB('HW3 Q1 · f × g is continuous', 'Homework 3 · §18', R`If $f,g$ are continuous, so is $h(a,c)=(f(a),g(c))$.`, ['continuous', 'product-topology'], ['m-continuous'], R`<p>Check basis elements: $h^{-1}(U\times V)=f^{-1}(U)\times g^{-1}(V)$, open.</p>`),
+'hw3-q2': PB('HW3 Q2 · The identity and finer topologies', 'Homework 3 · §18', R`$\mathrm{id}:(X,\mathcal T)\to(X,\mathcal T')$ is continuous iff $\mathcal T$ is finer; a homeomorphism iff $\mathcal T=\mathcal T'$.`, ['continuous', 'finer-coarser', 'homeomorphism'], ['m-continuous', 'm-compare'], R`<p>$\mathrm{id}^{-1}(U)=U$, so continuity says exactly $\mathcal T'\subseteq\mathcal T$.</p>`),
+'hw3-q3': PB('HW3 Q3 · Maps agreeing on a dense set', 'Homework 3 · §17–18', R`Continuous maps into a Hausdorff space agreeing on a dense set are equal; give a counterexample without Hausdorff.`, ['dense', 'hausdorff', 'continuous'], ['m-hausdorff', 'm-counterexample'], R`<p>$\{x: f(x)=g(x)\}$ is closed when $Y$ is Hausdorff and contains $A$. Without Hausdorff: maps into an [[ex-indiscrete|indiscrete]] space.</p>`),
+'hw3-q4': PB('HW3 Q4 · Retractions and embeddings', 'Homework 3 · §18', R`With $g\circ f=\mathrm{id}$: $\{y: f(g(y))=y\}=f(X)$, which is closed if $Y$ is Hausdorff, and $f$ is an embedding.`, ['embedding', 'set-equality', 'hausdorff'], ['m-set-equality', 'm-closed'], R`<p>Two inclusions for the set equality; closedness is the HW3 Q3 argument with $f\circ g$ and $\mathrm{id}$.</p>`),
+'hw3-q5': PB('HW3 Q5 · Convergence in ∏{0,1}', 'Homework 3 · §19', R`If $A_1\subseteq A_2\subseteq\cdots$ then $x(A_n)\to x(\bigcup A_n)$ in the product topology.`, ['product-vs-box', 'convergence'], ['m-continuous'], R`<p>In the product topology, convergence is coordinatewise; each coordinate is eventually constant.</p>`),
+'hw3-q6': PB('HW3 Q6 · The max function on an infinite product', 'Homework 3 · §19', R`$m(x)=\max_j x_j$ on $\prod\{0,\dots,n\}$ is not continuous unless $J$ is finite.`, ['product-vs-box', 'continuous'], ['m-continuous'], R`<p>$m^{-1}(\{0\})=\{(0,0,\dots)\}$ would have to be open, but a product-topology basis element restricts only finitely many coordinates.</p>`),
+'mt-q1': PB('MT Q1 · {0} is not open in ℚ', 'Midterm 1 practice · §16', R`State the subspace topology; prove $\{0\}$ is not open in $\mathbb Q$.`, ['subspace-topology'], ['m-open'], R`<p>If $\{0\}=\mathbb Q\cap U$ with $U$ open, $U\supseteq(a,b)\ni0$, which contains other rationals.</p>`),
+'mt-q2': PB('MT Q2 · Closure in a finite space', 'Midterm 1 practice · §17', R`Find $\overline{\{1\}}$ in $X=\{0,1,2\}$, $\mathcal T=\{\varnothing,\{0\},\{0,1\},X\}$.`, ['closure'], ['m-finite', 'm-closure'], R`<p>Closed sets: $X,\{1,2\},\{2\},\varnothing$. The smallest containing $1$ is $\{1,2\}$.</p>`),
+'mt-q3': PB('MT Q3 · True or false on subspaces of ℝ', 'Midterm 1 practice · §16–18', 'Quick judgments with no justification.', ['subspace-topology', 'hausdorff'], ['m-true-false'], R`<p>Run through the standard examples first.</p>`),
+'mt-q4': PB('MT Q4 · Injective maps into the cofinite line', 'Midterm 1 practice · §18', R`Every injective $f:\mathbb R\to\mathbb R_f$ is continuous.`, ['ex-finite-complement', 'continuous'], ['m-continuous'], R`<p>Closed sets of $\mathbb R_f$ are finite (or everything); preimages of finite sets under an injective map are finite, hence closed in $\mathbb R$.</p>`),
+'mt-q5': PB('MT Q5 · Products of closed sets are closed', 'Midterm 1 practice · §19', R`If each $A_j$ is closed in $X_j$, then $\prod A_j$ is closed in $\prod X_j$.`, ['product-vs-box', 'closed-set'], ['m-closed'], R`<p>The complement is $\bigcup_j\pi_j^{-1}(X_j\setminus A_j)$, a union of open sets.</p>`),
+'mt-q6': PB('MT Q6 · A closed ball is closed', 'Midterm 1 practice · §20', R`State the metric axioms; prove $\{y: d(x,y)\le1\}$ is closed.`, ['metric', 'ball'], ['m-closed', 'm-open'], R`<p>If $d(x,z)>1$, the ball $B(z,d(x,z)-1)$ misses the set by the triangle inequality.</p>`),
+'hw6-q1': PB('HW6 Q1 · The quotient topology on {−1, 0, 1}', 'Homework 6 · §22', R`Find the quotient topology on $\{-1,0,1\}$ induced by $p:\mathbb R\to\{-1,0,1\}$ (the sign of $x$).`, ['quotient-topology'], ['m-finite'], R`<p>$U$ is open iff $p^{-1}(U)$ is open in $\mathbb R$. Since $p^{-1}(\{0\})=\{0\}$ is not open, the topology is $\{\varnothing,\{-1\},\{1\},\{-1,1\},\{-1,0,1\}\}$.</p>`),
+'hw6-q2': PB('HW6 Q2 · Quotient maps through a section', 'Homework 6 · §22', R`A map with a continuous one-sided inverse is a quotient map; $\pi_1:X\times Y\to X$ is one.`, ['quotient-map', 'projections'], ['m-quotient-map'], R`<p>If $r\circ i=\mathrm{id}$ with $i$ continuous: $U=i^{-1}(r^{-1}(U))$. For $\pi_1$, fix $y_0\in Y$ (uses $Y\ne\varnothing$) and use $i(x)=(x,y_0)$.</p>`),
+'hw6-q3': PB('HW6 Q3 · A map that is not a quotient map', 'Homework 6 · §22', 'Subspace versus quotient topology on pieces of a square.', ['quotient-map', 'saturated', 'subspace-topology'], ['m-not-quotient'], R`<p>A point cut off from the square upstairs is crowded downstairs. Build an open saturated set using a triangle that avoids the diagonal near the corner; its image is not open.</p>`),
+'hw6-q4': PB('HW6 Q4 · Finer topologies and quotients', 'Homework 6 · §22', R`The quotient topology is finer than the subspace topology; a topology finer than a Hausdorff one is Hausdorff.`, ['quotient-topology', 'finer-coarser', 'hausdorff'], ['m-compare', 'm-hausdorff'], R`<p>$f^{-1}(A\cap V)=f^{-1}(V)$ is open by continuity. A finer topology keeps the same disjoint open sets.</p>`),
+'hw6-q5': PB('HW6 Q5 · A quotient that is Hausdorff', 'Homework 6 · §22', R`For $x\sim y$ iff $q(x)=q(y)$ with $q$ into a Hausdorff space, $X/{\sim}$ is Hausdorff.`, ['quotient-topology', 'maps-out-of-quotients', 'hausdorff'], ['m-quotient', 'm-hausdorff'], R`<p>Map out of the quotient: $g([z])=q(z)$ is well defined and continuous; pull back disjoint open sets of the Hausdorff target.</p>`),
+'hw7-q2': PB('HW7 Q2 · Is the sign map open? closed?', 'Homework 7 · §22', R`Decide whether $p:\mathbb R\to\{-1,0,1\}$ from HW6 is an open map and whether it is a closed map.`, ['open-map', 'quotient-map'], ['m-open-map'], R`<p>Use the topology from [[hw6-q1]]. Test small sets: what is the image of an open interval containing $0$? Of a closed set like $\{0\}$ or $[1,2]$? Decide which images are open or closed in the finite topology.</p>`),
+'hw7-q3': PB('HW7 Q3 · Projections are open, not always closed', 'Homework 7 · §15', R`(a) $\pi_1:X\times Y\to X$ is open. (b) It need not be closed.`, ['projections', 'open-map'], ['m-open-map'], R`<p>(a) is the [[hw2-q2]] argument. (b) Look for a closed set in $\mathbb R^2$ whose shadow on the $x$-axis approaches a point it never reaches.</p>`),
+'hw7-q4': PB('HW7 Q4 · Folding a plane region onto ℝ', 'Homework 7 · §22', R`$A=[0,\infty)\times\mathbb R\cup\mathbb R\times\{0\}$, $q(x,y)=x$: sketch $A$; $q$ is a quotient map but neither open nor closed.`, ['quotient-map', 'open-map', 'subspace-topology'], ['m-quotient-map', 'm-open-map'], R`<p>(b) The section trick: $j(x)=(x,0)$ lands in $A$ and $q\circ j=\mathrm{id}$ (compare [[hw6-q2]]). (c) Find a set open in $A$ on the left half-line part whose image is a single point or a non-open set; and a closed set whose image is not closed.</p>`),
+'hw7-q5': PB('HW7 Q5 · Quotient then subspace, or subspace then quotient', 'Homework 7 · §22', R`$p:D\to C$ flattens the lower edge onto the square; it is a quotient map, and restricting to $B$ gives a quotient topology on $q(B)$ different from the subspace topology.`, ['quotient-map', 'subspace-topology', 'saturated'], ['m-quotient-map', 'm-not-quotient'], R`<p>(a) A section again. (c) Reuse the HW6 Q3 construction: an open saturated set in $B$ whose image is not open in the subspace topology of $q(B)$.</p>`),
+'hw7-q6': PB('HW7 Q6 · Open bijections', 'Homework 7 · §18', R`(a) A bijection is open iff closed. (b) An open bijection need not be continuous.`, ['open-map', 'image-preimage'], ['m-open-map', 'm-counterexample'], R`<p>(a) For a bijection, $f(X\setminus U)=Y\setminus f(U)$. (b) Use the identity map between two topologies on the same set, one finer than the other ([[hw3-q2]]).</p>`)
+});
+A['hw7-q1'].kind = 'problem'; A['hw7-q1'].method = ['m-quotient', 'm-hausdorff']; A['hw7-q1'].where = 'Homework 7 · §22';
+A['hw7-q1'].lede = R`(a) The classes of $\sim_A$. (b) If $X$ is a metric space and $A$ is closed, $X/{\sim_A}$ is Hausdorff.`;
+
 </script>
 <script>
 // ===== The encyclopedia: home page, articles, link previews, a trail of where you have been, search.
-var KIND = {definition: 'Definition', theorem: 'Theorem', method: 'Method', example: 'Example', idea: 'Idea', worked: 'Worked problem'};
+var KIND = {definition: 'Definition', theorem: 'Theorem', method: 'Method', example: 'Example', idea: 'Idea', worked: 'Worked problem', problem: 'Problem'};
+// reading order follows the book; problems step through their own set
+ORDER = []; BOOK.forEach(function(c){ c[1].forEach(function(sx){ sx[1].forEach(function(id){ if (ORDER.indexOf(id) < 0) ORDER.push(id); }); }); });
+var USEDIN = {}; Object.keys(A).forEach(function(id){ (A[id].method || []).forEach(function(m){ (USEDIN[m] = USEDIN[m] || []).push(id); }); });
+var SETOF = {}; PROBSETS.forEach(function(ps){ ps[1].forEach(function(id){ SETOF[id] = ps[1]; }); });
 var BACK = {}, MENTION = {};
 Object.keys(A).forEach(function(id){ (A[id].pre || []).forEach(function(p){ (BACK[p] = BACK[p] || []).push(id); });
   var txt = JSON.stringify(A[id]); (txt.match(/\[\[([a-z0-9-]+)/g) || []).forEach(function(m){ var t = m.slice(2); if (t !== id){ MENTION[t] = MENTION[t] || []; if (MENTION[t].indexOf(id) < 0) MENTION[t].push(id); } }); });
@@ -404,10 +542,15 @@ function chip(id){ var a = A[id]; return a ? '<a class="chip" href="#a/' + id + 
 var TRAIL = []; try { TRAIL = JSON.parse(sessionStorage.getItem('tg-trail') || '[]'); } catch(e){}
 function home(){
   var recent = []; try { recent = JSON.parse(localStorage.getItem('tg-recent') || '[]'); } catch(e){}
-  var h = '<h1>Topology Reference Guide</h1><p class="intro">An encyclopedia of the course, one article per idea. Each article opens to a one-line summary and its definition; everything else unfolds when you want it. Underlined terms are links: tap one for a preview, then read on or stay where you are. At the end of each article you will find what it depends on and what builds on it, and the next article in Munkres order.</p>';
-  h += '<div class="start"><a class="chip" href="#a/topology">Start at the beginning</a><a class="chip" href="#a/crushing-a-set">Current: quotients</a><a class="chip" href="#a/hw7-q1">HW7 Q1</a><a class="chip" href="tabs/">Quick-reference tabs</a></div>';
+  var h = '<h1>Topology Reference Guide</h1><p class="intro">An encyclopedia of the course, arranged by the chapters of Munkres: one article per concept, the methods the homework and tests ask for, and every assigned problem linked to both. Each article opens to a one-line summary and its definition; everything else unfolds when you want it. Underlined terms are links: tap one for a preview, then read on or stay where you are. At the end of each article you will find what it depends on and what builds on it, and the next article in Munkres order.</p>';
+  h += '<div class="start"><a class="chip" href="#a/image-preimage">Start at Chapter 1</a><a class="chip" href="#a/quotient-topology">Now: §22 quotients</a><a class="chip" href="#a/hw7-q2">Homework 7</a><a class="chip" href="tabs/">Quick-reference tabs</a></div>';
   if (recent.length) h += '<div class="topic"><h2>Recently read</h2><div class="chips">' + recent.slice(0, 8).map(chip).join('') + '</div></div>';
-  TOPICS.forEach(function(tp){ h += '<div class="topic"><h2>' + tp[0] + '</h2><div class="tlist">' + tp[1].map(function(id){ var a = A[id]; return '<a href="#a/' + id + '"><b>' + a.title + '</b><span class="kind">' + KIND[a.kind] + '</span><i>' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }).join('') + '</div></div>'; });
+  function row(id){ var a = A[id]; return '<a href="#a/' + id + '"><b>' + a.title + '</b><span class="kind">' + KIND[a.kind] + '</span><i>' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }
+  BOOK.forEach(function(ch){ h += '<h2 class="chap">' + ch[0] + '</h2>'; ch[1].forEach(function(sx){ h += '<details class="topic"' + (sx[1].length ? '' : ' open') + '><summary>' + sx[0] + '<span class="cnt">' + (sx[1].length ? sx[1].length + ' articles' : 'coming') + '</span></summary><div class="tlist">' + (sx[1].length ? sx[1].map(row).join('') : '<p class="foot">Added as the course reaches it.</p>') + '</div></details>'; }); });
+  h += '<h2 class="chap">Methods · how the homework and tests are solved</h2><div class="tlist">' + METHODS.map(function(id){ var a = A[id], n = (USEDIN[id] || []).length; return '<a href="#a/' + id + '"><b>' + a.title + '</b>' + (n ? '<span class="kind">' + n + ' problem' + (n > 1 ? 's' : '') + '</span>' : '') + '<i>' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }).join('') + '</div>';
+  h += '<h2 class="chap">Problems · homework and midterm</h2>'; PROBSETS.forEach(function(ps){ h += '<details class="topic"><summary>' + ps[0] + '<span class="cnt">' + ps[1].length + '</span></summary><div class="tlist">' + ps[1].map(row).join('') + '</div></details>'; });
+  h += '<p class="foot">Homework 4 is not here yet: send the PDF and it gets added.</p>';
+  h += '<h2 class="chap">Example spaces</h2><div class="tlist">' + EXAMPLES.map(row).join('') + '</div>';
   h += '<p class="foot">Theorem numbers follow Munkres, <em>Topology</em>, 2nd ed.; check them against your copy. Earlier notes and quiz: <a href="classic/">classic</a>.</p>';
   return h;
 }
@@ -417,16 +560,20 @@ function article(id){
   var h = '<div class="trail"><a href="#">Home</a>' + TRAIL.slice(0, -1).map(function(t){ return '<span class="sep">›</span><a href="#a/' + t + '">' + A[t].title + '</a>'; }).join('') + '<span class="sep">›</span>' + a.title + '</div>';
   h += '<div class="meta">' + KIND[a.kind] + ' · ' + a.where + '</div><h1>' + a.title + '</h1><div class="lede">' + wiki(a.lede) + '</div>';
   if (a.steps) h += '<details class="sec" open><summary>Steps</summary><div class="secb"><ol class="steps">' + a.steps.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + wiki(s[0]) + '</summary><div class="why"><b>Why:</b> ' + wiki(s[1]) + '</div></details>' : wiki(s[0])) + '</li>'; }).join('') + '</ol></div></details>';
-  (a.sections || []).forEach(function(s, i){ h += '<details class="sec"' + (i === 0 && !a.steps ? ' open' : '') + (s[0] === 'Picture' ? ' open' : '') + '><summary>' + s[0] + '</summary><div class="secb">' + wiki(s[1]) + '</div></details>'; });
+  (a.sections || []).forEach(function(s, i){ var body = s[1];
+    if (s[0] === 'Concepts and method') body = '<p><b>Concepts:</b></p><div class="chips">' + (a.pre || []).map(chip).join('') + '</div><p style="margin-top:10px"><b>Method:</b></p><div class="chips">' + (a.method || []).map(chip).join('') + '</div>';
+    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method') : (i === 0 && !a.steps); if (s[0] === 'Picture') open = true;
+    h += '<details class="sec"' + (open ? ' open' : '') + '><summary>' + s[0] + '</summary><div class="secb">' + wiki(body) + '</div></details>'; });
+  if (a.kind === 'method' && (USEDIN[id] || []).length) h += '<div class="links"><h3>Used in these problems</h3><div class="chips">' + USEDIN[id].map(chip).join('') + '</div></div>';
   h += '<div class="links">';
-  if ((a.pre || []).length) h += '<h3>Depends on</h3><div class="chips">' + a.pre.map(chip).join('') + '</div>';
+  if ((a.pre || []).length && a.kind !== 'problem') h += '<h3>Depends on</h3><div class="chips">' + a.pre.map(chip).join('') + '</div>';
   if ((BACK[id] || []).length) h += '<h3>Builds toward</h3><div class="chips">' + BACK[id].map(chip).join('') + '</div>';
   var men = (MENTION[id] || []).filter(function(m){ return (BACK[id] || []).indexOf(m) < 0 && (a.pre || []).indexOf(m) < 0; });
   if (men.length) h += '<h3>Mentioned in</h3><div class="chips">' + men.map(chip).join('') + '</div>';
   h += '</div>';
-  var k = ORDER.indexOf(id);
-  if (k >= 0) h += '<div class="pn">' + (k > 0 ? '<a href="#a/' + ORDER[k - 1] + '"><span>Previous</span>' + A[ORDER[k - 1]].title + '</a>' : '<span style="flex:1"></span>') + (k < ORDER.length - 1 ? '<a class="nx" href="#a/' + ORDER[k + 1] + '"><span>Next in Munkres order</span>' + A[ORDER[k + 1]].title + '</a>' : '') + '</div>';
-  return h;
+  var seq = SETOF[id] || ORDER, k = seq.indexOf(id); var ORDER_ = ORDER; ORDER = seq;
+  if (k >= 0) h += '<div class="pn">' + (k > 0 ? '<a href="#a/' + ORDER[k - 1] + '"><span>Previous</span>' + A[ORDER[k - 1]].title + '</a>' : '<span style="flex:1"></span>') + (k < ORDER.length - 1 ? '<a class="nx" href="#a/' + ORDER[k + 1] + '"><span>' + (SETOF[id] ? 'Next problem' : 'Next in the book') + '</span>' + A[ORDER[k + 1]].title + '</a>' : '') + '</div>';
+  ORDER = ORDER_; return h;
 }
 function route(){
   var hsh = location.hash.replace(/^#/, ''), v = document.getElementById('view');
