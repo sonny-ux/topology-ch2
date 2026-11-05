@@ -1902,6 +1902,9 @@ function padAuto(t){
       .replace(/(^|[^A-Za-z])([A-Za-z](?:_\{[^{}]*\})?)\s+(?:sup|super)\s+(\{[^{}]*\}|[A-Za-z0-9+\-]+)/g, function(m, pre, v, sp){ return pre + v + '^{' + sp.replace(/^\{|\}$/g, '') + '}'; })
       .replace(/(^|[^A-Za-z])([A-Za-z](?:_\{[^{}]*\})?)\s+inverse\b/g, function(m, pre, v){ return pre + v + '^{-1}'; })
       .replace(/(^|[\s(,])([A-Z](?:_\{[^{}]*\}|_[A-Za-z0-9])?)\s+x\s+(?=[A-Z](?:_\{[^{}]*\}|_[A-Za-z0-9])?(?![A-Za-z]))/g, function(m, pre, a){ return pre + a + ' \\times '; }); });
+  // symbols typed straight from the keyboard become their LaTeX: × → ⊆ ∈ ∪ ∩ ≠ ≤ ≥ ⇒ ⇔ ∉ ⊂ ∖ ∘ ∀ ∃ ε δ π
+  var UNI = {'×': '\\times', '→': '\\to', '⊆': '\\subseteq', '⊂': '\\subset', '∈': '\\in', '∉': '\\notin', '∪': '\\cup', '∩': '\\cap', '≠': '\\neq', '≤': '\\le', '≥': '\\ge', '⇒': '\\Rightarrow', '⇔': '\\iff', '∖': '\\setminus', '∘': '\\circ', '∀': '\\forall', '∃': '\\exists', 'ε': '\\varepsilon', 'δ': '\\delta', 'π': '\\pi'};
+  t = padOnPlain(t, function(x){ return x.replace(/[εδπ]/g, function(c){ return UNI[c] + ' '; }).replace(/([εδπ]|\\(?:varepsilon|delta|pi)) (?=[(_])/g, '$1').replace(/[×→⊆⊂∈∉∪∩≠≤≥⇒⇔∖∘∀∃]/g, function(c){ return ' ' + UNI[c] + ' '; }).replace(/([^ ]) {2,}/g, '$1 ').replace(/\\(varepsilon|delta|pi) (?=[(_])/g, '\\$1'); });
   // 0. braces typed as sets: {x}, {(x, y) : xy = 1}, {1/n : n in N} become set notation
   t = padOnPlain(t, function(x){ return x.replace(/(^|[^\\A-Za-z_^}])\{([^{}$\n]*)\}/g, function(m, pre, inner){ return pre + '$\\{' + inner.replace(/\bin\b/g, '\\in') + '\\}$'; }); });
   // 2. Greek letters typed by name, with an optional subscript and argument: epsilon, pi_1(W)
@@ -1915,7 +1918,7 @@ function padAuto(t){
     .replace(/<=>/g, '$\\iff$').replace(/=>/g, '$\\Rightarrow$').replace(/->/g, '$\\to$').replace(/!=/g, '$\\neq$').replace(/<=/g, '$\\le$').replace(/>=/g, '$\\ge$')
     .replace(/([A-Za-z0-9)])\s*\*\s*(?=[A-Za-z0-9(])/g, '$1 $\\cdot$ ').replace(/(^|[^<>=!$])([<>])(?![=>$])/g, '$1$$$2$$'); });
   // 5. single-letter variables, with an optional subscript, prime or ^-1 (not the article "a", not a part label like "(a)")
-  t = padOnPlain(t, function(x){ return x.replace(new RegExp('(^|[\\s(,\\[{])([A-Za-z]' + sub + "'?" + sup + ')(?=$|[\\s.,;:)\\]}=])', 'g'), function(m, pre, v, off, str){
+  t = padOnPlain(t, function(x){ return x.replace(new RegExp('(^|[\\s(,\\[{:])([A-Za-z]' + sub + "'?" + sup + ')(?=$|[\\s.,;:)\\]}=])', 'g'), function(m, pre, v, off, str){
       if (v === 'a' || v === 'A' && /(^|[.!?:]\s*|\n\s*)$/.test(str.slice(0, off) + pre)) return m;
       if (pre === '(' && str.charAt(off + m.length) === ')' && /^[a-z]$/.test(v)) return m;
       return pre + '$' + v.replace(/\^-1$/, '^{-1}').replace(/\^-([A-Za-z0-9])$/, '^{-$1}') + '$'; }); });
