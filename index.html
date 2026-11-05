@@ -1873,7 +1873,7 @@ function satFig(){
 
 // ===== Write-up pad on each problem page: type the answer, put math between $ signs, see it rendered; saved on this device
 var PADSYM = [['$\\ldots$', '$ $', 1], ['display', '$$\n\n$$', 3], ['=', ' = ', 0, null, 'plain'], ['\\in', '\\in '], ['\\notin', '\\notin '], ['\\subseteq', '\\subseteq '], ['\\cup', '\\cup '], ['\\cap', '\\cap '], ['\\setminus', '\\setminus '],
-  ['\\times', '\\times '], ['\\varnothing', '\\varnothing '], ['\\mathbb R', '\\mathbb R '], ['\\pi_1', '\\pi_1'], ['f^{-1}', '^{-1}'], ['\\overline{A}', '\\overline{', 0, '}'], ['x_n', '_{', 0, '}'], ['x^2', '^{', 0, '}'],
+  ['\\times', '\\times '], ['\\varnothing', '\\varnothing '], ['\\mathbb R', '\\mathbb R '], ['\\infty', '\\infty '], ['\\pi_1', '\\pi_1'], ['f^{-1}', '^{-1}'], ['\\overline{A}', '\\overline{', 0, '}'], ['x_n', '_{', 0, '}'], ['x^2', '^{', 0, '}'],
   ['\\{\\,\\}', '\\{', 0, '\\}'], ['\\to', '\\to '], ['\\Rightarrow', '\\Rightarrow '], ['\\iff', '\\iff '], ['\\forall', '\\forall '], ['\\exists', '\\exists '], ['\\neq', '\\neq '], ['\\le', '\\le '],
   ['\\varepsilon', '\\varepsilon '], ['\\delta', '\\delta '], ['\\sim', '\\sim '], ['\\circ', '\\circ '], ['\\bigcup_i', '\\bigcup_{i} '], ['[x]', '[', 0, ']']];
 // the clean solution and its "why" sit right above the write-up box, folded or open, scrolling on their own
@@ -1918,8 +1918,11 @@ function padAuto(t){
       .replace(/(^|[^A-Za-z])([A-Za-z](?:_\{[^{}]*\})?)\s+inverse\b/g, function(m, pre, v){ return pre + v + '^{-1}'; })
       .replace(/(^|[\s(,])([A-Z](?:_\{[^{}]*\}|_[A-Za-z0-9])?)\s+x\s+(?=[A-Z](?:_\{[^{}]*\}|_[A-Za-z0-9])?(?![A-Za-z]))/g, function(m, pre, a){ return pre + a + ' \\times '; }); });
   // symbols typed straight from the keyboard become their LaTeX: × → ⊆ ∈ ∪ ∩ ≠ ≤ ≥ ⇒ ⇔ ∉ ⊂ ∖ ∘ ∀ ∃ ε δ π
-  var UNI = {'×': '\\times', '→': '\\to', '⊆': '\\subseteq', '⊂': '\\subset', '∈': '\\in', '∉': '\\notin', '∪': '\\cup', '∩': '\\cap', '≠': '\\neq', '≤': '\\le', '≥': '\\ge', '⇒': '\\Rightarrow', '⇔': '\\iff', '∖': '\\setminus', '∘': '\\circ', '∀': '\\forall', '∃': '\\exists', 'ε': '\\varepsilon', 'δ': '\\delta', 'π': '\\pi'};
-  t = padOnPlain(t, function(x){ return x.replace(/[εδπ]/g, function(c){ return UNI[c] + ' '; }).replace(/([εδπ]|\\(?:varepsilon|delta|pi)) (?=[(_])/g, '$1').replace(/[×→⊆⊂∈∉∪∩≠≤≥⇒⇔∖∘∀∃]/g, function(c){ return ' ' + UNI[c] + ' '; }).replace(/([^ ]) {2,}/g, '$1 ').replace(/\\(varepsilon|delta|pi) (?=[(_])/g, '\\$1'); });
+  var UNI = {'×': '\\times', '→': '\\to', '⊆': '\\subseteq', '⊂': '\\subset', '∈': '\\in', '∉': '\\notin', '∪': '\\cup', '∩': '\\cap', '≠': '\\neq', '≤': '\\le', '≥': '\\ge', '⇒': '\\Rightarrow', '⇔': '\\iff', '∖': '\\setminus', '∘': '\\circ', '∀': '\\forall', '∃': '\\exists', 'ε': '\\varepsilon', 'δ': '\\delta', 'π': '\\pi', '∞': '\\infty'};
+  t = padOnPlain(t, function(x){ return x.replace(/[εδπ]/g, function(c){ return UNI[c] + ' '; }).replace(/([εδπ]|\\(?:varepsilon|delta|pi)) (?=[(_])/g, '$1').replace(/∞/g, '\\infty').replace(/[×→⊆⊂∈∉∪∩≠≤≥⇒⇔∖∘∀∃]/g, function(c){ return ' ' + UNI[c] + ' '; }).replace(/([^ ]) {2,}/g, '$1 ').replace(/\\(varepsilon|delta|pi) (?=[(_])/g, '\\$1'); });
+  // intervals: [0, \\infty), (0, 1], (-\\infty, a) become math; an x between two of them is a product
+  t = padOnPlain(t, function(x){ return x.replace(/\\infty\s+(?=[\])])/g, '\\infty').replace(/(^|[^\w$\\])([\[(])\s*(-?(?:\d+(?:\.\d+)?|\\infty|[a-z]))\s*,\s*(-?(?:\d+(?:\.\d+)?|\\infty|[a-z]))\s*([\])])/g, function(m, pre, o, a, b, c){ return pre + '$' + o + a + ', ' + b + c + '$'; }); });
+  t = t.replace(/\$\s+x\s+\$(?=[\[(])/g, ' \\times ');
   // 0. braces typed as sets: {x}, {(x, y) : xy = 1}, {1/n : n in N} become set notation
   t = padOnPlain(t, function(x){ return x.replace(/(^|[^\\A-Za-z_^}])\{([^{}$\n]*)\}/g, function(m, pre, inner){ return pre + '$\\{' + inner.replace(/\bin\b/g, '\\in') + '\\}$'; }); });
   // 2. Greek letters typed by name, with an optional subscript and argument: epsilon, pi_1(W)
