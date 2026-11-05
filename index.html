@@ -161,6 +161,7 @@ details.pad>summary{color:var(--text);}
 .padprev{border:1px solid var(--border);border-radius:10px;padding:12px 14px;background:var(--card);color:var(--text);}
 .padprev p{color:var(--text);} .padprev .padtip{color:var(--muted);font:12px/1.4 -apple-system,system-ui,sans-serif;border-top:1px solid var(--border);padding-top:8px;margin-top:6px;} .padempty{color:var(--muted)!important;}
 #padprint{display:none;}
+body,.padprev,#padprint,button,input,textarea{font-variant-numeric:lining-nums;font-feature-settings:'lnum' 1;}  /* Georgia's old-style figures make 0 look like o */
 .padcaret{display:inline-block;width:2px;height:1.1em;margin:0 1px;vertical-align:-.15em;background:#4a90e2;animation:padblink 1s steps(1) infinite;} @keyframes padblink{50%{opacity:0;}}
 .padview{display:flex;gap:4px;align-items:center;margin:6px 0 8px;font:12px -apple-system,system-ui,sans-serif;color:var(--muted);flex-wrap:wrap;} .padview button{border:1px solid var(--border2);background:var(--card);color:var(--text2);border-radius:999px;padding:5px 11px;font:13px -apple-system,system-ui,sans-serif;cursor:pointer;} .padview button.on{background:var(--text);color:var(--bg);border-color:var(--text);}
 .padwork{display:flex;flex-direction:column;gap:10px;}
