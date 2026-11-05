@@ -1639,7 +1639,8 @@ var SETOF = {}; PROBSETS.forEach(function(ps){ ps[1].forEach(function(id){ SETOF
 var BACK = {}, MENTION = {};
 Object.keys(A).forEach(function(id){ (A[id].pre || []).forEach(function(p){ (BACK[p] = BACK[p] || []).push(id); });
   var txt = JSON.stringify(A[id]); (txt.match(/\[\[([a-z0-9-]+)/g) || []).forEach(function(m){ var t = m.slice(2); if (t !== id){ MENTION[t] = MENTION[t] || []; if (MENTION[t].indexOf(id) < 0) MENTION[t].push(id); } }); });
-function wiki(h){ return h.replace(/\[\[([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g, function(_, id, label){ var a = A[id]; return '<a class="wl" href="#a/' + id + '" data-id="' + id + '">' + (label || (a ? a.title : id)) + '</a>'; }); }
+function wiki(h){ h = h.replace(/\$\$[\s\S]*?\$\$|\$[^$]*\$/g, function(m){ return m.replace(/</g, '&lt;').replace(/>/g, '&gt;'); });   // a < inside math (0<r<1) must not be read as an HTML tag
+  return h.replace(/\[\[([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g, function(_, id, label){ var a = A[id]; return '<a class="wl" href="#a/' + id + '" data-id="' + id + '">' + (label || (a ? a.title : id)) + '</a>'; }); }
 function plain(h){ return h.replace(/\[\[([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g, function(_, id, l){ return l || (A[id] ? A[id].title : id); }).replace(/<[^>]+>/g, ''); }
 function math(el){ if (window.renderMathInElement) renderMathInElement(el, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}], throwOnError: false}); }
 function chip(id){ var a = A[id]; return a ? '<a class="chip" href="#a/' + id + '">' + a.title + '</a>' : ''; }
