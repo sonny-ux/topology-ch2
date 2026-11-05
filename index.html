@@ -21,7 +21,7 @@
 :root[data-theme="light"]{--bg:#fff;--surf:#fff;--card:#fafafa;--card2:#f1f1f1;--border:#e2e2e2;--border2:#cfcfcf;--text:#111;--text2:#3f3f3f;--muted:#8a8a8a;--link:#111;color-scheme:light;}
 *{box-sizing:border-box;margin:0;padding:0;}
 html{-webkit-text-size-adjust:100%;}
-body{background:var(--bg);color:var(--text);font:17px/1.65 Georgia,'Times New Roman',serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+body{background:var(--bg);color:var(--text);font:17px/1.65 'LineDigits',Georgia,'Times New Roman',serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
 a{color:var(--link);}
 .top{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--border);padding:10px 16px calc(10px);padding-top:max(10px, env(safe-area-inset-top));}
 .toprow{display:flex;align-items:center;gap:10px;max-width:760px;margin:0 auto;}
@@ -139,7 +139,7 @@ details.topic .tlist{padding-left:10px;}
 .dq p{color:var(--text);margin:4px 0 0;}
 .dst{margin:0 0 16px;}
 .dsq{font:600 14px -apple-system,system-ui,sans-serif;color:var(--text);margin-bottom:8px;}
-.dopt{display:block;width:100%;text-align:left;border:1px solid var(--border2);border-radius:10px;background:var(--card);color:var(--text);padding:10px 12px;margin:0 0 7px;font:16px/1.45 Georgia,serif;cursor:pointer;}
+.dopt{display:block;width:100%;text-align:left;border:1px solid var(--border2);border-radius:10px;background:var(--card);color:var(--text);padding:10px 12px;margin:0 0 7px;font:16px/1.45 'LineDigits',Georgia,serif;cursor:pointer;}
 .dopt.right{border-color:#5fae7a;background:rgba(95,174,122,.12);}
 .dopt.wrong{border-color:#c9495a;background:rgba(201,73,90,.12);}
 .dopt.dim{opacity:.45;}
@@ -152,7 +152,7 @@ details.topic .tlist{padding-left:10px;}
 details.pad>summary{color:var(--text);}
 .padnote{font-size:.9em;color:var(--muted);}
 .padbar{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0;}
-.padbar button{border:1px solid var(--border2);background:var(--card);color:var(--text);border-radius:7px;padding:5px 8px;min-width:38px;font:14px Georgia,serif;cursor:pointer;}
+.padbar button{border:1px solid var(--border2);background:var(--card);color:var(--text);border-radius:7px;padding:5px 8px;min-width:38px;font:14px 'LineDigits',Georgia,serif;cursor:pointer;}
 #padin{width:100%;min-height:120px;resize:vertical;border:1px solid var(--border2);border-radius:8px;background:var(--card);color:var(--text);padding:10px 12px;font:16px/1.5 ui-monospace,Menlo,monospace;}
 .padtools{display:flex;gap:8px;align-items:center;margin:8px 0 12px;flex-wrap:wrap;}
 .padtools button:disabled{opacity:.4;cursor:default;}
@@ -161,7 +161,8 @@ details.pad>summary{color:var(--text);}
 .padprev{border:1px solid var(--border);border-radius:10px;padding:12px 14px;background:var(--card);color:var(--text);}
 .padprev p{color:var(--text);} .padprev .padtip{color:var(--muted);font:12px/1.4 -apple-system,system-ui,sans-serif;border-top:1px solid var(--border);padding-top:8px;margin-top:6px;} .padempty{color:var(--muted)!important;}
 #padprint{display:none;}
-body,.padprev,#padprint,button,input,textarea{font-variant-numeric:lining-nums;font-feature-settings:'lnum' 1;}  /* Georgia's old-style figures make 0 look like o */
+/* Georgia's old-style figures make 0 look like o: take the digits alone from Times, which has lining figures on every device */
+@font-face{font-family:'LineDigits';src:local('Times New Roman'),local('TimesNewRomanPSMT'),local('Times'),local('Times-Roman');unicode-range:U+0030-0039;}
 .padcaret{display:inline-block;width:2px;height:1.1em;margin:0 1px;vertical-align:-.15em;background:#4a90e2;animation:padblink 1s steps(1) infinite;} @keyframes padblink{50%{opacity:0;}}
 .padview{display:flex;gap:4px;align-items:center;margin:6px 0 8px;font:12px -apple-system,system-ui,sans-serif;color:var(--muted);flex-wrap:wrap;} .padview button{border:1px solid var(--border2);background:var(--card);color:var(--text2);border-radius:999px;padding:5px 11px;font:13px -apple-system,system-ui,sans-serif;cursor:pointer;} .padview button.on{background:var(--text);color:var(--bg);border-color:var(--text);}
 .padwork{display:flex;flex-direction:column;gap:10px;}
@@ -169,7 +170,7 @@ body,.padprev,#padprint,button,input,textarea{font-variant-numeric:lining-nums;f
 .padwork.v-side{display:grid;grid-template-columns:1fr 1fr;align-items:start;} .padwork.v-side .padprev{position:sticky;top:70px;max-height:calc(100vh - 90px);overflow:auto;} body.padside .wrap{max-width:1180px;}
 .padwork.v-pin{flex-direction:column-reverse;} .padwork.v-pin .padprev{position:sticky;top:64px;z-index:6;height:34vh;overflow:auto;box-shadow:0 6px 16px rgba(0,0,0,.25);}
 @media (max-width:640px){ .padwork.v-side{grid-template-columns:1fr;} }
-@media print{ body.printing>*:not(#padprint){display:none!important;} body.printing{background:#fff!important;color:#000!important;} #padprint{display:block;color:#000;font:12pt/1.55 Georgia,serif;padding:0 6mm;} #padprint h1{font-size:16pt;font-weight:normal;margin:0 0 8pt;} #padprint h2{font-size:12pt;margin:14pt 0 6pt;} #padprint .pq{border-left:2pt solid #999;padding-left:8pt;color:#222;} #padprint p{margin:0 0 7pt;color:#000;} }
+@media print{ body.printing>*:not(#padprint){display:none!important;} body.printing{background:#fff!important;color:#000!important;} #padprint{display:block;color:#000;font:12pt/1.55 'LineDigits',Georgia,serif;padding:0 6mm;} #padprint h1{font-size:16pt;font-weight:normal;margin:0 0 8pt;} #padprint h2{font-size:12pt;margin:14pt 0 6pt;} #padprint .pq{border-left:2pt solid #999;padding-left:8pt;color:#222;} #padprint p{margin:0 0 7pt;color:#000;} }
 #ltx{display:none;position:fixed;z-index:70;background:var(--surf);border-top:1px solid var(--border2);flex-direction:column;}
 #ltx.on{display:flex;}
 #ltx .lxh{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 6px;font:600 14px -apple-system,system-ui,sans-serif;}
@@ -221,7 +222,7 @@ ol.sent li::before{content:counter(sn);position:absolute;left:0;top:7px;width:19
 .why1{color:var(--text);padding:4px 0;}
 @media (pointer:coarse){ .rtabs button{min-height:38px;padding:6px 14px;font-size:14px;} }
 .q4fig{width:100%;max-width:560px;display:block;margin:6px 0 10px;border:1px solid var(--border);border-radius:8px;background:var(--card);--q4fill:rgba(120,170,230,.10);--q4hatch:rgba(120,170,230,.35);--q4edge:#7aa8e0;--q4col:#e0947a;--q4col2:#5fae7a;}
-.q4fig .q4t{font:13px Georgia,serif;fill:var(--muted);} .q4fig .q4l{font:15px Georgia,serif;fill:var(--text);} .q4fig .q4s{font:11.5px -apple-system,system-ui,sans-serif;fill:var(--text2);} .q4fig .q4big{font:italic 26px Georgia,serif;fill:var(--q4edge);}
+.q4fig .q4t{font:13px 'LineDigits',Georgia,serif;fill:var(--muted);} .q4fig .q4l{font:15px 'LineDigits',Georgia,serif;fill:var(--text);} .q4fig .q4s{font:11.5px -apple-system,system-ui,sans-serif;fill:var(--text2);} .q4fig .q4big{font:italic 26px 'LineDigits',Georgia,serif;fill:var(--q4edge);}
 .secb .goal{border-left:3px solid var(--text2);padding:4px 0 4px 12px;margin:2px 0 10px;color:var(--text);background:var(--card);border-radius:0 6px 6px 0;}
 .steps details summary b{font-weight:600;}
 .sketchbox{border:1px dashed var(--border2);border-radius:6px;height:150px;margin:8px 0;display:flex;align-items:flex-end;justify-content:flex-end;padding:4px 8px;font:11px -apple-system,system-ui,sans-serif;color:var(--muted);}
