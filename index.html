@@ -1886,7 +1886,7 @@ function padHtml(id){ return '<details class="sec pad" open><summary>Your write-
   + padRefHtml(id)
   + '<button type="button" class="padsymt" id="padsymt" aria-expanded="true">Symbols <span>▾</span></button>'
   + '<div class="padbar" id="padbar">' + PADSYM.map(function(b, i){ return '<button type="button" data-p="' + i + '">' + (i === 0 ? 'inline math' : b[0] === 'display' ? 'display math' : '$' + b[0] + '$') + '</button>'; }).join('') + '</div>'
-  + '<textarea id="padin" spellcheck="false" autocapitalize="sentences" placeholder="Let $W$ be open in $X \\times Y$. …"></textarea>'
+  + '<textarea id="padin" spellcheck="false" autocorrect="off" autocomplete="off" writingsuggestions="false" data-gramm="false" autocapitalize="sentences" placeholder="Let $W$ be open in $X \\times Y$. …"></textarea>'
   + '<div class="padtools"><button type="button" id="padundo" aria-label="Undo">↶ Undo</button><button type="button" id="padredo" aria-label="Redo">↷ Redo</button><button type="button" id="padcopy">Copy text</button><button type="button" id="padpdf">Save as PDF</button><button type="button" id="padltx">LaTeX dictionary</button><button type="button" id="padadd">+ Add to document</button><a id="padopendoc" class="padlink" href="#">Open document</a><span id="padsaved"></span></div>'
   + '<div class="padprev" id="padprev"></div></div></details>'; }
 // typed math is recognised outside dollar signs too: LaTeX commands (\pi_1, \times), functions f(x), g(x, y), f^-1(V), single-letter
