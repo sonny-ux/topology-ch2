@@ -161,6 +161,11 @@ details.pad>summary{color:var(--text);}
 .padprev{border:1px solid var(--border);border-radius:10px;padding:12px 14px;background:var(--card);color:var(--text);}
 .padprev p{color:var(--text);} .padprev .padtip{color:var(--muted);font:12px/1.4 -apple-system,system-ui,sans-serif;border-top:1px solid var(--border);padding-top:8px;margin-top:6px;} .padempty{color:var(--muted)!important;}
 #padprint{display:none;}
+.padview{display:flex;gap:4px;align-items:center;margin:6px 0 8px;font:12px -apple-system,system-ui,sans-serif;color:var(--muted);flex-wrap:wrap;} .padview button{border:1px solid var(--border2);background:var(--card);color:var(--text2);border-radius:999px;padding:5px 11px;font:13px -apple-system,system-ui,sans-serif;cursor:pointer;} .padview button.on{background:var(--text);color:var(--bg);border-color:var(--text);}
+.padwork{display:flex;flex-direction:column;gap:10px;}
+.padwork.v-side{display:grid;grid-template-columns:1fr 1fr;align-items:start;} .padwork.v-side .padprev{position:sticky;top:70px;max-height:calc(100vh - 90px);overflow:auto;} body.padside .wrap{max-width:1180px;}
+.padwork.v-pin{flex-direction:column-reverse;} .padwork.v-pin .padprev{position:sticky;top:64px;z-index:6;max-height:42vh;overflow:auto;box-shadow:0 6px 16px rgba(0,0,0,.25);}
+@media (max-width:640px){ .padwork.v-side{grid-template-columns:1fr;} }
 @media print{ body.printing>*:not(#padprint){display:none!important;} body.printing{background:#fff!important;color:#000!important;} #padprint{display:block;color:#000;font:12pt/1.55 Georgia,serif;padding:0 6mm;} #padprint h1{font-size:16pt;font-weight:normal;margin:0 0 8pt;} #padprint h2{font-size:12pt;margin:14pt 0 6pt;} #padprint .pq{border-left:2pt solid #999;padding-left:8pt;color:#222;} #padprint p{margin:0 0 7pt;color:#000;} }
 #ltx{display:none;position:fixed;z-index:70;background:var(--surf);border-top:1px solid var(--border2);flex-direction:column;}
 #ltx.on{display:flex;}
@@ -1673,7 +1678,7 @@ function article(id){
   if (k >= 0) h += '<div class="pn">' + (k > 0 ? '<a href="#a/' + ORDER[k - 1] + '"><span>Previous</span>' + A[ORDER[k - 1]].title + '</a>' : '<span style="flex:1"></span>') + (k < ORDER.length - 1 ? '<a class="nx" href="#a/' + ORDER[k + 1] + '"><span>' + (SETOF[id] ? 'Next problem' : 'Next in the book') + '</span>' + A[ORDER[k + 1]].title + '</a>' : '') + '</div>';
   ORDER = ORDER_; return h;
 }
-function route(){
+function route(){ document.body.classList.remove('padside');
   var hsh = location.hash.replace(/^#/, ''), v = document.getElementById('view');
   closePv();
   if (hsh.indexOf('a/') === 0){ var id = hsh.slice(2); v.innerHTML = article(id); document.title = (A[id] ? A[id].title + ' · ' : '') + 'Topology Reference Guide'; }
@@ -1886,9 +1891,10 @@ function padHtml(id){ return '<details class="sec pad" open><summary>Your write-
   + padRefHtml(id)
   + '<button type="button" class="padsymt" id="padsymt" aria-expanded="true">Symbols <span>▾</span></button>'
   + '<div class="padbar" id="padbar">' + PADSYM.map(function(b, i){ return '<button type="button" data-p="' + i + '">' + (i === 0 ? 'inline math' : b[0] === 'display' ? 'display math' : '$' + b[0] + '$') + '</button>'; }).join('') + '</div>'
-  + '<textarea id="padin" spellcheck="false" autocorrect="off" autocomplete="off" writingsuggestions="false" data-gramm="false" autocapitalize="sentences" placeholder="Let $W$ be open in $X \\times Y$. …"></textarea>'
+  + '<div class="padview" id="padview">View: <button type="button" data-v="below">Below</button><button type="button" data-v="side">Side by side</button><button type="button" data-v="pin">Pinned on top</button></div>'
+  + '<div class="padwork" id="padwork"><textarea id="padin" spellcheck="false" autocorrect="off" autocomplete="off" writingsuggestions="false" data-gramm="false" autocapitalize="sentences" placeholder="Let $W$ be open in $X \\times Y$. …"></textarea><div class="padprev" id="padprev"></div></div>'
   + '<div class="padtools"><button type="button" id="padundo" aria-label="Undo">↶ Undo</button><button type="button" id="padredo" aria-label="Redo">↷ Redo</button><button type="button" id="padcopy">Copy text</button><button type="button" id="padpdf">Save as PDF</button><button type="button" id="padltx">LaTeX dictionary</button><button type="button" id="padadd">+ Add to document</button><a id="padopendoc" class="padlink" href="#">Open document</a><span id="padsaved"></span></div>'
-  + '<div class="padprev" id="padprev"></div></div></details>'; }
+  + '</div></details>'; }
 // typed math is recognised outside dollar signs too: LaTeX commands (\pi_1, \times), functions f(x), g(x, y), f^-1(V), single-letter
 // variables (X, W, U_i), "X x Y" as a product, a*b, arrows and relations (->, =>, <=>, !=, <=, >=), and Greek letters by name.
 // Pieces of math separated only by spaces or an operator are joined, so "f : X -> Y" becomes one formula.
@@ -1943,6 +1949,10 @@ function padInit(id){
   function draw(){ pv.innerHTML = padRender(ta.value) + (padAuto(ta.value) !== ta.value ? '<p class="padtip">Math typed without dollar signs is recognised and shown as math. If something renders that should stay as words, or the other way round, put the math between $ signs.</p>' : ''); math(pv); }
   function grow(){ ta.style.height = 'auto'; ta.style.height = Math.max(120, ta.scrollHeight + 4) + 'px'; }
   draw(); grow(); math(document.querySelector('.padbar'));
+  var pw = document.getElementById('padwork'), pvw = document.getElementById('padview');
+  function setView(v){ pw.className = 'padwork v-' + v; document.body.classList.toggle('padside', v === 'side'); pvw.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.dataset.v === v); }); try { localStorage.setItem('tg-padview', v); } catch(e){} }
+  var v0 = 'below'; try { v0 = localStorage.getItem('tg-padview') || 'below'; } catch(e){} setView(v0);
+  pvw.addEventListener('mousedown', function(e){ e.preventDefault(); }); pvw.addEventListener('click', function(e){ var b = e.target.closest('button'); if (b) setView(b.dataset.v); });
   // undo and redo: our own history, because inserts from the buttons bypass the browser's undo. Typing is grouped into one step per pause.
   var HIST = [{v: ta.value, c: ta.value.length}], HI = 0, typing = null, restoring = false, ub = document.getElementById('padundo'), rb = document.getElementById('padredo');
   function btns(){ ub.disabled = HI === 0; rb.disabled = HI >= HIST.length - 1; }
