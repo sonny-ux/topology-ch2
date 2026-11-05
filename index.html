@@ -1908,6 +1908,8 @@ function padHtml(id){ return '<details class="sec pad" open><summary>Your write-
 var PAD_MATHRE = /(\$\$[\s\S]*?\$\$|\$(?:[^$\n]|\n(?![ \t]*\n))*\$)/;   // inline math may run onto the next line, not across a blank line
 function padOnPlain(t, fn){ return t.split(PAD_MATHRE).map(function(seg, i){ return i % 2 ? seg : fn(seg); }).join(''); }
 function padAuto(t){
+  // an inverse put right after finished math or a bracket joins it: $\\pi_1$^{-1} -> $\\pi_1^{-1}$, (g \\circ f)^{-1} -> $(g \\circ f)^{-1}$
+  t = t.replace(/\$([^$\n]+)\$\^\{-1\}/g, function(m, a){ return '$' + a + '^{-1}$'; }).replace(/(^|[^$\w])\(([^()$\n]+)\)\^\{-1\}/g, function(m, pre, a){ return pre + '$(' + a + ')^{-1}$'; });
   var G = 'alpha|beta|gamma|delta|epsilon|varepsilon|lambda|mu|pi|rho|sigma|tau|phi|omega|Delta|Omega|Sigma';
   var sub = "(?:_\\{[^{}]*\\}|_[A-Za-z0-9])?", sup = "(?:\\^\\{[^{}]*\\}|\\^-?[A-Za-z0-9])?";
   // words for sub- and superscripts: "U sub i" -> U_i, "x sub n+1" -> x_{n+1}, "x sup 2" or "x super 2" -> x^2, "f inverse" -> f^{-1}
@@ -1921,7 +1923,7 @@ function padAuto(t){
   // 0. braces typed as sets: {x}, {(x, y) : xy = 1}, {1/n : n in N} become set notation
   t = padOnPlain(t, function(x){ return x.replace(/(^|[^\\A-Za-z_^}])\{([^{}$\n]*)\}/g, function(m, pre, inner){ return pre + '$\\{' + inner.replace(/\bin\b/g, '\\in') + '\\}$'; }); });
   // 2. Greek letters typed by name, with an optional subscript and argument: epsilon, pi_1(W)
-  t = padOnPlain(t, function(x){ return x.replace(new RegExp('(^|[^A-Za-z\\\\])(' + G + ')(' + sub + ')(\\([^()$]*\\))?(?![A-Za-z])', 'g'), function(m, pre, g, s1, arg){ return pre + '$\\' + (g === 'epsilon' ? 'varepsilon' : g) + s1 + (arg || '') + '$'; }); });
+  t = padOnPlain(t, function(x){ return x.replace(new RegExp('(^|[^A-Za-z\\\\])(' + G + ')(' + sub + sup + ')(\\([^()$]*\\))?(?![A-Za-z])', 'g'), function(m, pre, g, s1, arg){ return pre + '$\\' + (g === 'epsilon' ? 'varepsilon' : g) + s1 + (arg || '') + '$'; }); });
   // 3. functions applied to arguments: f(x), g(x, y), f^-1(V), U_i(…)
   t = padOnPlain(t, function(x){ return x.replace(new RegExp('(^|[^A-Za-z])([A-Za-z]' + sub + sup + ')(?:(?<=\\^\\{-1\\}|\\^-1) )?(\\((?:[^()$]|\\([^()$]*\\))*\\))', 'g'), function(m, pre, f, arg){ return pre + '$' + f + arg + '$'; }); });
   // 1. LaTeX commands
@@ -2053,7 +2055,7 @@ function padInsert(code, off){ var ta = document.getElementById('padin'); if (!t
   // symbols go in as plain LaTeX (the preview recognises it without dollar signs); the cursor goes after the symbol,
   // or into its first empty braces when it has a blank to fill (a subscript, a bar over a letter, a fraction)
   // a superscript or subscript button attaches to the letter before it, even across a typed space; with no letter there, the inverse button types the f it shows
-  if (/^[_^]/.test(code) && a0 === a1){ var bt = before.replace(/[ \t]+$/, ''); if (/(^|[^A-Za-z\\])[A-Za-z]$|[0-9)}\]]$/.test(bt)){ a0 = bt.length; before = bt; } else if (code === '^{-1}'){ code = 'f^{-1}'; if (off != null) off += 1; } }
+  if (/^[_^]/.test(code) && a0 === a1){ var bt = before.replace(/[ \t]+$/, ''); if (code === '^{-1}' ? bt.length > 0 : /(^|[^A-Za-z\\])[A-Za-z]$|[0-9)}\]]$/.test(bt)){ a0 = bt.length; before = bt; } else if (code === '^{-1}'){ code = 'f^{-1}'; if (off != null) off += 1; } }   // the inverse goes straight onto whatever comes before it
   var hole = code.indexOf('{}'); if (off == null) off = hole >= 0 ? hole + 1 : code.length;
   var dollars = (before.replace(/\\\$/g, '').match(/\$/g) || []).length, inMath = dollars % 2 === 1, lead = (inMath || /(^|[\s(\[{])$/.test(before) || /^[_^]/.test(code)) ? '' : ' ';
   var ins = lead + code, caret = a0 + lead.length + off;
