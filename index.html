@@ -222,6 +222,9 @@ ol.sent li::before{content:counter(sn);position:absolute;left:0;top:7px;width:19
 .q4fig .q4t{font:13px Georgia,serif;fill:var(--muted);} .q4fig .q4l{font:15px Georgia,serif;fill:var(--text);} .q4fig .q4s{font:11.5px -apple-system,system-ui,sans-serif;fill:var(--text2);} .q4fig .q4big{font:italic 26px Georgia,serif;fill:var(--q4edge);}
 .secb .goal{border-left:3px solid var(--text2);padding:4px 0 4px 12px;margin:2px 0 10px;color:var(--text);background:var(--card);border-radius:0 6px 6px 0;}
 .steps details summary b{font-weight:600;}
+.sketchbox{border:1px dashed var(--border2);border-radius:6px;height:150px;margin:8px 0;display:flex;align-items:flex-end;justify-content:flex-end;padding:4px 8px;font:11px -apple-system,system-ui,sans-serif;color:var(--muted);}
+.sketchbox.tall{height:260px;}
+@media print{ #padprint .sketchbox{border:0.6pt solid #999;height:70mm;color:#aaa;break-inside:avoid;} #padprint .sketchbox.tall{height:120mm;} }
 </style>
 </head>
 <body>
@@ -1943,7 +1946,8 @@ function padAuto(t){
 function padRender(txt){ function esc(x){ return x.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   // per paragraph: line breaks inside math become spaces, other line breaks stay; a lone unmatched $ is set apart so it cannot swallow the rest
   function par(p){ var parts = p.split(/(\$\$[\s\S]*?\$\$|\$[^$]*\$)/); return parts.map(function(seg, i){ if (i % 2) return seg.replace(/\n/g, ' '); return seg.replace(/\$/g, '<span class="lone">$</span>').replace(/\n/g, '<br>'); }).join(''); }
-  return txt.trim() ? esc(padAuto(txt)).split(/\n\s*\n/).map(function(p){ return '<p>' + par(p) + '</p>'; }).join('') : '<p class="padempty">Your rendered write-up appears here.</p>'; }
+  // a line [sketch] (or [sketch tall]) leaves a framed blank space to draw in after exporting
+  return txt.trim() ? esc(padAuto(txt)).split(/\n\s*\n/).map(function(p){ var m = p.trim().match(/^\[sketch( tall)?\]$/i); if (m) return '<div class="sketchbox' + (m[1] ? ' tall' : '') + '">sketch</div>'; return '<p>' + par(p) + '</p>'; }).join('') : '<p class="padempty">Your rendered write-up appears here.</p>'; }
 function padInit(id){
   var ta = document.getElementById('padin'), pv = document.getElementById('padprev'), sv = document.getElementById('padsaved'), key = 'tg-pad-' + id, tm = null;
   try { ta.value = localStorage.getItem(key) || ''; } catch(e){}
