@@ -1892,7 +1892,7 @@ function padHtml(id){ return '<details class="sec pad" open><summary>Your write-
 // typed math is recognised outside dollar signs too: LaTeX commands (\pi_1, \times), functions f(x), g(x, y), f^-1(V), single-letter
 // variables (X, W, U_i), "X x Y" as a product, a*b, arrows and relations (->, =>, <=>, !=, <=, >=), and Greek letters by name.
 // Pieces of math separated only by spaces or an operator are joined, so "f : X -> Y" becomes one formula.
-var PAD_MATHRE = /(\$\$[\s\S]*?\$\$|\$[^$\n]*\$)/;
+var PAD_MATHRE = /(\$\$[\s\S]*?\$\$|\$(?:[^$\n]|\n(?![ \t]*\n))*\$)/;   // inline math may run onto the next line, not across a blank line
 function padOnPlain(t, fn){ return t.split(PAD_MATHRE).map(function(seg, i){ return i % 2 ? seg : fn(seg); }).join(''); }
 function padAuto(t){
   var G = 'alpha|beta|gamma|delta|epsilon|varepsilon|lambda|mu|pi|rho|sigma|tau|phi|omega|Delta|Omega|Sigma';
@@ -1934,7 +1934,9 @@ function padAuto(t){
     else { out.push(m); out.push(parts[k + 1] || ''); } }
   return out.join(''); }
 function padRender(txt){ function esc(x){ return x.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-  return txt.trim() ? esc(padAuto(txt)).split(/\n\s*\n/).map(function(par){ return '<p>' + par.replace(/\n/g, '<br>') + '</p>'; }).join('') : '<p class="padempty">Your rendered write-up appears here.</p>'; }
+  // per paragraph: line breaks inside math become spaces, other line breaks stay; a lone unmatched $ is set apart so it cannot swallow the rest
+  function par(p){ var parts = p.split(/(\$\$[\s\S]*?\$\$|\$[^$]*\$)/); return parts.map(function(seg, i){ if (i % 2) return seg.replace(/\n/g, ' '); return seg.replace(/\$/g, '<span class="lone">$</span>').replace(/\n/g, '<br>'); }).join(''); }
+  return txt.trim() ? esc(padAuto(txt)).split(/\n\s*\n/).map(function(p){ return '<p>' + par(p) + '</p>'; }).join('') : '<p class="padempty">Your rendered write-up appears here.</p>'; }
 function padInit(id){
   var ta = document.getElementById('padin'), pv = document.getElementById('padprev'), sv = document.getElementById('padsaved'), key = 'tg-pad-' + id, tm = null;
   try { ta.value = localStorage.getItem(key) || ''; } catch(e){}
