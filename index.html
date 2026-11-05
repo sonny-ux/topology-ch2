@@ -163,7 +163,7 @@ details.pad>summary{color:var(--text);}
 #padprint{display:none;}
 /* Georgia's old-style figures make 0 look like o: take the digits alone from Times, which has lining figures on every device */
 @font-face{font-family:'LineDigits';src:local('Times New Roman'),local('TimesNewRomanPSMT'),local('Times'),local('Times-Roman');unicode-range:U+0030-0039;}
-.padcaret{display:inline-block;width:2px;height:1.1em;margin:0 1px;vertical-align:-.15em;background:#4a90e2;animation:padblink 1s steps(1) infinite;} @keyframes padblink{50%{opacity:0;}}
+.padcaret{display:inline-block;width:2px;height:1.1em;margin:0 1px;vertical-align:-.15em;background:#4a90e2;} @keyframes padblink{50%{opacity:0;}}
 .padview{display:flex;gap:4px;align-items:center;margin:6px 0 8px;font:12px -apple-system,system-ui,sans-serif;color:var(--muted);flex-wrap:wrap;} .padview button{border:1px solid var(--border2);background:var(--card);color:var(--text2);border-radius:999px;padding:5px 11px;font:13px -apple-system,system-ui,sans-serif;cursor:pointer;} .padview button.on{background:var(--text);color:var(--bg);border-color:var(--text);}
 .padwork{display:flex;flex-direction:column;gap:10px;}
 @media (pointer:coarse){ #padin{height:38vh!important;min-height:38vh;resize:none;overflow-y:auto;overscroll-behavior:contain;} .padwork.v-side .padprev{height:38vh;max-height:none;} .padwork.v-pin .padprev{height:28vh;} }
