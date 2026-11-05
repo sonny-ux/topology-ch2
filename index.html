@@ -2020,14 +2020,13 @@ var PADSEL = null;
 // insert LaTeX at the cursor: inside math as is; right after a closing $ it joins that math; otherwise it is wrapped in $ … $.
 // The cursor is left inside the math (in the first empty braces if there are any), so the next letters typed are math too.
 function padInsert(code, off){ var ta = document.getElementById('padin'); if (!ta) return; var a0 = PADSEL ? PADSEL[0] : ta.value.length, a1 = PADSEL ? PADSEL[1] : a0, v = ta.value, before = v.slice(0, a0);
-  if (off == null){ var hole = code.indexOf('{}'); off = hole >= 0 ? hole + 1 : code.length; }
-  var dollars = (before.replace(/\\\$/g, '').match(/\$/g) || []).length, inMath = dollars % 2 === 1, pos, ins, caret;
-  if (inMath){ pos = a0; ins = code; caret = a0 + off; }
-  else if (/\$$/.test(before) && !/\$\$$/.test(before) && dollars > 0 && a0 === a1){ pos = a0 - 1; ins = (/\s$/.test(v.slice(0, a0 - 1)) ? '' : ' ') + code; caret = pos + ins.length - code.length + off; a1 = pos; a0 = pos; }
-  else { var vm = a0 === a1 ? before.match(/(^|[\s(,])([A-Za-z](?:_[A-Za-z0-9]|')?)(\s?)$/) : null;   // a lone letter just typed (x, X, U_i) joins the math
-    if (vm){ var vs = a0 - vm[2].length - vm[3].length; pos = vs; ins = '$' + vm[2] + ' ' + code + '$'; caret = vs + 1 + vm[2].length + 1 + off; }
-    else { pos = a0; ins = '$' + code + '$'; caret = a0 + 1 + off; } }
-  ta.value = v.slice(0, pos) + ins + v.slice(a1); ta.focus({preventScroll: true}); ta.setSelectionRange(caret, caret); PADSEL = [caret, caret]; ta.dispatchEvent(new Event('input')); ltxKeep(); }
+  // symbols go in as plain LaTeX (the preview recognises it without dollar signs); the cursor goes after the symbol,
+  // or into its first empty braces when it has a blank to fill (a subscript, a bar over a letter, a fraction)
+  var hole = code.indexOf('{}'); if (off == null) off = hole >= 0 ? hole + 1 : code.length;
+  var dollars = (before.replace(/\\\$/g, '').match(/\$/g) || []).length, inMath = dollars % 2 === 1, lead = (inMath || /(^|[\s(\[{])$/.test(before) || /^[_^]/.test(code)) ? '' : ' ';
+  var ins = lead + code, caret = a0 + lead.length + off;
+  if (!inMath && hole < 0 && off === code.length && !/\s$/.test(code) && !/^\s/.test(v.slice(a1))){ ins += ' '; caret += 1; }
+  ta.value = before + ins + v.slice(a1); ta.focus({preventScroll: true}); ta.setSelectionRange(caret, caret); PADSEL = [caret, caret]; ta.dispatchEvent(new Event('input')); ltxKeep(); }
 // ===== The homework document: write-ups added from each problem page, gathered in problem order with the questions,
 // a header (name, course, assignment, date), and one "Save as PDF" for the whole set. It reads the live drafts, so later edits show up.
 function docSetOf(id){ for (var i = 0; i < PROBSETS.length; i++) if (PROBSETS[i][1].indexOf(id) >= 0) return i; return -1; }
