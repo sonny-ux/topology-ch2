@@ -1897,16 +1897,21 @@ function padOnPlain(t, fn){ return t.split(PAD_MATHRE).map(function(seg, i){ ret
 function padAuto(t){
   var G = 'alpha|beta|gamma|delta|epsilon|varepsilon|lambda|mu|pi|rho|sigma|tau|phi|omega|Delta|Omega|Sigma';
   var sub = "(?:_\\{[^{}]*\\}|_[A-Za-z0-9])?", sup = "(?:\\^\\{[^{}]*\\}|\\^-?[A-Za-z0-9])?";
+  // words for sub- and superscripts: "U sub i" -> U_i, "x sub n+1" -> x_{n+1}, "x sup 2" or "x super 2" -> x^2, "f inverse" -> f^{-1}
+  t = padOnPlain(t, function(x){ return x.replace(/(^|[^A-Za-z])([A-Za-z])\s+sub\s+(\{[^{}]*\}|[A-Za-z0-9+\-]+)/g, function(m, pre, v, sb){ return pre + v + '_{' + sb.replace(/^\{|\}$/g, '') + '}'; })
+      .replace(/(^|[^A-Za-z])([A-Za-z](?:_\{[^{}]*\})?)\s+(?:sup|super)\s+(\{[^{}]*\}|[A-Za-z0-9+\-]+)/g, function(m, pre, v, sp){ return pre + v + '^{' + sp.replace(/^\{|\}$/g, '') + '}'; })
+      .replace(/(^|[^A-Za-z])([A-Za-z](?:_\{[^{}]*\})?)\s+inverse\b/g, function(m, pre, v){ return pre + v + '^{-1}'; })
+      .replace(/(^|[\s(,])([A-Z](?:_\{[^{}]*\}|_[A-Za-z0-9])?)\s+x\s+(?=[A-Z](?:_\{[^{}]*\}|_[A-Za-z0-9])?(?![A-Za-z]))/g, function(m, pre, a){ return pre + a + ' \\times '; }); });
   // 0. braces typed as sets: {x}, {(x, y) : xy = 1}, {1/n : n in N} become set notation
   t = padOnPlain(t, function(x){ return x.replace(/(^|[^\\A-Za-z_^}])\{([^{}$\n]*)\}/g, function(m, pre, inner){ return pre + '$\\{' + inner.replace(/\bin\b/g, '\\in') + '\\}$'; }); });
-  // 1. LaTeX commands
-  t = padOnPlain(t, function(x){ return x.replace(/\\(?:(?:mathbb|mathcal|operatorname|mathrm)\s?(?:\{[^{}]*\}|[A-Za-z])|[a-zA-Z]+(?:\{[^{}]*\})*)(?:_\{[^{}]*\}|_[A-Za-z0-9]|\^\{[^{}]*\}|\^[A-Za-z0-9])*(?:\([^()$]*\))?/g, function(m){ return '$' + m + '$'; }); });
   // 2. Greek letters typed by name, with an optional subscript and argument: epsilon, pi_1(W)
   t = padOnPlain(t, function(x){ return x.replace(new RegExp('(^|[^A-Za-z\\\\])(' + G + ')(' + sub + ')(\\([^()$]*\\))?(?![A-Za-z])', 'g'), function(m, pre, g, s1, arg){ return pre + '$\\' + (g === 'epsilon' ? 'varepsilon' : g) + s1 + (arg || '') + '$'; }); });
   // 3. functions applied to arguments: f(x), g(x, y), f^-1(V), U_i(…)
   t = padOnPlain(t, function(x){ return x.replace(new RegExp('(^|[^A-Za-z])([A-Za-z]' + sub + sup + ')(\\((?:[^()$]|\\([^()$]*\\))*\\))', 'g'), function(m, pre, f, arg){ return pre + '$' + f + arg + '$'; }); });
+  // 1. LaTeX commands
+  t = padOnPlain(t, function(x){ return x.replace(/\\(?:(?:mathbb|mathcal|operatorname|mathrm)\s?(?:\{[^{}]*\}|[A-Za-z])|[a-zA-Z]+(?:\{[^{}]*\})*)(?:_\{[^{}]*\}|_[A-Za-z0-9]|\^\{[^{}]*\}|\^[A-Za-z0-9])*(?:\([^()$]*\))?/g, function(m){ return '$' + m + '$'; }); });
   // 4. products and operators between operands
-  t = padOnPlain(t, function(x){ return x.replace(/(^|[\s(])([A-Z](?:_[A-Za-z0-9])?)\s+x\s+(?=[A-Z](?:_[A-Za-z0-9])?(?![A-Za-z]))/g, function(m, pre, a){ return pre + '$' + a + ' \\times$ '; })
+  t = padOnPlain(t, function(x){ return x.replace(/∅/g, '$\\varnothing$').replace(/(^|[\s(])([A-Z](?:_\{[^{}]*\}|_[A-Za-z0-9])?)\s+x\s+(?=[A-Z](?:_\{[^{}]*\}|_[A-Za-z0-9])?(?![A-Za-z]))/g, function(m, pre, a){ return pre + '$' + a + ' \\times$ '; })
     .replace(/<=>/g, '$\\iff$').replace(/=>/g, '$\\Rightarrow$').replace(/->/g, '$\\to$').replace(/!=/g, '$\\neq$').replace(/<=/g, '$\\le$').replace(/>=/g, '$\\ge$')
     .replace(/([A-Za-z0-9)])\s*\*\s*(?=[A-Za-z0-9(])/g, '$1 $\\cdot$ ').replace(/(^|[^<>=!$])([<>])(?![=>$])/g, '$1$$$2$$'); });
   // 5. single-letter variables, with an optional subscript, prime or ^-1 (not the article "a", not a part label like "(a)")
