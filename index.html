@@ -1961,7 +1961,7 @@ function padRender(txt){ function esc(x){ return x.replace(/&/g, '&amp;').replac
   return txt.trim() ? esc(padAuto(txt)).split(/\n\s*\n/).map(function(p){ var m = p.trim().match(/^\[sketch( tall)?\]$/i); if (m) return '<div class="sketchbox' + (m[1] ? ' tall' : '') + '"></div>'; return '<p>' + par(p) + '</p>'; }).join('') : '<p class="padempty">Your rendered write-up appears here.</p>'; }
 function padInit(id){
   var ta = document.getElementById('padin'), pv = document.getElementById('padprev'), sv = document.getElementById('padsaved'), key = 'tg-pad-' + id, tm = null;
-  try { ta.value = localStorage.getItem(key) || ''; } catch(e){}
+  try { ta.value = localStorage.getItem(key) || localStorage.getItem(key + '-backup') || ''; } catch(e){}
   // a caret in the render: a marker goes in at the cursor (moved past any math it sits inside, and to the end of the word, so it never breaks a formula), then becomes a blinking bar
   function withCaret(v){ var c = ta.selectionEnd, d = (v.slice(0, c).replace(/\\\$/g, '').match(/\$/g) || []).length;
     if (d % 2 === 1){ var j = v.indexOf('$', c); c = j < 0 ? v.length : j + 1; if (v.charAt(c) === '$') c++; }
@@ -2002,7 +2002,10 @@ function padInit(id){
   st.addEventListener('mousedown', function(e){ e.preventDefault(); }); st.onclick = function(){ symShow(sb.hidden); };
   document.getElementById('padltx').onclick = function(){ ltxShow(!document.body.classList.contains('ltxon')); };
   try { if (localStorage.getItem('tg-ltx')) ltxShow(true); } catch(e){}
-  ta.addEventListener('input', function(){ grow(); clearTimeout(tm); tm = setTimeout(function(){ hold(draw); try { localStorage.setItem(key, ta.value); sv.textContent = 'Saved on this device'; } catch(e){ sv.textContent = 'Could not save on this device'; } }, 250); });
+  // save on every keystroke, before anything else runs, and again whenever the page is hidden or closed; a backup copy keeps the last non-empty draft
+  function save(){ try { localStorage.setItem(key, ta.value); if (ta.value.trim()) localStorage.setItem(key + '-backup', ta.value); sv.textContent = 'Saved on this device'; } catch(e){ sv.textContent = 'Could not save on this device'; } }
+  ta.addEventListener('input', function(){ save(); grow(); clearTimeout(tm); tm = setTimeout(function(){ hold(draw); }, 250); });
+  ta.addEventListener('blur', save); window.addEventListener('pagehide', save); document.addEventListener('visibilitychange', function(){ if (document.hidden) save(); }); window.addEventListener('hashchange', save, {once: true});
   document.querySelector('.padbar').addEventListener('mousedown', function(e){ if (e.target.closest('button')) e.preventDefault(); });
   document.querySelector('.padbar').addEventListener('click', function(e){ var b = e.target.closest('button'); if (!b) return; var d = PADSYM[+b.dataset.p], a0 = ta.selectionStart, a1 = ta.selectionEnd, sel = ta.value.slice(a0, a1);
     if (d[4] === 'plain'){ var v0 = ta.value, ins = (/\s$/.test(v0.slice(0, a0)) ? d[1].replace(/^ /, '') : d[1]); ta.value = v0.slice(0, a0) + ins + v0.slice(a1); var cp = a0 + ins.length; ta.focus({preventScroll: true}); ta.setSelectionRange(cp, cp); PADSEL = [cp, cp]; ta.dispatchEvent(new Event('input')); return; }   // typed by the box, so the keyboard does not treat it as a sum
