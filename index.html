@@ -1860,7 +1860,7 @@ function satFig(){
 }
 
 // ===== Write-up pad on each problem page: type the answer, put math between $ signs, see it rendered; saved on this device
-var PADSYM = [['$\\ldots$', '$ $', 1], ['display', '$$\n\n$$', 3], ['\\in', '\\in '], ['\\notin', '\\notin '], ['\\subseteq', '\\subseteq '], ['\\cup', '\\cup '], ['\\cap', '\\cap '], ['\\setminus', '\\setminus '],
+var PADSYM = [['$\\ldots$', '$ $', 1], ['display', '$$\n\n$$', 3], ['=', ' = ', 0, null, 'plain'], ['\\in', '\\in '], ['\\notin', '\\notin '], ['\\subseteq', '\\subseteq '], ['\\cup', '\\cup '], ['\\cap', '\\cap '], ['\\setminus', '\\setminus '],
   ['\\times', '\\times '], ['\\varnothing', '\\varnothing '], ['\\mathbb R', '\\mathbb R '], ['\\pi_1', '\\pi_1'], ['f^{-1}', '^{-1}'], ['\\overline{A}', '\\overline{', 0, '}'], ['x_n', '_{', 0, '}'], ['x^2', '^{', 0, '}'],
   ['\\{\\,\\}', '\\{', 0, '\\}'], ['\\to', '\\to '], ['\\Rightarrow', '\\Rightarrow '], ['\\iff', '\\iff '], ['\\forall', '\\forall '], ['\\exists', '\\exists '], ['\\neq', '\\neq '], ['\\le', '\\le '],
   ['\\varepsilon', '\\varepsilon '], ['\\delta', '\\delta '], ['\\sim', '\\sim '], ['\\circ', '\\circ '], ['\\bigcup_i', '\\bigcup_{i} '], ['[x]', '[', 0, ']']];
@@ -1964,6 +1964,7 @@ function padInit(id){
   ta.addEventListener('input', function(){ grow(); clearTimeout(tm); tm = setTimeout(function(){ draw(); try { localStorage.setItem(key, ta.value); sv.textContent = 'Saved on this device'; } catch(e){ sv.textContent = 'Could not save on this device'; } }, 250); });
   document.querySelector('.padbar').addEventListener('mousedown', function(e){ if (e.target.closest('button')) e.preventDefault(); });
   document.querySelector('.padbar').addEventListener('click', function(e){ var b = e.target.closest('button'); if (!b) return; var d = PADSYM[+b.dataset.p], a0 = ta.selectionStart, a1 = ta.selectionEnd, sel = ta.value.slice(a0, a1);
+    if (d[4] === 'plain'){ var v0 = ta.value, ins = (/\s$/.test(v0.slice(0, a0)) ? d[1].replace(/^ /, '') : d[1]); ta.value = v0.slice(0, a0) + ins + v0.slice(a1); var cp = a0 + ins.length; ta.focus({preventScroll: true}); ta.setSelectionRange(cp, cp); PADSEL = [cp, cp]; ta.dispatchEvent(new Event('input')); return; }   // typed by the box, so the keyboard does not treat it as a sum
     if (+b.dataset.p >= 2){ PADSEL = [a0, a1]; var code = d[3] ? d[1] + sel + d[3] : d[1]; if (sel && d[3]){ PADSEL = [a0, a1]; padInsert(code, d[1].length + sel.length + d[3].length); } else padInsert(code, d[3] ? d[1].length : code.length); return; }
     var ins, caret; if (d[2]){ ins = d[1].slice(0, d[2]) + sel + d[1].slice(d[2]); caret = a0 + d[2] + sel.length; } else if (d[3]){ ins = d[1] + sel + d[3]; caret = a0 + d[1].length + sel.length; } else { ins = d[1]; caret = a0 + ins.length; }
     ta.value = ta.value.slice(0, a0) + ins + ta.value.slice(a1); ta.focus(); ta.setSelectionRange(caret, caret); ta.dispatchEvent(new Event('input')); });
