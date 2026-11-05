@@ -224,7 +224,7 @@ ol.sent li::before{content:counter(sn);position:absolute;left:0;top:7px;width:19
 .steps details summary b{font-weight:600;}
 .sketchbox{border:1px dashed var(--border2);border-radius:6px;height:150px;margin:8px 0;display:flex;align-items:flex-end;justify-content:flex-end;padding:4px 8px;font:11px -apple-system,system-ui,sans-serif;color:var(--muted);}
 .sketchbox.tall{height:260px;}
-@media print{ #padprint .sketchbox{border:0.6pt solid #999;height:70mm;color:#aaa;break-inside:avoid;} #padprint .sketchbox.tall{height:120mm;} }
+@media print{ #padprint .sketchbox{border:0;height:70mm;break-inside:avoid;} #padprint .sketchbox.tall{height:120mm;} }
 </style>
 </head>
 <body>
@@ -1947,7 +1947,7 @@ function padRender(txt){ function esc(x){ return x.replace(/&/g, '&amp;').replac
   // per paragraph: line breaks inside math become spaces, other line breaks stay; a lone unmatched $ is set apart so it cannot swallow the rest
   function par(p){ var parts = p.split(/(\$\$[\s\S]*?\$\$|\$[^$]*\$)/); return parts.map(function(seg, i){ if (i % 2) return seg.replace(/\n/g, ' '); return seg.replace(/\$/g, '<span class="lone">$</span>').replace(/\n/g, '<br>'); }).join(''); }
   // a line [sketch] (or [sketch tall]) leaves a framed blank space to draw in after exporting
-  return txt.trim() ? esc(padAuto(txt)).split(/\n\s*\n/).map(function(p){ var m = p.trim().match(/^\[sketch( tall)?\]$/i); if (m) return '<div class="sketchbox' + (m[1] ? ' tall' : '') + '">sketch</div>'; return '<p>' + par(p) + '</p>'; }).join('') : '<p class="padempty">Your rendered write-up appears here.</p>'; }
+  return txt.trim() ? esc(padAuto(txt)).split(/\n\s*\n/).map(function(p){ var m = p.trim().match(/^\[sketch( tall)?\]$/i); if (m) return '<div class="sketchbox' + (m[1] ? ' tall' : '') + '"></div>'; return '<p>' + par(p) + '</p>'; }).join('') : '<p class="padempty">Your rendered write-up appears here.</p>'; }
 function padInit(id){
   var ta = document.getElementById('padin'), pv = document.getElementById('padprev'), sv = document.getElementById('padsaved'), key = 'tg-pad-' + id, tm = null;
   try { ta.value = localStorage.getItem(key) || ''; } catch(e){}
