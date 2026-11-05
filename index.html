@@ -212,6 +212,8 @@ ol.sent li:last-child{border-bottom:0;}
 ol.sent li::before{content:counter(sn);position:absolute;left:0;top:7px;width:19px;height:19px;border:1px solid var(--border2);border-radius:50%;font:11px/19px -apple-system,system-ui,sans-serif;text-align:center;color:var(--muted);}
 .why1{color:var(--text);padding:4px 0;}
 @media (pointer:coarse){ .rtabs button{min-height:38px;padding:6px 14px;font-size:14px;} }
+.q4fig{width:100%;max-width:560px;display:block;margin:6px 0 10px;border:1px solid var(--border);border-radius:8px;background:var(--card);--q4fill:rgba(120,170,230,.10);--q4hatch:rgba(120,170,230,.35);--q4edge:#7aa8e0;--q4col:#e0947a;--q4col2:#5fae7a;}
+.q4fig .q4t{font:13px Georgia,serif;fill:var(--muted);} .q4fig .q4l{font:15px Georgia,serif;fill:var(--text);} .q4fig .q4s{font:11.5px -apple-system,system-ui,sans-serif;fill:var(--text2);} .q4fig .q4big{font:italic 26px Georgia,serif;fill:var(--q4edge);}
 </style>
 </head>
 <body>
@@ -1561,6 +1563,28 @@ A['equivalence-class'].sections.splice(1, 0,
   ['What a class is for', R`<p>A class lets a whole group of things that count as the same be treated as <b>one object</b>. Many familiar objects are built this way: the number $\tfrac12$ is the class of pairs $(1,2),(2,4),(3,6),\ldots$; "3 o'clock" is the class $\{\ldots,-9,3,15,27,\ldots\}$.</p>
 <p>In topology this is how spaces are glued. The relation says what is glued to what, and each class becomes one point of the [[quotient-topology|quotient]]: for the circle, $0$ and $1$ form one class; for [[crushing-a-set]], all of $A$ does.</p>
 <p>Once things are glued, anything done on the new space may depend only on the class, not on the element chosen from it. A function descends to the quotient only if it is constant on each class ([[maps-out-of-quotients]]); a set has a picture downstairs only if it takes whole classes ([[saturated]]).</p>`]);
+// ===== HW7 Q4: a picture of A and of the map q, right after the problem
+(function(){ var a = A['hw7-q4'], i = a.sections.findIndex(function(x){ return x[0] === 'The problem'; }); a.sections.splice(i + 1, 0, ['Picture of A', R`<svg viewBox="0 0 460 300" class="q4fig" role="img" aria-label="The set A: the closed right half-plane together with the left half of the x-axis, and the map q squashing it onto the line">
+<defs><pattern id="q4h" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="var(--q4fill)"/><line x1="0" y1="0" x2="0" y2="7" stroke="var(--q4hatch)" stroke-width="2"/></pattern>
+<marker id="q4a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--text2)"/></marker></defs>
+<rect x="210" y="14" width="236" height="172" fill="url(#q4h)"/>
+<line x1="210" y1="14" x2="210" y2="186" stroke="var(--q4edge)" stroke-width="3"/>
+<line x1="16" y1="100" x2="210" y2="100" stroke="var(--q4edge)" stroke-width="3.5"/>
+<line x1="210" y1="100" x2="446" y2="100" stroke="var(--text2)" stroke-width="1" stroke-dasharray="3 3"/>
+<polygon points="10,100 20,94 20,106" fill="var(--q4edge)"/><polygon points="210,8 204,18 216,18" fill="var(--q4edge)"/><polygon points="210,192 204,182 216,182" fill="var(--q4edge)"/>
+<text x="198" y="114" class="q4t" text-anchor="end">0</text><text x="436" y="94" class="q4t" text-anchor="end">x</text><text x="196" y="22" class="q4t" text-anchor="end">y</text>
+<text x="224" y="38" class="q4l">[0, ∞) × ℝ</text><text x="224" y="54" class="q4s">closed right half-plane</text><text x="224" y="67" class="q4s">(the edge x = 0 is included)</text>
+<text x="24" y="86" class="q4l">ℝ × {0}, left half</text><text x="24" y="120" class="q4s">only the axis itself:</text><text x="24" y="133" class="q4s">nothing above or below it</text>
+<line x1="380" y1="22" x2="380" y2="180" stroke="var(--q4col)" stroke-width="2"/><text x="372" y="150" class="q4s" fill="var(--q4col)" text-anchor="end">a whole vertical line</text>
+<text x="232" y="160" class="q4big">A</text>
+<circle cx="80" cy="100" r="4" fill="var(--q4col2)"/>
+<line x1="16" y1="250" x2="446" y2="250" stroke="var(--text)" stroke-width="2"/><polygon points="446,250 436,244 436,256" fill="var(--text)"/><polygon points="16,250 26,244 26,256" fill="var(--text)"/>
+<text x="210" y="272" class="q4t" text-anchor="middle">0</text><text x="440" y="274" class="q4t" text-anchor="end">ℝ</text>
+<circle cx="380" cy="250" r="4.5" fill="var(--q4col)"/><text x="372" y="242" class="q4s" fill="var(--q4col)" text-anchor="end">goes to one point x</text>
+<circle cx="80" cy="250" r="4" fill="var(--q4col2)"/><text x="24" y="242" class="q4s" fill="var(--q4col2)">the left axis: one to one</text>
+<line x1="380" y1="186" x2="380" y2="240" stroke="var(--text2)" stroke-width="1.2" marker-end="url(#q4a)"/><line x1="80" y1="108" x2="80" y2="232" stroke="var(--text2)" stroke-width="1.2" marker-end="url(#q4a)"/>
+<text x="118" y="206" class="q4l">q(x, y) = x</text><text x="118" y="221" class="q4s">drops each point straight down</text>
+</svg>`]); })();
 </script>
 <script>
 // ===== The encyclopedia: home page, articles, link previews, a trail of where you have been, search.
@@ -1604,7 +1628,7 @@ function article(id){
   if (a.steps) h += '<details class="sec" open><summary>Steps</summary><div class="secb"><ol class="steps">' + a.steps.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + wiki(s[0]) + '</summary><div class="why"><b>Why:</b> ' + wiki(s[1]) + '</div></details>' : wiki(s[0])) + '</li>'; }).join('') + '</ol></div></details>';
   (a.sections || []).forEach(function(s, i){ var body = s[1];
     if (s[0] === 'Concepts and method') body = '<p><b>Concepts:</b></p><div class="chips">' + (a.pre || []).map(chip).join('') + '</div><p style="margin-top:10px"><b>Method:</b></p><div class="chips">' + (a.method || []).map(chip).join('') + '</div>';
-    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method' || s[0] === 'The problem' || s[0].indexOf('What it builds on') === 0 || s[0] === 'Terms in the problem' || s[0] === 'How the terms are used' || s[0].indexOf('Breakdown') === 0) : (i === 0 && !a.steps); if (s[0] === 'Picture' || s[0] === 'Reading the definition' || s[0] === 'Reading the statement' || s[0] === 'What it is' || (s[0] === 'Definition' && i === 1) || (a.where === 'Start here') || a.kind === 'idea') open = true;
+    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method' || s[0] === 'The problem' || s[0].indexOf('What it builds on') === 0 || s[0] === 'Terms in the problem' || s[0] === 'How the terms are used' || s[0].indexOf('Breakdown') === 0) : (i === 0 && !a.steps); if (s[0] === 'Picture' || s[0] === 'Picture of A' || s[0] === 'Reading the definition' || s[0] === 'Reading the statement' || s[0] === 'What it is' || (s[0] === 'Definition' && i === 1) || (a.where === 'Start here') || a.kind === 'idea') open = true;
     h += '<details class="sec"' + (open ? ' open' : '') + '><summary>' + s[0] + '</summary><div class="secb">' + wiki(body) + '</div></details>'; });
   if (a.kind === 'problem') h += padHtml(id);
   if (a.kind === 'method' && (USEDIN[id] || []).length) h += '<div class="links"><h3>Used in these problems</h3><div class="chips">' + USEDIN[id].map(chip).join('') + '</div></div>';
