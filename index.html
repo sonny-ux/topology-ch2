@@ -1671,7 +1671,7 @@ function article(id){
   if (a.steps) h += '<details class="sec" open><summary>Steps</summary><div class="secb"><ol class="steps">' + a.steps.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + wiki(s[0]) + '</summary><div class="why"><b>Why:</b> ' + wiki(s[1]) + '</div></details>' : wiki(s[0])) + '</li>'; }).join('') + '</ol></div></details>';
   (a.sections || []).forEach(function(s, i){ var body = s[1];
     if (s[0] === 'Concepts and method') body = '<p><b>Concepts:</b></p><div class="chips">' + (a.pre || []).map(chip).join('') + '</div><p style="margin-top:10px"><b>Method:</b></p><div class="chips">' + (a.method || []).map(chip).join('') + '</div>';
-    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method' || s[0] === 'The problem' || s[0].indexOf('What it builds on') === 0 || s[0] === 'Terms in the problem' || s[0] === 'How the terms are used' || s[0].indexOf('Breakdown') === 0) : (i === 0 && !a.steps); if (s[0] === 'Picture' || s[0] === 'Picture of A' || s[0] === 'Reading the definition' || s[0] === 'Reading the statement' || s[0] === 'What it is' || (s[0] === 'Definition' && i === 1) || (a.where === 'Start here') || a.kind === 'idea') open = true;
+    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method' || s[0] === 'The problem' || s[0] === 'The problem, again' || s[0].indexOf('What it builds on') === 0 || s[0] === 'Terms in the problem' || s[0] === 'How the terms are used' || s[0].indexOf('Breakdown') === 0) : (i === 0 && !a.steps); if (s[0] === 'Picture' || s[0] === 'Picture of A' || s[0] === 'Reading the definition' || s[0] === 'Reading the statement' || s[0] === 'What it is' || (s[0] === 'Definition' && i === 1) || (a.where === 'Start here') || a.kind === 'idea') open = true;
     h += '<details class="sec"' + (open ? ' open' : '') + '><summary>' + s[0] + '</summary><div class="secb">' + wiki(body) + '</div></details>'; });
   if (a.kind === 'problem') h += padHtml(id);
   if (a.kind === 'method' && (USEDIN[id] || []).length) h += '<div class="links"><h3>Used in these problems</h3><div class="chips">' + USEDIN[id].map(chip).join('') + '</div></div>';
@@ -1685,6 +1685,8 @@ function article(id){
   if (k >= 0) h += '<div class="pn">' + (k > 0 ? '<a href="#a/' + ORDER[k - 1] + '"><span>Previous</span>' + A[ORDER[k - 1]].title + '</a>' : '<span style="flex:1"></span>') + (k < ORDER.length - 1 ? '<a class="nx" href="#a/' + ORDER[k + 1] + '"><span>' + (SETOF[id] ? 'Next problem' : 'Next in the book') + '</span>' + A[ORDER[k + 1]].title + '</a>' : '') + '</div>';
   ORDER = ORDER_; return h;
 }
+// HW7: the problem restated just above the conclusion, so it is in view while writing up
+['hw7-q1', 'hw7-q2', 'hw7-q3', 'hw7-q4', 'hw7-q5', 'hw7-q6'].forEach(function(id){ var a = A[id]; if (!a || !VERBATIM[id]) return; var S = a.sections, k = S.findIndex(function(x){ return x[0] === 'Conclusion'; }); var sec = ['The problem, again', VERBATIM[id]]; if (k < 0) S.push(sec); else S.splice(k, 0, sec); });
 function route(){ document.body.classList.remove('padside');
   var hsh = location.hash.replace(/^#/, ''), v = document.getElementById('view');
   closePv();
