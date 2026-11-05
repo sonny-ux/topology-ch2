@@ -174,8 +174,8 @@ details.pad>summary{color:var(--text);}
 #ltx .lxs{grid-row:1/3;align-self:center;font-size:1.05rem;overflow:hidden;}
 #ltx code{font:12px ui-monospace,Menlo,monospace;color:var(--text2);word-break:break-all;}
 #ltx .lxe i{font:12px -apple-system,system-ui,sans-serif;font-style:normal;color:var(--muted);}
-@media (min-width:1000px){ #ltx{top:0;right:0;bottom:0;width:330px;border-top:0;border-left:1px solid var(--border2);padding-top:env(safe-area-inset-top);} body.ltxon .wrap,body.ltxon .toprow{margin-left:max(16px,calc((100vw - 330px - 760px)/2));margin-right:346px;} }
-@media (max-width:999px){ #ltx{left:0;right:0;bottom:0;height:44vh;padding-bottom:env(safe-area-inset-bottom);border-radius:14px 14px 0 0;box-shadow:0 -8px 24px rgba(0,0,0,.3);} body.ltxon{padding-bottom:46vh;} }
+@media (min-width:540px){ :root{--ltxw:clamp(230px,36vw,330px);} #ltx{top:0;right:0;bottom:0;width:var(--ltxw);border-top:0;border-left:1px solid var(--border2);padding-top:env(safe-area-inset-top);} body.ltxon .wrap,body.ltxon .toprow{margin-left:max(12px,calc((100vw - var(--ltxw) - 760px)/2));margin-right:calc(var(--ltxw) + 12px);} body.ltxon .padbar button{min-width:40px;} }
+@media (max-width:539px){ #ltx{left:0;right:0;bottom:0;height:44vh;padding-bottom:env(safe-area-inset-bottom);border-radius:14px 14px 0 0;box-shadow:0 -8px 24px rgba(0,0,0,.3);} body.ltxon{padding-bottom:46vh;} }
 @media print{ #ltx{display:none!important;} }
 @media (pointer:coarse){ .padbar{gap:7px;} .padbar button{min-width:48px;height:44px;padding:4px 10px;font-size:17px;border-radius:9px;} .padtools button{min-height:44px;padding:8px 14px;font-size:15px;} #ltx .lxe{padding:10px 2px;min-height:48px;} #ltx .lxx{min-height:40px;} }
 .padsymt{border:1px solid var(--border2);background:var(--card2);color:var(--text);border-radius:8px;padding:6px 12px;font:14px -apple-system,system-ui,sans-serif;cursor:pointer;margin-top:4px;}
@@ -2004,7 +2004,7 @@ function ltxPanel(){ var p = document.getElementById('ltx'); if (p) return p; p 
 function ltxShow(on){ var p = ltxPanel(); p.classList.toggle('on', on); document.body.classList.toggle('ltxon', on); try { localStorage.setItem('tg-ltx', on ? '1' : ''); } catch(e){}
   if (on) ltxKeep(); }
 // on narrow screens keep the write-up box (and its symbol bar) in the space above the panel
-function ltxKeep(){ if (window.innerWidth >= 1000 || !document.body.classList.contains('ltxon')) return; var ta = document.getElementById('padin'), bar = document.querySelector('.padbar'); if (!ta) return;
+function ltxKeep(){ if (window.innerWidth >= 540 || !document.body.classList.contains('ltxon')) return; var ta = document.getElementById('padin'), bar = document.querySelector('.padbar'); if (!ta) return;
   var head = document.querySelector('.top').offsetHeight, room = window.innerHeight*0.56 - head, top = (bar && ta.offsetHeight + bar.offsetHeight + 16 < room ? bar : ta).getBoundingClientRect().top + window.scrollY - head - 8;
   setTimeout(function(){ window.scrollTo({top: top, behavior: 'smooth'}); }, 30); }
 var PADSEL = null;
