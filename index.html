@@ -161,6 +161,7 @@ details.pad>summary{color:var(--text);}
 .padprev{border:1px solid var(--border);border-radius:10px;padding:12px 14px;background:var(--card);color:var(--text);}
 .padprev p{color:var(--text);} .padprev .padtip{color:var(--muted);font:12px/1.4 -apple-system,system-ui,sans-serif;border-top:1px solid var(--border);padding-top:8px;margin-top:6px;} .padempty{color:var(--muted)!important;}
 #padprint{display:none;}
+.padcaret{display:inline-block;width:2px;height:1.1em;margin:0 1px;vertical-align:-.15em;background:#4a90e2;animation:padblink 1s steps(1) infinite;} @keyframes padblink{50%{opacity:0;}}
 .padview{display:flex;gap:4px;align-items:center;margin:6px 0 8px;font:12px -apple-system,system-ui,sans-serif;color:var(--muted);flex-wrap:wrap;} .padview button{border:1px solid var(--border2);background:var(--card);color:var(--text2);border-radius:999px;padding:5px 11px;font:13px -apple-system,system-ui,sans-serif;cursor:pointer;} .padview button.on{background:var(--text);color:var(--bg);border-color:var(--text);}
 .padwork{display:flex;flex-direction:column;gap:10px;}
 @media (pointer:coarse){ #padin{height:38vh!important;min-height:38vh;resize:none;overflow-y:auto;overscroll-behavior:contain;} .padwork.v-side .padprev{height:38vh;max-height:none;} .padwork.v-pin .padprev{height:28vh;} }
@@ -1951,7 +1952,13 @@ function padRender(txt){ function esc(x){ return x.replace(/&/g, '&amp;').replac
 function padInit(id){
   var ta = document.getElementById('padin'), pv = document.getElementById('padprev'), sv = document.getElementById('padsaved'), key = 'tg-pad-' + id, tm = null;
   try { ta.value = localStorage.getItem(key) || ''; } catch(e){}
-  function draw(){ pv.innerHTML = padRender(ta.value) + (padAuto(ta.value) !== ta.value ? '<p class="padtip">Math typed without dollar signs is recognised and shown as math. If something renders that should stay as words, or the other way round, put the math between $ signs.</p>' : ''); math(pv); }
+  // a caret in the render: a marker goes in at the cursor (moved past any math it sits inside, and to the end of the word, so it never breaks a formula), then becomes a blinking bar
+  function withCaret(v){ var c = ta.selectionEnd, d = (v.slice(0, c).replace(/\\\$/g, '').match(/\$/g) || []).length;
+    if (d % 2 === 1){ var j = v.indexOf('$', c); c = j < 0 ? v.length : j + 1; if (v.charAt(c) === '$') c++; }
+    else { var m = /^[^\s$]*/.exec(v.slice(c)); c += m[0].length; }
+    return v.slice(0, c) + '\uE000' + v.slice(c); }
+  function caretize(){ var w = document.createTreeWalker(pv, NodeFilter.SHOW_TEXT), n; while ((n = w.nextNode())){ var i = n.nodeValue.indexOf('\uE000'); if (i < 0) continue; if (n.parentNode.closest && n.parentNode.closest('.katex, mjx-container')){ n.nodeValue = n.nodeValue.replace('\uE000', ''); continue; } var r = n.splitText(i); r.nodeValue = r.nodeValue.slice(1); var sp = document.createElement('span'); sp.className = 'padcaret'; r.parentNode.insertBefore(sp, r); break; } }
+  function draw(){ var focused = document.activeElement === ta; pv.innerHTML = padRender(focused ? withCaret(ta.value) : ta.value) + (padAuto(ta.value) !== ta.value ? '<p class="padtip">Math typed without dollar signs is recognised and shown as math. If something renders that should stay as words, or the other way round, put the math between $ signs.</p>' : ''); math(pv); caretize(); }
   // keep the typing box where it is on screen while it resizes or the render above it changes height
   function hold(fn){ var t0 = ta.getBoundingClientRect().top, y = window.scrollY; fn(); var d = ta.getBoundingClientRect().top - t0; if (Math.abs(d) > 1) window.scrollTo(0, y + d); else if (window.scrollY !== y) window.scrollTo(0, y); }
   var FIXH = window.matchMedia('(pointer:coarse)').matches;  // touch screens: fixed-height box that scrolls inside, so the page itself never moves
@@ -1972,6 +1979,7 @@ function padInit(id){
   ta.addEventListener('beforeinput', function(e){ if (e.inputType === 'insertText' && e.data === '$' && ta.selectionStart === ta.selectionEnd && ta.value.charAt(ta.selectionStart) === '$'){ var b4 = ta.value.slice(0, ta.selectionStart); if (((b4.match(/\$/g) || []).length) % 2 === 1){ e.preventDefault(); var c = ta.selectionStart + 1; ta.setSelectionRange(c, c); PADSEL = [c, c]; } } });
   ta.addEventListener('keydown', function(e){ if ((e.metaKey || e.ctrlKey) && (e.key === 'z' || e.key === 'Z')){ e.preventDefault(); go(e.shiftKey ? 1 : -1); } else if ((e.metaKey || e.ctrlKey) && (e.key === 'y' || e.key === 'Y')){ e.preventDefault(); go(1); } });
   ['keyup', 'mouseup', 'select', 'input', 'blur'].forEach(function(ev){ ta.addEventListener(ev, function(){ PADSEL = [ta.selectionStart, ta.selectionEnd]; }); }); PADSEL = [ta.value.length, ta.value.length];
+  var ct = null; ['keyup', 'mouseup', 'touchend', 'focus', 'blur'].forEach(function(ev){ ta.addEventListener(ev, function(){ clearTimeout(ct); ct = setTimeout(function(){ hold(draw); }, 120); }); });
   docButtonInit(id);
   var rt = document.getElementById('padreft'), rb = document.getElementById('padref');
   if (rt){ var refShow = function(on){ rb.hidden = !on; rt.setAttribute('aria-expanded', on); rt.querySelector('span').textContent = on ? '▾' : '▸'; try { localStorage.setItem('tg-padref', on ? '1' : ''); } catch(e){} };
