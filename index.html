@@ -214,6 +214,8 @@ ol.sent li::before{content:counter(sn);position:absolute;left:0;top:7px;width:19
 @media (pointer:coarse){ .rtabs button{min-height:38px;padding:6px 14px;font-size:14px;} }
 .q4fig{width:100%;max-width:560px;display:block;margin:6px 0 10px;border:1px solid var(--border);border-radius:8px;background:var(--card);--q4fill:rgba(120,170,230,.10);--q4hatch:rgba(120,170,230,.35);--q4edge:#7aa8e0;--q4col:#e0947a;--q4col2:#5fae7a;}
 .q4fig .q4t{font:13px Georgia,serif;fill:var(--muted);} .q4fig .q4l{font:15px Georgia,serif;fill:var(--text);} .q4fig .q4s{font:11.5px -apple-system,system-ui,sans-serif;fill:var(--text2);} .q4fig .q4big{font:italic 26px Georgia,serif;fill:var(--q4edge);}
+.secb .goal{border-left:3px solid var(--text2);padding:4px 0 4px 12px;margin:2px 0 10px;color:var(--text);background:var(--card);border-radius:0 6px 6px 0;}
+.steps details summary b{font-weight:600;}
 </style>
 </head>
 <body>
@@ -1585,6 +1587,35 @@ A['equivalence-class'].sections.splice(1, 0,
 <line x1="380" y1="186" x2="380" y2="240" stroke="var(--text2)" stroke-width="1.2" marker-end="url(#q4a)"/><line x1="80" y1="108" x2="80" y2="232" stroke="var(--text2)" stroke-width="1.2" marker-end="url(#q4a)"/>
 <text x="118" y="206" class="q4l">q(x, y) = x</text><text x="118" y="221" class="q4s">drops each point straight down</text>
 </svg>`]); })();
+// ===== HW7 Q4: the breakdown split by part, each with its goal, short steps, and the reason folded under each
+(function(){
+  function st(rows){ return '<ol class="steps">' + rows.map(function(r){ return '<li><details><summary>' + r[0] + '</summary><div class="why"><b>Why:</b> ' + r[1] + '</div></details></li>'; }).join('') + '</ol>'; }
+  function goal(g){ return '<p class="goal"><b>Goal.</b> ' + g + '</p>'; }
+  var parts = [
+   ['Breakdown of (a): the sketch', goal(R`Draw $A$.`) + st([
+     [R`Shade the half-plane $x\ge0$, including its edge, the $y$-axis.`, R`$[0,\infty)\times\mathbb R$ is every point whose first coordinate is $\ge 0$, with any second coordinate. $0\in[0,\infty)$, so the edge belongs to it.`],
+     [R`Add the negative $x$-axis as a single line.`, R`$\mathbb R\times\{0\}$ adds the points with $y=0$. Its right half is already shaded, so what is new is the half-line $\{(x,0):x\lt0\}$, with nothing above or below it. See the picture above.`]])],
+   ['Breakdown of (b): q is a quotient map', goal(R`Three things: $q$ is surjective; $q$ is continuous; and if $q^{-1}(U)$ is open in $A$, then $U$ is open in $\mathbb R$.`) + st([
+     [R`<b>Surjective.</b> Every $x$ is hit, by the point $(x,0)$.`, R`The whole $x$-axis lies in $A$, so $(x,0)\in A$ for every $x$, and $q(x,0)=x$.`],
+     [R`<b>Continuous.</b> $q$ is the projection $\pi_1$, restricted to $A$.`, R`$\pi_1:\mathbb R^2\to\mathbb R$ is continuous, and restricting a continuous map to a subspace keeps it continuous (Theorem 18.2).`],
+     [R`<b>The third condition: the idea.</b> Carry openness back down along the $x$-axis, using a map going the other way.`, R`This is the hint: HW6 Q2 showed that a continuous surjection with a continuous <em>section</em> (a map $j$ back with $q\circ j=\mathrm{id}$) is a quotient map ([[hw6-q2]], [[m-quotient-map]]).`],
+     [R`<b>The section.</b> $j:\mathbb R\to A$, $j(x)=(x,0)$. It is continuous, and $q(j(x))=x$.`, R`Its two coordinates, $x$ and $0$, are continuous, so $j$ is continuous into $\mathbb R^2$ (Theorem 18.4). Its image lies on the axis, inside $A$, so it is continuous into $A$ (Theorem 18.2).`],
+     [R`<b>Finish.</b> If $q^{-1}(U)$ is open in $A$, then $U=j^{-1}\big(q^{-1}(U)\big)$, which is open.`, R`Because $q\circ j=\mathrm{id}$, pulling $U$ back through $q$ and then through $j$ returns $U$ itself: $j^{-1}(q^{-1}(U))=(q\circ j)^{-1}(U)=U$. And $j$ is continuous, so it pulls the open set $q^{-1}(U)$ back to an open set.`]])],
+   ['Breakdown of (c): q is not open', goal(R`One open set of $A$ whose image is <em>not</em> open in $\mathbb R$.`) + st([
+     [R`<b>Where to look:</b> on the edge $x=0$, above the axis.`, R`There $A$ simply stops: it has no points to the left. An open set of $A$ around such a point is cut off along $x=0$, and squashing it down keeps the cut.`],
+     [R`<b>The set:</b> $W=A\cap B\big((0,1),\tfrac12\big)$, a small disc around $(0,1)$ cut down to $A$.`, R`A set of the form $A\cap(\text{open set of }\mathbb R^2)$ is open in $A$; that is the subspace topology ([[subspace-topology]]).`],
+     [R`<b>What $W$ is:</b> the right half of the disc, the points with $x\ge0$.`, R`Every point of the disc has $y\gt\tfrac12$, so none of it is on the axis; inside $A$ only the part with $x\ge0$ survives.`],
+     [R`<b>Its image:</b> $q(W)=[0,\tfrac12)$.`, R`The right half of a disc of radius $\tfrac12$ centred on the $y$-axis has first coordinates from $0$ up to (not including) $\tfrac12$.`],
+     [R`<b>Not open:</b> $0\in q(W)$, but no interval $(-\varepsilon,\varepsilon)$ lies inside $[0,\tfrac12)$. So $q$ is not an open map.`, R`Open in $\mathbb R$ means room around every point; $0$ has no room to its left.`]])],
+   ['Breakdown of (c): q is not closed', goal(R`One closed set of $A$ whose image is <em>not</em> closed in $\mathbb R$.`) + st([
+     [R`<b>Where to look:</b> far up the half-plane, a closed set that hugs the edge $x=0$ without touching it.`, R`The same idea as [[hw7-q3]](b): a closed set can approach the edge only by climbing to infinity, and squashing away the height leaves a hole at $0$.`],
+     [R`<b>The set:</b> $C=\{(x,y): x\gt0,\ xy=1\}$, the right branch of the hyperbola $y=1/x$.`, R`Each of its points has $x\gt0$, so it lies in the half-plane, inside $A$.`],
+     [R`<b>$C$ is closed in $A$.</b>`, R`$\{xy=1\}$ is closed in $\mathbb R^2$ (the preimage of $\{1\}$ under the continuous map $(x,y)\mapsto xy$), and so is $\{x\ge0\}$. Their intersection is exactly $C$ (no point with $x=0$ has $xy=1$), so $C$ is closed in $\mathbb R^2$, and $C=C\cap A$ is closed in $A$ (Theorem 17.2).`],
+     [R`<b>Its image:</b> $q(C)=(0,\infty)$.`, R`Each $x\gt0$ is hit, by $(x,1/x)$; no $x\le0$ is.`],
+     [R`<b>Not closed:</b> $0$ is a limit point of $(0,\infty)$ (the points $1/n$ close in on it) but is not in it. So $q$ is not a closed map.`, R`A closed set must contain all of its limit points ([[closure-limit-points]]).`]])]];
+  var a = A['hw7-q4'], i = a.sections.findIndex(function(x){ return x[0] === 'Breakdown'; });
+  if (i >= 0) a.sections.splice.apply(a.sections, [i, 1].concat(parts.map(function(p){ return [p[0], p[1]]; })));
+})();
 </script>
 <script>
 // ===== The encyclopedia: home page, articles, link previews, a trail of where you have been, search.
