@@ -1917,7 +1917,7 @@ function padAuto(t){
   // 2. Greek letters typed by name, with an optional subscript and argument: epsilon, pi_1(W)
   t = padOnPlain(t, function(x){ return x.replace(new RegExp('(^|[^A-Za-z\\\\])(' + G + ')(' + sub + ')(\\([^()$]*\\))?(?![A-Za-z])', 'g'), function(m, pre, g, s1, arg){ return pre + '$\\' + (g === 'epsilon' ? 'varepsilon' : g) + s1 + (arg || '') + '$'; }); });
   // 3. functions applied to arguments: f(x), g(x, y), f^-1(V), U_i(…)
-  t = padOnPlain(t, function(x){ return x.replace(new RegExp('(^|[^A-Za-z])([A-Za-z]' + sub + sup + ')(\\((?:[^()$]|\\([^()$]*\\))*\\))', 'g'), function(m, pre, f, arg){ return pre + '$' + f + arg + '$'; }); });
+  t = padOnPlain(t, function(x){ return x.replace(new RegExp('(^|[^A-Za-z])([A-Za-z]' + sub + sup + ')(?:(?<=\\^\\{-1\\}|\\^-1) )?(\\((?:[^()$]|\\([^()$]*\\))*\\))', 'g'), function(m, pre, f, arg){ return pre + '$' + f + arg + '$'; }); });
   // 1. LaTeX commands
   t = padOnPlain(t, function(x){ return x.replace(/\\(?:(?:mathbb|mathcal|operatorname|mathrm)\s?(?:\{[^{}]*\}|[A-Za-z])|[a-zA-Z]+(?:\{[^{}]*\})*)(?:_\{[^{}]*\}|_[A-Za-z0-9]|\^\{[^{}]*\}|\^[A-Za-z0-9])*(?:\([^()$]*\))?/g, function(m){ return '$' + m + '$'; }); });
   // 4. products and operators between operands
@@ -2038,10 +2038,12 @@ var PADSEL = null;
 function padInsert(code, off){ var ta = document.getElementById('padin'); if (!ta) return; var a0 = PADSEL ? PADSEL[0] : ta.value.length, a1 = PADSEL ? PADSEL[1] : a0, v = ta.value, before = v.slice(0, a0);
   // symbols go in as plain LaTeX (the preview recognises it without dollar signs); the cursor goes after the symbol,
   // or into its first empty braces when it has a blank to fill (a subscript, a bar over a letter, a fraction)
+  // a superscript or subscript button attaches to the letter before it, even across a typed space; with no letter there, the inverse button types the f it shows
+  if (/^[_^]/.test(code) && a0 === a1){ var bt = before.replace(/[ \t]+$/, ''); if (/(^|[^A-Za-z\\])[A-Za-z]$|[0-9)}\]]$/.test(bt)){ a0 = bt.length; before = bt; } else if (code === '^{-1}'){ code = 'f^{-1}'; if (off != null) off += 1; } }
   var hole = code.indexOf('{}'); if (off == null) off = hole >= 0 ? hole + 1 : code.length;
   var dollars = (before.replace(/\\\$/g, '').match(/\$/g) || []).length, inMath = dollars % 2 === 1, lead = (inMath || /(^|[\s(\[{])$/.test(before) || /^[_^]/.test(code)) ? '' : ' ';
   var ins = lead + code, caret = a0 + lead.length + off;
-  if (!inMath && hole < 0 && off === code.length && !/\s$/.test(code) && !/^\s/.test(v.slice(a1))){ ins += ' '; caret += 1; }
+  if (!inMath && hole < 0 && off === code.length && !/^[_^]/.test(code) && !/\s$/.test(code) && !/^\s/.test(v.slice(a1))){ ins += ' '; caret += 1; }
   ta.value = before + ins + v.slice(a1); ta.focus({preventScroll: true}); ta.setSelectionRange(caret, caret); PADSEL = [caret, caret]; ta.dispatchEvent(new Event('input')); ltxKeep(); }
 // ===== The homework document: write-ups added from each problem page, gathered in problem order with the questions,
 // a header (name, course, assignment, date), and one "Save as PDF" for the whole set. It reads the live drafts, so later edits show up.
