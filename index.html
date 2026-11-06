@@ -2017,7 +2017,7 @@ function padInit(id){
   document.getElementById('padpdf').onclick = function(){ var a = A[id], pr = (a.sections || []).filter(function(x){ return x[0] === 'The problem'; })[0], box = document.createElement('div'); box.id = 'padprint';
     box.innerHTML = '<h1>' + a.title + '</h1>' + (pr ? '<div class="pq">' + wiki(pr[1]).replace(/<a [^>]*>|<\/a>/g, '').replace(/<p class="foot">[\s\S]*?<\/p>/g, '') + '</div>' : '') + '<h2>Solution</h2>' + padRender(ta.value);
     document.body.appendChild(box); math(box); document.body.classList.add('printing');
-    setTimeout(function(){ window.print(); setTimeout(function(){ document.body.classList.remove('printing'); box.remove(); }, 500); }, 300); };
+    window.print(); var done_ = function(){ document.body.classList.remove('printing'); box.remove(); }; if ('onafterprint' in window) window.addEventListener('afterprint', done_, {once: true}); else setTimeout(done_, 1000); /* print straight from the tap: Safari blocks a delayed print */ };
 }
 // ===== LaTeX dictionary: a panel docked beside the page (wide screens) or along the bottom (narrow ones), so it never covers
 // the write-up box or the symbol bar. Tap an entry to insert it where the cursor was; it stays open until closed.
@@ -2098,9 +2098,9 @@ function docInit(si){ var view = document.getElementById('docview'); math(view);
   document.getElementById('view').onclick = function(e){ var b = e.target.closest('.docrm, .docadd'); if (!b) return; var inc = docGet(si), id = b.dataset.id;
     if (b.classList.contains('docrm')) inc = inc.filter(function(x){ return x !== id; }); else if (inc.indexOf(id) < 0) inc.push(id); docPut(si, inc); route(); };
   document.getElementById('docbare').onclick = function(){ var box = document.createElement('div'); box.id = 'padprint'; box.className = 'bare'; box.innerHTML = docBody(si, true, true); document.body.appendChild(box); math(box); document.body.classList.add('printing', 'printbare'); var st = document.createElement('style'); st.textContent = '@page{margin:0}'; document.head.appendChild(st);
-    setTimeout(function(){ window.print(); setTimeout(function(){ document.body.classList.remove('printing', 'printbare'); box.remove(); st.remove(); }, 500); }, 300); };
+    window.print(); var done_ = function(){ document.body.classList.remove('printing', 'printbare'); box.remove(); st.remove(); }; if ('onafterprint' in window) window.addEventListener('afterprint', done_, {once: true}); else setTimeout(done_, 1000); /* print straight from the tap: Safari blocks a delayed print */ };
   document.getElementById('docpdf').onclick = function(){ var box = document.createElement('div'); box.id = 'padprint'; box.innerHTML = docBody(si, true); document.body.appendChild(box); math(box); document.body.classList.add('printing');
-    setTimeout(function(){ window.print(); setTimeout(function(){ document.body.classList.remove('printing'); box.remove(); }, 500); }, 300); }; }
+    window.print(); var done_ = function(){ document.body.classList.remove('printing'); box.remove(); }; if ('onafterprint' in window) window.addEventListener('afterprint', done_, {once: true}); else setTimeout(done_, 1000); /* print straight from the tap: Safari blocks a delayed print */ }; }
 function docButtonInit(id){ var b = document.getElementById('padadd'), si = docSetOf(id); if (!b) return; if (si < 0){ b.remove(); return; }
   function lab(){ var on = docGet(si).indexOf(id) >= 0; b.textContent = on ? '✓ In ' + PROBSETS[si][0].replace(/ \(file header.*\)/, '') + ' document' : '+ Add to document'; b.classList.toggle('on', on); }
   lab(); b.onclick = function(){ var inc = docGet(si); if (inc.indexOf(id) >= 0) inc = inc.filter(function(x){ return x !== id; }); else inc.push(id); docPut(si, inc); lab(); };
