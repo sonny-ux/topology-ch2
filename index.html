@@ -161,6 +161,7 @@ details.pad>summary{color:var(--text);}
 .padprev{border:1px solid var(--border);border-radius:10px;padding:12px 14px;background:var(--card);color:var(--text);}
 .padprev p{color:var(--text);} .padprev .padtip{color:var(--muted);font:12px/1.4 -apple-system,system-ui,sans-serif;border-top:1px solid var(--border);padding-top:8px;margin-top:6px;} .padempty{color:var(--muted)!important;}
 #padprint{display:none;}
+@media print{ @page{margin:14mm 16mm;} #padprint.bare h2{font-size:13pt;font-weight:bold;margin:12pt 0 4pt;} #padprint.bare .docq{break-inside:auto;} }
 /* Georgia's old-style figures make 0 look like o: take the digits alone from Times, which has lining figures on every device */
 @font-face{font-family:'LineDigits';src:local('Times New Roman'),local('TimesNewRomanPSMT'),local('Times'),local('Times-Roman');unicode-range:U+0030-0039;}
 .padcaret{display:inline-block;width:2px;height:1.1em;margin:0 1px;vertical-align:-.15em;background:#4a90e2;} @keyframes padblink{50%{opacity:0;}}
@@ -2079,7 +2080,9 @@ function docHead(){ try { return JSON.parse(localStorage.getItem('tg-dochead') |
 function docDraft(id){ try { return localStorage.getItem('tg-pad-' + id) || ''; } catch(e){ return ''; } }
 function docQ(id){ var m = A[id].title.match(/Q(\d+)/); return m ? 'Question ' + m[1] : A[id].title; }
 function docStatement(id){ var pr = (A[id].sections || []).filter(function(x){ return x[0] === 'The problem'; })[0]; return pr ? wiki(pr[1]).replace(/<a [^>]*>|<\/a>/g, '').replace(/<p class="foot">[\s\S]*?<\/p>/g, '') : ''; }
-function docBody(si, forPrint){ var ps = PROBSETS[si], inc = docGet(si), hd = docHead(), ids = ps[1].filter(function(id){ return inc.indexOf(id) >= 0; });
+function docBody(si, forPrint, bare){ var ps = PROBSETS[si], inc = docGet(si), hd = docHead(), ids = ps[1].filter(function(id){ return inc.indexOf(id) >= 0; });
+  // bare: only a number header and the write-up itself, no title block, no question text, no 'Solution' label
+  if (bare) return ids.map(function(id){ var m = A[id].title.match(/Q(\d+)/), d = docDraft(id); return '<section class="docq bare"><h2>' + (m ? m[1] + '.' : A[id].title) + '</h2>' + (d.trim() ? padRender(d) : '') + '</section>'; }).join('');
   var h = '<div class="dochead"><b>' + (hd.name || '') + '</b><span>' + (hd.course || 'MATH GU4051 · Introduction to Topology') + '</span><span>' + ps[0].replace(/ \(file header.*\)/, '') + '</span><span>' + (hd.date || '') + '</span></div>';
   ids.forEach(function(id){ var d = docDraft(id); h += '<section class="docq"><h2>' + docQ(id) + (forPrint ? '' : ' <a class="docedit" href="#a/' + id + '">edit</a> <button type="button" class="docrm" data-id="' + id + '">remove</button>') + '</h2><div class="pq">' + docStatement(id) + '</div><h3>Solution</h3>' + (d.trim() ? padRender(d) : '<p class="padempty">No write-up yet.</p>') + '</section>'; });
   if (!ids.length) h += '<p class="padempty">Nothing added yet. On a problem page, tap "Add to document" under your write-up.</p>';
@@ -2087,13 +2090,15 @@ function docBody(si, forPrint){ var ps = PROBSETS[si], inc = docGet(si), hd = do
 function docPage(si){ var ps = PROBSETS[si]; if (!ps) return '<p>No such document.</p>'; var inc = docGet(si), hd = docHead(), rest = ps[1].filter(function(id){ return inc.indexOf(id) < 0; });
   return '<div class="trail"><a href="#">Home</a><span class="sep">›</span>' + ps[0] + ' document</div><div class="meta">Document · ' + ps[0] + '</div><h1>' + ps[0].replace(/ \(file header.*\)/, '') + ': your write-up</h1>'
     + '<div class="docform"><label>Name<input id="dname" value="' + (hd.name || '').replace(/"/g, '&quot;') + '" placeholder="Your name"></label><label>Course<input id="dcourse" value="' + (hd.course || 'MATH GU4051 · Introduction to Topology').replace(/"/g, '&quot;') + '"></label><label>Date<input id="ddate" value="' + (hd.date || '').replace(/"/g, '&quot;') + '" placeholder="e.g. November 4, 2026"></label></div>'
-    + '<div class="padtools"><button type="button" id="docpdf">Save document as PDF</button><span class="dnote">' + inc.length + ' of ' + ps[1].length + ' problems added · uses your latest drafts</span></div>'
+    + '<div class="padtools"><button type="button" id="docpdf">Save document as PDF</button><button type="button" id="docbare">Save bare PDF (just my text)</button><span class="dnote">' + inc.length + ' of ' + ps[1].length + ' problems added · uses your latest drafts</span></div>'
     + '<div class="docview" id="docview">' + docBody(si) + '</div>'
     + (rest.length ? '<div class="links"><h3>Not in the document yet</h3><div class="chips">' + rest.map(function(id){ return '<button type="button" class="chip docadd" data-id="' + id + '">+ ' + docQ(id) + (docDraft(id).trim() ? '' : ' (no draft)') + '</button>'; }).join('') + '</div></div>' : ''); }
 function docInit(si){ var view = document.getElementById('docview'); math(view);
   ['dname', 'dcourse', 'ddate'].forEach(function(k){ document.getElementById(k).addEventListener('input', function(){ var hd = docHead(); hd[{dname: 'name', dcourse: 'course', ddate: 'date'}[k]] = this.value; try { localStorage.setItem('tg-dochead', JSON.stringify(hd)); } catch(e){} view.innerHTML = docBody(si); math(view); }); });
   document.getElementById('view').onclick = function(e){ var b = e.target.closest('.docrm, .docadd'); if (!b) return; var inc = docGet(si), id = b.dataset.id;
     if (b.classList.contains('docrm')) inc = inc.filter(function(x){ return x !== id; }); else if (inc.indexOf(id) < 0) inc.push(id); docPut(si, inc); route(); };
+  document.getElementById('docbare').onclick = function(){ var box = document.createElement('div'); box.id = 'padprint'; box.className = 'bare'; box.innerHTML = docBody(si, true, true); document.body.appendChild(box); math(box); document.body.classList.add('printing');
+    setTimeout(function(){ window.print(); setTimeout(function(){ document.body.classList.remove('printing'); box.remove(); }, 500); }, 300); };
   document.getElementById('docpdf').onclick = function(){ var box = document.createElement('div'); box.id = 'padprint'; box.innerHTML = docBody(si, true); document.body.appendChild(box); math(box); document.body.classList.add('printing');
     setTimeout(function(){ window.print(); setTimeout(function(){ document.body.classList.remove('printing'); box.remove(); }, 500); }, 300); }; }
 function docButtonInit(id){ var b = document.getElementById('padadd'), si = docSetOf(id); if (!b) return; if (si < 0){ b.remove(); return; }
