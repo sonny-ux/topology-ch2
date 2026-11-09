@@ -1880,8 +1880,67 @@ function route(){ document.body.classList.remove('padside');
   if (hsh.indexOf('a/') === 0){ var id = hsh.slice(2); v.innerHTML = article(id); document.title = (A[id] ? A[id].title + ' · ' : '') + 'Topology Reference Guide'; }
   else if (hsh.indexOf('doc/') === 0){ v.innerHTML = docPage(+hsh.slice(4)); document.title = 'Document · Topology Reference Guide'; }
   else { v.innerHTML = home(); document.title = 'Topology Reference Guide'; }
-  math(v); window.scrollTo(0, 0); if (document.getElementById('qfig')) quotFig(); if (document.getElementById('satfig')) satFig(); if (document.getElementById('drill')) drill(); if (document.getElementById('padin')) padInit(location.hash.slice(3)); if (document.getElementById('docview')) docInit(+location.hash.slice(5));
+  math(v); window.scrollTo(0, 0); if (window.partLinks) partLinks(v); if (document.getElementById('qfig')) quotFig(); if (document.getElementById('satfig')) satFig(); if (document.getElementById('drill')) drill(); if (document.getElementById('padin')) padInit(location.hash.slice(3)); if (document.getElementById('docview')) docInit(+location.hash.slice(5));
 }
+// ===== Problem pages: tap (a), (b), … anywhere below the question to peek at that part; the Problem pill peeks at the whole question;
+// "Jump to it" scrolls up to it and a Back pill returns to where you were reading.
+(function(){
+  var css = document.createElement('style');
+  css.textContent = '#ppv{position:fixed;left:0;right:0;bottom:0;z-index:85;background:var(--card);border-top:1px solid var(--border2);box-shadow:0 -10px 30px rgba(0,0,0,.35);padding:16px 18px calc(18px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .22s ease;max-width:760px;margin:0 auto;border-radius:14px 14px 0 0;max-height:68vh;overflow:auto;}'
+    + '#ppv.on{transform:none;}#ppv .pm{font:11px -apple-system,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px;}'
+    + '#ppv .pq{margin-bottom:12px;}#ppv .pq p{margin:.4em 0;}#ppv .pq .hit{border-left:2px solid var(--text2);padding-left:10px;}#ppv .pq .dim{color:var(--muted);}'
+    + '#ppv .pb{display:flex;gap:8px;position:sticky;bottom:0;background:var(--card);padding-top:6px;}#ppv .pb button{flex:1;text-align:center;border:1px solid var(--border2);border-radius:8px;padding:10px;font:14px -apple-system,system-ui,sans-serif;background:var(--card2);color:var(--text);cursor:pointer;}'
+    + 'a.partref{text-decoration:none;border-bottom:1px solid var(--text2);color:var(--text);font-weight:600;padding:0 1px;}'
+    + '.qpill{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom));z-index:70;display:none;border:1px solid var(--border2);border-radius:999px;padding:8px 14px;font:13px -apple-system,system-ui,sans-serif;background:var(--card2);color:var(--text);box-shadow:0 4px 14px rgba(0,0,0,.35);cursor:pointer;}'
+    + '.qpill.on{display:block;}#qpill{left:12px;}#qback{left:110px;}'
+    + '.partflash{animation:partflash 1.6s ease;}@keyframes partflash{0%,40%{background:rgba(160,180,220,.22);}100%{background:transparent;}}';
+  document.head.appendChild(css);
+  var sh = document.createElement('div'); sh.id = 'ppv'; sh.setAttribute('role', 'dialog');
+  sh.innerHTML = '<div class="pm"></div><div class="pq"></div><div class="pb"><button type="button" class="pj">Jump to it</button><button type="button" class="px">Close</button></div>';
+  document.body.appendChild(sh);
+  var pill = document.createElement('button'); pill.type = 'button'; pill.id = 'qpill'; pill.className = 'qpill'; pill.textContent = 'Problem'; document.body.appendChild(pill);
+  var back = document.createElement('button'); back.type = 'button'; back.id = 'qback'; back.className = 'qpill'; back.textContent = '↩ Back'; document.body.appendChild(back);
+  var cur = null, target = null, saved = null;
+  function probSec(){ var ds = document.querySelectorAll('#view details.sec'); for (var i = 0; i < ds.length; i++){ var s = ds[i].querySelector('summary'); if (s && s.textContent === 'The problem') return ds[i]; } return null; }
+  window.partLinks = function(v){
+    back.classList.remove('on'); saved = null; sh.classList.remove('on');
+    var id = location.hash.indexOf('#a/') === 0 ? location.hash.slice(3) : null, a = id && A[id];
+    cur = (a && a.kind === 'problem') ? id : null;
+    var ps = cur && probSec(); pill.classList.toggle('on', !!ps);
+    if (!ps) return;
+    var parts = {};
+    ps.querySelectorAll('.secb > p').forEach(function(p){ var m = p.textContent.trim().match(/^\(([a-e])\)/); if (m){ p.id = 'part-' + m[1]; parts[m[1]] = 1; } });
+    if (!Object.keys(parts).length) return;
+    var walk = document.createTreeWalker(v, NodeFilter.SHOW_TEXT, {acceptNode: function(n){
+      if (!/\([a-e]\)/.test(n.nodeValue)) return NodeFilter.FILTER_REJECT; var el = n.parentNode;
+      if (el.closest('.katex, a, textarea, .pad, .padref, script, style, svg')) return NodeFilter.FILTER_REJECT;
+      var s = el.closest('details.sec'), sm = s && s.querySelector('summary');
+      if (sm && /^The problem/.test(sm.textContent)) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT; }});
+    var nodes = [], n; while ((n = walk.nextNode())) nodes.push(n);
+    nodes.forEach(function(n){ var txt = n.nodeValue, re = /\(([a-e])\)/g, last = 0, m, frag = document.createDocumentFragment();
+      while ((m = re.exec(txt))){ if (!parts[m[1]] || (txt.slice(0, m.index).match(/\$/g) || []).length % 2) continue; frag.appendChild(document.createTextNode(txt.slice(last, m.index)));
+        var l = document.createElement('a'); l.className = 'partref'; l.href = '#'; l.dataset.p = m[1]; l.title = 'Show part (' + m[1] + ') of the question'; l.textContent = m[0]; frag.appendChild(l); last = m.index + m[0].length; }
+      if (!last) return; frag.appendChild(document.createTextNode(txt.slice(last))); n.parentNode.replaceChild(frag, n); });
+  };
+  function peek(p){ var ps = probSec(); if (!ps || !cur) return;
+    var b = ps.querySelector('.secb').cloneNode(true); b.querySelectorAll('.foot').forEach(function(f){ f.remove(); });
+    b.querySelectorAll('[id]').forEach(function(x){ if (/^part-/.test(x.id)){ if (p && x.id !== 'part-' + p) x.classList.add('dim'); else if (p) x.classList.add('hit'); } x.removeAttribute('id'); });
+    target = p ? document.getElementById('part-' + p) : ps;
+    sh.querySelector('.pm').textContent = A[cur].title.split(' · ')[0] + (p ? ' · part (' + p + ')' : ' · the question');
+    var q = sh.querySelector('.pq'); q.innerHTML = ''; q.appendChild(b); sh.scrollTop = 0; sh.classList.add('on'); pill.style.visibility = 'hidden'; }
+  function closeSh(){ sh.classList.remove('on'); pill.style.visibility = ''; }
+  function jump(){ if (!target) return; saved = window.scrollY; var ps = probSec(); if (ps) ps.open = true; closeSh();
+    target.scrollIntoView({block: 'center'}); target.classList.remove('partflash'); void target.offsetWidth; target.classList.add('partflash'); back.classList.add('on'); }
+  document.addEventListener('click', function(e){
+    var r = e.target.closest('a.partref');
+    if (r){ e.preventDefault(); e.stopPropagation(); peek(r.dataset.p); return; }
+    if (e.target.closest('#qpill')){ e.stopPropagation(); peek(null); return; }
+    if (e.target.closest('#qback')){ e.stopPropagation(); if (saved != null) window.scrollTo(0, saved); saved = null; back.classList.remove('on'); return; }
+    if (e.target.closest('#ppv .pj')){ e.stopPropagation(); jump(); return; }
+    if (e.target.closest('#ppv .px') || (sh.classList.contains('on') && !e.target.closest('#ppv'))) closeSh();
+  }, true);
+})();
 // previews: a tap on an underlined term inside an article shows its summary first
 function closePv(){ document.getElementById('pv').classList.remove('on'); }
 document.addEventListener('click', function(e){
