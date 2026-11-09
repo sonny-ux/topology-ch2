@@ -1883,66 +1883,49 @@ function route(){ document.body.classList.remove('padside');
   else { v.innerHTML = home(); document.title = 'Topology Reference Guide'; }
   math(v); window.scrollTo(0, 0); if (window.partLinks) partLinks(v); if (window.thmLinks) thmLinks(v); if (document.getElementById('qfig')) quotFig(); if (document.getElementById('satfig')) satFig(); if (document.getElementById('drill')) drill(); if (document.getElementById('padin')) padInit(location.hash.slice(3)); if (document.getElementById('docview')) docInit(+location.hash.slice(5));
 }
-// ===== Work-throughs: each step says where we are, the move and how you would think of it, the lines themselves, and what we now know.
-function wt(list){ return '<ol class="wt">' + list.map(function(s){ return '<li><p class="wth">' + s.t + '</p>'
-  + (s.have ? '<p><span class="wtl">Where we are.</span> ' + s.have + '</p>' : '')
-  + (s.move ? '<p><span class="wtl">The move, and how you would think of it.</span> ' + s.move + '</p>' : '')
-  + (s.work ? '<div class="wtw"><span class="wtl">Doing it.</span> ' + s.work + '</div>' : '')
-  + (s.now ? '<p><span class="wtl">Now we know.</span> ' + s.now + '</p>' : '') + '</li>'; }).join('') + '</ol>'; }
+// ===== Work-throughs: the problem worked in order as connected prose, one idea per paragraph, teaching as it goes.
 (function(){ var css = document.createElement('style');
-  css.textContent = 'ol.wt{padding-left:1.3em;}ol.wt>li{margin:0 0 1.3em;}ol.wt .wth{font-weight:600;margin:.2em 0 .4em;}ol.wt p{margin:.35em 0;}.wtl{font:600 11px -apple-system,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-right:4px;}.wtw{border-left:2px solid var(--border2);padding:2px 0 2px 12px;margin:.5em 0;}.wtw p{margin:.3em 0;}';
+  css.textContent = '.wk h4{font:600 15px -apple-system,system-ui,sans-serif;margin:1.4em 0 .4em;}.wk h4:first-child{margin-top:.3em;}.wk p{margin:.55em 0;}';
   document.head.appendChild(css); })();
 (function(){ var S = A['hw8-q2'].sections, k = S.findIndex(function(x){ return x[0] === 'Breakdown'; });
- S.splice(k, 1, ['Work-through', wt([
-  {t: R`Set up: name what we have`,
-   have: R`$X$ is any topological space; nothing else is known about it. $\{0,1\}$ has the discrete topology.`,
-   move: R`Before proving anything, give the family of maps a name, because every statement in the problem is about "all continuous $f$". Writing the relation out in full shows its shape: it is a "for every $f$" statement.`,
-   work: R`<p>Let $\mathcal F$ be the set of all continuous maps $f:X\to\{0,1\}$. Then</p>$$x\sim x'\iff f(x)=f(x')\ \text{for every}\ f\in\mathcal F.$$`,
-   now: R`$x\sim x'$ is a list of equations, one for each $f\in\mathcal F$. Each equation is between two values in $\{0,1\}$, and for those the only tool needed is ordinary equality.`},
-  {t: R`(a) Reflexive: $x\sim x$`,
-   have: R`An arbitrary point $x\in X$.`,
-   move: R`Unwind the goal with the definition: $x\sim x$ means "$f(x)=f(x)$ for every $f\in\mathcal F$". A "for every $f$" claim is proved by taking an arbitrary $f$.`,
-   work: R`<p>Let $f\in\mathcal F$. Then $f(x)=f(x)$, since any value equals itself. As $f$ was arbitrary, $f(x)=f(x)$ for all $f\in\mathcal F$, so $x\sim x$.</p>`,
-   now: R`Reflexivity of $\sim$ is reflexivity of $=$, applied to every $f$ at once.`},
-  {t: R`(a) Symmetric: $x\sim x'\Rightarrow x'\sim x$`,
-   have: R`The hypothesis $x\sim x'$, i.e. $f(x)=f(x')$ for every $f\in\mathcal F$.`,
-   move: R`Unwind the goal: $x'\sim x$ means $f(x')=f(x)$ for every $f$. Take an arbitrary $f$, use the hypothesis <em>for that $f$</em>, then flip the equation.`,
-   work: R`<p>Let $f\in\mathcal F$. By hypothesis $f(x)=f(x')$, so $f(x')=f(x)$. As $f$ was arbitrary, $x'\sim x$.</p>`,
-   now: R`Symmetry of $\sim$ comes from symmetry of $=$.`},
-  {t: R`(a) Transitive: $x\sim x'$ and $x'\sim x''\Rightarrow x\sim x''$`,
-   have: R`Two "for every $f$" statements: $f(x)=f(x')$ for all $f$, and $f(x')=f(x'')$ for all $f$.`,
-   move: R`The goal is a third "for every $f$" statement, $f(x)=f(x'')$. Fix <b>one</b> arbitrary $f$ and apply <b>both</b> hypotheses to that same $f$; then the two equations share the middle value $f(x')$ and can be chained.`,
-   work: R`<p>Let $f\in\mathcal F$. Then $f(x)=f(x')$ (first hypothesis, for this $f$) and $f(x')=f(x'')$ (second hypothesis, for this $f$). So $f(x)=f(x'')$. As $f$ was arbitrary, $x\sim x''$.</p>`,
-   now: R`$\sim$ is reflexive, symmetric and transitive: an equivalence relation. Part (a) is done.`},
-  {t: R`(b) Read the goal: what has to be shown, and with what`,
-   have: R`$A$ is an equivalence class of $\sim$. We want: $A$ is closed in $X$.`,
-   move: R`<b>Recall</b> the two ways to show a set is closed ([[closed-set]]): show its complement is open, or build it from closed sets with operations that keep sets closed: preimages under continuous maps (Theorem 18.1) and intersections of any number of closed sets (Theorem 17.1). We know nothing about the topology of $X$ itself; the only information about $X$ is that the maps in $\mathcal F$ are continuous. So closedness has to come <b>from the maps</b>, through preimages. That decides the plan: write $A$ in terms of preimages.`,
-   now: R`Plan: (1) describe $A$ as a set; (2) rewrite that description as an intersection of preimages; (3) show each preimage is closed; (4) intersect.`},
-  {t: R`(b) Describe $A$ concretely`,
-   have: R`$A$ is a class, so it is the class of any of its points.`,
-   move: R`A class is only usable once you name a point in it and write it out with the definition of $\sim$.`,
-   work: R`<p>Choose $x\in A$. Then</p>$$A=[x]=\{x'\in X: x'\sim x\}=\{x'\in X:\ f(x')=f(x)\ \text{for every}\ f\in\mathcal F\}.$$`,
-   now: R`A point $x'$ is in $A$ exactly when it passes the test "$f(x')=f(x)$" for every $f$.`},
-  {t: R`(b) Turn "for every $f$" into an intersection`,
-   have: R`$A$ is the set of points passing a list of tests, one for each $f$.`,
-   move: R`<b>Recall:</b> "in $A_f$ for every $f$" is exactly "in $\bigcap_f A_f$" ([[set-equality]]). So find, for one $f$, the set of points passing that one test, and recognise it. Points with $f(x')=f(x)$ are the points sent to the value $f(x)$: a <b>preimage</b> ([[image-preimage]]).`,
-   work: R`<p>For one $f$: $\{x': f(x')=f(x)\}=f^{-1}(\{f(x)\})$. Therefore</p>$$A=\bigcap_{f\in\mathcal F}f^{-1}(\{f(x)\}).$$<p>Check both inclusions ([[m-set-equality]]). If $x'\in A$, then $f(x')=f(x)$ for each $f$, so $x'\in f^{-1}(\{f(x)\})$ for each $f$: $x'$ is in the intersection. If $x'$ is in the intersection, then $f(x')=f(x)$ for each $f$, so $x'\sim x$ and $x'\in A$.</p>`,
-   now: R`$A$ is an intersection of preimages of single points. Now the topology can enter.`},
-  {t: R`(b) Each preimage is closed`,
-   have: R`Sets $f^{-1}(\{f(x)\})$, with $f$ continuous and $\{f(x)\}$ equal to $\{0\}$ or $\{1\}$.`,
-   move: R`Two facts from the concept pages. <b>Recall</b> ([[ex-discrete]], Facts): in the discrete topology every subset is open, so, taking complements, every subset is closed; in particular $\{0\}$ and $\{1\}$ are closed. <b>Recall</b> (Theorem 18.1): the preimage of a closed set under a continuous map is closed.`,
-   work: R`<p>$\{f(x)\}$ is closed in $\{0,1\}$ (its complement, the other point, is open). $f$ is continuous, so $f^{-1}(\{f(x)\})$ is closed in $X$.</p>`,
-   now: R`Every set in the intersection is closed.`},
-  {t: R`(b) Intersect, and conclude`,
-   have: R`$A$ is an intersection of closed sets, usually infinitely many (one for each $f\in\mathcal F$).`,
-   move: R`<b>Recall</b> (Theorem 17.1): <em>any</em> intersection of closed sets is closed, not only finite ones. This is exactly the case that needs "any".`,
-   work: R`<p>$A=\bigcap_{f\in\mathcal F}f^{-1}(\{f(x)\})$ is an intersection of closed sets, hence closed. $\blacksquare$</p>`,
-   now: R`Every equivalence class of $\sim$ is closed.`},
-  {t: R`(b) Another route: the complement is open`,
-   move: R`The same proof seen from outside. $x'\notin A$ means some $f$ separates it from $x$: $f(x')\ne f(x)$, i.e. $f(x')$ is the other value $1-f(x)$. So the complement is a <b>union</b> of preimages of open sets (De Morgan turns the intersection into a union).`,
-   work: R`$$X\setminus A=\bigcup_{f\in\mathcal F}f^{-1}(\{1-f(x)\}),$$<p>a union of open sets (each $\{1-f(x)\}$ is open in the discrete topology and $f$ is continuous), hence open. So $A$ is closed.</p>`,
-   now: R`Either write-up is complete; use the one that reads more naturally to you.`}
- ])]); })();
+ S.splice(k, 1, ['Work-through', R`<div class="wk">
+<h4>Naming the maps</h4>
+<p>Every statement in this problem is about "all continuous maps $f:X\to\{0,1\}$", so it helps to give that collection a name. Let $\mathcal F$ be the set of all continuous $f:X\to\{0,1\}$. The relation then reads</p>
+$$x\sim x'\iff f(x)=f(x')\ \text{ for every } f\in\mathcal F.$$
+<p>Written this way, $x\sim x'$ is a whole list of equations, one for each map in $\mathcal F$. Each equation compares two values in $\{0,1\}$, and comparing values needs nothing more than ordinary equality. That observation is the entire idea of part (a).</p>
+
+<h4>(a) Reflexive</h4>
+<p>To show $x\sim x$ we have to show $f(x)=f(x)$ for every $f\in\mathcal F$. A claim about every $f$ is proved by taking one arbitrary $f$ and showing it there. So let $f\in\mathcal F$. Any value equals itself, so $f(x)=f(x)$. Since $f$ was arbitrary, this holds for all $f$, and $x\sim x$.</p>
+
+<h4>(a) Symmetric</h4>
+<p>Now suppose $x\sim x'$, which means $f(x)=f(x')$ for every $f$. We want $x'\sim x$, that is, $f(x')=f(x)$ for every $f$. Take an arbitrary $f\in\mathcal F$. The hypothesis, applied to this $f$, gives $f(x)=f(x')$, and an equation can be read in either direction, so $f(x')=f(x)$. Since $f$ was arbitrary, $x'\sim x$.</p>
+
+<h4>(a) Transitive</h4>
+<p>This is the step that needs care, because there are two hypotheses, each about all maps: $f(x)=f(x')$ for every $f$, and $f(x')=f(x'')$ for every $f$. The way to combine them is to fix <em>one</em> arbitrary $f\in\mathcal F$ and apply <em>both</em> hypotheses to that same $f$. Then $f(x)=f(x')$ and $f(x')=f(x'')$ are two equations sharing the middle value $f(x')$, so $f(x)=f(x'')$. Since $f$ was arbitrary, $x\sim x''$.</p>
+<p>So $\sim$ is reflexive, symmetric and transitive, and is an equivalence relation. Notice that each property of $\sim$ came straight from the same property of $=$; the phrase "for every $f$" was simply carried along.</p>
+
+<h4>(b) Deciding how to prove a set is closed</h4>
+<p>Let $A$ be an equivalence class. There are two standard ways to show a set is closed ([[closed-set]]): show its complement is open, or build the set out of closed sets using operations that keep sets closed. The operations available are taking preimages under continuous maps (Theorem 18.1) and taking intersections of any number of closed sets (Theorem 17.1).</p>
+<p>Which to use is decided by what we know. We know nothing at all about the topology of $X$; the only information about $X$ in the problem is that the maps in $\mathcal F$ are continuous. So whatever makes $A$ closed has to come from those maps, which means through preimages. The plan is therefore to write $A$ using preimages.</p>
+
+<h4>(b) Writing the class as an intersection of preimages</h4>
+<p>A class is easiest to work with once a point in it is named. Choose $x\in A$; then $A$ is the class of $x$, and by the definition of $\sim$,</p>
+$$A=\{x'\in X:\ f(x')=f(x)\ \text{ for every } f\in\mathcal F\}.$$
+<p>A point belongs to $A$ when it passes one test for each $f$. Look at a single test first. The points $x'$ with $f(x')=f(x)$ are the points that $f$ sends to the value $f(x)$, which is a preimage: $f^{-1}(\{f(x)\})$ ([[image-preimage]]). Passing every test means lying in every one of these preimages, and "lying in every one of a family of sets" is exactly lying in their intersection. So</p>
+$$A=\bigcap_{f\in\mathcal F}f^{-1}(\{f(x)\}).$$
+<p>To be sure of the equality, check both inclusions ([[m-set-equality]]). If $x'\in A$, then $f(x')=f(x)$ for each $f$, so $x'$ is in each preimage and therefore in the intersection. If $x'$ is in the intersection, then $f(x')=f(x)$ for each $f$, which says $x'\sim x$, so $x'\in A$.</p>
+
+<h4>(b) Why each preimage is closed</h4>
+<p>The value $f(x)$ is $0$ or $1$, so $\{f(x)\}$ is $\{0\}$ or $\{1\}$. In the discrete topology every subset is open, and so, taking complements, every subset is also closed ([[ex-discrete]]). In particular $\{f(x)\}$ is closed in $\{0,1\}$. Since $f$ is continuous, the preimage of this closed set is closed in $X$ (Theorem 18.1).</p>
+
+<h4>(b) Finishing</h4>
+<p>$A$ is now an intersection of closed sets, one for each $f\in\mathcal F$. There are usually infinitely many such maps, which is why it matters that Theorem 17.1 allows intersections of any number of closed sets, not just finitely many. So $A$ is closed. $\blacksquare$</p>
+
+<h4>The same proof from the outside</h4>
+<p>The argument can also be run on the complement. A point $x'$ is outside $A$ exactly when some map tells it apart from $x$, that is, $f(x')\ne f(x)$ for some $f$; since there are only two values, this means $f(x')=1-f(x)$. So</p>
+$$X\setminus A=\bigcup_{f\in\mathcal F}f^{-1}(\{1-f(x)\}),$$
+<p>a union of preimages of open sets, which is open. Hence $A$ is closed. This is the first proof with De Morgan's law applied: the complement of an intersection is the union of the complements. Either version is a complete answer.</p>
+</div>`]); })();
 // ===== Facts to keep in mind: the short list of usable facts for each core concept, placed right after the definition and open by default.
 var FACTS = {
 'ex-discrete': [
