@@ -2033,6 +2033,8 @@ A['set-equality'].sections.push(['Logic into sets', R`<p>Statements about points
 <tr><td>for some $i$</td><td>$\bigcup_i A_i$</td><td>$x\in A_i$ for at least one $i$</td></tr>
 <tr><td>not</td><td>$X\setminus A$</td><td>$x\notin A$</td></tr></table>
 <p><b>De Morgan:</b> "not (for every)" is "for some (not)", so $X\setminus\bigcap A_i=\bigcup(X\setminus A_i)$; and $X\setminus\bigcup A_i=\bigcap(X\setminus A_i)$. Example: [[hw8-q2]], where "for every continuous $f$" becomes an intersection of preimages.</p>`]);
+A['product-vs-box'].sections.splice(1, 0, ['Reading the notation', R`<p><b>Big pi, $\prod$,</b> means product. $\prod_{j\in J}X_j$ is read "the product of the $X_j$ over $j$ in $J$" or "product over $j$ in $J$ of $X$ sub $j$". For two factors it is just $X_1\times X_2$, "$X_1$ cross $X_2$". It is a <b>Cartesian product of sets</b>: its points are families $(x_j)_{j\in J}$ with one $x_j\in X_j$ for each index, just as $\sum$ adds terms and $\prod$ multiplies numbers in algebra. A shorthand is $\prod X_j$ when the index set is understood.</p>
+<p><b>Little pi, $\pi_j$,</b> is something else: the <b>projection</b> onto the $j$-th factor, read "pi sub $j$" or "the $j$-th projection" ([[projections]]). It takes a point of the product and returns its $j$-th coordinate: $\pi_j((x_k)_k)=x_j$.</p>`]);
 // ===== Facts to keep in mind: the short list of usable facts for each core concept, placed right after the definition and open by default.
 var FACTS = {
 'ex-discrete': [
