@@ -2395,17 +2395,31 @@ var FS = {tab: 'browse', kinds: {c: 1, t: 1, m: 1, e: 1, p: 1}, sec: '', sort: '
 try { var _fs = JSON.parse(localStorage.getItem('tg-find') || 'null'); if (_fs){ FS.kinds = _fs.kinds || FS.kinds; FS.sec = _fs.sec || ''; FS.sort = _fs.sort || 'book'; FS.tab = _fs.tab || 'browse'; } } catch(e){}
 function fsSave(){ try { localStorage.setItem('tg-find', JSON.stringify({kinds: FS.kinds, sec: FS.sec, sort: FS.sort, tab: FS.tab})); } catch(e){} }
 function inSec(id){ if (!FS.sec) return true; if (FS.sec.indexOf('s:') === 0) return SECOF[id] === FS.sec.slice(2) || (!SECOF[id] && A[id].where === FS.sec.slice(2)); var ps = PROBSETS[+FS.sec.slice(2)]; return ps && ps[1].indexOf(id) >= 0; }
-function score(id, q){ var e = IDX.filter(function(x){ return x.id === id; })[0]; return e.t.indexOf(q) === 0 ? 0 : e.t.indexOf(q) >= 0 ? 1 : e.l.indexOf(q) >= 0 ? 2 : e.b.indexOf(q) >= 0 ? 3 : 9; }
+function score(id, q){ if (id.indexOf('thm:') === 0) return 1; var e = IDX.filter(function(x){ return x.id === id; })[0]; return e.t.indexOf(q) === 0 ? 0 : e.t.indexOf(q) >= 0 ? 1 : e.l.indexOf(q) >= 0 ? 2 : e.b.indexOf(q) >= 0 ? 3 : 9; }
 function findList(){
   var q = FS.q.trim().toLowerCase(), recent = []; try { recent = JSON.parse(localStorage.getItem('tg-recent') || '[]'); } catch(e){}
   var ids = Object.keys(A).filter(function(id){ return FS.kinds[KGROUP[A[id].kind]] && inSec(id) && (!q || score(id, q) < 9); });
+  // every numbered result of Munkres appears too (Theorems filter), unless an article already carries that number in its title
+  if (FS.kinds.t && typeof THM !== 'undefined') Object.keys(THM).forEach(function(n){ var t = THM[n], lab = SECLAB(n);
+    if (t[3] && A[t[3]] && A[t[3]].title.indexOf(n) >= 0 && ids.indexOf(t[3]) >= 0) return;
+    if (FS.sec && !(FS.sec === 's:' + lab)) return;
+    if (q && (t[0] + ' ' + n + ' ' + t[1] + ' ' + plain(t[2])).toLowerCase().indexOf(q) < 0) return;
+    ids.push('thm:' + n); });
   var by = FS.sort === 'az' ? function(a, b){ return A[a].title.replace(/^[^A-Za-z0-9ℝ]+/, '').localeCompare(A[b].title.replace(/^[^A-Za-z0-9ℝ]+/, '')); }
-    : FS.sort === 'match' && q ? function(a, b){ return score(a, q) - score(b, q) || BOOKPOS[a] - BOOKPOS[b]; }
-    : FS.sort === 'recent' ? function(a, b){ var x = recent.indexOf(a), y = recent.indexOf(b); x = x < 0 ? 99 : x; y = y < 0 ? 99 : y; return x - y || BOOKPOS[a] - BOOKPOS[b]; }
-    : function(a, b){ return BOOKPOS[a] - BOOKPOS[b]; };
+    : FS.sort === 'match' && q ? function(a, b){ return score(a, q) - score(b, q) || BKEY(a) - BKEY(b); }
+    : FS.sort === 'recent' ? function(a, b){ var x = recent.indexOf(a), y = recent.indexOf(b); x = x < 0 ? 99 : x; y = y < 0 ? 99 : y; return x - y || BKEY(a) - BKEY(b); }
+    : function(a, b){ return BKEY(a) - BKEY(b); };
+  if (FS.sort === 'az') by = (function(f){ return function(a, b){ return f(TTL(a), TTL(b)); }; })(function(x, y){ return x.localeCompare(y); });
   return ids.sort(by);
 }
-function findRow(id){ var a = A[id]; return '<a href="#a/' + id + '"><b>' + a.title + '</b><span class="kind">' + KIND[a.kind] + '</span><i>' + (SECOF[id] || a.where) + ' — ' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }
+// book-order key: numbered results sit at the start of their section, in number order; theorem articles named by a number sort with it
+function SECLAB(n){ var c = n.split('.')[0], lab = ''; BOOK.forEach(function(ch){ ch[1].forEach(function(sx){ if (!lab && sx[0].indexOf('§' + c + ' ') === 0) lab = sx[0]; }); }); return lab; }
+function SECPOS(n){ var lab = SECLAB(n), pos = null; BOOK.forEach(function(ch){ ch[1].forEach(function(sx){ if (sx[0] === lab && sx[1].length && pos == null) pos = BOOKPOS[sx[1][0]]; }); }); return pos == null ? 1e6 : pos; }
+function BKEY(id){ var m = id.indexOf('thm:') === 0 ? id.slice(4) : (A[id] && A[id].kind === 'theorem' && (A[id].title.match(/(\d{2})\.(\d{1,2})/) || [])[0]);
+  if (m) return SECPOS(m) - 0.9 + (+m.split('.')[1])/100; return BOOKPOS[id] == null ? 1e6 : BOOKPOS[id]; }
+function TTL(id){ return id.indexOf('thm:') === 0 ? THM[id.slice(4)][1] : A[id].title.replace(/^[^A-Za-z0-9ℝ]+/, ''); }
+function findRow(id){ if (id.indexOf('thm:') === 0){ var n = id.slice(4), t = THM[n]; return '<a href="#" class="thmref" data-n="' + n + '"><b>' + t[0] + ' ' + n + ' · ' + t[1] + '</b><span class="kind">' + t[0] + '</span><i>' + SECLAB(n) + ' — ' + plain(t[2]) + '</i></a>'; }
+  var a = A[id]; return '<a href="#a/' + id + '"><b>' + a.title + '</b><span class="kind">' + KIND[a.kind] + '</span><i>' + (SECOF[id] || a.where) + ' — ' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }
 function renderFind(){
   var p = document.getElementById('fp'), h = '<div class="fhead"><div class="seg"><button data-tab="browse"' + (FS.tab === 'browse' ? ' class="on"' : '') + '>Browse</button><button data-tab="symbols"' + (FS.tab === 'symbols' ? ' class="on"' : '') + '>Symbols</button></div><button class="tb fdone">Done</button></div>';
   if (FS.tab === 'browse'){
@@ -2414,7 +2428,7 @@ function renderFind(){
     h += '<div class="fsel"><label>Section<select id="fsec"><option value="">All sections</option>' + BOOK.map(function(c){ return '<optgroup label="' + c[0].replace(/"/g, '') + '">' + c[1].filter(function(sx){ return sx[1].length; }).map(function(sx){ return '<option value="s:' + sx[0] + '"' + (FS.sec === 's:' + sx[0] ? ' selected' : '') + '>' + sx[0] + '</option>'; }).join('') + '</optgroup>'; }).join('')
       + '<optgroup label="Problem sets">' + PROBSETS.map(function(ps, i){ return '<option value="p:' + i + '"' + (FS.sec === 'p:' + i ? ' selected' : '') + '>' + ps[0] + '</option>'; }).join('') + '</optgroup></select></label>';
     h += '<label>Sort<select id="fsort">' + [['book', 'Book order'], ['az', 'A–Z'], ['match', 'Best match'], ['recent', 'Recently read']].map(function(o){ return '<option value="' + o[0] + '"' + (FS.sort === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></label></div>';
-    var L = findList(); h += '<div class="fcount">' + L.length + ' article' + (L.length === 1 ? '' : 's') + '</div><div class="tlist" id="flist">' + L.map(findRow).join('') + '</div>';
+    var L = findList(); h += '<div class="fcount">' + L.length + ' item' + (L.length === 1 ? '' : 's') + '</div><div class="tlist" id="flist">' + L.map(findRow).join('') + '</div>';
   } else {
     var card = '';
     if (FS.sym >= 0){ var s = SYMS[FS.sym], used = SYMUSE[FS.sym].filter(function(id){ return id !== s[3]; }), con = used.filter(function(id){ return A[id].kind !== 'problem'; }), pr = used.filter(function(id){ return A[id].kind === 'problem'; });
