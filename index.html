@@ -694,7 +694,7 @@ Object.assign(A, {
     ['Where it appears', R`<p>MT Q4 (injective maps), [[homeomorphism|homeomorphisms]], HW7 Q6 (bijections).</p>`]]},
 'indexed-products': {title: 'Cartesian products of indexed families', kind: 'definition', where: 'Ch. 1, §5', pre: ['functions'],
   lede: R`$\prod_{\alpha\in J}X_\alpha$ is the set of $J$-tuples $(x_\alpha)$ with $x_\alpha\in X_\alpha$, i.e. functions $J\to\bigcup X_\alpha$.`,
-  sections: [['Definition', R`<p>A point of $\prod X_\alpha$ is a choice of one $x_\alpha\in X_\alpha$ for each index $\alpha$. The projection $\pi_\beta$ reads off the $\beta$ coordinate.</p>`],
+  sections: [['Definition', R`<p>A point of $\prod X_\alpha$ is a choice of one $x_\alpha\in X_\alpha$ for each index $\alpha$. The [[projections|projection]] $\pi_\beta$ reads off the $\beta$ coordinate ([[coordinate-function|coordinate functions]] do the same for maps into the product).</p>`],
     ['Example', R`<p>$\prod_{j\in J}\{0,1\}$ is the set of functions $J\to\{0,1\}$, equivalently of subsets of $J$ ($x(A)_j=1$ iff $j\in A$; HW3 Q5, HW4 Q1).</p>`],
     ['Topologies on it', R`<p>[[product-vs-box]].</p>`]]},
 'countable': {title: 'Countable sets', kind: 'definition', where: 'Ch. 1, §7', pre: ['functions'],
@@ -1908,7 +1908,7 @@ function route(){ document.body.classList.remove('padside');
   if (hsh.indexOf('a/') === 0){ var id = hsh.slice(2); v.innerHTML = article(id); document.title = (A[id] ? A[id].title + ' · ' : '') + 'Topology Reference Guide'; }
   else if (hsh.indexOf('doc/') === 0){ v.innerHTML = docPage(+hsh.slice(4)); document.title = 'Document · Topology Reference Guide'; }
   else { v.innerHTML = home(); document.title = 'Topology Reference Guide'; }
-  math(v); window.scrollTo(0, 0); if (window.partLinks) partLinks(v); if (window.thmLinks) thmLinks(v); if (document.getElementById('qfig')) quotFig(); if (document.getElementById('satfig')) satFig(); if (document.getElementById('drill')) drill(); if (document.getElementById('padin')) padInit(location.hash.slice(3)); if (document.getElementById('docview')) docInit(+location.hash.slice(5));
+  math(v); window.scrollTo(0, 0); if (window.partLinks) partLinks(v); if (window.thmLinks) thmLinks(v); if (window.autoLink) autoLink(v); if (document.getElementById('qfig')) quotFig(); if (document.getElementById('satfig')) satFig(); if (document.getElementById('drill')) drill(); if (document.getElementById('padin')) padInit(location.hash.slice(3)); if (document.getElementById('docview')) docInit(+location.hash.slice(5));
 }
 // ===== Work-throughs: the problem worked in order as connected prose, one idea per paragraph, teaching as it goes.
 (function(){ var css = document.createElement('style');
@@ -2328,6 +2328,34 @@ A['theorems'].sections.unshift(['Since Midterm 1 (§19–24): the Midterm 2 rang
   }, true);
   window.addEventListener('hashchange', function(){ sh.classList.remove('on'); });
 })();
+// ===== Key terms link themselves: on every page, the first plain mention of a key term (outside math, headings and existing links)
+// becomes a link to its article, with the usual tap-to-preview, unless the page already links there.
+var AUTOTERMS = [
+ ['coordinate functions', 'coordinate-function'], ['coordinate function', 'coordinate-function'],
+ ['projections', 'projections'], ['projection', 'projections'],
+ ['quotient topology', 'quotient-topology'], ['quotient maps', 'quotient-map'], ['quotient map', 'quotient-map'],
+ ['subspace topology', 'subspace-topology'], ['product topology', 'product-topology'], ['box topology', 'product-vs-box'],
+ ['discrete topology', 'ex-discrete'], ['indiscrete topology', 'ex-indiscrete'],
+ ['equivalence relation', 'relation-equivalence'], ['equivalence classes', 'equivalence-class'], ['equivalence class', 'equivalence-class'],
+ ['path connected', 'path-connected'], ['saturated', 'saturated'], ['Hausdorff', 'hausdorff'], ['homeomorphism', 'homeomorphism'],
+ ['open map', 'open-map'], ['closed map', 'open-map'], ['subbasis', 'subbasis'], ['limit point', 'limit-point'],
+ ['preimages', 'image-preimage'], ['preimage', 'image-preimage'], ['partition', 'partition'], ['closure', 'closure'],
+ ['metric topology', 'metric-topology'], ['pasting lemma', 'pasting-lemma'], ['connected', 'connected'], ['continuous', 'continuous']
+];
+window.autoLink = function(v){ var id = location.hash.indexOf('#a/') === 0 ? location.hash.slice(3) : null; if (!id || !A[id]) return;
+  var root = v; var have = {}; root.querySelectorAll('a.wl').forEach(function(a){ have[a.dataset.id] = 1; }); have[id] = 1;
+  AUTOTERMS.forEach(function(tm){ var term = tm[0], to = tm[1]; if (have[to] || !A[to]) return;
+    var re = new RegExp('(^|[^A-Za-z-])(' + term.replace(/ /g, '\\s+') + ')(?![A-Za-z-])', 'i');
+    var walk = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {acceptNode: function(n){
+      if (!re.test(n.nodeValue)) return NodeFilter.FILTER_REJECT;
+      if (n.parentNode.closest('.katex, a, h1, h4, summary, .trail, .meta, .qsw, .pad, .padref, svg, textarea, script, style, .links, .chips, button')) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT; }});
+    var n, done = false;
+    while (!done && (n = walk.nextNode())){ var txt = n.nodeValue, m = re.exec(txt); if (!m) continue;
+      var at = m.index + m[1].length, before = txt.slice(0, at); if ((before.match(/\$/g) || []).length % 2) continue;
+      var l = document.createElement('a'); l.className = 'wl'; l.href = '#a/' + to; l.dataset.id = to; l.textContent = m[2];
+      var after = document.createTextNode(txt.slice(at + m[2].length)); n.nodeValue = before; n.parentNode.insertBefore(l, n.nextSibling); l.parentNode.insertBefore(after, l.nextSibling);
+      have[to] = 1; done = true; } }); };
 // ===== Problem pages: tap (a), (b), … anywhere below the question to peek at that part; the Problem pill peeks at the whole question;
 // "Jump to it" scrolls up to it and a Back pill returns to where you were reading.
 (function(){
