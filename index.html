@@ -2007,7 +2007,7 @@ function article(id){
   if (a.steps) h += '<details class="sec" open><summary>Steps</summary><div class="secb"><ol class="steps">' + a.steps.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + wiki(s[0]) + '</summary><div class="why"><b>Why:</b> ' + wiki(s[1]) + '</div></details>' : wiki(s[0])) + '</li>'; }).join('') + '</ol></div></details>';
   (a.sections || []).forEach(function(s, i){ var body = s[1];
     if (s[0] === 'Concepts and method') body = '<p><b>Concepts:</b></p><div class="chips">' + (a.pre || []).map(chip).join('') + '</div><p style="margin-top:10px"><b>Method:</b></p><div class="chips">' + (a.method || []).map(chip).join('') + '</div>';
-    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method' || s[0] === 'The problem' || s[0] === 'The problem, again' || s[0].indexOf('What it builds on') === 0 || s[0] === 'Terms in the problem' || s[0] === 'How the terms are used' || s[0].indexOf('What "constant" means') === 0 || s[0].indexOf('Breakdown') === 0 || (s[0] === 'Work-through' && a.where !== 'Midterm 2 practice')) : (i === 0 && !a.steps); if (s[0] === 'Facts to keep in mind' || s[0] === 'Open and closed at once' || s[0] === 'Picture' || s[0] === 'Picture of A' || s[0] === 'Reading the definition' || s[0] === 'Reading the statement' || s[0] === 'What it is' || (s[0] === 'Definition' && i === 1) || (a.where === 'Start here') || a.kind === 'idea') open = true;
+    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method' || s[0] === 'The problem' || s[0] === 'The problem, again' || s[0].indexOf('What it builds on') === 0 || s[0] === 'Terms in the problem' || s[0] === 'How the terms are used' || s[0].indexOf('What "constant" means') === 0 || s[0].indexOf('Breakdown') === 0 || (s[0] === 'Work-through' && a.where !== 'Midterm 2 practice')) : (i === 0 && !a.steps); if (s[0] === 'Facts to keep in mind' || s[0] === 'Open and closed at once' || (a.kind === 'definition' && /^(Examples?|Worked examples?)$/.test(s[0])) || s[0] === 'Picture' || s[0] === 'Picture of A' || s[0] === 'Reading the definition' || s[0] === 'Reading the statement' || s[0] === 'What it is' || (s[0] === 'Definition' && i === 1) || (a.where === 'Start here') || a.kind === 'idea') open = true;
     h += '<details class="sec"' + (open ? ' open' : '') + '><summary>' + s[0] + '</summary><div class="secb">' + wiki(body) + '</div></details>'; });
   if (a.kind === 'problem') h += padHtml(id);
   if (a.kind === 'method' && (USEDIN[id] || []).length) h += '<div class="links"><h3>Used in these problems</h3><div class="chips">' + USEDIN[id].map(chip).join('') + '</div></div>';
@@ -2489,6 +2489,14 @@ window.autoLink = function(v){ var id = location.hash.indexOf('#a/') === 0 ? loc
       var l = document.createElement('a'); l.className = 'wl'; l.href = '#a/' + to; l.dataset.id = to; l.textContent = m[2];
       var after = document.createTextNode(txt.slice(at + m[2].length)); n.nodeValue = before; n.parentNode.insertBefore(l, n.nextSibling); l.parentNode.insertBefore(after, l.nextSibling);
       have[to] = 1; done = true; } }); };
+// ===== Examples near the top: on every definition page, example sections come right after the definition, and open
+var EXRE = /^(Examples?|Worked examples?|Non-example, and why it fails|Non-examples?)$/;
+Object.keys(A).forEach(function(id){ var a = A[id]; if (a.kind !== 'definition' || !a.sections) return;
+  var S = a.sections, ex = S.filter(function(x){ return EXRE.test(x[0]); }); if (!ex.length) return;
+  var rest = S.filter(function(x){ return !EXRE.test(x[0]); }), k = -1;
+  rest.forEach(function(x, i){ if (/^(Definition|Definitions)$/.test(x[0])) k = i; });
+  if (k < 0) rest.forEach(function(x, i){ if (x[0] === 'What it is') k = i; });
+  a.sections = rest.slice(0, k + 1).concat(ex, rest.slice(k + 1)); });
 // ===== Problem pages: tap (a), (b), … anywhere below the question to peek at that part; the Problem pill peeks at the whole question;
 // "Jump to it" scrolls up to it and a Back pill returns to where you were reading.
 (function(){
