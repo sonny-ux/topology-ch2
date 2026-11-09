@@ -87,6 +87,12 @@ details.topic .tlist{padding-left:10px;}
 .tlist a i{display:block;font-style:normal;color:var(--muted);font-size:.9rem;line-height:1.45;}
 .kind{font:10px -apple-system,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border:1px solid var(--border2);border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:2px;}
 .facts li{margin:.35em 0;}
+.qsw{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0 14px;padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:var(--card);font:13px -apple-system,system-ui,sans-serif;}
+.qsn{color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-size:11px;}
+.qst{display:flex;gap:6px;flex-wrap:wrap;}
+.qst a,.qst span{min-width:38px;text-align:center;padding:7px 9px;border:1px solid var(--border2);border-radius:8px;text-decoration:none;color:var(--text);background:var(--card2);}
+.qst a.on{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:600;}
+.qst .off{opacity:.35;}
 .foot{color:var(--muted);font-size:.85rem;margin-top:30px;}
 /* preview sheet */
 #pv{position:fixed;left:0;right:0;bottom:0;z-index:80;background:var(--card);border-top:1px solid var(--border2);box-shadow:0 -10px 30px rgba(0,0,0,.35);padding:16px 18px calc(18px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .22s ease;max-width:760px;margin:0 auto;border-radius:14px 14px 0 0;}
@@ -1822,7 +1828,14 @@ var KIND = {definition: 'Definition', theorem: 'Theorem', method: 'Method', exam
 // reading order follows the book; problems step through their own set
 ORDER = []; var SECOF = {}; BOOK.forEach(function(c){ c[1].forEach(function(sx){ sx[1].forEach(function(id){ SECOF[id] = sx[0]; if (A[id].kind !== 'problem' && ORDER.indexOf(id) < 0) ORDER.push(id); }); }); });
 var USEDIN = {}; Object.keys(A).forEach(function(id){ (A[id].method || []).forEach(function(m){ (USEDIN[m] = USEDIN[m] || []).push(id); }); });
-var SETOF = {}; PROBSETS.forEach(function(ps){ ps[1].forEach(function(id){ SETOF[id] = ps[1]; }); });
+var SETOF = {}, SETNAME = {}; PROBSETS.forEach(function(ps){ ps[1].forEach(function(id){ SETOF[id] = ps[1]; SETNAME[id] = ps[0]; }); });
+// problem switcher: the set's questions as tabs, with previous and next, shown at the top and bottom of every problem page
+function qswitch(id){ var seq = SETOF[id]; if (!seq) return ''; var k = seq.indexOf(id);
+  function lab(q){ var t = A[q].title.split(' · ')[0].split(' '); return t[t.length - 1]; }
+  return '<nav class="qsw" aria-label="Problems in this set"><span class="qsn">' + SETNAME[id] + '</span><div class="qst">'
+    + (k > 0 ? '<a class="qsa" href="#a/' + seq[k - 1] + '" aria-label="Previous problem">‹</a>' : '<span class="qsa off">‹</span>')
+    + seq.map(function(q){ return '<a href="#a/' + q + '"' + (q === id ? ' class="on" aria-current="page"' : '') + '>' + lab(q) + '</a>'; }).join('')
+    + (k < seq.length - 1 ? '<a class="qsa" href="#a/' + seq[k + 1] + '" aria-label="Next problem">›</a>' : '<span class="qsa off">›</span>') + '</div></nav>'; }
 var BACK = {}, MENTION = {};
 Object.keys(A).forEach(function(id){ (A[id].pre || []).forEach(function(p){ (BACK[p] = BACK[p] || []).push(id); });
   var txt = JSON.stringify(A[id]); (txt.match(/\[\[([a-z0-9-]+)/g) || []).forEach(function(m){ var t = m.slice(2); if (t !== id){ MENTION[t] = MENTION[t] || []; if (MENTION[t].indexOf(id) < 0) MENTION[t].push(id); } }); });
@@ -1854,6 +1867,7 @@ function article(id){
   var a = A[id]; if (!a) return '<p>No article called “' + id + '”.</p>';
   TRAIL = TRAIL.filter(function(x){ return x !== id; }); TRAIL.push(id); TRAIL = TRAIL.slice(-3); try { sessionStorage.setItem('tg-trail', JSON.stringify(TRAIL)); var r = JSON.parse(localStorage.getItem('tg-recent') || '[]').filter(function(x){ return x !== id; }); r.unshift(id); localStorage.setItem('tg-recent', JSON.stringify(r.slice(0, 12))); } catch(e){}
   var h = '<div class="trail"><a href="#">Home</a>' + TRAIL.slice(0, -1).map(function(t){ return '<span class="sep">›</span><a href="#a/' + t + '">' + A[t].title + '</a>'; }).join('') + '<span class="sep">›</span>' + a.title + '</div>';
+  if (a.kind === 'problem') h += qswitch(id);
   h += '<div class="meta">' + KIND[a.kind] + ' · ' + (SECOF[id] || a.where) + '</div><h1>' + a.title + '</h1><div class="lede">' + wiki(a.lede) + '</div>';
   if (typeof ROLE !== 'undefined' && ROLE[id]) h += '<div class="role">In the whole picture: <b>' + ROLE[id][0] + '</b>. ' + ROLE[id][1] + ' ' + wiki('[[whole-picture|See how it fits →]]') + '</div>';
   if (a.steps) h += '<details class="sec" open><summary>Steps</summary><div class="secb"><ol class="steps">' + a.steps.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + wiki(s[0]) + '</summary><div class="why"><b>Why:</b> ' + wiki(s[1]) + '</div></details>' : wiki(s[0])) + '</li>'; }).join('') + '</ol></div></details>';
@@ -1869,6 +1883,7 @@ function article(id){
   var men = (MENTION[id] || []).filter(function(m){ return (BACK[id] || []).indexOf(m) < 0 && (a.pre || []).indexOf(m) < 0; });
   if (men.length) h += '<h3>Mentioned in</h3><div class="chips">' + men.map(chip).join('') + '</div>';
   h += '</div>';
+  if (a.kind === 'problem') h += qswitch(id);
   var seq = SETOF[id] || ORDER, k = seq.indexOf(id); var ORDER_ = ORDER; ORDER = seq;
   if (k >= 0) h += '<div class="pn">' + (k > 0 ? '<a href="#a/' + ORDER[k - 1] + '"><span>Previous</span>' + A[ORDER[k - 1]].title + '</a>' : '<span style="flex:1"></span>') + (k < ORDER.length - 1 ? '<a class="nx" href="#a/' + ORDER[k + 1] + '"><span>' + (SETOF[id] ? 'Next problem' : 'Next in the book') + '</span>' + A[ORDER[k + 1]].title + '</a>' : '') + '</div>';
   ORDER = ORDER_; return h;
