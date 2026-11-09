@@ -1930,6 +1930,14 @@ $$A=\{x'\in X:\ f(x')=f(x)\ \text{ for every } f\in\mathcal F\}.$$
 $$A=\bigcap_{f\in\mathcal F}f^{-1}(\{f(x)\}).$$
 <p>To be sure of the equality, check both inclusions ([[m-set-equality]]). If $x'\in A$, then $f(x')=f(x)$ for each $f$, so $x'$ is in each preimage and therefore in the intersection. If $x'$ is in the intersection, then $f(x')=f(x)$ for each $f$, which says $x'\sim x$, so $x'\in A$.</p>
 
+<h4>(b) Why "for every $f$" becomes an intersection</h4>
+<p>"For every $f$" is the word "and" repeated once for each map, and in set language "and" is intersection. By definition, $\bigcap_f S_f=\{x': x'\in S_f\ \text{for every } f\}$: the points lying in <em>all</em> the sets. Compare $A=\{x': f(x')=f(x)\ \text{for every } f\}$. Both are "the points that pass a test for every $f$"; with $S_f=f^{-1}(\{f(x)\})$ the two tests are the same, since $f(x')=f(x)$ says exactly that $x'\in f^{-1}(\{f(x)\})$.</p>
+<p>A small case makes it concrete. If only two maps $g,h$ were continuous, then</p>
+$$x'\sim x\iff g(x')=g(x)\ \text{and}\ h(x')=h(x)\iff x'\in g^{-1}(\{g(x)\})\cap h^{-1}(\{h(x)\}).$$
+<p>More maps add more "and"s, so more sets are intersected; infinitely many maps give an intersection of infinitely many sets, which is why the last step needs Theorem 17.1 for <em>any</em> number of closed sets.</p>
+<p>A union would be wrong: $\bigcup_f S_f$ is the set of points in <em>at least one</em> $S_f$, which says "<em>some</em> map agrees on $x'$ and $x$". That is far weaker; a constant map agrees on every pair, so the union would be all of $X$.</p>
+<table><tr><th>Logic</th><th>Sets</th></tr><tr><td>and; for every</td><td>$\cap$; $\bigcap$</td></tr><tr><td>or; for some</td><td>$\cup$; $\bigcup$</td></tr><tr><td>not</td><td>complement</td></tr></table>
+<p>The last row explains the second proof below: "not in $A$" means "<em>some</em> map separates $x'$ from $x$", so the complement is a union (De Morgan's law).</p>
 <h4>(b) Why each preimage is closed</h4>
 <p>The value $f(x)$ is $0$ or $1$, so $\{f(x)\}$ is $\{0\}$ or $\{1\}$. In the discrete topology every subset is open, and so, taking complements, every subset is also closed ([[ex-discrete]]). In particular $\{f(x)\}$ is closed in $\{0,1\}$. Since $f$ is continuous, the preimage of this closed set is closed in $X$ (Theorem 18.1).</p>
 
@@ -1941,6 +1949,14 @@ $$A=\bigcap_{f\in\mathcal F}f^{-1}(\{f(x)\}).$$
 $$X\setminus A=\bigcup_{f\in\mathcal F}f^{-1}(\{1-f(x)\}),$$
 <p>a union of preimages of open sets, which is open. Hence $A$ is closed. This is the first proof with De Morgan's law applied: the complement of an intersection is the union of the complements. Either version is a complete answer.</p>
 </div>`]); })();
+A['set-equality'].sections.push(['Logic into sets', R`<p>Statements about points translate into operations on sets. Reading a set description in this way tells you which operation to use.</p>
+<table><tr><th>Logic</th><th>Sets</th><th>Example</th></tr>
+<tr><td>and</td><td>$A\cap B$</td><td>$x\in A$ and $x\in B$</td></tr>
+<tr><td>for every $i$</td><td>$\bigcap_i A_i$</td><td>$x\in A_i$ for every $i$</td></tr>
+<tr><td>or</td><td>$A\cup B$</td><td>$x\in A$ or $x\in B$</td></tr>
+<tr><td>for some $i$</td><td>$\bigcup_i A_i$</td><td>$x\in A_i$ for at least one $i$</td></tr>
+<tr><td>not</td><td>$X\setminus A$</td><td>$x\notin A$</td></tr></table>
+<p><b>De Morgan:</b> "not (for every)" is "for some (not)", so $X\setminus\bigcap A_i=\bigcup(X\setminus A_i)$; and $X\setminus\bigcup A_i=\bigcap(X\setminus A_i)$. Example: [[hw8-q2]], where "for every continuous $f$" becomes an intersection of preimages.</p>`]);
 // ===== Facts to keep in mind: the short list of usable facts for each core concept, placed right after the definition and open by default.
 var FACTS = {
 'ex-discrete': [
