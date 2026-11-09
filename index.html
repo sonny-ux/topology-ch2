@@ -1893,15 +1893,14 @@ function route(){ document.body.classList.remove('padside');
     + 'a.partref{text-decoration:none;border-bottom:1px solid var(--text2);color:var(--text);font-weight:600;padding:0 1px;}'
     + '.qpill{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom));z-index:70;display:none;border:1px solid var(--border2);border-radius:999px;padding:8px 14px;font:13px -apple-system,system-ui,sans-serif;background:var(--card2);color:var(--text);box-shadow:0 4px 14px rgba(0,0,0,.35);cursor:pointer;}'
     + '.qpill.on{display:block;}#qpill{left:12px;}'
-    + '#qback{left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));z-index:75;padding:14px 26px;font:600 16px -apple-system,system-ui,sans-serif;background:var(--text);color:var(--bg);border-color:var(--text);box-shadow:0 6px 22px rgba(0,0,0,.5);white-space:nowrap;}'
-    + 'body.ppback #qpill{display:none;}'
+    + '#qback{display:none;white-space:nowrap;font-weight:600;background:var(--text);color:var(--bg);border-color:var(--text);}#qback.on{display:inline-block;}'
     + '.partflash{animation:partflash 1.6s ease;}@keyframes partflash{0%,40%{background:rgba(160,180,220,.22);}100%{background:transparent;}}';
   document.head.appendChild(css);
   var sh = document.createElement('div'); sh.id = 'ppv'; sh.setAttribute('role', 'dialog');
   sh.innerHTML = '<div class="pm"></div><div class="pq"></div><div class="pb"><button type="button" class="pj">Jump to it</button><button type="button" class="px">Close</button></div>';
   document.body.appendChild(sh);
   var pill = document.createElement('button'); pill.type = 'button'; pill.id = 'qpill'; pill.className = 'qpill'; pill.textContent = 'Problem'; document.body.appendChild(pill);
-  var back = document.createElement('button'); back.type = 'button'; back.id = 'qback'; back.className = 'qpill'; back.textContent = '↩ Back to reading'; document.body.appendChild(back);
+  var back = document.createElement('button'); back.type = 'button'; back.id = 'qback'; back.className = 'tb'; back.textContent = '↩ Back'; back.setAttribute('aria-label', 'Back to where you were reading'); var fb = document.getElementById('findBtn'); fb.parentNode.insertBefore(back, fb);
   var cur = null, target = null, saved = null;
   function probSec(){ var ds = document.querySelectorAll('#view details.sec'); for (var i = 0; i < ds.length; i++){ var s = ds[i].querySelector('summary'); if (s && s.textContent === 'The problem') return ds[i]; } return null; }
   window.partLinks = function(v){
