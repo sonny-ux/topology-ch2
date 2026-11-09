@@ -2283,12 +2283,12 @@ A['theorems'] = {title: 'Theorems by number (Munkres)', kind: 'idea', where: 'Re
   lede: 'Every numbered lemma, theorem and corollary the guide cites, with its statement. Anywhere in the guide, tapping a number such as 17.1 shows the statement.',
   sections: (function(){ var by = {}; Object.keys(THM).forEach(function(n){ var s = n.split('.')[0]; (by[s] = by[s] || []).push(n); });
     return Object.keys(by).sort(function(a, b){ return a - b; }).map(function(s){ return ['§' + s, '<ul class="facts">' + by[s].sort(function(a, b){ return +a.split('.')[1] - +b.split('.')[1]; }).map(function(n){ var t = THM[n];
-      return '<li><b>' + t[0] + ' ' + n + ' · ' + t[1] + '.</b> ' + t[2] + (t[3] && A[t[3]] ? ' [[' + t[3] + '|More →]]' : '') + (THMMEAN[n] ? '<br><span class="thmmean"><b>What it adds:</b> ' + THMMEAN[n] + '</span>' : '') + '</li>'; }).join('') + '</ul>']; }); })()};
+      return '<li><b>' + t[0] + ' ' + n + ' · ' + t[1] + '.</b> ' + t[2] + (t[3] && A[t[3]] ? ' [[' + t[3] + '|More →]]' : '') + (THMMEAN[n] ? '<span class="thmmean">' + THMMEAN[n] + '</span>' : '') + '</li>'; }).join('') + '</ul>']; }); })()};
 A['theorems'].sections.unshift(['Since Midterm 1 (§19–24): the Midterm 2 range', '<p>The 29 numbered results of §19–24, the material covered since Midterm 1 (HW4 and HW6–HW8). Tap a number for the statement.</p><p>' + Object.keys(THM).filter(function(n){ var c = +n.split('.')[0]; return c >= 19 && c <= 24; }).sort(function(a, b){ var x = a.split('.'), y = b.split('.'); return x[0] - y[0] || x[1] - y[1]; }).map(function(n){ return THM[n][0] + ' ' + n + ' · ' + THM[n][1]; }).join('<br>') + '</p>']);
 (function(){
   var css = document.createElement('style');
   css.textContent = '#tpv{position:fixed;left:0;right:0;bottom:0;z-index:86;background:var(--card);border-top:1px solid var(--border2);box-shadow:0 -10px 30px rgba(0,0,0,.35);padding:16px 18px calc(18px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .22s ease;max-width:760px;margin:0 auto;border-radius:14px 14px 0 0;max-height:70vh;overflow:auto;}'
-    + '#tpv.on{transform:none;}#tpv .pm{font:11px -apple-system,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}#tpv .pt{font-size:1.2rem;margin:2px 0 8px;}#tpv .pl{margin-bottom:8px;}#tpv .pw{color:var(--text2);font-size:.95em;margin-bottom:10px;}#tpv .pa{margin-bottom:10px;}#tpv .pp{border:1px solid var(--border2);border-radius:8px;padding:6px 12px;margin-bottom:12px;}#tpv .pp summary{cursor:pointer;font:600 13px -apple-system,system-ui,sans-serif;padding:4px 0;}#tpv .ppb p{margin:.5em 0;}.thmmean{display:block;color:var(--text2);font-size:.93em;margin-top:3px;}'
+    + '#tpv.on{transform:none;}#tpv .pm{font:11px -apple-system,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}#tpv .pt{font-size:1.2rem;margin:2px 0 8px;}#tpv .pl{margin-bottom:8px;}#tpv .pw{color:var(--text2);font-size:.95em;margin-bottom:10px;}#tpv .pa{margin-bottom:10px;color:var(--text2);}#tpv .pp{border:1px solid var(--border2);border-radius:8px;padding:6px 12px;margin-bottom:12px;}#tpv .pp summary{cursor:pointer;font:600 13px -apple-system,system-ui,sans-serif;padding:4px 0;}#tpv .ppb p{margin:.5em 0;}.thmmean{display:block;color:var(--text2);font-size:.93em;margin-top:3px;}'
     + '#tpv .pb{display:flex;gap:8px;}#tpv .pb a,#tpv .pb button{flex:1;text-align:center;border:1px solid var(--border2);border-radius:8px;padding:10px;font:14px -apple-system,system-ui,sans-serif;background:var(--card2);color:var(--text);text-decoration:none;cursor:pointer;}'
     + 'a.thmref{text-decoration:none;border-bottom:1px dashed var(--text2);color:inherit;}';
   document.head.appendChild(css);
@@ -2312,7 +2312,7 @@ A['theorems'].sections.unshift(['Since Midterm 1 (§19–24): the Midterm 2 rang
     sh.querySelector('.pm').textContent = t[0] + ' ' + num + ' · Munkres §' + num.split('.')[0];
     sh.querySelector('.pt').textContent = t[1];
     sh.querySelector('.pl').innerHTML = wiki(t[2]);
-    sh.querySelector('.pa').innerHTML = THMMEAN[num] ? '<b>What it adds:</b> ' + wiki(THMMEAN[num]) : '';
+    sh.querySelector('.pa').innerHTML = THMMEAN[num] ? wiki(THMMEAN[num]) : '';
     sh.querySelector('.pw').innerHTML = t[4] && !THMPROOF[num] ? '<b>Why:</b> ' + wiki(t[4]) : (t[4] ? '<b>Note:</b> ' + wiki(t[4]) : '');
     var pp = sh.querySelector('.pp'); pp.style.display = THMPROOF[num] ? '' : 'none'; pp.open = false; sh.querySelector('.ppb').innerHTML = THMPROOF[num] ? wiki(THMPROOF[num]) : '';
     var go = sh.querySelector('.pgo'); if (t[3] && A[t[3]]){ go.style.display = ''; go.setAttribute('href', '#a/' + t[3]); } else go.style.display = 'none';
