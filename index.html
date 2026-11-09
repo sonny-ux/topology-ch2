@@ -627,6 +627,18 @@ A['m-closure'].sections.push(['Where it appears', '<p>HW2 Q3, HW2 Q4, HW2 Q5, MT
 A['m-hausdorff'].sections.push(['Where it appears', '<p>HW2 Q6, HW3 Q3, HW6 Q4(b), HW6 Q5(b), HW7 Q1(b).</p>']);
 A['m-continuous'].sections.push(['Where it appears', '<p>HW3 Q1, HW3 Q2, HW3 Q6, MT Q4.</p>']);
 A['m-quotient'].sections.push(['Where it appears', '<p>HW6 Q5, HW7 Q1.</p>']);
+A['coordinate-function'] = {title: 'Coordinate functions', kind: 'definition', where: '§18–19', pre: ['projections', 'product-topology'],
+  lede: R`The pieces of a map into a product: for $f:A\to\prod X_\alpha$, the coordinate function $f_\alpha=\pi_\alpha\circ f$ records only the $\alpha$-th coordinate of $f(a)$.`,
+  sections: [
+  ['What it is', R`<p>A point of a product is a list of coordinates, one from each factor. So a map <em>into</em> a product produces, for each input, a whole list. The coordinate functions read off that list one entry at a time: $f_1$ gives the first coordinate, $f_2$ the second, and so on. Knowing all of them is the same as knowing $f$.</p>`],
+  ['Definition', R`<p>Let $f:A\to\prod_{\alpha\in J}X_\alpha$ and let $\pi_\beta:\prod X_\alpha\to X_\beta$ be the projection onto the $\beta$-th factor ([[projections]]). The <b>coordinate function</b> of $f$ for the index $\beta$ is</p>$$f_\beta=\pi_\beta\circ f:A\to X_\beta,\qquad f_\beta(a)=\text{the }\beta\text{-th coordinate of } f(a).$$<p>Conversely, any family of functions $f_\alpha:A\to X_\alpha$ defines one map into the product, $f(a)=(f_\alpha(a))_{\alpha\in J}$, and its coordinate functions are the $f_\alpha$ (Munkres §19). For two factors one writes $f(a)=(f_1(a),f_2(a))$ (Theorem 18.4).</p>`],
+  ['Facts to keep in mind', R`<ul class="facts"><li><b>A map into a product is the same thing as a family of coordinate functions</b>: $f\leftrightarrow(f_\alpha)_\alpha$.</li><li><b>Continuity is checked coordinate by coordinate</b> (Theorem 19.6, product topology only): $f$ is continuous iff every $f_\alpha$ is ([[maps-into-products]]).</li><li>The coordinate functions of a projection $\pi_\beta$ itself: only one, and it is $\pi_\beta$. The coordinate functions of the identity of $X\times Y$ are $\pi_1$ and $\pi_2$.</li><li>Constant maps and the identity are the most common coordinate functions: they make slices and diagonals continuous.</li><li>In the box topology, continuous coordinate functions do <em>not</em> make $f$ continuous ([[product-vs-box]]).</li></ul>`],
+  ['Worked examples', R`<p><b>A slice.</b> $i:Y\to X\times Y$, $i(y)=(x_0,y)$. Its coordinate functions are the constant map $y\mapsto x_0$ and the identity $y\mapsto y$, both continuous, so $i$ is continuous and its image $\{x_0\}\times Y$ is a copy of $Y$ ([[hw8-q5]]).</p>
+<p><b>A path in a product.</b> $\gamma(t)=(\gamma_j(t))_{j\in J}$: the coordinate functions are the paths $\gamma_j$, so $\gamma$ is continuous ([[hw8-q3]]).</p>
+<p><b>A straight line in the plane.</b> $\gamma(t)=((1-t)x_1+ty_1,\ (1-t)x_2+ty_2)$: each coordinate is a polynomial in $t$, so $\gamma$ is continuous ([[path-connected]]).</p>
+<p><b>The diagonal.</b> $\Delta:X\to X\times X$, $\Delta(x)=(x,x)$: both coordinate functions are the identity, so $\Delta$ is continuous.</p>`],
+  ['Why it is set up this way', R`<p>The product topology is designed so that a map into a product is continuous exactly when its coordinates are (it is the coarsest topology making all projections continuous; [[defining-by-maps]]). This turns a hard question about open sets in a product into several easy questions about the factors.</p>`],
+  ['Where it sits', R`<p>Introduced with products (§15, two factors; §19, any number). It is used whenever a map lands in a product: paths in $\mathbb R^n$, slices, homeomorphisms between products ([[hw4-q2]]), and later in homotopies $X\times[0,1]\to Y$.</p>`]]};
 // ---------- the problems
 function PB(title, where, stmt, pre, meth, idea, extra){ return {title: title, kind: 'problem', where: where, pre: pre, method: meth, lede: stmt, sections: [['Concepts and method', ''], ['Key idea', idea]].concat(extra || [])}; }
 Object.assign(A, {
@@ -699,7 +711,7 @@ Object.assign(A, {
     ['Order matters', R`<p>Taking a subspace and a quotient in different orders can give different topologies (HW6 Q3, HW7 Q5). Taking subspaces and products in either order gives the same one ([[products-and-subspaces]]).</p>`]]},
 // ---------- §19 fill-in
 'maps-into-products': {title: 'Maps into products (Theorem 19.6)', kind: 'theorem', where: '§19', pre: ['product-vs-box', 'continuous'],
-  lede: R`$f:A\to\prod X_\alpha$ is continuous iff every coordinate function $f_\alpha=\pi_\alpha\circ f$ is.`,
+  lede: R`$f:A\to\prod X_\alpha$ is continuous iff every [[coordinate-function|coordinate function]] $f_\alpha=\pi_\alpha\circ f$ is.`,
   sections: [['Statement', R`<p>In the product topology, $f=(f_\alpha)$ is continuous iff each $f_\alpha$ is. (For two factors this is Theorem 18.4.) It fails for the box topology.</p>`],
     ['Why', R`<p>Projections are continuous, so $f$ continuous gives each $f_\alpha$ continuous. Conversely the product topology has [[subbasis]] $\pi_\alpha^{-1}(U)$, and $f^{-1}(\pi_\alpha^{-1}(U))=f_\alpha^{-1}(U)$ is open.</p>`],
     ['Use', R`<p>HW4 Q2: rearranging $(X_1\times X_2)\times X_3\to\prod X_\alpha$ is continuous because each coordinate is a composite of projections; the inverse likewise, so it is a [[homeomorphism]], without mentioning open sets. Method: [[m-product-maps]].</p>`]]},
@@ -805,7 +817,7 @@ BOOK = [
     ['§16 · The subspace topology', ['subspace-topology', 'hw1-q4', 'hw1-q5', 'hw1-q6', 'mt-q1']],
     ['§17 · Closed sets and limit points', ['closed-set', 'closure', 'interior', 'closure-test', 'limit-point', 'closure-limit-points', 'dense', 'hausdorff', 't1', 'convergence', 'm-closed', 'm-closure', 'm-hausdorff', 'm-true-false', 'hw2-q3', 'hw2-q4', 'hw2-q5', 'hw2-q6', 'mt-q2', 'mt-q3']],
     ['§18 · Continuous functions', ['continuous', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'embedding', 'open-map', 'm-continuous', 'm-open-map', 'hw3-q1', 'hw3-q2', 'hw3-q3', 'hw3-q4', 'mt-q4']],
-    ['§19 · The product topology', ['product-vs-box', 'maps-into-products', 'products-and-subspaces', 'products-hausdorff-closure', 'product-convergence', 'm-product-maps', 'hw3-q5', 'hw3-q6', 'mt-q5', 'hw4-q1', 'hw4-q2', 'hw4-q3', 'hw4-q4']],
+    ['§19 · The product topology', ['product-vs-box', 'coordinate-function', 'maps-into-products', 'products-and-subspaces', 'products-hausdorff-closure', 'product-convergence', 'm-product-maps', 'hw3-q5', 'hw3-q6', 'mt-q5', 'hw4-q1', 'hw4-q2', 'hw4-q3', 'hw4-q4']],
     ['§20 · The metric topology', ['metric', 'ball', 'metric-topology', 'metric-hausdorff', 'mt-q6']],
     ['§21 · The metric topology (continued)', ['epsilon-delta', 'first-countable', 'sequence-lemma', 'metrizable', 'uniform-limit']],
     ['§22 · The quotient topology', ['quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples', 'm-quotient-map', 'm-not-quotient', 'm-quotient', 'hw6-q1', 'hw6-q2', 'hw6-q3', 'hw6-q4', 'hw6-q5', 'hw7-q1', 'hw7-q2', 'hw7-q3', 'hw7-q4', 'hw7-q5', 'hw7-q6']],
@@ -1964,7 +1976,7 @@ $$\gamma(t)=(\gamma_j(t))_{j\in J}.$$
 <p>At time $t$, the $j$-th coordinate of $\gamma(t)$ is wherever the path $\gamma_j$ has reached. This is a function from $[0,1]$ into $X$, since each $\gamma_j(t)$ lies in $X_j$.</p>
 
 <h4>Why $\gamma$ is continuous</h4>
-<p>Checking continuity directly would mean taking open sets of the product, which are unions of basis elements restricting finitely many coordinates. There is a theorem that does this work once and for all. <b>Recall</b> Theorem 19.6 ([[maps-into-products]]): a map into a product with the <em>product</em> topology is continuous exactly when each coordinate function is continuous. The coordinate functions of $\gamma$ are $\pi_j\circ\gamma=\gamma_j$, and each $\gamma_j$ is a path, hence continuous. So $\gamma$ is continuous.</p>
+<p>Checking continuity directly would mean taking open sets of the product, which are unions of basis elements restricting finitely many coordinates. There is a theorem that does this work once and for all. <b>Recall</b> Theorem 19.6 ([[maps-into-products]]): a map into a product with the <em>product</em> topology is continuous exactly when each coordinate function is continuous. The [[coordinate-function|coordinate functions]] of $\gamma$ are $\pi_j\circ\gamma=\gamma_j$, and each $\gamma_j$ is a path, hence continuous. So $\gamma$ is continuous.</p>
 <p>It is worth saying "product topology" in the write-up, because Theorem 19.6 is false for the box topology (see "Why it makes sense").</p>
 
 <h4>Checking the endpoints, and concluding</h4>
@@ -1999,7 +2011,7 @@ $$(x,y)\in Z\iff x\notin A\ \text{ or }\ y\notin B.$$
 <p>To show a space is connected you can assume a separation and reach a contradiction, or build the space out of pieces already known to be connected ([[m-connected]]). Here we know $X$ and $Y$ are connected and nothing else, so building is natural. The tool for gluing is Theorem 23.3: connected subspaces that all share one point have a connected union. So the plan is to find one point of $Z$, and for every point of $Z$ a connected subset of $Z$ joining it to that one point.</p>
 
 <h4>Slices are connected copies of $X$ and $Y$</h4>
-<p>The natural connected pieces of a product are its slices. For a fixed $x_0$, the vertical slice $\{x_0\}\times Y$ is the image of the map $Y\to X\times Y$, $y\mapsto(x_0,y)$. Its coordinates are the constant map $x_0$ and the identity of $Y$, both continuous, so the map is continuous by Theorem 19.6. A continuous image of a connected space is connected (Theorem 23.5), so $\{x_0\}\times Y$ is connected. In the same way every horizontal slice $X\times\{y_0\}$ is connected.</p>
+<p>The natural connected pieces of a product are its slices. For a fixed $x_0$, the vertical slice $\{x_0\}\times Y$ is the image of the map $Y\to X\times Y$, $y\mapsto(x_0,y)$. Its [[coordinate-function|coordinate functions]] are the constant map $x_0$ and the identity of $Y$, both continuous, so the map is continuous by Theorem 19.6. A continuous image of a connected space is connected (Theorem 23.5), so $\{x_0\}\times Y$ is connected. In the same way every horizontal slice $X\times\{y_0\}$ is connected.</p>
 <p>A slice lies in $Z$ when its fixed coordinate is outside the removed set: if $x_0\notin A$, every point of $\{x_0\}\times Y$ has first coordinate outside $A$, so the whole vertical slice is in $Z$. Likewise $X\times\{y_0\}\subseteq Z$ when $y_0\notin B$. (A subset of $Z$ gets the same topology from $Z$ as from $X\times Y$, by [[hw1-q4]], so these slices are connected as subspaces of $Z$ too.)</p>
 
 <h4>The hub</h4>
