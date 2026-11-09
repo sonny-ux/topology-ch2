@@ -1949,6 +1949,70 @@ $$x'\sim x\iff g(x')=g(x)\ \text{and}\ h(x')=h(x)\iff x'\in g^{-1}(\{g(x)\})\cap
 $$X\setminus A=\bigcup_{f\in\mathcal F}f^{-1}(\{1-f(x)\}),$$
 <p>a union of preimages of open sets, which is open. Hence $A$ is closed. This is the first proof with De Morgan's law applied: the complement of an intersection is the union of the complements. Either version is a complete answer.</p>
 </div>`]); })();
+function wkSet(id, html){ var S = A[id].sections, k = S.findIndex(function(x){ return x[0] === 'Breakdown'; }); if (k < 0) return; S.splice(k, 1, ['Work-through', '<div class="wk">' + html + '</div>']); }
+wkSet('hw8-q3', R`
+<h4>What has to be produced</h4>
+<p>Path connected is a "for every pair" statement: for any two points of $X=\prod_{j\in J}X_j$ we must produce a path between them ([[path-connected]]). So the proof starts by naming two arbitrary points, and its job is to construct one continuous map $\gamma:[0,1]\to X$ with $\gamma(0)$ the first point and $\gamma(1)$ the second.</p>
+<p>A point of the product is a family of coordinates, one in each factor. Write the two points as $x=(x_j)_{j\in J}$ and $y=(y_j)_{j\in J}$, with $x_j,y_j\in X_j$. The index set $J$ can be anything: two indices, countably many, uncountably many. The argument should not depend on which.</p>
+
+<h4>Where the paths come from</h4>
+<p>The only hypothesis is that each factor $X_j$ is path connected. Applied to the two points $x_j$ and $y_j$ of $X_j$, it gives a path in that factor: a continuous $\gamma_j:[0,1]\to X_j$ with $\gamma_j(0)=x_j$ and $\gamma_j(1)=y_j$. We do this for every $j$ at once, so we now have one path in each coordinate.</p>
+
+<h4>Combining them into one path</h4>
+<p>To move a point of the product, move all of its coordinates. Run all the coordinate paths at the same time, on the same clock $t$:</p>
+$$\gamma(t)=(\gamma_j(t))_{j\in J}.$$
+<p>At time $t$, the $j$-th coordinate of $\gamma(t)$ is wherever the path $\gamma_j$ has reached. This is a function from $[0,1]$ into $X$, since each $\gamma_j(t)$ lies in $X_j$.</p>
+
+<h4>Why $\gamma$ is continuous</h4>
+<p>Checking continuity directly would mean taking open sets of the product, which are unions of basis elements restricting finitely many coordinates. There is a theorem that does this work once and for all. <b>Recall</b> Theorem 19.6 ([[maps-into-products]]): a map into a product with the <em>product</em> topology is continuous exactly when each coordinate function is continuous. The coordinate functions of $\gamma$ are $\pi_j\circ\gamma=\gamma_j$, and each $\gamma_j$ is a path, hence continuous. So $\gamma$ is continuous.</p>
+<p>It is worth saying "product topology" in the write-up, because Theorem 19.6 is false for the box topology (see "Why it makes sense").</p>
+
+<h4>Checking the endpoints, and concluding</h4>
+<p>Two families are equal when they agree in every coordinate. At $t=0$ every coordinate is $\gamma_j(0)=x_j$, so $\gamma(0)=(x_j)_j=x$; at $t=1$ every coordinate is $\gamma_j(1)=y_j$, so $\gamma(1)=y$. Thus $\gamma$ is a path from $x$ to $y$. Since $x$ and $y$ were arbitrary, $X$ is path connected. $\blacksquare$</p>`);
+
+wkSet('hw8-q4', R`
+<h4>Listing what is open</h4>
+<p>The space is small enough to write everything down. The open sets are $\varnothing$, $\{0\}$ and $X=\{0,1\}$. So $\{1\}$ is <em>not</em> open, and the only open set containing $1$ is all of $X$. That last fact is what will make the problem work: $1$ cannot be given a small neighbourhood that avoids $0$.</p>
+
+<h4>What continuity means for a path into this space</h4>
+<p>A path is a continuous $\gamma:[0,1]\to X$. <b>Recall</b> continuity ([[continuous]]): the preimage of every open set must be open, here in $[0,1]$. There are three open sets to check. $\gamma^{-1}(\varnothing)=\varnothing$ and $\gamma^{-1}(X)=[0,1]$ are always open, whatever $\gamma$ is. So the whole condition is:</p>
+$$\gamma^{-1}(\{0\}),\ \text{the set of times at which the path is at } 0,\ \text{is open in } [0,1].$$
+<p>"Open in $[0,1]$" uses the subspace topology ([[subspace-topology]]): a set is open in $[0,1]$ when it is $[0,1]\cap U$ for some open $U\subseteq\mathbb R$. So $[0,1)=[0,1]\cap(-1,1)$ is open in $[0,1]$, even though it is not open in $\mathbb R$; there is nothing to the left of $0$ to worry about.</p>
+
+<h4>Finding the path from $0$ to $1$</h4>
+<p>The path has to start at $0$ and end at $1$, so it must change value at some moment. The condition above says the times spent at $0$ must form an open set. So stay at $0$ for an open stretch of time, $[0,1)$, and arrive at $1$ only at the final instant:</p>
+$$\gamma(t)=0\ \text{ for } 0\le t\lt1,\qquad \gamma(1)=1.$$
+<p>Then $\gamma^{-1}(\{0\})=[0,1)$, which is open in $[0,1]$, so $\gamma$ is continuous; and $\gamma(0)=0$, $\gamma(1)=1$.</p>
+<p>The jump cannot go the other way. If the path sat at $1$ and jumped to $0$ at the end, the time spent at $0$ would be the single point $\{1\}$, which is not open in $[0,1]$. The open point, $0$, has to be the one that occupies an open stretch of time.</p>
+
+<h4>The other pairs of points</h4>
+<p>Path connected asks for a path between every pair, so the remaining pairs need a line each. From $1$ to $0$, run the path backwards: $\delta(t)=\gamma(1-t)$. It is at $0$ for $0\lt t\le1$, and $\delta^{-1}(\{0\})=(0,1]=[0,1]\cap(0,2)$ is open in $[0,1]$, so $\delta$ is continuous, with $\delta(0)=1$ and $\delta(1)=0$. From a point to itself, use the constant path; every preimage under a constant map is $\varnothing$ or $[0,1]$, so it is continuous.</p>
+<p>Every pair of points is joined by a path, so $X$ is path connected. $\blacksquare$</p>`);
+
+wkSet('hw8-q5', R`
+<h4>Which points are in $Z$</h4>
+<p>Start by reading the set. A point $(x,y)$ is in $A\times B$ when $x\in A$ <em>and</em> $y\in B$. Removing those points leaves the points where this fails, and "not (both)" is "at least one fails":</p>
+$$(x,y)\in Z\iff x\notin A\ \text{ or }\ y\notin B.$$
+<p>So every point of $Z$ is of one of two kinds, and the proof will treat them in turn.</p>
+
+<h4>Choosing a strategy for connectedness</h4>
+<p>To show a space is connected you can assume a separation and reach a contradiction, or build the space out of pieces already known to be connected ([[m-connected]]). Here we know $X$ and $Y$ are connected and nothing else, so building is natural. The tool for gluing is Theorem 23.3: connected subspaces that all share one point have a connected union. So the plan is to find one point of $Z$, and for every point of $Z$ a connected subset of $Z$ joining it to that one point.</p>
+
+<h4>Slices are connected copies of $X$ and $Y$</h4>
+<p>The natural connected pieces of a product are its slices. For a fixed $x_0$, the vertical slice $\{x_0\}\times Y$ is the image of the map $Y\to X\times Y$, $y\mapsto(x_0,y)$. Its coordinates are the constant map $x_0$ and the identity of $Y$, both continuous, so the map is continuous by Theorem 19.6. A continuous image of a connected space is connected (Theorem 23.5), so $\{x_0\}\times Y$ is connected. In the same way every horizontal slice $X\times\{y_0\}$ is connected.</p>
+<p>A slice lies in $Z$ when its fixed coordinate is outside the removed set: if $x_0\notin A$, every point of $\{x_0\}\times Y$ has first coordinate outside $A$, so the whole vertical slice is in $Z$. Likewise $X\times\{y_0\}\subseteq Z$ when $y_0\notin B$. (A subset of $Z$ gets the same topology from $Z$ as from $X\times Y$, by [[hw1-q4]], so these slices are connected as subspaces of $Z$ too.)</p>
+
+<h4>The hub</h4>
+<p>This is where "proper subset" is used. Since $A\ne X$ there is a point $a\in X\setminus A$, and since $B\ne Y$ there is $b\in Y\setminus B$. By the previous paragraph the vertical slice $\{a\}\times Y$ and the horizontal slice $X\times\{b\}$ both lie in $Z$. They cross at $(a,b)$, which will be the common point every piece passes through.</p>
+
+<h4>Joining every point to the hub</h4>
+<p>Take any $(x,y)\in Z$. If $x\notin A$, its vertical slice $\{x\}\times Y$ lies in $Z$ and meets the horizontal arm $X\times\{b\}$ at $(x,b)$. Put</p>
+$$C_{(x,y)}=(\{x\}\times Y)\cup(X\times\{b\}).$$
+<p>It lies in $Z$, contains $(x,y)$ and $(a,b)$, and is connected by Theorem 23.3, since its two slices are connected and share $(x,b)$.</p>
+<p>If instead $x\in A$, then $y\notin B$ (the point is in $Z$), so its horizontal slice $X\times\{y\}$ lies in $Z$ and meets the vertical arm $\{a\}\times Y$ at $(a,y)$. Put $C_{(x,y)}=(X\times\{y\})\cup(\{a\}\times Y)$; for the same reasons it lies in $Z$, is connected, and contains $(x,y)$ and $(a,b)$.</p>
+
+<h4>Concluding</h4>
+<p>Every point of $Z$ lies in its own $C_{(x,y)}$, and every $C_{(x,y)}$ lies in $Z$, so $Z=\bigcup_{(x,y)\in Z}C_{(x,y)}$. This is a union of connected subspaces all containing $(a,b)$, so $Z$ is connected by Theorem 23.3. $\blacksquare$</p>`);
 A['set-equality'].sections.push(['Logic into sets', R`<p>Statements about points translate into operations on sets. Reading a set description in this way tells you which operation to use.</p>
 <table><tr><th>Logic</th><th>Sets</th><th>Example</th></tr>
 <tr><td>and</td><td>$A\cap B$</td><td>$x\in A$ and $x\in B$</td></tr>
