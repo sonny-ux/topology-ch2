@@ -86,6 +86,7 @@ details.topic .tlist{padding-left:10px;}
 .tlist a b{font-weight:normal;color:var(--text);}
 .tlist a i{display:block;font-style:normal;color:var(--muted);font-size:.9rem;line-height:1.45;}
 .kind{font:10px -apple-system,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border:1px solid var(--border2);border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:2px;}
+.facts li{margin:.35em 0;}
 .foot{color:var(--muted);font-size:.85rem;margin-top:30px;}
 /* preview sheet */
 #pv{position:fixed;left:0;right:0;bottom:0;z-index:80;background:var(--card);border-top:1px solid var(--border2);box-shadow:0 -10px 30px rgba(0,0,0,.35);padding:16px 18px calc(18px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .22s ease;max-width:760px;margin:0 auto;border-radius:14px 14px 0 0;}
@@ -516,8 +517,8 @@ var A = {
 'ex-lower-limit': {title: 'ℝ_ℓ, the lower limit topology', kind: 'example', where: '§13', pre: ['basis'], lede: R`Basis: $[a,b)$. Strictly finer than ℝ.`, sections: [['Facts', R`<p>[[hausdorff|Hausdorff]]; $[a,b)$ is both open and closed; strictly finer than ℝ by [[lemma-13-3]]. The identity $\mathbb R\to\mathbb R_\ell$ is not [[continuous]].</p>`]]},
 'ex-k-topology': {title: 'ℝ_K, the K-topology', kind: 'example', where: '§13', pre: ['basis'], lede: R`Basis: $(a,b)$ and $(a,b)\setminus K$ with $K=\{1/n\}$.`, sections: [['Facts', R`<p>Strictly finer than ℝ, not comparable with ℝ_ℓ (Lemma 13.4); Hausdorff. $K$ is closed in ℝ_K.</p>`]]},
 'ex-finite-complement': {title: 'Finite complement topology', kind: 'example', where: '§12', pre: ['standard-topologies'], lede: 'Open sets: complements of finite sets. T₁ but not Hausdorff on an infinite set.', sections: [['Why not Hausdorff', R`<p>Two nonempty open sets have finite complements; on an infinite set their complements cannot cover $X$, so the sets meet.</p>`], ['Convergence', R`<p>A sequence of distinct points converges to every point.</p>`]]},
-'ex-discrete': {title: 'Discrete space', kind: 'example', where: '§12', pre: ['standard-topologies'], lede: 'Every subset is open; every map out of it is continuous.', sections: [['Facts', R`<p>Metrizable by the discrete metric; Hausdorff.</p>`]]},
-'ex-indiscrete': {title: 'Indiscrete space', kind: 'example', where: '§12', pre: ['standard-topologies'], lede: R`Only $\varnothing$ and $X$; every map into it is continuous.`, sections: [['Facts', R`<p>Not Hausdorff if it has two points; every sequence converges to every point.</p>`]]},
+'ex-discrete': {title: 'Discrete space', kind: 'example', where: '§12', pre: ['standard-topologies'], lede: 'Every subset is open (so every subset is also closed); every map out of it is continuous.', sections: []},
+'ex-indiscrete': {title: 'Indiscrete space', kind: 'example', where: '§12', pre: ['standard-topologies'], lede: R`Only $\varnothing$ and $X$; every map into it is continuous.`, sections: []},
 'ex-sierpinski': {title: 'Sierpiński space', kind: 'example', where: '§12', pre: ['topology'], lede: R`$\{0,1\}$ with open sets $\varnothing,\{1\},\{0,1\}$.`, sections: [['Facts', R`<p>Not [[t1|T₁]]: $\{1\}$ is open, so $\{0\}$ is closed, but $\{1\}$ is not closed. The smallest space that is neither discrete nor indiscrete.</p>`]]},
 'ex-crush-open': {title: 'ℝ/(0,1): crushing a set that is not closed', kind: 'example', where: '§22', pre: ['quotient-topology', 'limit-point'], lede: R`Collapsing $(0,1)$ to a point gives a non-Hausdorff space.`, sections: [['Why', R`<p>Any open $V\ni\{0\}$ has $p^{-1}(V)$ open in $\mathbb R$ containing $0$, so containing $(-\varepsilon,\varepsilon)$, which meets $(0,1)$. So $[(0,1)]\in V$. Every neighbourhood of $\{0\}$ contains the crushed point.</p>`], ['Also', R`<p>$\{[(0,1)]\}$ is not closed, since its preimage $(0,1)$ is not closed: the space is not even [[t1|T₁]].</p>`]]},
 'ex-circle': {title: 'Circle from an interval', kind: 'example', where: '§22', pre: ['gluing-examples'], lede: R`$[0,1]$ with $0\sim1$ is homeomorphic to $S^1$.`, sections: [['Why', R`<p>See [[gluing-examples]].</p>`]]},
@@ -1858,7 +1859,7 @@ function article(id){
   if (a.steps) h += '<details class="sec" open><summary>Steps</summary><div class="secb"><ol class="steps">' + a.steps.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + wiki(s[0]) + '</summary><div class="why"><b>Why:</b> ' + wiki(s[1]) + '</div></details>' : wiki(s[0])) + '</li>'; }).join('') + '</ol></div></details>';
   (a.sections || []).forEach(function(s, i){ var body = s[1];
     if (s[0] === 'Concepts and method') body = '<p><b>Concepts:</b></p><div class="chips">' + (a.pre || []).map(chip).join('') + '</div><p style="margin-top:10px"><b>Method:</b></p><div class="chips">' + (a.method || []).map(chip).join('') + '</div>';
-    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method' || s[0] === 'The problem' || s[0] === 'The problem, again' || s[0].indexOf('What it builds on') === 0 || s[0] === 'Terms in the problem' || s[0] === 'How the terms are used' || s[0].indexOf('What "constant" means') === 0 || s[0].indexOf('Breakdown') === 0) : (i === 0 && !a.steps); if (s[0] === 'Picture' || s[0] === 'Picture of A' || s[0] === 'Reading the definition' || s[0] === 'Reading the statement' || s[0] === 'What it is' || (s[0] === 'Definition' && i === 1) || (a.where === 'Start here') || a.kind === 'idea') open = true;
+    var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method' || s[0] === 'The problem' || s[0] === 'The problem, again' || s[0].indexOf('What it builds on') === 0 || s[0] === 'Terms in the problem' || s[0] === 'How the terms are used' || s[0].indexOf('What "constant" means') === 0 || s[0].indexOf('Breakdown') === 0) : (i === 0 && !a.steps); if (s[0] === 'Facts to keep in mind' || s[0] === 'Picture' || s[0] === 'Picture of A' || s[0] === 'Reading the definition' || s[0] === 'Reading the statement' || s[0] === 'What it is' || (s[0] === 'Definition' && i === 1) || (a.where === 'Start here') || a.kind === 'idea') open = true;
     h += '<details class="sec"' + (open ? ' open' : '') + '><summary>' + s[0] + '</summary><div class="secb">' + wiki(body) + '</div></details>'; });
   if (a.kind === 'problem') h += padHtml(id);
   if (a.kind === 'method' && (USEDIN[id] || []).length) h += '<div class="links"><h3>Used in these problems</h3><div class="chips">' + USEDIN[id].map(chip).join('') + '</div></div>';
@@ -1882,6 +1883,120 @@ function route(){ document.body.classList.remove('padside');
   else { v.innerHTML = home(); document.title = 'Topology Reference Guide'; }
   math(v); window.scrollTo(0, 0); if (window.partLinks) partLinks(v); if (document.getElementById('qfig')) quotFig(); if (document.getElementById('satfig')) satFig(); if (document.getElementById('drill')) drill(); if (document.getElementById('padin')) padInit(location.hash.slice(3)); if (document.getElementById('docview')) docInit(+location.hash.slice(5));
 }
+// ===== Facts to keep in mind: the short list of usable facts for each core concept, placed right after the definition and open by default.
+var FACTS = {
+'ex-discrete': [
+ R`<b>Every subset is open.</b> Taking complements, <b>every subset is also closed</b>. So every set is both open and closed.`,
+ R`Every single point $\{x\}$ is open, and the singletons form a basis.`,
+ R`<b>Every map out of a discrete space is continuous</b>: any preimage is some subset, and every subset is open.`,
+ R`A map <em>into</em> a discrete space, $f:X\to D$, is continuous iff each fibre $f^{-1}(\{d\})$ is open in $X$ (every preimage is a union of fibres). For $D=\{0,1\}$: iff $f^{-1}(\{0\})$ and $f^{-1}(\{1\})$ are open ([[hw8-q1]]).`,
+ R`<b>Not connected</b> once it has two points: any nonempty proper subset $A$ and its complement form a separation. This is why $\{0,1\}$ discrete is the test target for connectedness ([[hw8-q1]]).`,
+ R`Hausdorff (separate $x\ne y$ by $\{x\}$ and $\{y\}$); metrizable by the discrete metric $d(x,y)=1$ for $x\ne y$.`,
+ R`Every subspace of a discrete space is discrete; a finite product of discrete spaces is discrete ([[hw2-q1]]); an infinite product $\prod\{0,1\}$ with the product topology is <em>not</em> discrete ([[hw3-q6]], [[hw4-q4]]).`,
+ R`A sequence converges only if it is eventually constant.`,
+ R`It is the <b>finest</b> topology on $X$: every other topology is coarser ([[finer-coarser]]).`],
+'ex-indiscrete': [
+ R`<b>Only $\varnothing$ and $X$ are open</b>, so only $\varnothing$ and $X$ are closed.`,
+ R`<b>Every map into an indiscrete space is continuous</b>: the only preimages to check are $f^{-1}(\varnothing)=\varnothing$ and $f^{-1}(X)$, the whole domain.`,
+ R`<b>Connected</b> (there are no two disjoint nonempty open sets) and <b>path connected</b> (every function $[0,1]\to X$ is continuous).`,
+ R`<b>Not Hausdorff</b> once it has two points: the only open set around either point is $X$. Not even $T_1$: $\{x\}$ is not closed.`,
+ R`Every sequence converges to every point; the closure of any nonempty set is $X$.`,
+ R`It is the <b>coarsest</b> topology on $X$.`],
+'ex-sierpinski': [
+ R`Here written with $\{1\}$ open: open sets $\varnothing,\{1\},\{0,1\}$; closed sets $\{0,1\},\{0\},\varnothing$. ([[hw8-q4]] uses the same space with the labels swapped, $\{0\}$ open.)`,
+ R`$\{0\}$ is closed but not open; $\{1\}$ is open but not closed. The closure of $\{1\}$ is the whole space: $0$ is stuck to $1$.`,
+ R`<b>Connected and path connected</b>, yet <b>not Hausdorff</b> (not even $T_1$). A path can sit at the open point and jump to the other at the last instant ([[hw8-q4]]).`,
+ R`A continuous map $f:X\to S$ is the same thing as an open set of $X$, namely $f^{-1}(\{1\})$.`],
+'open-set': [
+ R`$\varnothing$ and $X$ are open; <b>any union</b> of open sets is open; <b>finite intersections</b> are open.`,
+ R`Infinite intersections need not be open: $\bigcap_n(-\tfrac1n,\tfrac1n)=\{0\}$.`,
+ R`<b>Test:</b> $U$ is open iff every $x\in U$ has an open set (or a basis element) $V$ with $x\in V\subseteq U$.`,
+ R`$U$ is open iff its complement $X\setminus U$ is closed.`,
+ R`<b>Open depends on the space.</b> $[0,1)$ is open in $[0,1]$ but not in $\mathbb R$. If $Y$ is open in $X$, a set open in $Y$ is open in $X$ (Lemma 16.2).`,
+ R`A set can be open and closed at once ($\varnothing$, $X$, any set in a discrete space) or neither ($[0,1)$ in $\mathbb R$).`],
+'closed-set': [
+ R`<b>$C$ is closed iff $X\setminus C$ is open.</b> This is the definition, and most proofs of closedness go through it.`,
+ R`$\varnothing$ and $X$ are closed; <b>any intersection</b> of closed sets is closed; <b>finite unions</b> are closed (Theorem 17.1). Infinite unions need not be: $\bigcup_n[\tfrac1n,1]=(0,1]$.`,
+ R`<b>Preimages of closed sets under continuous maps are closed</b> (Theorem 18.1). So level sets $f^{-1}(\{c\})$ are closed whenever $\{c\}$ is closed, as in [[hw7-q3]] and [[hw8-q2]].`,
+ R`$C$ is closed iff it contains all its limit points; $\overline A$ is the smallest closed set containing $A$.`,
+ R`In a Hausdorff space every finite set is closed (Theorem 17.8). In a discrete space every set is closed.`,
+ R`In a subspace $Y$: the closed sets are $Y\cap C$ with $C$ closed in $X$ (Theorem 17.2). If $Y$ is closed in $X$, closed in $Y$ means closed in $X$ (Theorem 17.3).`],
+'continuous': [
+ R`<b>Check preimages of open sets.</b> It is enough to check basis (or subbasis) elements of the target.`,
+ R`Equivalent tests (Theorem 18.1): preimages of closed sets are closed; $f(\overline A)\subseteq\overline{f(A)}$; in metric spaces, $\varepsilon$–$\delta$ ([[epsilon-delta]]).`,
+ R`<b>Always continuous:</b> constant maps, identities, inclusions of subspaces, compositions, restrictions to a subspace; shrinking or enlarging the target (Theorem 18.2). Any map out of a discrete space; any map into an indiscrete space.`,
+ R`<b>Into a product:</b> continuous iff each coordinate is (Theorem 19.6, product topology) ([[maps-into-products]]). <b>Out of a quotient:</b> $g$ is continuous iff $g\circ p$ is (Theorem 22.2) ([[maps-out-of-quotients]]).`,
+ R`<b>Pieces:</b> two continuous maps on closed sets $A,B$ covering $X$ that agree on $A\cap B$ glue to a continuous map ([[pasting-lemma]]).`,
+ R`Continuous images of connected spaces are connected (23.5) and of compact spaces compact (26.5).`,
+ R`Continuous does <em>not</em> mean open or closed: images go forward, continuity pulls back ([[open-map]]).`],
+'connected': [
+ R`<b>Definition to use:</b> no separation, i.e. no two disjoint nonempty open sets covering $X$. Equivalently, the only clopen sets are $\varnothing$ and $X$; equivalently, every continuous $X\to\{0,1\}$ (discrete) is constant ([[hw8-q1]]).`,
+ R`<b>A connected subspace lies on one side of any separation</b> (Lemma 23.2). Most proofs run on this.`,
+ R`<b>Building connected spaces:</b> continuous images (23.5); unions of connected sets with a common point (23.3); any $B$ with $A\subseteq B\subseteq\overline A$ for connected $A$ (23.4); finite products (23.6).`,
+ R`<b>Standard examples.</b> Connected: intervals and rays in $\mathbb R$, $\mathbb R^n$, convex sets, indiscrete spaces, Sierpiński space. Not connected: $\mathbb Q$, $\mathbb R\setminus\{0\}$, $\mathbb R_\ell$, a discrete space with two points.`,
+ R`<b>In a subspace,</b> a separation uses open sets <em>of the subspace</em>: $Y=A\cup B$, disjoint, nonempty, neither containing a limit point of the other (Lemma 23.1).`,
+ R`Path connected $\Rightarrow$ connected; the converse fails (topologist's sine curve).`,
+ R`Independent of Hausdorff: all four combinations occur (see "Connected versus Hausdorff" below).`,
+ R`A topological property: homeomorphic spaces are both connected or both not, so $\mathbb R\not\cong\mathbb R\setminus\{0\}$.`],
+'path-connected': [
+ R`<b>To prove it, build the path:</b> a formula $\gamma:[0,1]\to X$, then continuity, then $\gamma(0)$ and $\gamma(1)$ ([[m-path-connected]]).`,
+ R`<b>Path connected $\Rightarrow$ connected</b>; the converse is false.`,
+ R`Convex subsets of $\mathbb R^n$ are path connected: $\gamma(t)=(1-t)x+ty$.`,
+ R`Continuous images of path connected spaces are path connected; <b>any product</b> of path connected spaces is path connected ([[hw8-q3]]); a union of path connected sets with a common point is path connected (join through the common point).`,
+ R`Paths can be <b>reversed</b> ($t\mapsto\gamma(1-t)$) and <b>joined</b> end to end (run each at double speed; continuity by the [[pasting-lemma]]).`,
+ R`Paths can jump in non-Hausdorff spaces: Sierpiński space is path connected ([[hw8-q4]]).`],
+'subspace-topology': [
+ R`<b>Open in $Y$</b> means $Y\cap U$ with $U$ open in $X$; <b>closed in $Y$</b> means $Y\cap C$ with $C$ closed in $X$ (17.2).`,
+ R`Open in $Y$ need not be open in $X$ ($[0,1)$ in $[0,1]$); if $Y$ is open in $X$ it is (16.2); likewise for closed with $Y$ closed (17.3).`,
+ R`A subspace of a subspace gets the same topology either way ([[hw1-q4]]).`,
+ R`The inclusion $Y\to X$ is continuous; restricting a continuous map to $Y$ keeps it continuous.`,
+ R`Closure inside $Y$: $\overline A^{\,Y}=\overline A\cap Y$ (17.4).`,
+ R`Subspaces of Hausdorff spaces are Hausdorff (17.11); a product of subspaces carries the subspace topology of the product (16.3, [[hw4-q3]]).`],
+'product-topology': [
+ R`<b>Basis: boxes</b> $U\times V$ with $U,V$ open. An open set is a <em>union</em> of boxes, not usually a single box.`,
+ R`<b>Projections are continuous and open</b> ([[hw7-q3]]) but not always closed (the hyperbola $xy=1$).`,
+ R`<b>Maps into a product</b> are continuous iff every coordinate is (19.6).`,
+ R`Slices $\{x\}\times Y$ and $X\times\{y\}$ are homeomorphic to $Y$ and $X$ ([[hw8-q5]]).`,
+ R`Products of closed sets are closed; $\overline{A\times B}=\overline A\times\overline B$; products of Hausdorff spaces are Hausdorff; finite products of connected spaces are connected; any product of path connected spaces is path connected.`,
+ R`For infinitely many factors the product topology restricts only finitely many coordinates at a time; the box topology is finer and breaks 19.6 ([[product-vs-box]]).`],
+'quotient-topology': [
+ R`<b>$U$ is open in the quotient iff its preimage $p^{-1}(U)$ is open upstairs.</b> The same holds for closed sets.`,
+ R`<b>Open sets downstairs correspond to open saturated sets upstairs</b> ([[saturated]]).`,
+ R`To find a quotient topology on a finite set, test each subset's preimage ([[hw6-q1]]).`,
+ R`Maps out of a quotient: $g$ is continuous iff $g\circ p$ is (22.2) ([[maps-out-of-quotients]]).`,
+ R`A quotient of a Hausdorff space need not be Hausdorff: $\mathbb R/(0,1)$ ([[ex-crush-open]]); crushing a <em>closed</em> set of a metric space is fine ([[hw7-q1]]).`],
+'quotient-map': [
+ R`<b>Three claims:</b> surjective; continuous; and if $p^{-1}(U)$ is open then $U$ is open ([[m-quotient-map]]).`,
+ R`Shortcuts: a continuous surjective <b>open or closed</b> map is a quotient map; a continuous surjection with a continuous <b>section</b> ($p\circ i=\mathrm{id}$) is one ([[hw6-q2]]).`,
+ R`A quotient map need not be open or closed: the sign map is open, not closed ([[hw7-q2]]); the folding map is neither ([[hw7-q4]]).`,
+ R`Compositions of quotient maps are quotient maps; a restriction to a subspace need not be ([[hw7-q5]]).`],
+'hausdorff': [
+ R`<b>Finite sets are closed</b> (17.8) and <b>limits are unique</b> (17.10).`,
+ R`Subspaces and products of Hausdorff spaces are Hausdorff (17.11); every metric space is Hausdorff.`,
+ R`A topology finer than a Hausdorff one is Hausdorff ([[hw6-q4]]).`,
+ R`For continuous $f,g$ into a Hausdorff space, $\{x: f(x)=g(x)\}$ is closed; maps agreeing on a dense set are equal ([[hw3-q3]]).`,
+ R`Not Hausdorff: indiscrete with two points, the cofinite topology on an infinite set, Sierpiński space, $\mathbb R/(0,1)$.`,
+ R`Independent of connectedness ([[connected]], "Connected versus Hausdorff").`],
+'metric-topology': [
+ R`<b>Basis: open balls</b> $B(x,\varepsilon)$. $U$ is open iff every $x\in U$ has a ball $B(x,\varepsilon)\subseteq U$.`,
+ R`<b>Balls are open:</b> for $y\in B(x,\varepsilon)$, the ball $B(y,\varepsilon-d(x,y))$ fits inside, by the triangle inequality.`,
+ R`<b>Closed balls $\{y: d(x,y)\le r\}$ are closed</b> ([[mt-q6]]): a point at distance $>r$ has a ball, of radius $d(x,z)-r$, missing the set. Likewise $\{y:d(x,y)>r\}$ is open.`,
+ R`Metric spaces are Hausdorff and first countable, so sequences decide closures and continuity ([[sequence-lemma]]).`,
+ R`Different metrics can give the same topology, e.g. $\min(d,1)$ and $d$.`],
+'open-map': [
+ R`<b>Open map:</b> images of open sets are open. It is enough to check basis elements, because images respect unions.`,
+ R`Open is <em>not</em> continuous: an open bijection need not be continuous ([[hw7-q6]]).`,
+ R`For a bijection, open $\iff$ closed ([[hw7-q6]]); a continuous open bijection is a homeomorphism.`,
+ R`Projections are open but not always closed ([[hw7-q3]]). A continuous surjective open map is a quotient map.`],
+'relation-equivalence': [
+ R`<b>Three rules:</b> reflexive, symmetric, transitive. Each must be proved for arbitrary elements.`,
+ R`<b>"Same value under $f$"</b> ($x\sim y$ iff $f(x)=f(y)$) is always an equivalence relation, and so is "same value under <em>every</em> $f$ in a family": each rule comes from the same rule for equality ([[hw8-q2]]).`,
+ R`For transitivity with "every $f$": fix one arbitrary $f$, use both hypotheses for that same $f$, conclude for it.`,
+ R`The classes partition $X$: two classes are equal or disjoint, and $x\sim y$ iff $[x]=[y]$ ([[equivalence-class]], [[partition]]).`]
+};
+Object.keys(FACTS).forEach(function(id){ var a = A[id]; if (!a) return; var s = a.sections || [], k = 0;
+  s.forEach(function(x, i){ if (/^(What it is|Definition|Definitions|Statement|Statements)$/.test(x[0])) k = i + 1; });
+  s.splice(k, 0, ['Facts to keep in mind', '<ul class="facts">' + FACTS[id].map(function(f){ return '<li>' + f + '</li>'; }).join('') + '</ul>']); a.sections = s; });
 // ===== Problem pages: tap (a), (b), … anywhere below the question to peek at that part; the Problem pill peeks at the whole question;
 // "Jump to it" scrolls up to it and a Back pill returns to where you were reading.
 (function(){
