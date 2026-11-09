@@ -1835,7 +1835,7 @@ var TRAIL = []; try { TRAIL = JSON.parse(sessionStorage.getItem('tg-trail') || '
 function home(){
   var recent = []; try { recent = JSON.parse(localStorage.getItem('tg-recent') || '[]'); } catch(e){}
   var h = '<h1>Topology Reference Guide</h1><p class="intro">An encyclopedia of the course in the order of Munkres. Each section holds its concepts, the methods its problems call for, and the assigned problems themselves, all linked to each other. Each article opens to a one-line summary and its definition; everything else unfolds when you want it. Underlined terms are links: tap one for a preview, then read on or stay where you are. At the end of each article you will find what it depends on and what builds on it, and the next article in the book.</p>';
-  h += '<div class="start"><a class="chip" href="#a/what-is-topology">Start here: what topology is</a><a class="chip" href="#a/approach">How to approach a problem</a><a class="chip" href="#a/whole-picture">The whole picture</a><a class="chip" href="#a/first-moves">Practice: first moves</a><a class="chip" href="#a/image-preimage">Chapter 1</a><a class="chip" href="#a/connected">Now: §23–24 connectedness</a><a class="chip" href="#a/hw8-q1">Homework 8</a><a class="chip" href="#a/hw7-q2">Homework 7</a><a class="chip" href="tabs/">Quick-reference tabs</a></div>';
+  h += '<div class="start"><a class="chip" href="#a/what-is-topology">Start here: what topology is</a><a class="chip" href="#a/approach">How to approach a problem</a><a class="chip" href="#a/whole-picture">The whole picture</a><a class="chip" href="#a/first-moves">Practice: first moves</a><a class="chip" href="#a/image-preimage">Chapter 1</a><a class="chip" href="#a/connected">Now: §23–24 connectedness</a><a class="chip" href="#a/hw8-q1">Homework 8</a><a class="chip" href="#a/hw7-q2">Homework 7</a><a class="chip" href="#a/theorems">Theorems by number</a><a class="chip" href="tabs/">Quick-reference tabs</a></div>';
   if (recent.length) h += '<div class="topic"><h2>Recently read</h2><div class="chips">' + recent.slice(0, 8).map(chip).join('') + '</div></div>';
   function row(id){ var a = A[id]; return '<a href="#a/' + id + '"><b>' + a.title + '</b><span class="kind">' + KIND[a.kind] + '</span><i>' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }
   function group(ids){ var g = {c: [], m: [], p: []}; ids.forEach(function(id){ var k = A[id].kind; (k === 'method' ? g.m : k === 'problem' ? g.p : g.c).push(id); });
@@ -1881,7 +1881,7 @@ function route(){ document.body.classList.remove('padside');
   if (hsh.indexOf('a/') === 0){ var id = hsh.slice(2); v.innerHTML = article(id); document.title = (A[id] ? A[id].title + ' · ' : '') + 'Topology Reference Guide'; }
   else if (hsh.indexOf('doc/') === 0){ v.innerHTML = docPage(+hsh.slice(4)); document.title = 'Document · Topology Reference Guide'; }
   else { v.innerHTML = home(); document.title = 'Topology Reference Guide'; }
-  math(v); window.scrollTo(0, 0); if (window.partLinks) partLinks(v); if (document.getElementById('qfig')) quotFig(); if (document.getElementById('satfig')) satFig(); if (document.getElementById('drill')) drill(); if (document.getElementById('padin')) padInit(location.hash.slice(3)); if (document.getElementById('docview')) docInit(+location.hash.slice(5));
+  math(v); window.scrollTo(0, 0); if (window.partLinks) partLinks(v); if (window.thmLinks) thmLinks(v); if (document.getElementById('qfig')) quotFig(); if (document.getElementById('satfig')) satFig(); if (document.getElementById('drill')) drill(); if (document.getElementById('padin')) padInit(location.hash.slice(3)); if (document.getElementById('docview')) docInit(+location.hash.slice(5));
 }
 // ===== Facts to keep in mind: the short list of usable facts for each core concept, placed right after the definition and open by default.
 var FACTS = {
@@ -1997,6 +1997,108 @@ var FACTS = {
 Object.keys(FACTS).forEach(function(id){ var a = A[id]; if (!a) return; var s = a.sections || [], k = 0;
   s.forEach(function(x, i){ if (/^(What it is|Definition|Definitions|Statement|Statements)$/.test(x[0])) k = i + 1; });
   s.splice(k, 0, ['Facts to keep in mind', '<ul class="facts">' + FACTS[id].map(function(f){ return '<li>' + f + '</li>'; }).join('') + '</ul>']); a.sections = s; });
+// ===== Munkres's numbered results: every "Theorem 17.1", "Lemma 23.2", "(23.5)" in the guide is a link that shows the statement,
+// with a link to the full article where the guide has one. All of them are listed on the page "Theorems by number".
+var THM = {
+'13.1': ['Lemma', 'Open sets from a basis', R`If $\mathcal B$ is a basis for a topology $\mathcal T$ on $X$, then $\mathcal T$ is the collection of all unions of elements of $\mathcal B$.`, 'generated-topology'],
+'13.2': ['Lemma', 'Recognising a basis', R`If $\mathcal C$ is a collection of open sets of $X$ such that for each open $U$ and each $x\in U$ there is $C\in\mathcal C$ with $x\in C\subseteq U$, then $\mathcal C$ is a basis for the topology of $X$.`, 'generated-topology'],
+'13.3': ['Lemma', 'Comparing topologies through bases', R`Let $\mathcal B,\mathcal B'$ be bases for $\mathcal T,\mathcal T'$ on $X$. Then $\mathcal T'$ is finer than $\mathcal T$ iff for each $x$ and each $B\in\mathcal B$ containing $x$ there is $B'\in\mathcal B'$ with $x\in B'\subseteq B$.`, 'lemma-13-3'],
+'13.4': ['Lemma', 'The lower limit and K-topologies', R`The topologies of $\mathbb R_\ell$ and $\mathbb R_K$ are each strictly finer than the standard topology on $\mathbb R$, but are not comparable with one another.`, 'lemma-13-3'],
+'15.1': ['Theorem', 'Basis for a product', R`If $\mathcal B$ is a basis for $X$ and $\mathcal C$ a basis for $Y$, then $\{B\times C: B\in\mathcal B, C\in\mathcal C\}$ is a basis for the product topology on $X\times Y$.`, 'product-topology'],
+'15.2': ['Theorem', 'Subbasis for a product', R`The sets $\pi_1^{-1}(U)$ ($U$ open in $X$) and $\pi_2^{-1}(V)$ ($V$ open in $Y$) form a subbasis for the product topology on $X\times Y$.`, 'product-topology'],
+'16.1': ['Lemma', 'Basis for a subspace', R`If $\mathcal B$ is a basis for $X$, then $\{B\cap Y: B\in\mathcal B\}$ is a basis for the subspace topology on $Y\subseteq X$.`, 'subspace-topology'],
+'16.2': ['Lemma', 'Open in an open subspace', R`If $Y$ is a subspace of $X$, $U$ is open in $Y$ and $Y$ is open in $X$, then $U$ is open in $X$.`, 'subspace-topology'],
+'16.3': ['Theorem', 'Products of subspaces', R`If $A$ is a subspace of $X$ and $B$ a subspace of $Y$, the product topology on $A\times B$ equals the topology $A\times B$ inherits as a subspace of $X\times Y$.`, 'subspace-topology'],
+'17.1': ['Theorem', 'Closed sets', R`In a topological space $X$: (1) $\varnothing$ and $X$ are closed; (2) arbitrary intersections of closed sets are closed; (3) finite unions of closed sets are closed.`, 'closed-set', R`Take complements of the open-set axioms: $X\setminus\bigcap C_\alpha=\bigcup(X\setminus C_\alpha)$ is a union of open sets (De Morgan), and $X\setminus(C_1\cup\dots\cup C_n)=\bigcap(X\setminus C_i)$ is a finite intersection of open sets.`],
+'17.2': ['Theorem', 'Closed sets of a subspace', R`Let $Y$ be a subspace of $X$. A set $A$ is closed in $Y$ iff $A=C\cap Y$ for some closed set $C$ of $X$.`, 'subspace-topology'],
+'17.3': ['Theorem', 'Closed in a closed subspace', R`If $Y$ is a subspace of $X$, $A$ is closed in $Y$ and $Y$ is closed in $X$, then $A$ is closed in $X$.`, 'subspace-topology'],
+'17.4': ['Theorem', 'Closure in a subspace', R`If $Y$ is a subspace of $X$ and $A\subseteq Y$, the closure of $A$ in $Y$ is $\overline A\cap Y$, where $\overline A$ is the closure in $X$.`, 'closure'],
+'17.5': ['Theorem', 'The closure test', R`$x\in\overline A$ iff every open set containing $x$ meets $A$; if the topology is given by a basis, iff every basis element containing $x$ meets $A$.`, 'closure-test'],
+'17.6': ['Theorem', 'Closure and limit points', R`$\overline A=A\cup A'$, where $A'$ is the set of limit points of $A$.`, 'closure-limit-points'],
+'17.7': ['Corollary', 'Closed iff it contains its limit points', R`A subset of a topological space is closed iff it contains all its limit points.`, 'closure-limit-points'],
+'17.8': ['Theorem', 'Finite sets in Hausdorff spaces', R`Every finite set in a Hausdorff space is closed.`, 'hausdorff', R`For one point $x$: each $y\ne x$ has an open set missing $x$, so $X\setminus\{x\}$ is open. A finite set is a finite union of points (17.1).`],
+'17.9': ['Theorem', 'Limit points in a T₁ space', R`In a $T_1$ space, $x$ is a limit point of $A$ iff every neighbourhood of $x$ contains infinitely many points of $A$.`, 't1'],
+'17.10': ['Theorem', 'Unique limits', R`In a Hausdorff space, a sequence converges to at most one point.`, 'hausdorff'],
+'17.11': ['Theorem', 'Building Hausdorff spaces', R`Every simply ordered set in the order topology is Hausdorff; the product of two Hausdorff spaces is Hausdorff; a subspace of a Hausdorff space is Hausdorff.`, 'hausdorff'],
+'18.1': ['Theorem', 'Equivalent forms of continuity', R`For $f:X\to Y$ the following are equivalent: (1) $f$ is continuous; (2) $f(\overline A)\subseteq\overline{f(A)}$ for every $A\subseteq X$; (3) $f^{-1}(B)$ is closed for every closed $B\subseteq Y$; (4) for each $x$ and each neighbourhood $V$ of $f(x)$ there is a neighbourhood $U$ of $x$ with $f(U)\subseteq V$.`, 'continuity-equivalents', R`(1)$\Leftrightarrow$(3): $f^{-1}(Y\setminus B)=X\setminus f^{-1}(B)$, so preimages of open sets are open iff preimages of closed sets are closed.`],
+'18.2': ['Theorem', 'Rules for continuous functions', R`Constant maps, inclusions of subspaces and composites of continuous maps are continuous; restricting the domain, or restricting or expanding the range, keeps a map continuous; a map is continuous if its restrictions to the sets of an open cover are.`, 'continuous'],
+'18.3': ['Theorem', 'The pasting lemma', R`If $X=A\cup B$ with $A,B$ closed in $X$, and $f:A\to Y$, $g:B\to Y$ are continuous and agree on $A\cap B$, then the combined map $h:X\to Y$ is continuous.`, 'pasting-lemma'],
+'18.4': ['Theorem', 'Maps into a product of two spaces', R`$f:A\to X\times Y$, $f(a)=(f_1(a),f_2(a))$, is continuous iff $f_1$ and $f_2$ are continuous.`, 'maps-into-products'],
+'19.3': ['Theorem', 'Products of subspaces', R`If $A_\alpha$ is a subspace of $X_\alpha$ for each $\alpha$, then $\prod A_\alpha$ is a subspace of $\prod X_\alpha$ when both carry the product topology (or both the box topology).`, 'products-and-subspaces'],
+'19.4': ['Theorem', 'Products of Hausdorff spaces', R`A product of Hausdorff spaces is Hausdorff, in the box or the product topology.`, 'products-hausdorff-closure'],
+'19.5': ['Theorem', 'Closure in a product', R`$\overline{\prod A_\alpha}=\prod\overline{A_\alpha}$, in the box or the product topology.`, 'products-hausdorff-closure'],
+'19.6': ['Theorem', 'Maps into products', R`$f:A\to\prod X_\alpha$, $f(a)=(f_\alpha(a))_\alpha$, with the product topology on the target: $f$ is continuous iff every coordinate function $f_\alpha$ is continuous.`, 'maps-into-products', R`$f^{-1}(\pi_\beta^{-1}(U))=f_\beta^{-1}(U)$, and the sets $\pi_\beta^{-1}(U)$ form a subbasis for the product topology. The box topology has no such subbasis, which is why the theorem fails there.`],
+'20.5': ['Theorem', 'A metric for the product topology on ℝ^ω', R`$D(x,y)=\sup_i \bar d(x_i,y_i)/i$, with $\bar d(a,b)=\min(|a-b|,1)$, induces the product topology on $\mathbb R^\omega$.`, 'metrizable'],
+'21.1': ['Theorem', 'ε–δ continuity', R`For metric spaces, $f:X\to Y$ is continuous iff for each $x$ and $\varepsilon>0$ there is $\delta>0$ with $d_X(x,y)\lt\delta\Rightarrow d_Y(f(x),f(y))\lt\varepsilon$.`, 'epsilon-delta'],
+'21.2': ['Lemma', 'The sequence lemma', R`If a sequence of points of $A$ converges to $x$, then $x\in\overline A$; the converse holds if $X$ is metrizable.`, 'sequence-lemma'],
+'21.3': ['Theorem', 'Continuity by sequences', R`If $f$ is continuous, then $x_n\to x$ implies $f(x_n)\to f(x)$; the converse holds if $X$ is metrizable.`, 'sequence-lemma'],
+'21.6': ['Theorem', 'Uniform limit theorem', R`A uniform limit of continuous functions into a metric space is continuous.`, 'uniform-limit'],
+'22.2': ['Theorem', 'Maps out of a quotient', R`Let $p:X\to Y$ be a quotient map and $g:X\to Z$ continuous and constant on each fibre $p^{-1}(\{y\})$. Then $g$ induces $f:Y\to Z$ with $f\circ p=g$; $f$ is continuous iff $g$ is, and $f$ is a quotient map iff $g$ is.`, 'maps-out-of-quotients'],
+'23.1': ['Lemma', 'Separations of a subspace', R`If $Y$ is a subspace of $X$, a separation of $Y$ is a pair of disjoint nonempty sets $A,B$ with $A\cup B=Y$, neither containing a limit point of the other. $Y$ is connected iff it has no separation.`, 'connected'],
+'23.2': ['Lemma', 'Connected pieces lie on one side', R`If $C,D$ form a separation of $X$ and $Y$ is a connected subspace of $X$, then $Y\subseteq C$ or $Y\subseteq D$.`, 'connected', R`Otherwise $Y\cap C$ and $Y\cap D$ would be disjoint nonempty sets, open in $Y$, covering $Y$: a separation of $Y$.`],
+'23.3': ['Theorem', 'Unions through a common point', R`The union of a collection of connected subspaces of $X$ that have a point in common is connected.`, 'connected', R`If $U,V$ separated the union, the common point $p$ lies in one of them, say $U$; by 23.2 each piece lies in $U$, so $V$ is empty.`],
+'23.4': ['Theorem', 'Between a set and its closure', R`If $A$ is a connected subspace of $X$ and $A\subseteq B\subseteq\overline A$, then $B$ is connected.`, 'connected'],
+'23.5': ['Theorem', 'Continuous images', R`The image of a connected space under a continuous map is connected.`, 'connected', R`If $U,V$ separated $f(X)$, then $f^{-1}(U),f^{-1}(V)$ would separate $X$.`],
+'23.6': ['Theorem', 'Finite products', R`A finite Cartesian product of connected spaces is connected.`, 'connected', R`For $X\times Y$: fix $(a,b)$; each $T_x=(X\times\{b\})\cup(\{x\}\times Y)$ is connected (23.3) and contains $(a,b)$; their union is $X\times Y$. Compare [[hw8-q5]].`],
+'24.1': ['Theorem', 'Intervals are connected', R`A linear continuum in the order topology is connected, and so are its intervals and rays. In particular $\mathbb R$ and every interval and ray in $\mathbb R$ are connected.`, 'connected-reals'],
+'24.3': ['Theorem', 'Intermediate value theorem', R`If $f:X\to Y$ is continuous, $X$ connected and $Y$ ordered (order topology), then for $a,b\in X$ and any $r$ between $f(a)$ and $f(b)$ there is $c\in X$ with $f(c)=r$.`, 'connected-reals'],
+'26.2': ['Theorem', 'Closed in compact', R`Every closed subspace of a compact space is compact.`, 'compact'],
+'26.3': ['Theorem', 'Compact in Hausdorff', R`Every compact subspace of a Hausdorff space is closed.`, 'compact'],
+'26.5': ['Theorem', 'Continuous images', R`The image of a compact space under a continuous map is compact.`, 'compact'],
+'26.6': ['Theorem', 'Compact to Hausdorff', R`A continuous bijection from a compact space to a Hausdorff space is a homeomorphism.`, 'compact'],
+'26.7': ['Theorem', 'Finite products', R`The product of finitely many compact spaces is compact.`, 'compact'],
+'27.1': ['Theorem', 'Closed intervals are compact', R`In an ordered set with the least upper bound property, every closed interval is compact; in particular $[a,b]\subset\mathbb R$.`, 'compact-reals'],
+'27.3': ['Theorem', 'Heine–Borel', R`A subspace of $\mathbb R^n$ is compact iff it is closed and bounded.`, 'compact-reals'],
+'27.4': ['Theorem', 'Extreme value theorem', R`A continuous $f:X\to Y$ from a compact space to an ordered space attains a minimum and a maximum.`, 'compact-reals'],
+'27.5': ['Lemma', 'Lebesgue number lemma', R`For an open cover of a compact metric space there is $\delta>0$ such that every set of diameter less than $\delta$ lies in one member of the cover.`, 'compact-reals'],
+'27.6': ['Theorem', 'Uniform continuity', R`A continuous map from a compact metric space to a metric space is uniformly continuous.`, 'compact-reals'],
+'28.1': ['Theorem', 'Compact implies limit point compact', R`Compactness implies limit point compactness, but not conversely.`, 'limit-point-compact'],
+'28.2': ['Theorem', 'Compactness in metric spaces', R`For a metrizable space, compact, limit point compact and sequentially compact are equivalent.`, 'limit-point-compact']
+};
+A['theorems'] = {title: 'Theorems by number (Munkres)', kind: 'idea', where: 'Reference', pre: [],
+  lede: 'Every numbered lemma, theorem and corollary the guide cites, with its statement. Anywhere in the guide, tapping a number such as 17.1 shows the statement.',
+  sections: (function(){ var by = {}; Object.keys(THM).forEach(function(n){ var s = n.split('.')[0]; (by[s] = by[s] || []).push(n); });
+    return Object.keys(by).sort(function(a, b){ return a - b; }).map(function(s){ return ['§' + s, '<ul class="facts">' + by[s].sort(function(a, b){ return +a.split('.')[1] - +b.split('.')[1]; }).map(function(n){ var t = THM[n];
+      return '<li><b>' + t[0] + ' ' + n + ' · ' + t[1] + '.</b> ' + t[2] + (t[3] && A[t[3]] ? ' [[' + t[3] + '|More →]]' : '') + '</li>'; }).join('') + '</ul>']; }); })()};
+(function(){
+  var css = document.createElement('style');
+  css.textContent = '#tpv{position:fixed;left:0;right:0;bottom:0;z-index:86;background:var(--card);border-top:1px solid var(--border2);box-shadow:0 -10px 30px rgba(0,0,0,.35);padding:16px 18px calc(18px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .22s ease;max-width:760px;margin:0 auto;border-radius:14px 14px 0 0;max-height:70vh;overflow:auto;}'
+    + '#tpv.on{transform:none;}#tpv .pm{font:11px -apple-system,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}#tpv .pt{font-size:1.2rem;margin:2px 0 8px;}#tpv .pl{margin-bottom:8px;}#tpv .pw{color:var(--text2);font-size:.95em;margin-bottom:12px;}'
+    + '#tpv .pb{display:flex;gap:8px;}#tpv .pb a,#tpv .pb button{flex:1;text-align:center;border:1px solid var(--border2);border-radius:8px;padding:10px;font:14px -apple-system,system-ui,sans-serif;background:var(--card2);color:var(--text);text-decoration:none;cursor:pointer;}'
+    + 'a.thmref{text-decoration:none;border-bottom:1px dashed var(--text2);color:inherit;}';
+  document.head.appendChild(css);
+  var sh = document.createElement('div'); sh.id = 'tpv'; sh.setAttribute('role', 'dialog');
+  sh.innerHTML = '<div class="pm"></div><div class="pt"></div><div class="pl"></div><div class="pw"></div><div class="pb"><a class="pgo" href="#">Full article →</a><a class="pall" href="#a/theorems">All theorems</a><button type="button" class="px">Close</button></div>';
+  document.body.appendChild(sh);
+  window.thmLinks = function(v){
+    var walk = document.createTreeWalker(v, NodeFilter.SHOW_TEXT, {acceptNode: function(n){
+      if (!/(1[2-9]|2\d)\.\d/.test(n.nodeValue)) return NodeFilter.FILTER_REJECT;
+      if (n.parentNode.closest('.katex, a, textarea, svg, h1, .trail, script, style, .padref')) return NodeFilter.FILTER_REJECT; return NodeFilter.FILTER_ACCEPT; }});
+    var nodes = [], n; while ((n = walk.nextNode())) nodes.push(n);
+    nodes.forEach(function(n){ var txt = n.nodeValue, re = /\b((?:1[2-9]|2\d)\.\d{1,2})\b/g, m, last = 0, frag = document.createDocumentFragment();
+      while ((m = re.exec(txt))){ var num = m[1], before = txt.slice(0, m.index);
+        if (!THM[num] || (before.match(/\$/g) || []).length % 2) continue;
+        if (!/(Theorems?|Thm\.?|Lemmas?|Corollary|Munkres)[^.;:]{0,30}$/.test(before) && !/[(,–\/]\s*$/.test(before)) continue;
+        frag.appendChild(document.createTextNode(txt.slice(last, m.index)));
+        var l = document.createElement('a'); l.className = 'thmref'; l.href = '#'; l.dataset.n = num; l.textContent = num; frag.appendChild(l); last = m.index + num.length; }
+      if (!last) return; frag.appendChild(document.createTextNode(txt.slice(last))); n.parentNode.replaceChild(frag, n); });
+  };
+  function show(num){ var t = THM[num]; if (!t) return;
+    sh.querySelector('.pm').textContent = t[0] + ' ' + num + ' · Munkres §' + num.split('.')[0];
+    sh.querySelector('.pt').textContent = t[1];
+    sh.querySelector('.pl').innerHTML = wiki(t[2]);
+    sh.querySelector('.pw').innerHTML = t[4] ? '<b>Why:</b> ' + wiki(t[4]) : '';
+    var go = sh.querySelector('.pgo'); if (t[3] && A[t[3]]){ go.style.display = ''; go.setAttribute('href', '#a/' + t[3]); } else go.style.display = 'none';
+    math(sh); sh.scrollTop = 0; sh.classList.add('on'); }
+  document.addEventListener('click', function(e){
+    var r = e.target.closest('a.thmref');
+    if (r){ e.preventDefault(); e.stopPropagation(); show(r.dataset.n); return; }
+    if (e.target.closest('#tpv .px')){ sh.classList.remove('on'); return; }
+    if (e.target.closest('#tpv a')){ sh.classList.remove('on'); return; }
+    if (sh.classList.contains('on') && !e.target.closest('#tpv')) sh.classList.remove('on');
+  }, true);
+  window.addEventListener('hashchange', function(){ sh.classList.remove('on'); });
+})();
 // ===== Problem pages: tap (a), (b), … anywhere below the question to peek at that part; the Problem pill peeks at the whole question;
 // "Jump to it" scrolls up to it and a Back pill returns to where you were reading.
 (function(){
