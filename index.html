@@ -2249,6 +2249,7 @@ A['theorems'] = {title: 'Theorems by number (Munkres)', kind: 'idea', where: 'Re
     + '.qpill{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom));z-index:70;display:none;border:1px solid var(--border2);border-radius:999px;padding:8px 14px;font:13px -apple-system,system-ui,sans-serif;background:var(--card2);color:var(--text);box-shadow:0 4px 14px rgba(0,0,0,.35);cursor:pointer;}'
     + '.qpill.on{display:block;}#qpill{right:12px;}'
     + '#qback{left:12px;font-weight:600;font-size:15px;padding:11px 18px;background:var(--text);color:var(--bg);border-color:var(--text);white-space:nowrap;}'
+    + '@media (max-width:699px){#qback{display:none!important;}}'
     + '.partflash{animation:partflash 1.6s ease;}@keyframes partflash{0%,40%{background:rgba(160,180,220,.22);}100%{background:transparent;}}';
   document.head.appendChild(css);
   var sh = document.createElement('div'); sh.id = 'ppv'; sh.setAttribute('role', 'dialog');
