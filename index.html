@@ -2247,19 +2247,27 @@ A['theorems'] = {title: 'Theorems by number (Munkres)', kind: 'idea', where: 'Re
     + '#ppv .pb{display:flex;gap:8px;position:sticky;bottom:0;background:var(--card);padding-top:6px;}#ppv .pb button{flex:1;text-align:center;border:1px solid var(--border2);border-radius:8px;padding:10px;font:14px -apple-system,system-ui,sans-serif;background:var(--card2);color:var(--text);cursor:pointer;}'
     + 'a.partref{text-decoration:none;border-bottom:1px solid var(--text2);color:var(--text);font-weight:600;padding:0 1px;}'
     + '.qpill{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom));z-index:70;display:none;border:1px solid var(--border2);border-radius:999px;padding:8px 14px;font:13px -apple-system,system-ui,sans-serif;background:var(--card2);color:var(--text);box-shadow:0 4px 14px rgba(0,0,0,.35);cursor:pointer;}'
-    + '.qpill.on{display:block;}#qpill{left:12px;}'
-    + '#qback{display:none;white-space:nowrap;font-weight:600;background:var(--text);color:var(--bg);border-color:var(--text);}#qback.on{display:inline-block;}'
+    + '.qpill.on{display:block;}#qpill{right:12px;}'
+    + '#qback{left:12px;font-weight:600;font-size:15px;padding:11px 18px;background:var(--text);color:var(--bg);border-color:var(--text);white-space:nowrap;}'
     + '.partflash{animation:partflash 1.6s ease;}@keyframes partflash{0%,40%{background:rgba(160,180,220,.22);}100%{background:transparent;}}';
   document.head.appendChild(css);
   var sh = document.createElement('div'); sh.id = 'ppv'; sh.setAttribute('role', 'dialog');
   sh.innerHTML = '<div class="pm"></div><div class="pq"></div><div class="pb"><button type="button" class="pj">Jump to it</button><button type="button" class="px">Close</button></div>';
   document.body.appendChild(sh);
   var pill = document.createElement('button'); pill.type = 'button'; pill.id = 'qpill'; pill.className = 'qpill'; pill.textContent = 'Problem'; document.body.appendChild(pill);
-  var back = document.createElement('button'); back.type = 'button'; back.id = 'qback'; back.className = 'tb'; back.textContent = '↩ Back'; back.setAttribute('aria-label', 'Back to where you were reading'); var fb = document.getElementById('findBtn'); fb.parentNode.insertBefore(back, fb);
+  var back = document.createElement('button'); back.type = 'button'; back.id = 'qback'; back.className = 'qpill'; back.textContent = '↩ Back'; back.setAttribute('aria-label', 'Back to where you were reading'); document.body.appendChild(back);
+  // page history inside the guide: each move to another article remembers the page and how far down you were
+  var NAV = [], restoring = null, curHash = location.hash, lastY = 0;
+  window.addEventListener('scroll', function(){ lastY = window.scrollY; }, {passive: true});
+  function showBack(){ back.classList.toggle('on', saved != null || NAV.length > 0); }
+  window.addEventListener('hashchange', function(){ var h = location.hash;
+    if (restoring){ var y = restoring.y; restoring = null; curHash = h; setTimeout(function(){ window.scrollTo(0, y); lastY = y; showBack(); }, 60); return; }
+    if (NAV.length && NAV[NAV.length - 1].h === h){ var t = NAV.pop(); curHash = h; setTimeout(function(){ window.scrollTo(0, t.y); lastY = t.y; showBack(); }, 60); return; }
+    if (curHash !== h){ NAV.push({h: curHash || '#', y: lastY}); if (NAV.length > 40) NAV.shift(); } curHash = h; setTimeout(showBack, 0); });
   var cur = null, target = null, saved = null;
   function probSec(){ var ds = document.querySelectorAll('#view details.sec'); for (var i = 0; i < ds.length; i++){ var s = ds[i].querySelector('summary'); if (s && s.textContent === 'The problem') return ds[i]; } return null; }
   window.partLinks = function(v){
-    back.classList.remove('on'); document.body.classList.remove('ppback'); saved = null; sh.classList.remove('on');
+    document.body.classList.remove('ppback'); saved = null; sh.classList.remove('on'); showBack();
     var id = location.hash.indexOf('#a/') === 0 ? location.hash.slice(3) : null, a = id && A[id];
     cur = (a && a.kind === 'problem') ? id : null;
     var ps = cur && probSec(); pill.classList.toggle('on', !!ps);
@@ -2288,14 +2296,14 @@ A['theorems'] = {title: 'Theorems by number (Munkres)', kind: 'idea', where: 'Re
   function closeSh(){ sh.classList.remove('on'); pill.style.visibility = ''; }
   function jump(){ if (!target) return; saved = window.scrollY; var ps = probSec(); if (ps) ps.open = true; closeSh();
     try { history.pushState({ppBack: saved}, '', location.href); } catch(err){}
-    target.scrollIntoView({block: 'center'}); target.classList.remove('partflash'); void target.offsetWidth; target.classList.add('partflash'); back.classList.add('on'); document.body.classList.add('ppback'); }
-  function goBack(){ if (saved == null) return; var y = saved; saved = null; back.classList.remove('on'); document.body.classList.remove('ppback'); window.scrollTo(0, y); }
+    target.scrollIntoView({block: 'center'}); target.classList.remove('partflash'); void target.offsetWidth; target.classList.add('partflash'); showBack(); document.body.classList.add('ppback'); }
+  function goBack(){ if (saved == null) return; var y = saved; saved = null; document.body.classList.remove('ppback'); window.scrollTo(0, y); showBack(); }
   window.addEventListener('popstate', function(){ if (saved == null) return; var y = saved; goBack(); setTimeout(function(){ window.scrollTo(0, y); }, 30); });
   document.addEventListener('click', function(e){
     var r = e.target.closest('a.partref');
     if (r){ e.preventDefault(); e.stopPropagation(); peek(r.dataset.p); return; }
     if (e.target.closest('#qpill')){ e.stopPropagation(); peek(null); return; }
-    if (e.target.closest('#qback')){ e.stopPropagation(); if (history.state && history.state.ppBack != null) history.back(); else goBack(); return; }
+    if (e.target.closest('#qback')){ e.stopPropagation(); if (saved != null){ if (history.state && history.state.ppBack != null) history.back(); else goBack(); } else if (NAV.length){ var t = NAV.pop(); restoring = {y: t.y}; location.hash = t.h; } return; }
     if (e.target.closest('#ppv .pj')){ e.stopPropagation(); jump(); return; }
     if (e.target.closest('#ppv .px') || (sh.classList.contains('on') && !e.target.closest('#ppv'))) closeSh();
   }, true);
