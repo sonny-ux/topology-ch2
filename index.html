@@ -917,11 +917,11 @@ BOOK = [
     ['§15 · The product topology on X × Y', ['product-topology', 'projections', 'hw2-q1', 'hw2-q2']],
     ['§16 · The subspace topology', ['subspace-topology', 'hw1-q4', 'hw1-q5', 'hw1-q6', 'mt-q1']],
     ['§17 · Closed sets and limit points', ['closed-set', 'closure', 'interior', 'closure-test', 'limit-point', 'closure-limit-points', 'dense', 'hausdorff', 't1', 'convergence', 'm-closed', 'm-closure', 'm-hausdorff', 'm-true-false', 'hw2-q3', 'hw2-q4', 'hw2-q5', 'hw2-q6', 'mt-q2', 'mt-q3']],
-    ['§18 · Continuous functions', ['continuous', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'embedding', 'open-map', 'm-continuous', 'm-open-map', 'hw3-q1', 'hw3-q2', 'hw3-q3', 'hw3-q4', 'mt-q4']],
+    ['§18 · Continuous functions', ['continuous', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'embedding', 'open-map', 'm-continuous', 'm-open-map', 'm-homeomorphic', 'hw3-q1', 'hw3-q2', 'hw3-q3', 'hw3-q4', 'mt-q4']],
     ['§19 · The product topology', ['product-vs-box', 'ex-box-rw', 'coordinate-function', 'maps-into-products', 'products-and-subspaces', 'products-hausdorff-closure', 'product-convergence', 'm-product-maps', 'hw3-q5', 'hw3-q6', 'mt-q5', 'hw4-q1', 'hw4-q2', 'hw4-q3', 'hw4-q4']],
     ['§20 · The metric topology', ['metric', 'ball', 'metric-topology', 'metric-hausdorff', 'mt-q6', 'mt2-q1']],
     ['§21 · The metric topology (continued)', ['epsilon-delta', 'first-countable', 'sequence-lemma', 'metrizable', 'uniform-limit']],
-    ['§22 · The quotient topology', ['quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples', 'm-quotient-map', 'm-not-quotient', 'm-quotient', 'hw6-q1', 'hw6-q2', 'hw6-q3', 'hw6-q4', 'hw6-q5', 'hw7-q1', 'hw7-q2', 'hw7-q3', 'hw7-q4', 'hw7-q5', 'hw7-q6', 'mt2-q2', 'mt2-q3']],
+    ['§22 · The quotient topology', ['quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples', 'm-quotient-map', 'm-not-quotient', 'm-build-quotient', 'm-quotient', 'hw6-q1', 'hw6-q2', 'hw6-q3', 'hw6-q4', 'hw6-q5', 'hw7-q1', 'hw7-q2', 'hw7-q3', 'hw7-q4', 'hw7-q5', 'hw7-q6', 'mt2-q2', 'mt2-q3']],
     ['Across the chapter', ['defining-by-maps', 'm-counterexample']]]],
   ['Chapter 3 · Connectedness and Compactness', [
     ['§23 · Connected spaces', ['connected', 'm-connected', 'ex-rationals', 'hw8-q1', 'hw8-q2', 'hw8-q5', 'mt2-q4', 'mt2-q5', 'mt2-q6']],
@@ -1901,6 +1901,55 @@ var DRILL = [
 ];
 (function(){ var st = BOOK[0]; if (st && st[0] === 'Start here') st[1].push(['How to approach a problem', ['approach', 'whole-picture', 'first-moves']]); })();
 // where a concept sits among the four kinds of thing
+// build a quotient by gluing; show two spaces are (not) homeomorphic  (11/10/26)
+Object.assign(A, {
+'m-build-quotient': {title: 'Build a quotient space by gluing', kind: 'method', where: '§22', pre: ['relation-equivalence', 'equivalence-class', 'quotient-topology'],
+  lede: R`Six steps from a space and a gluing rule to a new space: start, choose the relation, sort into classes, merge each class into a point, map down, give it the quotient topology.`,
+  steps: [
+    [R`<b>Start</b> with a space $X$.`, R`Gluing never invents points; everything in the quotient comes from $X$.`],
+    [R`<b>Choose</b> an [[relation-equivalence|equivalence relation]] $\sim$ on $X$: for each pair of points it answers yes or no to "should these count as the same point?"`, R`The relation only says <em>which</em> points to glue. It is chosen (by hand, or by a condition, as in [[mt2-q3]]). It must be reflexive, symmetric and transitive so that the points fall into separate classes.`],
+    [R`<b>Sort</b> the points into classes: $[x]=\{a\in X: a\sim x\}$.`, R`Each class is one group of points to be glued together ([[equivalence-class]]).`],
+    [R`<b>Merge</b> each class into one point. The new set is $X/{\sim}=\{[x]: x\in X\}$.`, R`A point of the quotient is a class, a subset of $X$. Read $X/{\sim}$ as "$X$ mod tilde". Munkres writes $X^*$ for the same set, viewed as a [[partition]].`],
+    [R`<b>Map down</b> with the quotient map $p:X\to X/{\sim}$, $p(x)=[x]$.`, R`$p$ sends each point to its class. It is surjective; it is injective only if nothing was glued.`],
+    [R`<b>Give it the topology:</b> $W\subseteq X/{\sim}$ is open iff $p^{-1}(W)$ is open in $X$.`, R`The [[quotient-topology]]. To test a set downstairs, lift it: $p^{-1}(W)$ is every original point glued into $W$.`]],
+  sections: [
+    ['Worked: the ends of a segment', R`<p><b>1. Start.</b> $X=[0,1]$ with the subspace topology from $\mathbb R$.</p>
+<p><b>2. Choose.</b> $a\sim b$ iff $a=b$ or $\{a,b\}=\{0,1\}$. Every point is related to itself, and $0$ and $1$ to each other; nothing else.</p>
+<p><b>3. Sort.</b> $[0]=[1]=\{0,1\}$, and $[t]=\{t\}$ for $0\lt t\lt1$.</p>
+<p><b>4. Merge.</b> One two-point class and one single-point class for each interior point:</p>
+$$X/{\sim}=\big\{\{0,1\}\big\}\cup\big\{\{t\}: 0\lt t\lt1\big\}.$$
+<p>The glued point is the element $q=\{0,1\}$.</p>
+<p><b>5. Map down.</b></p>
+$$p(t)=\begin{cases}\{0,1\} & t=0 \text{ or } t=1,\\ \{t\} & 0\lt t\lt1.\end{cases}$$
+<p>So $p(0)=p(1)=q$, the only place two points share an image.</p>
+<p><b>6. Topology.</b> If $W$ does not contain $q$, then $W=\{\{t\}: t\in O\}$ with $O\subseteq(0,1)$ and $p^{-1}(W)=O$: open exactly when $O$ is, so nothing changes away from the glued point. If $W$ contains $q$, then $p^{-1}(W)$ contains both $0$ and $1$, and to be open in $[0,1]$ it must contain room around each: $p^{-1}(W)\supseteq[0,\varepsilon)\cup(1-\varepsilon,1]$ for some $\varepsilon\gt0$. An open set around $q$ reaches in from both ends.</p>
+<p><b>Result.</b> A circle, up to [[homeomorphism]]: $t\mapsto(\cos2\pi t,\sin2\pi t)$ sends $0$ and $1$ to the same point, so it passes to the quotient ([[maps-out-of-quotients]]). See [[gluing-examples]].</p>`],
+    ['Picture', R`<p>Draw $X$ on top ("upstairs") and $X/{\sim}$ underneath ("downstairs"), with arrows for $p$ from each point to its class. For the segment: bend it until the ends meet; the two endpoints become the single point $q$. "What lies over" a set $W$ downstairs is $p^{-1}(W)$, the upstairs points whose arrows land in $W$. (Intuition, beyond Munkres.)</p>`],
+    ['A set that is not open', R`<p>$W=p([0,\varepsilon))$ contains $q$ but reaches in from one side only. Lifting it drags in the other endpoint: $p^{-1}(W)=[0,\varepsilon)\cup\{1\}$, which is not open in $[0,1]$ because every interval around $1$ contains points below $1$. So $W$ is not open. The set $[0,\varepsilon)$ was open upstairs but not [[saturated]]: it held $0$ without $1$.</p>`],
+    ['The same steps in MT2 Q3', R`<p>Start with any space $X$; choose $x\sim y$ iff $f(x)=f(y)$ for every continuous $f:X\to[0,1]$; steps 3 to 6 are as above. The quotient merges exactly the points no such map can tell apart, and [[mt2-q3]] (b) shows it is Hausdorff.</p>`],
+    ['Next', R`<p>Once the quotient is built, [[m-quotient]] shows how to work in it: test openness by lifting, build open sets from saturated ones, define maps out of it.</p>`]]},
+'m-homeomorphic': {title: 'Show two spaces are homeomorphic, or not', kind: 'method', where: '§18', pre: ['homeomorphism', 'continuous'],
+  lede: R`To show they are the same space, write down a bijection and check continuity both ways. To show they are different, find a topological property one has and the other lacks.`,
+  steps: [
+    [R`<b>Guess the map.</b> Picture how to deform one space into the other (stretch, bend, glue) and write the deformation as a formula $h:X\to Y$.`, R`Stretching a circle into an oval: $h(\cos\theta,\sin\theta)=(a\cos\theta,b\sin\theta)$.`],
+    [R`<b>Check it is a bijection.</b> Each point of $Y$ is hit by exactly one point of $X$; usually by writing down the inverse $h^{-1}$.`, R`A [[homeomorphism]] matches points one to one.`],
+    [R`<b>Check $h$ is continuous.</b>`, R`Formulas built from continuous pieces are continuous; or use [[m-continuous]].`],
+    [R`<b>Check $h^{-1}$ is continuous.</b> Do not skip this.`, R`A continuous bijection can still tear: $[0,1)\to S^1$, $t\mapsto(\cos2\pi t,\sin2\pi t)$ has a discontinuous inverse at $(1,0)$.`],
+    [R`<b>To show two spaces are not homeomorphic,</b> find a property preserved by homeomorphisms that one space has and the other does not.`, R`Connectedness ([[connected]]), Hausdorff ([[hausdorff]]), and counts such as "how many pieces are left after removing one point".`]],
+  sections: [
+    ['Worked: circle and oval', R`<p>Let $S^1$ be the unit circle and $E=\{(x,y): x^2/a^2+y^2/b^2=1\}$ an oval, $a,b\gt0$. Define $h(x,y)=(ax,by)$.</p>
+<p><b>Into $E$:</b> if $x^2+y^2=1$ then $(ax)^2/a^2+(by)^2/b^2=x^2+y^2=1$. <b>Inverse:</b> $h^{-1}(u,v)=(u/a,v/b)$, which lands back on $S^1$ by the same computation. So $h$ is a bijection. <b>Continuity both ways:</b> each coordinate of $h$ and of $h^{-1}$ is a constant times a coordinate, which is continuous ([[maps-into-products]]). So $S^1\cong E$. Size and shape are not topological: topology keeps only nearness.</p>`],
+    ['Worked: circle and figure eight', R`<p>Remove any one point from a circle: one connected piece remains. Remove the crossing point of a figure eight: four pieces remain. A homeomorphism $h$ would restrict to a homeomorphism from the circle minus a point onto the figure eight minus $h$ of that point, and homeomorphisms preserve the number of [[components]]. Taking the point that $h$ sends to the crossing gives $1=4$, a contradiction. So they are not homeomorphic.</p>`],
+    ['Common mistakes', R`<p>Checking only that $h$ is continuous; forgetting surjectivity; using a property, such as being bounded, that homeomorphisms do not preserve ($(-1,1)\cong\mathbb R$).</p>`]]}
+});
+A['homeomorphism'].sections = [
+  ['Definition', R`<p>A bijection $f:X\to Y$ with $f$ and $f^{-1}$ both [[continuous|continuous]]. If one exists, $X$ and $Y$ are <b>homeomorphic</b>, written $X\cong Y$.</p>`],
+  ['Examples', R`<p><b>Standard example:</b> a circle and an oval, $h(x,y)=(ax,by)$; worked in [[m-homeomorphic]]. Also $(-1,1)\cong\mathbb R$ via $x\mapsto x/(1-x^2)$, and [[ex-circle|an interval with its ends glued]] is a circle ([[m-build-quotient]]).</p><p><b>Contrast:</b> $[0,1)\to S^1$, $t\mapsto(\cos2\pi t,\sin2\pi t)$, is a continuous bijection whose inverse is not continuous: it tears the circle open at $(1,0)$. Points near $(1,0)$ from below come from $t$ near $1$, while $(1,0)$ itself comes from $t=0$.</p>`],
+  ['Why it is defined this way', R`<p>A topology records only nearness ([[topology]]). A homeomorphism matches the points one to one <em>and</em> matches nearness in both directions, so every statement about open sets in $X$ translates into the same statement in $Y$. Continuity one way is not enough: it only says nearness is not torn going forward, and the contrast above shows the backward direction can still tear. Distance, size and shape are not preserved, so they are not topological; a circle and an oval are the same space.</p>`],
+  ['What depends on it', R`<p>A <b>topological property</b> is one preserved by homeomorphisms: [[hausdorff|Hausdorff]], [[connected]], compact. Such properties are how spaces are told apart ([[m-homeomorphic]]). "This quotient is a circle" means "this quotient is homeomorphic to $S^1$" ([[gluing-examples]]).</p>`],
+  ['Where it sits', R`<p>Homeomorphism is the notion of sameness in topology, as isomorphism is in algebra: the classification questions of the subject are questions about which spaces are homeomorphic.</p>`],
+  ['History', R`<p>Henri Poincaré introduced the word (<em>homéomorphisme</em>) in his 1895 paper <em>Analysis Situs</em>, which founded algebraic topology. His maps were between manifolds and assumed some smoothness; the definition by continuity in both directions belongs to the later point-set setting of open sets built up by Hausdorff and others in the 1910s. Calling this "the same notion made general" is an interpretation of that development.</p><p class="foot">Sources: Poincaré, "Analysis Situs", <em>Journal de l'École Polytechnique</em> (1895); Wikipedia, "Homeomorphism" and "Analysis Situs (paper)". The date should be checked against a history of topology before being cited.</p>`]];
+A['quotient-topology'].sections.splice(1, 0, ['Building one', R`<p>The whole construction, step by step with the segment-to-circle example written out: [[m-build-quotient]].</p>`]);
 var ROLE = {hausdorff: ['a property of spaces', 'It passes to subspaces and products, not always to quotients or continuous images.'],
   t1: ['a property of spaces', 'It passes to subspaces and products; a quotient is T₁ exactly when every class is closed.'],
   connected: ['a property of spaces', 'It passes to products, quotients and continuous images, not to subspaces.'],
