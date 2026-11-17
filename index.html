@@ -174,7 +174,9 @@ details.pad>summary{color:var(--text);}
 .padcaret{display:inline-block;width:2px;height:1.1em;margin:0 1px;vertical-align:-.15em;background:#4a90e2;} @keyframes padblink{50%{opacity:0;}}
 .padview{display:flex;gap:4px;align-items:center;margin:6px 0 8px;font:12px -apple-system,system-ui,sans-serif;color:var(--muted);flex-wrap:wrap;} .padview button{border:1px solid var(--border2);background:var(--card);color:var(--text2);border-radius:999px;padding:5px 11px;font:13px -apple-system,system-ui,sans-serif;cursor:pointer;} .padview button.on{background:var(--text);color:var(--bg);border-color:var(--text);}
 .padwork{display:flex;flex-direction:column;gap:10px;}
-@media (min-width:1000px) and (pointer:fine){ body:has(#padin) .wrap{max-width:1040px;} #padin{min-height:42vh;font-size:17px;} .padprev{font-size:17px;} }
+@media (min-width:1000px) and (pointer:fine){ body:has(#padin) .wrap{max-width:1040px;} #padin{min-height:42vh;} }
+body.padbig .wrap{max-width:none!important;padding-left:32px;padding-right:32px;} body.padbig #padin{min-height:68vh;} body.padbig .padwork.v-side .padprev{max-height:calc(100vh - 90px);}
+.padview button.big{margin-left:12px;}
 .padprev h2.padh,.padprev h3.padh,.padprev h4.padh,#padprint h3.padh,#padprint h4.padh{margin:.9em 0 .3em;font-weight:650;} .padprev h2.padh{font-size:1.25em;} .padprev h3.padh{font-size:1.1em;} .padprev h4.padh{font-size:1em;}
 @media (pointer:coarse){ #padin{height:38vh!important;min-height:38vh;resize:none;overflow-y:auto;overscroll-behavior:contain;} .padwork.v-side .padprev{height:38vh;max-height:none;} .padwork.v-pin .padprev{height:28vh;} }
 .padwork.v-side{display:grid;grid-template-columns:1fr 1fr;align-items:start;} .padwork.v-side .padprev{position:sticky;top:70px;max-height:calc(100vh - 90px);overflow:auto;} body.padside .wrap{max-width:1180px;}
@@ -2239,7 +2241,7 @@ function article(id){
 }
 // HW7: the problem restated just above the conclusion, so it is in view while writing up
 ['hw7-q1', 'hw7-q2', 'hw7-q3', 'hw7-q4', 'hw7-q5', 'hw7-q6', 'hw8-q1', 'hw8-q2', 'hw8-q3', 'hw8-q4', 'hw8-q5', 'mt2-q1', 'mt2-q2', 'mt2-q3', 'mt2-q4', 'mt2-q5', 'mt2-q6'].forEach(function(id){ var a = A[id]; if (!a || !VERBATIM[id]) return; var S = a.sections, k = S.findIndex(function(x){ return x[0] === 'Conclusion'; }); var sec = ['The problem, again', VERBATIM[id]]; if (k < 0) S.push(sec); else S.splice(k, 0, sec); });
-function route(){ document.body.classList.remove('padside');
+function route(){ document.body.classList.remove('padside', 'padbig');
   var hsh = location.hash.replace(/^#/, ''), v = document.getElementById('view');
   closePv();
   if (hsh.indexOf('a/') === 0){ var id = hsh.slice(2); v.innerHTML = article(id); document.title = (A[id] ? A[id].title + ' · ' : '') + 'Topology Reference Guide'; }
@@ -3057,7 +3059,7 @@ function padHtml(id){ return '<details class="sec pad" open><summary>Your write-
   + padRefHtml(id)
   + '<button type="button" class="padsymt" id="padsymt" aria-expanded="true">Symbols <span>▾</span></button>'
   + '<div class="padbar" id="padbar">' + PADSYM.map(function(b, i){ return '<button type="button" data-p="' + i + '">' + (i === 0 ? 'inline math' : b[0] === 'display' ? 'display math' : '$' + b[0] + '$') + '</button>'; }).join('') + '</div>'
-  + '<div class="padview" id="padview">View: <button type="button" data-v="below">Below</button><button type="button" data-v="side">Side by side</button><button type="button" data-v="pin">Pinned on top</button></div>'
+  + '<div class="padview" id="padview">View: <button type="button" data-v="below">Below</button><button type="button" data-v="side">Side by side</button><button type="button" data-v="pin">Pinned on top</button><button type="button" class="big" id="padbig" aria-pressed="false">⤢ Expand</button></div>'
   + '<div class="padwork" id="padwork"><textarea id="padin" spellcheck="false" autocorrect="off" autocomplete="off" writingsuggestions="false" data-gramm="false" autocapitalize="sentences" placeholder="Let $W$ be open in $X \\times Y$. …"></textarea><div class="padprev" id="padprev"></div></div>'
   + '<div class="padtools"><button type="button" id="padundo" aria-label="Undo">↶ Undo</button><button type="button" id="padredo" aria-label="Redo">↷ Redo</button><button type="button" id="padcopy">Copy text</button><button type="button" id="padpdf">Save as PDF</button><button type="button" id="padltx">LaTeX dictionary</button><button type="button" id="padadd">+ Add to document</button><a id="padopendoc" class="padlink" href="#">Open document</a><span id="padsaved"></span></div>'
   + '</div></details>'; }
@@ -3138,7 +3140,11 @@ function padInit(id){
   var pw = document.getElementById('padwork'), pvw = document.getElementById('padview');
   function setView(v){ pw.className = 'padwork v-' + v; document.body.classList.toggle('padside', v === 'side'); pvw.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.dataset.v === v); }); try { localStorage.setItem('tg-padview', v); } catch(e){} }
   var v0 = 'below'; try { v0 = localStorage.getItem('tg-padview') || 'below'; } catch(e){} setView(v0);
-  pvw.addEventListener('mousedown', function(e){ e.preventDefault(); }); pvw.addEventListener('click', function(e){ var b = e.target.closest('button'); if (b) setView(b.dataset.v); });
+  // Expand: the page widens to the whole window and the typing box grows tall; the box can also be dragged taller at its corner
+  var bigb = document.getElementById('padbig');
+  function setBig(on){ document.body.classList.toggle('padbig', on); bigb.classList.toggle('on', on); bigb.setAttribute('aria-pressed', on); bigb.textContent = on ? '⤡ Normal size' : '⤢ Expand'; try { localStorage.setItem('tg-padbig', on ? '1' : ''); } catch(e){} }
+  try { setBig(!!localStorage.getItem('tg-padbig')); } catch(e){}
+  pvw.addEventListener('mousedown', function(e){ e.preventDefault(); }); pvw.addEventListener('click', function(e){ var b = e.target.closest('button'); if (!b) return; if (b.id === 'padbig'){ setBig(!document.body.classList.contains('padbig')); return; } setView(b.dataset.v); });
   // undo and redo: our own history, because inserts from the buttons bypass the browser's undo. Typing is grouped into one step per pause.
   var HIST = [{v: ta.value, c: ta.value.length}], HI = 0, typing = null, restoring = false, ub = document.getElementById('padundo'), rb = document.getElementById('padredo');
   function btns(){ ub.disabled = HI === 0; rb.disabled = HI >= HIST.length - 1; }
