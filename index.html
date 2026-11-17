@@ -262,7 +262,7 @@ var TOPICS = [
   ['Building new spaces', ['order-topology', 'product-topology', 'subspace-topology', 'quotient-topology']],
   ['Closed sets and limits', ['closed-set', 'closure', 'interior', 'limit-point', 'closure-test', 'closure-limit-points', 'convergence']],
   ['Separation', ['hausdorff', 't1']],
-  ['Continuous maps', ['continuous', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism']],
+  ['Continuous maps', ['continuous', 'restriction', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism']],
   ['Metric spaces', ['metric', 'ball', 'metric-topology', 'metric-hausdorff', 'epsilon-delta']],
   ['Quotients', ['quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples']],
   ['Methods', ['m-topology', 'm-open', 'm-closed', 'm-closure', 'm-continuous', 'm-hausdorff', 'm-quotient', 'm-compare', 'm-counterexample']],
@@ -270,7 +270,7 @@ var TOPICS = [
   ['Worked problems', ['hw7-q1']]
 ];
 // reading order, roughly following Munkres
-var ORDER = ['relation-equivalence', 'equivalence-class', 'partition', 'image-preimage', 'topology', 'open-set', 'standard-topologies', 'finer-coarser', 'basis', 'generated-topology', 'lemma-13-3', 'subbasis', 'order-topology', 'product-topology', 'subspace-topology', 'closed-set', 'closure', 'interior', 'closure-test', 'limit-point', 'closure-limit-points', 'hausdorff', 't1', 'convergence', 'continuous', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'metric', 'ball', 'metric-topology', 'metric-hausdorff', 'epsilon-delta', 'quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples'];
+var ORDER = ['relation-equivalence', 'equivalence-class', 'partition', 'image-preimage', 'topology', 'open-set', 'standard-topologies', 'finer-coarser', 'basis', 'generated-topology', 'lemma-13-3', 'subbasis', 'order-topology', 'product-topology', 'subspace-topology', 'closed-set', 'closure', 'interior', 'closure-test', 'limit-point', 'closure-limit-points', 'hausdorff', 't1', 'convergence', 'continuous', 'restriction', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'metric', 'ball', 'metric-topology', 'metric-hausdorff', 'epsilon-delta', 'quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples'];
 var A = {
 // ---------- foundations
 'relation-equivalence': {title: 'Equivalence relation', kind: 'definition', where: 'Ch. 1, §3', pre: [],
@@ -414,6 +414,17 @@ var A = {
     ['Examples', R`<p>Constants, the identity, inclusions of subspaces, projections from products, compositions of continuous maps (Theorem 18.2).</p>`],
     ['Non-example', R`<p>The identity $\mathbb R\to\mathbb R_\ell$: $[0,1)$ is open in [[ex-lower-limit|ℝ_ℓ]] but its preimage is not open in $\mathbb R$.</p>`],
     ['Related', R`<p>[[continuity-equivalents]], [[pasting-lemma]], [[homeomorphism]], recipe [[m-continuous]].</p>`]]},
+'restriction': {title: 'Restriction of a function', kind: 'definition', where: '§18', pre: ['continuous', 'subspace-topology'],
+  lede: R`The same rule, used only on a subset of the domain. Restricting a continuous map keeps it continuous (Theorem 18.2(d)).`,
+  sections: [['Definition', R`<p>Let $f:X\to Y$ be a function and $C\subseteq X$. The <b>restriction of $f$ to $C$</b>, written $f|_C$ and read "$f$ restricted to $C$", is the function $$f|_C:C\to Y,\qquad f|_C(c)=f(c)\ \text{for every } c\in C.$$ Only the domain changes, from $X$ to the smaller set $C$. Every point of $C$ goes where it went before; the points outside $C$ are no longer inputs.</p>`],
+    ['Example', R`<p>$f:\mathbb R\to\mathbb R$, $f(t)=t^2$, and $C=[0,1]$. Then $f|_{[0,1]}:[0,1]\to\mathbb R$ is still $t\mapsto t^2$, but accepts only inputs from $[0,1]$: $f|_{[0,1]}(\tfrac12)=\tfrac14=f(\tfrac12)$, while $f|_{[0,1]}(5)$ is not defined, since $5\notin[0,1]$.</p>
+<p>A restriction can have properties the original map lacks. $f(t)=t^2$ is not injective on $\mathbb R$ ($f(-1)=f(1)$), but $f|_{[0,1]}$ is. In the same way, a map to $\{0,1\}$ need not be constant on $X$, but its restriction to a connected subset is ([[hw9-q2]]).</p>`],
+    ['Why it is defined this way', R`<p>Many theorems apply only to maps whose domain has some property: connected, compact, closed. When the whole domain $X$ lacks the property but a subset $C$ has it, restricting gives a map with domain $C$, to which the theorem applies. Whatever it proves about $f|_C$ is then a statement about $f$ at the points of $C$, because the two agree there.</p>`],
+    ['Restrictions of continuous maps are continuous', R`<p><b>Theorem 18.2(d).</b> If $f:X\to Y$ is [[continuous]] and $C\subseteq X$ has the [[subspace-topology|subspace topology]], then $f|_C:C\to Y$ is continuous.</p>
+<p><b>Recall:</b> $g:A\to B$ is continuous when $g^{-1}(V)$ is open in $A$ for every open $V\subseteq B$. <b>Recall:</b> the open sets of the subspace $C$ are exactly the sets $C\cap U$ with $U$ open in $X$.</p>
+<p><b>The preimage.</b> A point $c$ lies in $(f|_C)^{-1}(V)$ exactly when $c\in C$ and $f|_C(c)\in V$. Since $f|_C(c)=f(c)$, this says $c\in C$ and $f(c)\in V$, so $$(f|_C)^{-1}(V)=C\cap f^{-1}(V).$$ The restricted preimage is the old preimage cut down to $C$.</p>
+<p><b>It is open in $C$.</b> $f$ is continuous and $V$ is open, so $f^{-1}(V)$ is open in $X$. Then $C\cap f^{-1}(V)$ is $C$ intersected with an open set of $X$, which is open in $C$ by the definition of the subspace topology.</p>`],
+    ['Related', R`<p>The <b>inclusion</b> $i:C\to X$, $i(c)=c$, gives another way to write it: $f|_C=f\circ i$, a composite of continuous maps (Theorem 18.2(b), (c)). Used in [[hw9-q2]] and [[hw7-q5]]. The reverse move, building one map on $X$ from maps on pieces, is the [[pasting-lemma]].</p>`]]},
 'continuity-equivalents': {title: 'Equivalent forms of continuity (Theorem 18.1)', kind: 'theorem', where: '§18', pre: ['continuous', 'closure'],
   lede: R`Continuity can be checked with closures, closed sets, or neighbourhoods.`,
   sections: [['Statement', R`<p>For $f:X\to Y$ these are equivalent: (1) $f$ is continuous; (2) $f(\overline A)\subseteq\overline{f(A)}$ for every $A\subseteq X$; (3) preimages of [[closed-set|closed sets]] are closed; (4) for each $x$ and each open $V\ni f(x)$ there is an open $U\ni x$ with $f(U)\subseteq V$.</p>`],
@@ -567,7 +578,7 @@ var BOOK = [
     ['§15 · The product topology on X × Y', ['product-topology', 'projections']],
     ['§16 · The subspace topology', ['subspace-topology']],
     ['§17 · Closed sets and limit points', ['closed-set', 'closure', 'interior', 'closure-test', 'limit-point', 'closure-limit-points', 'dense', 'hausdorff', 't1', 'convergence']],
-    ['§18 · Continuous functions', ['continuous', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'embedding', 'open-map']],
+    ['§18 · Continuous functions', ['continuous', 'restriction', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'embedding', 'open-map']],
     ['§19 · The product topology (infinite)', ['product-vs-box']],
     ['§20–21 · The metric topology', ['metric', 'ball', 'metric-topology', 'metric-hausdorff', 'epsilon-delta']],
     ['§22 · The quotient topology', ['quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples']]]],
@@ -921,7 +932,7 @@ BOOK = [
     ['§15 · The product topology on X × Y', ['product-topology', 'projections', 'hw2-q1', 'hw2-q2']],
     ['§16 · The subspace topology', ['subspace-topology', 'hw1-q4', 'hw1-q5', 'hw1-q6', 'mt-q1']],
     ['§17 · Closed sets and limit points', ['closed-set', 'closure', 'interior', 'closure-test', 'limit-point', 'closure-limit-points', 'dense', 'hausdorff', 't1', 'convergence', 'm-closed', 'm-closure', 'm-hausdorff', 'm-true-false', 'hw2-q3', 'hw2-q4', 'hw2-q5', 'hw2-q6', 'mt-q2', 'mt-q3']],
-    ['§18 · Continuous functions', ['continuous', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'embedding', 'open-map', 'm-continuous', 'm-open-map', 'm-homeomorphic', 'hw3-q1', 'hw3-q2', 'hw3-q3', 'hw3-q4', 'mt-q4']],
+    ['§18 · Continuous functions', ['continuous', 'restriction', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'embedding', 'open-map', 'm-continuous', 'm-open-map', 'm-homeomorphic', 'hw3-q1', 'hw3-q2', 'hw3-q3', 'hw3-q4', 'mt-q4']],
     ['§19 · The product topology', ['product-vs-box', 'ex-box-rw', 'coordinate-function', 'maps-into-products', 'products-and-subspaces', 'products-hausdorff-closure', 'product-convergence', 'm-product-maps', 'hw3-q5', 'hw3-q6', 'mt-q5', 'hw4-q1', 'hw4-q2', 'hw4-q3', 'hw4-q4']],
     ['§20 · The metric topology', ['metric', 'ball', 'metric-topology', 'metric-hausdorff', 'mt-q6', 'mt2-q1']],
     ['§21 · The metric topology (continued)', ['epsilon-delta', 'first-countable', 'sequence-lemma', 'metrizable', 'uniform-limit']],
@@ -1675,10 +1686,10 @@ hub9('hw9-q1', [
 hub9('hw9-q2', [
  ['How the terms are used', R`<p>The relation from [[hw8-q2]]: $x\sim y$ means $f(x)=f(y)$ for <b>every</b> continuous $f:X\to\{0,1\}$, where $\{0,1\}$ is discrete. So to prove $x\sim y$, take an arbitrary continuous $f$ and show $f(x)=f(y)$.</p>
 <p>The component $C$ containing $x$ and $y$ is connected (it is a connected subset of $X$, with the subspace topology). [[hw8-q1]](a) says: on a connected space, every continuous map to $\{0,1\}$ is constant.</p>
-<p><b>Restriction.</b> If $f:X\to Y$ is continuous and $C\subseteq X$, then $f|_C:C\to Y$ is continuous (Theorem 18.2(d)): $(f|_C)^{-1}(V)=C\cap f^{-1}(V)$, which is open in $C$.</p>`],
+<p><b>[[restriction|Restriction]].</b> Restricting a function keeps its rule but uses it only on a subset: $f|_C:C\to Y$, $f|_C(c)=f(c)$ for $c\in C$. If $f:X\to Y$ is continuous and $C\subseteq X$, then $f|_C:C\to Y$ is continuous (Theorem 18.2(d)): $(f|_C)^{-1}(V)=C\cap f^{-1}(V)$, which is open in $C$.</p>`],
  ['Breakdown', steps([
   [R`<b>Take an arbitrary continuous</b> $f:X\to\{0,1\}$.`, R`$x\sim y$ is a statement about every such $f$.`],
-  [R`<b>Restrict it to the component</b> $C$: $f|_C$ is continuous.`, R`Theorem 18.2(d).`],
+  [R`<b>Restrict it to the component</b> $C$: $f|_C$ is continuous.`, R`Theorem 18.2(d); see [[restriction]].`],
   [R`<b>$C$ is connected, so $f|_C$ is constant.</b>`, R`HW8 Q1(a), applied to the space $C$.`],
   [R`<b>So $f(x)=f|_C(x)=f|_C(y)=f(y)$.</b>`, R`$x,y\in C$. Since $f$ was arbitrary, $x\sim y$.`]])],
  ['Clean solution', R`<p>Let $C$ be the component of $X$ containing $x$ and $y$; it is connected. Let $f:X\to\{0,1\}$ be any continuous map. Its restriction $f|_C:C\to\{0,1\}$ is continuous (Theorem 18.2(d)). Since $C$ is connected, $f|_C$ is constant by HW8 Q1(a). As $x,y\in C$, $f(x)=f|_C(x)=f|_C(y)=f(y)$. This holds for every continuous $f:X\to\{0,1\}$, so $x\sim y$. $\blacksquare$</p>`],
