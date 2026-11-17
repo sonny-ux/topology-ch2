@@ -2728,7 +2728,7 @@ A['theorems'].sections.unshift(['Since Midterm 1 (§19–24): the Midterm 2 rang
     if (r){ e.preventDefault(); e.stopPropagation(); show(r.dataset.n); return; }
     if (e.target.closest('#tpv .px')){ sh.classList.remove('on'); return; }
     if (e.target.closest('#tpv a')){ sh.classList.remove('on'); return; }
-    if (sh.classList.contains('on') && !e.target.closest('#tpv')) sh.classList.remove('on');
+    if (sh.classList.contains('on') && !e.target.closest('#tpv') && !e.target.closest('.pad, textarea, input')) sh.classList.remove('on');
   }, true);
   window.addEventListener('hashchange', function(){ sh.classList.remove('on'); });
 })();
@@ -2837,7 +2837,8 @@ Object.keys(A).forEach(function(id){ var a = A[id]; if (a.kind !== 'definition' 
     if (e.target.closest('#qpill')){ e.stopPropagation(); peek(null); return; }
     if (e.target.closest('#qback')){ e.stopPropagation(); if (saved != null){ if (history.state && history.state.ppBack != null) history.back(); else goBack(); } else if (NAV.length){ var t = NAV.pop(); restoring = {y: t.y}; location.hash = t.h; } return; }
     if (e.target.closest('#ppv .pj')){ e.stopPropagation(); jump(); return; }
-    if (e.target.closest('#ppv .px') || (sh.classList.contains('on') && !e.target.closest('#ppv'))) closeSh();
+    // a tap into the write-up box (or any text field) keeps the question open, so it can be read while typing
+    if (e.target.closest('#ppv .px') || (sh.classList.contains('on') && !e.target.closest('#ppv') && !e.target.closest('.pad, textarea, input'))) closeSh();
   }, true);
 })();
 // previews: a tap on an underlined term inside an article shows its summary first
@@ -3175,11 +3176,11 @@ function padInit(id){
   ['keyup', 'mouseup', 'select', 'input', 'blur'].forEach(function(ev){ ta.addEventListener(ev, function(){ PADSEL = [ta.selectionStart, ta.selectionEnd]; }); }); PADSEL = [ta.value.length, ta.value.length];
   var ct = null; ['keyup', 'mouseup', 'touchend', 'focus', 'blur'].forEach(function(ev){ ta.addEventListener(ev, function(){ clearTimeout(ct); ct = setTimeout(function(){ hold(draw); }, 120); }); });
   docButtonInit(id);
-  var rt = document.getElementById('padreft'), rb = document.getElementById('padref');
-  if (rt){ var refShow = function(on){ rb.hidden = !on; rt.setAttribute('aria-expanded', on); rt.querySelector('span').textContent = on ? '▾' : '▸'; try { localStorage.setItem('tg-padref', on ? '1' : ''); } catch(e){} };
-    try { refShow(!!localStorage.getItem('tg-padref')); } catch(e){} rt.addEventListener('mousedown', function(e){ e.preventDefault(); }); rt.onclick = function(){ refShow(rb.hidden); }; 
-    rb.querySelector('.rtabs').addEventListener('click', function(e){ var b = e.target.closest('button'); if (!b) return; var i = +b.dataset.t; rb.querySelectorAll('.rtabs button').forEach(function(x, k){ x.classList.toggle('on', k === i); }); rb.querySelectorAll('.rpane').forEach(function(x, k){ x.hidden = k !== i; }); });
-    rb.querySelector('.rtabs').addEventListener('mousedown', function(e){ e.preventDefault(); }); }
+  var rt = document.getElementById('padreft'), rfb = document.getElementById('padref');
+  if (rt){ var refShow = function(on){ rfb.hidden = !on; rt.setAttribute('aria-expanded', on); rt.querySelector('span').textContent = on ? '▾' : '▸'; try { localStorage.setItem('tg-padref', on ? '1' : ''); } catch(e){} };
+    try { refShow(!!localStorage.getItem('tg-padref')); } catch(e){} rt.addEventListener('mousedown', function(e){ e.preventDefault(); }); rt.onclick = function(){ refShow(rfb.hidden); }; 
+    rfb.querySelector('.rtabs').addEventListener('click', function(e){ var b = e.target.closest('button'); if (!b) return; var i = +b.dataset.t; rfb.querySelectorAll('.rtabs button').forEach(function(x, k){ x.classList.toggle('on', k === i); }); rfb.querySelectorAll('.rpane').forEach(function(x, k){ x.hidden = k !== i; }); });
+    rfb.querySelector('.rtabs').addEventListener('mousedown', function(e){ e.preventDefault(); }); }
   var st = document.getElementById('padsymt'), sb = document.getElementById('padbar');
   function symShow(on){ sb.hidden = !on; st.setAttribute('aria-expanded', on); st.querySelector('span').textContent = on ? '▾' : '▸'; try { localStorage.setItem('tg-padsym', on ? '' : 'closed'); } catch(e){} }
   try { symShow(localStorage.getItem('tg-padsym') !== 'closed'); } catch(e){}
