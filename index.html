@@ -3093,7 +3093,7 @@ function padAuto(t){
   // 4. products and operators between operands
   t = padOnPlain(t, function(x){ return x.replace(/∅/g, '$\\varnothing$').replace(/(^|[\s(])([A-Z](?:_\{[^{}]*\}|_[A-Za-z0-9])?)\s+x\s+(?=[A-Z](?:_\{[^{}]*\}|_[A-Za-z0-9])?(?![A-Za-z]))/g, function(m, pre, a){ return pre + '$' + a + ' \\times$ '; })
     .replace(/<=>/g, '$\\iff$').replace(/=>/g, '$\\Rightarrow$').replace(/->/g, '$\\to$').replace(/!=/g, '$\\neq$').replace(/<=/g, '$\\le$').replace(/>=/g, '$\\ge$')
-    .replace(/([A-Za-z0-9)])\s*\*\s*(?=[A-Za-z0-9(])/g, '$1 $\\cdot$ ').replace(/(^|[^<>=!$])([<>])(?![=>$])/g, '$1$$$2$$'); });
+    .replace(/([A-Za-z0-9)])(\s*)\*(\s*)(?=[A-Za-z0-9(])/g, function(m, a1, s1, s2){ return (s1 === '') === (s2 === '') ? a1 + ' $\\cdot$ ' : m; }).replace(/(^|[^<>=!$])([<>])(?![=>$])/g, '$1$$$2$$'); });
   // 5. single-letter variables, with an optional subscript, prime or ^-1 (not the article "a", not a part label like "(a)")
   t = padOnPlain(t, function(x){ return x.replace(new RegExp('(^|[\\s(,\\[{:])([A-Za-z]' + sub + "'?" + sup + ')(?=$|[\\s.,;:)\\]}=])', 'g'), function(m, pre, v, off, str){
       if (v === 'a' || v === 'A' && /(^|[.!?:]\s*|\n\s*)$/.test(str.slice(0, off) + pre)) return m;
