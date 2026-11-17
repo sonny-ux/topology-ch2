@@ -174,6 +174,8 @@ details.pad>summary{color:var(--text);}
 .padcaret{display:inline-block;width:2px;height:1.1em;margin:0 1px;vertical-align:-.15em;background:#4a90e2;} @keyframes padblink{50%{opacity:0;}}
 .padview{display:flex;gap:4px;align-items:center;margin:6px 0 8px;font:12px -apple-system,system-ui,sans-serif;color:var(--muted);flex-wrap:wrap;} .padview button{border:1px solid var(--border2);background:var(--card);color:var(--text2);border-radius:999px;padding:5px 11px;font:13px -apple-system,system-ui,sans-serif;cursor:pointer;} .padview button.on{background:var(--text);color:var(--bg);border-color:var(--text);}
 .padwork{display:flex;flex-direction:column;gap:10px;}
+@media (min-width:1000px) and (pointer:fine){ body:has(#padin) .wrap{max-width:1040px;} #padin{min-height:42vh;font-size:17px;} .padprev{font-size:17px;} }
+.padprev h2.padh,.padprev h3.padh,.padprev h4.padh,#padprint h3.padh,#padprint h4.padh{margin:.9em 0 .3em;font-weight:650;} .padprev h2.padh{font-size:1.25em;} .padprev h3.padh{font-size:1.1em;} .padprev h4.padh{font-size:1em;}
 @media (pointer:coarse){ #padin{height:38vh!important;min-height:38vh;resize:none;overflow-y:auto;overscroll-behavior:contain;} .padwork.v-side .padprev{height:38vh;max-height:none;} .padwork.v-pin .padprev{height:28vh;} }
 .padwork.v-side{display:grid;grid-template-columns:1fr 1fr;align-items:start;} .padwork.v-side .padprev{position:sticky;top:70px;max-height:calc(100vh - 90px);overflow:auto;} body.padside .wrap{max-width:1180px;}
 .padwork.v-pin{flex-direction:column-reverse;} .padwork.v-pin .padprev{position:sticky;top:64px;z-index:6;height:34vh;overflow:auto;box-shadow:0 6px 16px rgba(0,0,0,.25);}
@@ -3051,7 +3053,7 @@ function padRefHtml(id){ var a = A[id], ss = (a.sections || []).filter(function(
   return '<button type="button" class="padsymt" id="padreft" aria-expanded="false">Solution and why <span>▸</span></button><div class="padref" id="padref" hidden><div class="rtabs">' + tabs.map(function(tb, i){ return '<button type="button" data-t="' + i + '"' + (i ? '' : ' class="on"') + '>' + tb + '</button>'; }).join('') + '</div>'
     + panes.map(function(pn, i){ return '<div class="rpane"' + (i ? ' hidden' : '') + '>' + pn + '</div>'; }).join('') + '</div>'; }
 function padHtml(id){ return '<details class="sec pad" open><summary>Your write-up</summary><div class="secb">'
-  + '<p class="padnote">Type your answer. Put math between dollar signs, like $\\pi_1(W)$, or use the buttons. It renders below as you type and is kept on this device.</p>'
+  + '<p class="padnote">Type your answer. Put math between dollar signs, like $\\pi_1(W)$, or use the buttons. It renders below as you type and is kept on this device.</p><p class="padnote">Shortcuts, as in Obsidian\'s Latex Suite: <b>mk</b> opens inline math, <b>dm</b> display math, <b>Tab</b> jumps to the next slot or out of the math; inside math, <b>@a</b> gives α (also @b @g @d @e @l @m @p @r @s @t @f @o, capitals @G @D @S @O) and <b>//</b> a fraction. A line starting with <b>#</b>, <b>##</b> or <b>###</b> is a heading; <b>**bold**</b> and <b>*italic*</b> work too.</p>'
   + padRefHtml(id)
   + '<button type="button" class="padsymt" id="padsymt" aria-expanded="true">Symbols <span>▾</span></button>'
   + '<div class="padbar" id="padbar">' + PADSYM.map(function(b, i){ return '<button type="button" data-p="' + i + '">' + (i === 0 ? 'inline math' : b[0] === 'display' ? 'display math' : '$' + b[0] + '$') + '</button>'; }).join('') + '</div>'
@@ -3110,9 +3112,14 @@ function padAuto(t){
   return out.join(''); }
 function padRender(txt){ function esc(x){ return x.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   // per paragraph: line breaks inside math become spaces, other line breaks stay; a lone unmatched $ is set apart so it cannot swallow the rest
-  function par(p){ var parts = p.split(/(\$\$[\s\S]*?\$\$|\$[^$]*\$)/); return parts.map(function(seg, i){ if (i % 2) return seg.replace(/\n/g, ' '); return seg.replace(/\$/g, '<span class="lone">$</span>').replace(/\n/g, '<br>'); }).join(''); }
+  function par(p){ var parts = p.split(/(\$\$[\s\S]*?\$\$|\$[^$]*\$)/); return parts.map(function(seg, i){ if (i % 2) return seg.replace(/\n/g, ' '); return seg.replace(/\$/g, '<span class="lone">$</span>').replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>').replace(/(^|[^*\w])\*([^*\n]+)\*(?![*\w])/g, '$1<i>$2</i>').replace(/\n/g, '<br>'); }).join(''); }
+  // Markdown headings: a line starting with #, ## or ### (as in Obsidian)
+  function block(p){ var lines = p.split('\n'), out = '', buf = [];
+    function flush(){ if (buf.length){ out += '<p>' + par(buf.join('\n')) + '</p>'; buf = []; } }
+    lines.forEach(function(l){ var h = l.match(/^\s*(#{1,3})\s+(.*)$/); if (h){ flush(); out += '<h' + (h[1].length + 1) + ' class="padh">' + par(h[2]) + '</h' + (h[1].length + 1) + '>'; } else buf.push(l); });
+    flush(); return out; }
   // a line [sketch] (or [sketch tall]) leaves a framed blank space to draw in after exporting
-  return txt.trim() ? esc(padAuto(txt)).split(/\n\s*\n/).map(function(p){ var m = p.trim().match(/^\[sketch( tall)?\]$/i); if (m) return '<div class="sketchbox' + (m[1] ? ' tall' : '') + '"></div>'; return '<p>' + par(p) + '</p>'; }).join('') : '<p class="padempty">Your rendered write-up appears here.</p>'; }
+  return txt.trim() ? esc(padAuto(txt)).split(/\n\s*\n/).map(function(p){ var m = p.trim().match(/^\[sketch( tall)?\]$/i); if (m) return '<div class="sketchbox' + (m[1] ? ' tall' : '') + '"></div>'; return block(p); }).join('') : '<p class="padempty">Your rendered write-up appears here.</p>'; }
 function padInit(id){
   var ta = document.getElementById('padin'), pv = document.getElementById('padprev'), sv = document.getElementById('padsaved'), key = 'tg-pad-' + id, tm = null;
   try { ta.value = localStorage.getItem(key) || localStorage.getItem(key + '-backup') || ''; } catch(e){}
@@ -3141,6 +3148,23 @@ function padInit(id){
   ub.addEventListener('mousedown', function(e){ e.preventDefault(); }); rb.addEventListener('mousedown', function(e){ e.preventDefault(); });
   ub.onclick = function(){ go(-1); }; rb.onclick = function(){ go(1); }; btns();
   ta.addEventListener('beforeinput', function(e){ if (e.inputType === 'insertText' && e.data === '$' && ta.selectionStart === ta.selectionEnd && ta.value.charAt(ta.selectionStart) === '$'){ var b4 = ta.value.slice(0, ta.selectionStart); if (((b4.match(/\$/g) || []).length) % 2 === 1){ e.preventDefault(); var c = ta.selectionStart + 1; ta.setSelectionRange(c, c); PADSEL = [c, c]; } } });
+  // Latex Suite style: where the caret is (inside $…$ or $$…$$?) and where that math ends
+  function mathAt(v, c){ var st = 0, open = -1; for (var i = 0; i < c; i++){ if (v.charAt(i) === '\\'){ i++; continue; } if (v.charAt(i) === '$'){ if (i + 1 < c && v.charAt(i + 1) === '$'){ if (st === 2){ st = 0; } else if (st === 0){ st = 2; open = i; } i++; } else if (st === 1) st = 0; else if (st === 0){ st = 1; open = i; } } }
+    if (!st) return null; var j = c; while (j < v.length){ if (v.charAt(j) === '\\'){ j += 2; continue; } if (v.charAt(j) === '$') break; j++; }
+    return {kind: st, end: j < v.length ? j : -1}; }
+  function put(a0, a1, ins, caret){ var v = ta.value; ta.value = v.slice(0, a0) + ins + v.slice(a1); ta.setSelectionRange(caret, caret); PADSEL = [caret, caret]; ta.dispatchEvent(new Event('input')); }
+  var GREEK = {a:'alpha', b:'beta', g:'gamma', d:'delta', e:'varepsilon', l:'lambda', m:'mu', p:'pi', r:'rho', s:'sigma', t:'tau', f:'phi', o:'omega', G:'Gamma', D:'Delta', S:'Sigma', O:'Omega'};
+  ta.addEventListener('input', function(e){ if (!e.isTrusted || e.inputType !== 'insertText' || ta.selectionStart !== ta.selectionEnd) return;
+    var v = ta.value, c = ta.selectionStart, b4 = v.slice(0, c), m = mathAt(v, c);
+    if (!m){ if (/(^|[\s(])mk$/.test(b4)){ put(c - 2, c, '$$', c - 1); return; }
+      if (/(^|\s)dm$/.test(b4)){ put(c - 2, c, '$$\n\n$$', c + 1); return; } return; }
+    var g = b4.match(/@([A-Za-z])$/); if (g && GREEK[g[1]]){ var w = '\\' + GREEK[g[1]] + ' '; put(c - 2, c, w, c - 2 + w.length); return; }
+    if (/\/\/$/.test(b4)){ put(c - 2, c, '\\frac{}{}', c - 2 + 6); return; } });
+  ta.addEventListener('keydown', function(e){ if (e.key !== 'Tab' || e.shiftKey || e.metaKey || e.ctrlKey || e.altKey) return; var v = ta.value, c = ta.selectionEnd, m = mathAt(v, c); if (!m) return;
+    e.preventDefault(); var end = m.end < 0 ? v.length : m.end, k = v.indexOf('}', c), pos;
+    if (k >= 0 && k < end){ pos = k + 1; if (v.charAt(pos) === '{') pos++; }
+    else pos = m.end < 0 ? v.length : end + m.kind;
+    ta.setSelectionRange(pos, pos); PADSEL = [pos, pos]; clearTimeout(ct); ct = setTimeout(function(){ hold(draw); }, 120); });
   ta.addEventListener('keydown', function(e){ if ((e.metaKey || e.ctrlKey) && (e.key === 'z' || e.key === 'Z')){ e.preventDefault(); go(e.shiftKey ? 1 : -1); } else if ((e.metaKey || e.ctrlKey) && (e.key === 'y' || e.key === 'Y')){ e.preventDefault(); go(1); } });
   ['keyup', 'mouseup', 'select', 'input', 'blur'].forEach(function(ev){ ta.addEventListener(ev, function(){ PADSEL = [ta.selectionStart, ta.selectionEnd]; }); }); PADSEL = [ta.value.length, ta.value.length];
   var ct = null; ['keyup', 'mouseup', 'touchend', 'focus', 'blur'].forEach(function(ev){ ta.addEventListener(ev, function(){ clearTimeout(ct); ct = setTimeout(function(){ hold(draw); }, 120); }); });
@@ -3176,12 +3200,12 @@ function padInit(id){
 // the write-up box or the symbol bar. Tap an entry to insert it where the cursor was; it stays open until closed.
 var LTX = [
  ['Sets', [['\\in', '\\in', 'is an element of'], ['\\notin', '\\notin', 'is not an element of'], ['\\subseteq', '\\subseteq', 'is a subset of (may be equal)'], ['\\subsetneq', '\\subsetneq', 'is a proper subset of'], ['\\supseteq', '\\supseteq', 'contains as a subset'],
-   ['\\cup', '\\cup', 'union'], ['\\cap', '\\cap', 'intersection'], ['\\setminus', '\\setminus', 'set difference, A minus B'], ['\\varnothing', '\\varnothing', 'the empty set'], ['X \\times Y', '\\times', 'Cartesian product'],
+   ['\\cup', '\\cup', 'union'], ['\\cap', '\\cap', 'intersection'], ['\\setminus', '\\setminus', 'set difference, A minus B'], ['\\varnothing', '\\varnothing', 'the empty set'], ['\\{x \\mid x \\gt 0\\}', '\\mid', 'the bar in set-builder notation ("such that")'], ['X \\times Y', '\\times', 'Cartesian product'],
    ['\\{x \\in X : P\\}', '\\{x \\in X : \\}', 'the set of x in X such that …'], ['\\bigcup_{i \\in I} A_i', '\\bigcup_{i \\in I} A_i', 'union of a family'], ['\\bigcap_{i \\in I} A_i', '\\bigcap_{i \\in I} A_i', 'intersection of a family'],
    ['\\prod_{\\alpha} X_\\alpha', '\\prod_{\\alpha} X_\\alpha', 'product of a family'], ['\\mathcal P(X)', '\\mathcal P(X)', 'power set: all subsets of X'], ['X^c', 'X^c', 'complement (when the ambient set is clear)']]],
  ['Numbers', [['\\mathbb R', '\\mathbb R', 'the real numbers'], ['\\mathbb Q', '\\mathbb Q', 'the rationals'], ['\\mathbb Z', '\\mathbb Z', 'the integers'], ['\\mathbb N', '\\mathbb N', 'the natural numbers'], ['\\mathbb R^n', '\\mathbb R^n', 'n-dimensional space'],
    ['\\mathbb R_\\ell', '\\mathbb R_\\ell', 'lower limit topology'], ['\\mathbb R_K', '\\mathbb R_K', 'K-topology'], ['\\mathbb R^\\omega', '\\mathbb R^\\omega', 'countable product of lines']]],
- ['Logic', [['\\forall', '\\forall', 'for all'], ['\\exists', '\\exists', 'there exists'], ['\\nexists', '\\nexists', 'there does not exist'], ['\\Rightarrow', '\\Rightarrow', 'implies'], ['\\Leftarrow', '\\Leftarrow', 'is implied by'],
+ ['Logic', [['\\forall', '\\forall', 'for all'], ['\\blacksquare', '\\blacksquare', 'end of proof'], ['\\exists', '\\exists', 'there exists'], ['\\nexists', '\\nexists', 'there does not exist'], ['\\Rightarrow', '\\Rightarrow', 'implies'], ['\\Leftarrow', '\\Leftarrow', 'is implied by'],
    ['\\iff', '\\iff', 'if and only if'], ['\\neg', '\\neg', 'not'], ['\\wedge', '\\wedge', 'and'], ['\\vee', '\\vee', 'or'], ['\\therefore', '\\therefore', 'therefore'], ['\\blacksquare', '\\blacksquare', 'end of proof']]],
  ['Relations', [['\\neq', '\\neq', 'not equal'], ['\\le', '\\le', 'less than or equal'], ['\\ge', '\\ge', 'greater than or equal'], ['\\lt', '\\lt', 'less than (safe form of <)'], ['\\gt', '\\gt', 'greater than (safe form of >)'],
    ['\\sim', '\\sim', 'is equivalent to (a relation)'], ['\\cong', '\\cong', 'is homeomorphic to'], ['\\approx', '\\approx', 'approximately'], ['\\equiv', '\\equiv', 'is identical / congruent to']]],
@@ -3190,9 +3214,9 @@ var LTX = [
  ['Topology', [['\\mathcal T', '\\mathcal T', 'a topology'], ['\\mathcal B', '\\mathcal B', 'a basis'], ['\\overline{A}', '\\overline{A}', 'closure of A'], ['\\operatorname{Int} A', '\\operatorname{Int} A', 'interior of A'], ['\\partial A', '\\partial A', 'boundary of A'],
    ["A'", "A'", 'limit points of A'], ['B_d(x, \\varepsilon)', 'B_d(x, \\varepsilon)', 'open ball'], ['d(x, y)', 'd(x, y)', 'distance (metric)'], ['X/{\\sim}', 'X/{\\sim}', 'quotient space'], ['[x]', '[x]', 'equivalence class of x'],
    ['p^{-1}(p(U))', 'p^{-1}(p(U))', 'saturation of U'], ['U \\times V', 'U \\times V', 'a box in a product'], ['x_n \\to x', 'x_n \\to x', 'the sequence converges to x']]],
- ['Greek', [['\\alpha', '\\alpha', 'alpha'], ['\\beta', '\\beta', 'beta'], ['\\gamma', '\\gamma', 'gamma'], ['\\delta', '\\delta', 'delta'], ['\\varepsilon', '\\varepsilon', 'epsilon'], ['\\lambda', '\\lambda', 'lambda'], ['\\mu', '\\mu', 'mu'],
+ ['Greek', [['\\alpha', '\\alpha', 'alpha'], ['\\beta', '\\beta', 'beta'], ['\\gamma', '\\gamma', 'gamma'], ['\\delta', '\\delta', 'delta'], ['\\varepsilon', '\\varepsilon', 'epsilon'], ['\\epsilon', '\\epsilon', 'epsilon, the other shape (the homework PDFs use it)'], ['\\Gamma_f', '\\Gamma', 'capital gamma (the graph of f)'], ['\\lambda', '\\lambda', 'lambda'], ['\\mu', '\\mu', 'mu'],
    ['\\pi', '\\pi', 'pi'], ['\\rho', '\\rho', 'rho'], ['\\sigma', '\\sigma', 'sigma'], ['\\tau', '\\tau', 'tau'], ['\\phi', '\\phi', 'phi'], ['\\omega', '\\omega', 'omega'], ['\\Delta', '\\Delta', 'capital delta (the diagonal)']]],
- ['Layout', [['x_{n}', '_{}', 'subscript (braces for more than one character)'], ['x^{2}', '^{}', 'superscript'], ['\\frac{a}{b}', '\\frac{}{}', 'fraction'], ['\\sqrt{x}', '\\sqrt{}', 'square root'], ['|x|', '|x|', 'absolute value'],
+ ['Layout', [['x_{n}', '_{}', 'subscript (braces for more than one character)'], ['x^{2}', '^{}', 'superscript'], ['\\frac{a}{b}', '\\frac{}{}', 'fraction'], ['\\begin{aligned} a &= b \\\\ &= c \\end{aligned}', '\\begin{aligned}\n a &= b \\\\\n &= c\n\\end{aligned}', 'a chain of equations lined up at & (\\\\ starts a new line; use inside $$ … $$)'], ['\\sqrt{x}', '\\sqrt{}', 'square root'], ['|x|', '|x|', 'absolute value'],
    ['\\lim_{n \\to \\infty}', '\\lim_{n \\to \\infty}', 'limit'], ['\\inf', '\\inf', 'infimum'], ['\\sup', '\\sup', 'supremum'], ['\\min', '\\min', 'minimum'], ['\\max', '\\max', 'maximum'], ['\\ldots', '\\ldots', 'dots on the line'],
    ['\\text{ such that }', '\\text{ such that }', 'ordinary words inside math'], ['a \\quad b', '\\quad', 'a wide space'], ['\\left( \\frac{a}{b} \\right)', '\\left(  \\right)', 'brackets that grow to fit']]]];
 function ltxPanel(){ var p = document.getElementById('ltx'); if (p) return p; p = document.createElement('div'); p.id = 'ltx';
