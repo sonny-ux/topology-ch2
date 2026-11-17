@@ -924,9 +924,9 @@ BOOK = [
     ['§22 · The quotient topology', ['quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples', 'm-quotient-map', 'm-not-quotient', 'm-build-quotient', 'm-quotient', 'hw6-q1', 'hw6-q2', 'hw6-q3', 'hw6-q4', 'hw6-q5', 'hw7-q1', 'hw7-q2', 'hw7-q3', 'hw7-q4', 'hw7-q5', 'hw7-q6', 'mt2-q2', 'mt2-q3']],
     ['Across the chapter', ['defining-by-maps', 'm-counterexample']]]],
   ['Chapter 3 · Connectedness and Compactness', [
-    ['§23 · Connected spaces', ['connected', 'm-connected', 'ex-rationals', 'hw8-q1', 'hw8-q2', 'hw8-q5', 'mt2-q4', 'mt2-q5', 'mt2-q6']],
+    ['§23 · Connected spaces', ['connected', 'm-connected', 'ex-rationals', 'hw8-q1', 'hw8-q2', 'hw8-q5', 'mt2-q4', 'mt2-q5', 'mt2-q6', 'hw9-q4']],
     ['§24 · Connected subspaces of the real line', ['connected-reals', 'ivt', 'path-connected', 'm-path-connected', 'ex-sine-curve', 'hw8-q3', 'hw8-q4']],
-    ['§25 · Components and local connectedness', ['components', 'path-components', 'local-connectedness']],
+    ['§25 · Components and local connectedness', ['components', 'path-components', 'local-connectedness', 'hw9-q1', 'hw9-q2', 'hw9-q3']],
     ['§26 · Compact spaces', ['compact', 'm-compact']],
     ['§27 · Compact subspaces of the real line', ['compact-reals']],
     ['§28 · Limit point compactness', ['limit-point-compact']],
@@ -934,7 +934,7 @@ BOOK = [
   ['Later in the course (Ch. 9, 12, 13)', [
     ['Ch. 9 · The fundamental group', []], ['Ch. 12 · Classification of surfaces', []], ['Ch. 13 · Covering spaces', []]]]
 ];
-PROBSETS = [['Homework 1', ['hw1-q1', 'hw1-q2', 'hw1-q3', 'hw1-q4', 'hw1-q5', 'hw1-q6']], ['Homework 2', ['hw2-q1', 'hw2-q2', 'hw2-q3', 'hw2-q4', 'hw2-q5', 'hw2-q6']], ['Homework 3', ['hw3-q1', 'hw3-q2', 'hw3-q3', 'hw3-q4', 'hw3-q5', 'hw3-q6']], ['Midterm 1 practice', ['mt-q1', 'mt-q2', 'mt-q3', 'mt-q4', 'mt-q5', 'mt-q6']], ['Homework 4', ['hw4-q1', 'hw4-q2', 'hw4-q3', 'hw4-q4']], ['Homework 6 (file header "Homework 5")', ['hw6-q1', 'hw6-q2', 'hw6-q3', 'hw6-q4', 'hw6-q5']], ['Homework 7', ['hw7-q1', 'hw7-q2', 'hw7-q3', 'hw7-q4', 'hw7-q5', 'hw7-q6']], ['Homework 8', ['hw8-q1', 'hw8-q2', 'hw8-q3', 'hw8-q4', 'hw8-q5']], ['Midterm 2 practice', ['mt2-q1', 'mt2-q2', 'mt2-q3', 'mt2-q4', 'mt2-q5', 'mt2-q6']]];
+PROBSETS = [['Homework 1', ['hw1-q1', 'hw1-q2', 'hw1-q3', 'hw1-q4', 'hw1-q5', 'hw1-q6']], ['Homework 2', ['hw2-q1', 'hw2-q2', 'hw2-q3', 'hw2-q4', 'hw2-q5', 'hw2-q6']], ['Homework 3', ['hw3-q1', 'hw3-q2', 'hw3-q3', 'hw3-q4', 'hw3-q5', 'hw3-q6']], ['Midterm 1 practice', ['mt-q1', 'mt-q2', 'mt-q3', 'mt-q4', 'mt-q5', 'mt-q6']], ['Homework 4', ['hw4-q1', 'hw4-q2', 'hw4-q3', 'hw4-q4']], ['Homework 6 (file header "Homework 5")', ['hw6-q1', 'hw6-q2', 'hw6-q3', 'hw6-q4', 'hw6-q5']], ['Homework 7', ['hw7-q1', 'hw7-q2', 'hw7-q3', 'hw7-q4', 'hw7-q5', 'hw7-q6']], ['Homework 8', ['hw8-q1', 'hw8-q2', 'hw8-q3', 'hw8-q4', 'hw8-q5']], ['Homework 9', ['hw9-q1', 'hw9-q2', 'hw9-q3', 'hw9-q4']], ['Midterm 2 practice', ['mt2-q1', 'mt2-q2', 'mt2-q3', 'mt2-q4', 'mt2-q5', 'mt2-q6']]];
 METHODS = ['m-set-equality', 'm-topology', 'm-finite', 'm-open', 'm-compare', 'm-closed', 'm-closure', 'm-hausdorff', 'm-true-false', 'm-continuous', 'm-open-map', 'm-product-maps', 'm-quotient-map', 'm-not-quotient', 'm-quotient', 'm-counterexample', 'm-connected', 'm-path-connected', 'm-compact'];
 
 // ===== Deeper teaching for the core concepts: inserted right after each article's Definition.
@@ -1634,6 +1634,104 @@ hub8('hw8-q5', [
  ['Why it makes sense', R`<p>Removing $A\times B$ takes out a "corner block", but it never takes out a whole slice: a vertical slice is lost only where $x\in A$, and then only its part over $B$. Every surviving point can walk along a full slice to the cross through $(a,b)$, and the cross is in one piece. So $Z$ is one piece.</p>
 <p><b>Why "proper" is needed.</b> If $A=X$, then $Z=X\times(Y\setminus B)$, which can fall apart: $X=Y=\mathbb R$, $A=\mathbb R$, $B=\{0\}$ gives $Z=\mathbb R\times(\mathbb R\setminus\{0\})$, the plane minus the $x$-axis, two open half-planes.</p>
 <p>The argument also proves Theorem 23.6 for two factors (take $A=B=\varnothing$): $X\times Y$ is connected. The same hub-and-slices picture is how Munkres proves it.</p>`]]);
+
+// ===== Homework 9 (§23–25, components; the relation from HW8 Q2; graphs of functions): problem guides.
+function PB9(t, stmt, pre, meth){ return {title: t, kind: 'problem', where: 'Homework 9', pre: pre, method: meth, lede: stmt, sections: []}; }
+Object.assign(A, {
+'hw9-q1': PB9('HW9 Q1 · Components of a three-point space', R`Find the connected components of $X=\{0,1,2\}$ with open sets $\varnothing,\{0\},\{0,2\},\{1,2\},\{2\},X$.`, ['components', 'connected', 'subspace-topology', 'ex-sierpinski'], ['m-finite', 'm-connected']),
+'hw9-q2': PB9('HW9 Q2 · Same component implies x ∼ y', R`If $x,y$ lie in the same component of $X$, then every continuous $f:X\to\{0,1\}$ has $f(x)=f(y)$.`, ['components', 'connected', 'hw8-q1', 'hw8-q2'], ['m-connected']),
+'hw9-q3': PB9('HW9 Q3 · Two points that no map separates, in different components', R`In $X=(\{0\}\times\{0,1\})\cup(\{\tfrac1n\}\times[0,1])$: (a) sketch; (b) $(0,0)\sim(0,1)$; (c) they lie in different components.`, ['components', 'connected', 'connected-reals', 'subspace-topology', 'hw8-q2', 'hw9-q2'], ['m-connected']),
+'hw9-q4': PB9('HW9 Q4 · The graph of a function', R`(a) $f$ continuous $\Rightarrow$ $\Gamma_f\cong X$, so $\Gamma_f$ is path connected when $X$ is. (b) For $f:[0,1]\to\mathbb R$: $\Gamma_f$ path connected $\Rightarrow$ $f$ continuous.`, ['homeomorphism', 'maps-into-products', 'path-connected', 'epsilon-delta', 'ivt'], ['m-homeomorphic', 'm-path-connected'])
+});
+Object.assign(VERBATIM, {
+'hw9-q1': R`<p>Let $X=\{0,1,2\}$ and $\mathcal T=\{\varnothing,\{0\},\{0,2\},\{1,2\},\{2\},X\}$. It may be used without proof that $\mathcal T$ is a topology on $X$. Determine the connected components of $X$.</p><p>Justify your answer.</p>`,
+'hw9-q2': R`<p>Let $X$ be a topological space, and let $\sim$ be the equivalence relation on $X$ defined in HW8Q2. Prove that if $x,y\in C$ are in the same connected component, then $x\sim y$.</p>`,
+'hw9-q3': R`<p>This question is a continuation of the previous.</p><p>Let $X\subset\mathbb R^2$ be the following subset, equipped with the subspace topology</p>$$X=(\{0\}\times\{0,1\})\cup\left(\left\{\tfrac1n\;\middle|\;n\in\mathbb Z_{\gt0}\right\}\times[0,1]\right).$$<p>(a) Sketch a picture of $X$.</p><p>(b) Let $x=(0,0)\in X$ and $y=(0,1)\in X$. Prove that $x\sim y$, where $\sim$ is the equivalence relation from the previous question.</p><p>(c) Prove that $x$ and $y$ are not in the same connected component of $X$.</p>`,
+'hw9-q4': R`<p>For any function $f:X\to Y$, the graph of $f$ is the subset $\Gamma_f\subset X\times Y$ defined as</p>$$\{(x,f(x))\mid x\in X\}.$$<p>(a) Prove that if $f$ is continuous, then the graph of $f$ is homeomorphic to $X$. Deduce that if $X$ is path connected and $f$ is continuous, then the graph of $f$ is also path connected.</p><p>(b) Prove that if the graph of $f:[0,1]\to\mathbb R$ is path connected, then $f$ is continuous.</p><p><i>Hint:</i> For any $x\in[0,1]$ and $\epsilon\gt0$, use a continuous path between $(0,f(0))$ and $(x,f(x))$ to find a $\delta\gt0$ such that $f([0,1]\cap(x-\delta,x])\subset(f(x)-\epsilon,f(x)+\epsilon)$. Use a continuous path between $(1,f(1))$ and $(x,f(x))$ in a similar way.</p>`
+});
+var PDF9 = '<p class="foot">Word for word from the assignment PDF (Homework 9, due Monday 11/16/26, 11:59 PM, Gradescope; 2% of the grade). The header says 5 questions, but the PDF has four. The assignment asks for all steps with a clear explanation, and no results beyond what the class has covered.</p>';
+function hub9(id, parts){ A[id].sections = [['The problem', VERBATIM[id] + PDF9], ['Concepts and method', '']].concat(parts); }
+
+// ---------- Q1
+hub9('hw9-q1', [
+ ['How the terms are used', R`<p>A <b>component</b> ([[components]]) is a maximal connected subset: connected, and not contained in any larger connected subset. The components split $X$ into disjoint pieces, and every connected subset lies inside one of them.</p>
+<p><b>Connected</b> ([[connected]]) means no separation: no pair of disjoint nonempty open sets whose union is the whole space. For a subset, "open" means open in the [[subspace-topology]]: intersect each open set of $X$ with the subset.</p>
+<p><b>Lemma 23.2</b> is the tool for maximality: if $U,V$ separate $X$, every connected subset lies entirely in $U$ or entirely in $V$.</p>`],
+ ['Breakdown', steps([
+  [R`<b>Look for a separation of $X$:</b> $\{0\}$ and $\{1,2\}$.`, R`Both are in $\mathcal T$, so both are open; they are disjoint, nonempty, and their union is $X$. So $X$ is not connected.`],
+  [R`<b>$\{0\}$ is connected.</b>`, R`A one-point space has no two disjoint nonempty subsets at all.`],
+  [R`<b>$\{1,2\}$ is connected:</b> its subspace topology is $\varnothing,\{2\},\{1,2\}$.`, R`Intersect each open set with $\{1,2\}$: $\varnothing$, $\{0\}\cap\{1,2\}=\varnothing$, $\{0,2\}\cap\{1,2\}=\{2\}$, $\{1,2\}$, $\{2\}$, $X\cap\{1,2\}=\{1,2\}$. The set $\{1\}$ is not open in it, so the only split $\{1\},\{2\}$ is not a separation. This is the Sierpiński space ([[ex-sierpinski]]).`],
+  [R`<b>Maximality:</b> a connected set containing $0$ and another point would meet both $\{0\}$ and $\{1,2\}$.`, R`Lemma 23.2: it must lie in one side of the separation. So no connected set contains $0$ together with $1$ or $2$.`],
+  [R`<b>Conclude:</b> the components are $\{0\}$ and $\{1,2\}$.`, R`Each is connected and cannot be enlarged, and together they cover $X$.`]])],
+ ['Clean solution', R`<p>The sets $U=\{0\}$ and $V=\{1,2\}$ belong to $\mathcal T$, are disjoint and nonempty, and $U\cup V=X$. So they form a separation of $X$.</p>
+<p>$\{0\}$ is connected, being a single point. The subspace topology on $\{1,2\}$ consists of the intersections of the open sets of $X$ with $\{1,2\}$, namely $\varnothing,\{2\},\{1,2\}$. Since $\{1\}$ is not open in $\{1,2\}$, there is no pair of disjoint nonempty open subsets of $\{1,2\}$ covering it, so $\{1,2\}$ is connected.</p>
+<p>By Lemma 23.2, every connected subset of $X$ lies in $U$ or in $V$. Hence no connected subset contains $0$ together with $1$ or $2$, so $\{0\}$ and $\{1,2\}$ are maximal connected subsets. The components of $X$ are $\{0\}$ and $\{1,2\}$. $\blacksquare$</p>`]]);
+
+// ---------- Q2
+hub9('hw9-q2', [
+ ['How the terms are used', R`<p>The relation from [[hw8-q2]]: $x\sim y$ means $f(x)=f(y)$ for <b>every</b> continuous $f:X\to\{0,1\}$, where $\{0,1\}$ is discrete. So to prove $x\sim y$, take an arbitrary continuous $f$ and show $f(x)=f(y)$.</p>
+<p>The component $C$ containing $x$ and $y$ is connected (it is a connected subset of $X$, with the subspace topology). [[hw8-q1]](a) says: on a connected space, every continuous map to $\{0,1\}$ is constant.</p>
+<p><b>Restriction.</b> If $f:X\to Y$ is continuous and $C\subseteq X$, then $f|_C:C\to Y$ is continuous (Theorem 18.2(d)): $(f|_C)^{-1}(V)=C\cap f^{-1}(V)$, which is open in $C$.</p>`],
+ ['Breakdown', steps([
+  [R`<b>Take an arbitrary continuous</b> $f:X\to\{0,1\}$.`, R`$x\sim y$ is a statement about every such $f$.`],
+  [R`<b>Restrict it to the component</b> $C$: $f|_C$ is continuous.`, R`Theorem 18.2(d).`],
+  [R`<b>$C$ is connected, so $f|_C$ is constant.</b>`, R`HW8 Q1(a), applied to the space $C$.`],
+  [R`<b>So $f(x)=f|_C(x)=f|_C(y)=f(y)$.</b>`, R`$x,y\in C$. Since $f$ was arbitrary, $x\sim y$.`]])],
+ ['Clean solution', R`<p>Let $C$ be the component of $X$ containing $x$ and $y$; it is connected. Let $f:X\to\{0,1\}$ be any continuous map. Its restriction $f|_C:C\to\{0,1\}$ is continuous (Theorem 18.2(d)). Since $C$ is connected, $f|_C$ is constant by HW8 Q1(a). As $x,y\in C$, $f(x)=f|_C(x)=f|_C(y)=f(y)$. This holds for every continuous $f:X\to\{0,1\}$, so $x\sim y$. $\blacksquare$</p>`],
+ ['Why it makes sense', R`<p>A map to $\{0,1\}$ is a way of cutting $X$ into two open pieces; a connected set can never be cut, so it lands on one side. Q3 shows the converse fails: two points can be on the same side of every cut and still lie in different components.</p>`]]);
+
+// ---------- Q3
+hub9('hw9-q3', [
+ ['The picture', R`<p>Vertical segments of height $1$ at $x=1,\tfrac12,\tfrac13,\dots$, crowding toward the $y$-axis, plus just two points on the $y$-axis: $(0,0)$ and $(0,1)$. There is no segment at $x=0$.</p>
+<svg viewBox="-20 -15 260 140" style="max-width:420px;width:100%" role="img" aria-label="Sketch of X">
+<g stroke="currentColor" stroke-width="2">
+<line x1="200" y1="10" x2="200" y2="110"/><line x1="100" y1="10" x2="100" y2="110"/><line x1="66.7" y1="10" x2="66.7" y2="110"/><line x1="50" y1="10" x2="50" y2="110"/><line x1="40" y1="10" x2="40" y2="110"/><line x1="33.3" y1="10" x2="33.3" y2="110"/><line x1="28.6" y1="10" x2="28.6" y2="110"/><line x1="25" y1="10" x2="25" y2="110"/><line x1="22.2" y1="10" x2="22.2" y2="110"/><line x1="20" y1="10" x2="20" y2="110"/></g>
+<g fill="currentColor"><circle cx="0" cy="110" r="3.5"/><circle cx="0" cy="10" r="3.5"/></g>
+<g font-size="10" fill="currentColor"><text x="-18" y="124">(0,0)</text><text x="-18" y="5">(0,1)</text><text x="194" y="124">1</text><text x="94" y="124">½</text><text x="61" y="124">⅓</text></g></svg>`],
+ ['How the terms are used', R`<p><b>(b)</b> is about the relation $\sim$ from [[hw8-q2]]: show every continuous $f:X\to\{0,1\}$ takes the same value at $x$ and $y$. <b>(c)</b> is about [[components]]: show no connected subset of $X$ contains both. Together with [[hw9-q2]], this shows that "same component" is strictly stronger than $\sim$.</p>
+<p><b>Each segment $S_n=\{\tfrac1n\}\times[0,1]$ is connected:</b> $t\mapsto(\tfrac1n,t)$ is continuous from $[0,1]$ onto $S_n$, and $[0,1]$ is connected ([[connected-reals]]); continuous images of connected spaces are connected (Theorem 23.5).</p>
+<p><b>Open in $X$</b> means $X\cap W$ with $W$ open in $\mathbb R^2$ ([[subspace-topology]]); for example $X\cap B((0,0),r)$, or $X\cap\big((-\infty,r)\times\mathbb R\big)$.</p>`],
+ ['Breakdown', steps([
+  [R`<b>(b) Fix a continuous</b> $f:X\to\{0,1\}$. On each segment $S_n$ it is constant; call the value $c_n$.`, R`$S_n$ is connected, and $f|_{S_n}$ is continuous, so HW8 Q1(a) applies.`],
+  [R`<b>(b) Near $x$:</b> $f^{-1}(\{f(x)\})$ is open and contains $x$, so it contains $X\cap B(x,r)$ for some $r\gt0$, which contains $(\tfrac1n,0)$ for every $n\gt1/r$. So $c_n=f(x)$ for all large $n$.`, R`$\{f(x)\}$ is open in the discrete $\{0,1\}$; open sets of $X$ come from open sets of $\mathbb R^2$, which contain a ball around each of their points. The segments crowd in on $(0,0)$.`],
+  [R`<b>(b) Near $y$, the same:</b> $c_n=f(y)$ for all large $n$, using the points $(\tfrac1n,1)$.`, ''],
+  [R`<b>(b) Take $n$ large enough for both:</b> $f(x)=c_n=f(y)$. So $x\sim y$.`, ''],
+  [R`<b>(c) Suppose $C\subseteq X$ is connected and contains $x$ and $y$.</b>`, R`Proof by contradiction: components are the maximal connected sets, so "same component" means some connected set contains both.`],
+  [R`<b>(c) If $C$ contains a point $(\tfrac1n,t)$,</b> pick $r$ with $\tfrac1{n+1}\lt r\lt\tfrac1n$ and cut $C$ by the vertical line $x=r$.`, R`$U=C\cap\big((r,\infty)\times\mathbb R\big)$ and $V=C\cap\big((-\infty,r)\times\mathbb R\big)$ are open in $C$ and disjoint; they cover $C$ because no point of $X$ has first coordinate $r$; $U\ni(\tfrac1n,t)$ and $V\ni x$. A separation of $C$: contradiction.`],
+  [R`<b>(c) Otherwise $C=\{x,y\}$,</b> which is not connected.`, R`$\{x\}=C\cap B(x,\tfrac12)$ and $\{y\}=C\cap B(y,\tfrac12)$ are open in $C$, disjoint, nonempty, and cover $C$.`]])],
+ ['Clean solution', R`<p><b>(a)</b> See the picture: the segments $S_n=\{\tfrac1n\}\times[0,1]$ for $n=1,2,3,\dots$, accumulating at the $y$-axis, together with the two points $(0,0)$ and $(0,1)$.</p>
+<p><b>(b)</b> Let $f:X\to\{0,1\}$ be continuous. Each $S_n$ is connected, as the image of the connected space $[0,1]$ under the continuous map $t\mapsto(\tfrac1n,t)$; so $f|_{S_n}$, which is continuous, is constant by HW8 Q1(a). Call its value $c_n$.</p>
+<p>Since $\{f(x)\}$ is open in $\{0,1\}$, the set $f^{-1}(\{f(x)\})$ is open in $X$ and contains $x$. So it equals $X\cap W$ for some open $W\subseteq\mathbb R^2$ containing $x$, and $W$ contains a ball $B(x,r)$. For every $n\gt1/r$, the point $(\tfrac1n,0)\in S_n$ lies in $B(x,r)\cap X$, so $c_n=f(\tfrac1n,0)=f(x)$. In the same way there is $r'\gt0$ with $c_n=f(y)$ for every $n\gt1/r'$, using the points $(\tfrac1n,1)$. Choosing $n$ larger than both $1/r$ and $1/r'$ gives $f(x)=c_n=f(y)$. Since $f$ was arbitrary, $x\sim y$.</p>
+<p><b>(c)</b> Suppose, for a contradiction, that $C\subseteq X$ is connected and contains $x$ and $y$.</p>
+<p>If $C$ contains a point $p=(\tfrac1n,t)$, choose $r$ with $\tfrac1{n+1}\lt r\lt\tfrac1n$. Let $U=C\cap\big((r,\infty)\times\mathbb R\big)$ and $V=C\cap\big((-\infty,r)\times\mathbb R\big)$. These are open in $C$ and disjoint. No point of $X$ has first coordinate $r$, since $r$ is neither $0$ nor of the form $\tfrac1m$, so $U\cup V=C$. Also $p\in U$ and $x\in V$. So $U,V$ separate $C$, a contradiction.</p>
+<p>Otherwise $C\subseteq\{x,y\}$, so $C=\{x,y\}$. Then $C\cap B(x,\tfrac12)=\{x\}$ and $C\cap B(y,\tfrac12)=\{y\}$ are disjoint nonempty open subsets of $C$ covering it, again a separation, a contradiction.</p>
+<p>So no connected subset of $X$ contains both $x$ and $y$: they lie in different components. $\blacksquare$</p>`],
+ ['Why it makes sense', R`<p>A continuous map to $\{0,1\}$ cannot tell $x$ from $y$, because both are limits of the same crowd of segments, and each segment is stuck on one value. But a connected set has to actually <em>contain</em> a bridge between them, and the only bridges in sight, the segments, never reach the $y$-axis. The missing segment at $x=0$ is what makes $\sim$ and "same component" differ.</p>`]]);
+
+// ---------- Q4
+hub9('hw9-q4', [
+ ['How the terms are used', R`<p>$\Gamma_f$ carries the [[subspace-topology]] from the product $X\times Y$. A <b>[[homeomorphism]]</b> is a continuous bijection with continuous inverse ([[m-homeomorphic]]).</p>
+<p><b>Maps into a product</b> ([[maps-into-products|Theorem 18.4 / 19.6]]): $h(x)=(h_1(x),h_2(x))$ is continuous iff $h_1$ and $h_2$ are. A continuous map whose image lies in a subspace is continuous into that subspace (Theorem 18.2(e)), and the restriction of a continuous map is continuous (18.2(d)).</p>
+<p><b>(b)</b> uses ε–δ continuity on $[0,1]\subseteq\mathbb R$ ([[epsilon-delta]]): $f$ is continuous at $x$ if for every $\epsilon\gt0$ there is $\delta\gt0$ with $|f(u)-f(x)|\lt\epsilon$ whenever $u\in[0,1]$ and $|u-x|\lt\delta$. The hint splits this into a left half $(x-\delta,x]$ and a right half $[x,x+\delta)$. The intermediate value theorem ([[ivt]]) is the other tool.</p>`],
+ ['Breakdown', steps([
+  [R`<b>(a) Define</b> $h:X\to\Gamma_f$, $h(x)=(x,f(x))$.`, R`It is the natural candidate: it hits each point of the graph exactly once.`],
+  [R`<b>(a) $h$ is a bijection,</b> with inverse $\pi_1|_{\Gamma_f}:(x,f(x))\mapsto x$.`, R`Onto by the definition of $\Gamma_f$; one-to-one because the first coordinate recovers $x$.`],
+  [R`<b>(a) $h$ is continuous:</b> its coordinates $\mathrm{id}_X$ and $f$ are continuous.`, R`Theorem 18.4 gives continuity into $X\times Y$; the image lies in $\Gamma_f$, so 18.2(e) gives continuity into $\Gamma_f$.`],
+  [R`<b>(a) The inverse is continuous:</b> it is the projection $\pi_1$ restricted to $\Gamma_f$.`, R`$\pi_1$ is continuous ($\pi_1^{-1}(U)=U\times Y$); restrictions of continuous maps are continuous.`],
+  [R`<b>(a) Deduce:</b> if $\gamma$ is a path in $X$ from $a$ to $b$, then $h\circ\gamma$ is a path in $\Gamma_f$ from $h(a)$ to $h(b)$.`, R`Composites of continuous maps are continuous, and every point of $\Gamma_f$ is $h(a)$ for some $a$.`],
+  [R`<b>(b) Fix $x\in[0,1]$ and $\epsilon\gt0$. Left side, $x\gt0$:</b> take a path $\gamma=(\gamma_1,\gamma_2)$ in $\Gamma_f$ from $(0,f(0))$ to $(x,f(x))$. On the graph, $\gamma_2(t)=f(\gamma_1(t))$ for every $t$.`, R`Each point of $\Gamma_f$ has the form $(u,f(u))$. $\gamma_1=\pi_1\circ\gamma$ and $\gamma_2=\pi_2\circ\gamma$ are continuous.`],
+  [R`<b>(b) Let $\tau$ be the first time with $\gamma_1(\tau)=x$.</b> Then $\tau\gt0$ and $\gamma_1(t)\lt x$ for $t\lt\tau$.`, R`$\gamma_1^{-1}(\{x\})$ is closed and nonempty in $[0,1]$, so it has a least element. Before $\tau$, $\gamma_1$ cannot exceed $x$ without passing through $x$ (IVT), and $\gamma_1(0)=0\lt x$.`],
+  [R`<b>(b) Continuity of $\gamma_2$ at $\tau$:</b> there is $\eta\gt0$ with $|\gamma_2(t)-f(x)|\lt\epsilon$ for $t\in[0,1]$, $|t-\tau|\lt\eta$.`, R`$\gamma_2(\tau)=f(\gamma_1(\tau))=f(x)$.`],
+  [R`<b>(b) Choose $t_0\in[0,\tau)$ with $\tau-t_0\lt\eta$, and let $\delta_L=x-\gamma_1(t_0)\gt0$.</b> Every $u\in(x-\delta_L,x)$ is $\gamma_1(t)$ for some $t\in(t_0,\tau)$, so $|f(u)-f(x)|=|\gamma_2(t)-f(x)|\lt\epsilon$.`, R`IVT for $\gamma_1$ on $[t_0,\tau]$, which runs from $\gamma_1(t_0)$ to $x$.`],
+  [R`<b>(b) Right side:</b> the same argument with a path from $(1,f(1))$ to $(x,f(x))$ gives $\delta_R$ for $x\lt1$. Take $\delta=\min(\delta_L,\delta_R)$.`, R`At $x=0$ there is no left side to check; at $x=1$ no right side.`]])],
+ ['Clean solution', R`<p><b>(a)</b> Define $h:X\to\Gamma_f$ by $h(x)=(x,f(x))$. Every point of $\Gamma_f$ is $(x,f(x))=h(x)$ for some $x$, so $h$ is onto; and $h(x)=h(x')$ forces $x=x'$ by comparing first coordinates, so $h$ is one-to-one. Its inverse is $g=\pi_1|_{\Gamma_f}$, since $g(h(x))=x$ and $h(g(x,f(x)))=(x,f(x))$.</p>
+<p>The coordinate functions of $h$, as a map into $X\times Y$, are $\mathrm{id}_X$ and $f$, both continuous; so $h$ is continuous into $X\times Y$ (Theorem 18.4), and since its image lies in $\Gamma_f$ it is continuous into $\Gamma_f$ (Theorem 18.2(e)). The projection $\pi_1:X\times Y\to X$ is continuous, so its restriction $g$ is continuous (Theorem 18.2(d)). Hence $h$ is a homeomorphism and $\Gamma_f\cong X$.</p>
+<p>Now let $X$ be path connected, and let $p,q\in\Gamma_f$. Write $p=h(a)$, $q=h(b)$ and take a path $\gamma:[0,1]\to X$ from $a$ to $b$. Then $h\circ\gamma$ is continuous, being a composite of continuous maps, with $h(\gamma(0))=p$ and $h(\gamma(1))=q$. So $\Gamma_f$ is path connected.</p>
+<p><b>(b)</b> Suppose $\Gamma_f$ is path connected. Fix $x\in[0,1]$ and $\epsilon\gt0$.</p>
+<p><i>Left side.</i> If $x=0$, set $\delta_L=1$. If $x\gt0$, take a path $\gamma=(\gamma_1,\gamma_2):[0,1]\to\Gamma_f$ from $(0,f(0))$ to $(x,f(x))$. The maps $\gamma_1=\pi_1\circ\gamma$ and $\gamma_2=\pi_2\circ\gamma$ are continuous, and since $\gamma(t)\in\Gamma_f$, $\gamma_2(t)=f(\gamma_1(t))$ for all $t$. The set $\gamma_1^{-1}(\{x\})$ is closed in $[0,1]$ and contains $1$, so it has a least element $\tau$; $\tau\gt0$ because $\gamma_1(0)=0\ne x$. For $t\lt\tau$ we have $\gamma_1(t)\lt x$: otherwise $\gamma_1(t)\gt x$, and the IVT on $[0,t]$ would give a time before $t$ at which $\gamma_1=x$. Since $\gamma_2$ is continuous at $\tau$ and $\gamma_2(\tau)=f(x)$, there is $\eta\gt0$ with $|\gamma_2(t)-f(x)|\lt\epsilon$ whenever $t\in[0,1]$ and $|t-\tau|\lt\eta$. Choose $t_0\in[0,\tau)$ with $\tau-t_0\lt\eta$ and set $\delta_L=x-\gamma_1(t_0)\gt0$. If $u\in[0,1]$ and $x-\delta_L\lt u\lt x$, then $\gamma_1(t_0)\lt u\lt\gamma_1(\tau)$, so by the IVT $u=\gamma_1(t)$ for some $t\in(t_0,\tau)$, and $|f(u)-f(x)|=|\gamma_2(t)-f(x)|\lt\epsilon$. Thus $f([0,1]\cap(x-\delta_L,x])\subseteq(f(x)-\epsilon,f(x)+\epsilon)$.</p>
+<p><i>Right side.</i> In the same way, using a path from $(1,f(1))$ to $(x,f(x))$ when $x\lt1$ (and $\delta_R=1$ when $x=1$), there is $\delta_R\gt0$ with $f([0,1]\cap[x,x+\delta_R))\subseteq(f(x)-\epsilon,f(x)+\epsilon)$.</p>
+<p>With $\delta=\min(\delta_L,\delta_R)$, every $u\in[0,1]$ with $|u-x|\lt\delta$ satisfies $|f(u)-f(x)|\lt\epsilon$. As $x$ and $\epsilon$ were arbitrary, $f$ is continuous (Theorem 21.1). $\blacksquare$</p>`],
+ ['Why it makes sense', R`<p>(a) The graph is a copy of $X$ drawn inside $X\times Y$; continuity of $f$ is exactly what keeps the copy from tearing. (b) runs the other way: if $f$ jumped at $x$, the graph would have a gap there, and a path along the graph would have to cross the gap; the first arrival time $\tau$ pins down where it crosses. For a converse to make sense you need the domain to be an interval: the IVT is what forces the path to visit every point just to the left of $x$.</p>`]]);
 
 // ===== Midterm 2 practice (in class Wed 11/11/26, 10:10–11:25, closed book): six problems, each with terms, a work-through and a clean solution.
 function MP(t, stmt, pre, meth){ return {title: t, kind: 'problem', where: 'Midterm 2 practice', pre: pre, method: meth, lede: stmt, sections: []}; }
