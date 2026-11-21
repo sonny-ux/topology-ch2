@@ -258,7 +258,7 @@ ol.sent li::before{content:counter(sn);position:absolute;left:0;top:7px;width:19
 var R = String.raw;
 var TOPICS = [
   ['Foundations', ['relation-equivalence', 'equivalence-class', 'partition', 'image-preimage']],
-  ['Open sets and bases', ['topology', 'open-set', 'standard-topologies', 'finer-coarser', 'basis', 'generated-topology', 'lemma-13-3', 'subbasis']],
+  ['Open sets and bases', ['topology', 'open-set', 'standard-topologies', 'finer-coarser', 'basis', 'generated-topology', 'lemma-13-3', 'lemma-13-4', 'subbasis']],
   ['Building new spaces', ['order-topology', 'product-topology', 'subspace-topology', 'quotient-topology']],
   ['Closed sets and limits', ['closed-set', 'closure', 'interior', 'limit-point', 'closure-test', 'closure-limit-points', 'convergence']],
   ['Separation', ['hausdorff', 't1']],
@@ -270,7 +270,7 @@ var TOPICS = [
   ['Worked problems', ['hw7-q1']]
 ];
 // reading order, roughly following Munkres
-var ORDER = ['relation-equivalence', 'equivalence-class', 'partition', 'image-preimage', 'topology', 'open-set', 'standard-topologies', 'finer-coarser', 'basis', 'generated-topology', 'lemma-13-3', 'subbasis', 'order-topology', 'product-topology', 'subspace-topology', 'closed-set', 'closure', 'interior', 'closure-test', 'limit-point', 'closure-limit-points', 'hausdorff', 't1', 'convergence', 'continuous', 'restriction', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'metric', 'ball', 'metric-topology', 'metric-hausdorff', 'epsilon-delta', 'quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples'];
+var ORDER = ['relation-equivalence', 'equivalence-class', 'partition', 'image-preimage', 'topology', 'open-set', 'standard-topologies', 'finer-coarser', 'basis', 'generated-topology', 'lemma-13-3', 'lemma-13-4', 'subbasis', 'order-topology', 'product-topology', 'subspace-topology', 'closed-set', 'closure', 'interior', 'closure-test', 'limit-point', 'closure-limit-points', 'hausdorff', 't1', 'convergence', 'continuous', 'restriction', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'metric', 'ball', 'metric-topology', 'metric-hausdorff', 'epsilon-delta', 'quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples'];
 var A = {
 // ---------- foundations
 'relation-equivalence': {title: 'Equivalence relation', kind: 'definition', where: 'Ch. 1, §3', pre: [],
@@ -332,7 +332,15 @@ var A = {
   lede: R`$\mathcal T'$ is finer than $\mathcal T$ iff every basis element of $\mathcal T$ around $x$ contains a basis element of $\mathcal T'$ around $x$.`,
   sections: [['Statement', R`<p>Let $\mathcal B,\mathcal B'$ generate $\mathcal T,\mathcal T'$. Then $\mathcal T'$ is finer than $\mathcal T$ iff for each $x$ and each $B\in\mathcal B$ with $x\in B$, there is $B'\in\mathcal B'$ with $x\in B'\subseteq B$.</p>`],
     ['Why', R`<p>If $U$ is $\mathcal T$-open and $x\in U$: pick $B$ with $x\in B\subseteq U$, then $B'$ with $x\in B'\subseteq B\subseteq U$. So $U$ is $\mathcal T'$-open by [[generated-topology]].</p>`],
-    ['Lemma 13.4', R`<p>[[ex-lower-limit|ℝ_ℓ]] and [[ex-k-topology|ℝ_K]] are each strictly finer than ℝ and not comparable with each other.</p>`]]},
+    ['Lemma 13.4', R`<p>[[ex-lower-limit|ℝ_ℓ]] and [[ex-k-topology|ℝ_K]] are each strictly finer than ℝ and not comparable with each other; this lemma is proved with 13.3. See [[lemma-13-4]].</p>`]]},
+'lemma-13-4': {title: 'The lower limit and K-topologies compared (Lemma 13.4)', kind: 'theorem', where: '§13', pre: ['lemma-13-3', 'ex-lower-limit', 'ex-k-topology', 'finer-coarser'],
+  lede: R`$\mathbb R_\ell$ and $\mathbb R_K$ are each strictly finer than the standard topology on $\mathbb R$, but neither is finer than the other.`,
+  sections: [['Statement', R`<p>The topologies of [[ex-lower-limit|$\mathbb R_\ell$]] (basis: all $[a,b)$) and [[ex-k-topology|$\mathbb R_K$]] (basis: all $(a,b)$ and all $(a,b)-K$, where $K=\{\tfrac1n:n\ge1\}$) are each strictly finer than the standard topology on $\mathbb R$ (basis: all $(a,b)$), but are not comparable with one another (Munkres §13).</p>`],
+    ['The tool', R`<p>Every comparison runs through [[lemma-13-3]]: $\mathcal T'$ is finer than $\mathcal T$ iff around each point, every basis element of $\mathcal T$ contains a basis element of $\mathcal T'$ around the same point. To show a topology is <em>not</em> finer, find one point $x$ and one basis element around it that contains no basis element of the other topology around $x$.</p>`],
+    ['ℝ_ℓ is strictly finer than ℝ', R`<p><b>Finer.</b> Given $x\in(a,b)$, the set $[x,b)$ is a basis element of $\mathbb R_\ell$ with $x\in[x,b)\subseteq(a,b)$. By 13.3, $\mathbb R_\ell$ is finer.</p><p><b>Strictly.</b> Take $x$ and the $\ell$-basis element $[x,d)$. Every open interval $(a,b)$ containing $x$ contains points less than $x$, so none lies inside $[x,d)$. So the standard topology is not finer than $\mathbb R_\ell$.</p>`],
+    ['ℝ_K is strictly finer than ℝ', R`<p><b>Finer.</b> Every interval $(a,b)$ is itself a basis element of $\mathbb R_K$, so the condition of 13.3 holds trivially.</p><p><b>Strictly.</b> Take $x=0$ and the $K$-basis element $B=(-1,1)-K$, which contains $0$. Any interval $(a,b)$ containing $0$ contains $\tfrac1n$ for large $n$, a point not in $B$. So no standard basis element around $0$ lies inside $B$.</p>`],
+    ['Neither is finer than the other', R`<p><b>$\mathbb R_K$ is not finer than $\mathbb R_\ell$.</b> Take $x=10$ and $[10,11)$. Every $K$-basis element containing $10$ is $(a,b)$ or $(a,b)-K$ with $a\lt10$, so it contains points just below $10$, which are not in $[10,11)$.</p><p><b>$\mathbb R_\ell$ is not finer than $\mathbb R_K$.</b> Take $x=0$ and $(-1,1)-K$. Every $[a,b)$ containing $0$ has $a\le0\lt b$, so it contains $\tfrac1n$ for large $n$, which is not in $(-1,1)-K$.</p>`],
+    ['Why it matters', R`<p>It shows that "finer" is not a ladder: two topologies can both refine a third and still not be comparable. $\mathbb R_\ell$ refines $\mathbb R$ by cutting at a point (half-open intervals); $\mathbb R_K$ refines it only near the sequence $\tfrac1n$. Both are also the course's sources of counterexamples later (for instance, $\mathbb R_K$ is Hausdorff but not regular, §31).</p>`]]},
 'subbasis': {title: 'Subbasis', kind: 'definition', where: '§13', pre: ['basis'],
   lede: R`Smaller ingredients still: intersect finitely many, then take unions.`,
   sections: [['Definition', R`<p>A collection $\mathcal S$ of subsets whose union is $X$. The topology it generates consists of all unions of finite intersections of elements of $\mathcal S$.</p>`],
@@ -573,7 +581,7 @@ var BOOK = [
     ['§3 · Relations', ['relation', 'relation-equivalence', 'equivalence-class', 'partition']]]],
   ['Chapter 2 · Topological Spaces and Continuous Functions', [
     ['§12 · Topological spaces', ['topology', 'open-set', 'standard-topologies', 'finer-coarser']],
-    ['§13 · Basis for a topology', ['basis', 'generated-topology', 'lemma-13-3', 'subbasis']],
+    ['§13 · Basis for a topology', ['basis', 'generated-topology', 'lemma-13-3', 'lemma-13-4', 'subbasis']],
     ['§14 · The order topology', ['order-topology']],
     ['§15 · The product topology on X × Y', ['product-topology', 'projections']],
     ['§16 · The subspace topology', ['subspace-topology']],
@@ -963,7 +971,7 @@ BOOK = [
     ['§7 · Countable and uncountable sets', ['countable']]]],
   ['Chapter 2 · Topological Spaces and Continuous Functions', [
     ['§12 · Topological spaces', ['topology', 'open-set', 'standard-topologies', 'finer-coarser', 'm-topology', 'm-finite', 'hw1-q1']],
-    ['§13 · Basis for a topology', ['basis', 'generated-topology', 'lemma-13-3', 'subbasis', 'm-open', 'm-compare', 'hw1-q2', 'hw1-q3']],
+    ['§13 · Basis for a topology', ['basis', 'generated-topology', 'lemma-13-3', 'lemma-13-4', 'subbasis', 'm-open', 'm-compare', 'hw1-q2', 'hw1-q3']],
     ['§14 · The order topology', ['order-topology']],
     ['§15 · The product topology on X × Y', ['product-topology', 'projections', 'hw2-q1', 'hw2-q2']],
     ['§16 · The subspace topology', ['subspace-topology', 'hw1-q4', 'hw1-q5', 'hw1-q6', 'mt-q1']],
@@ -2670,7 +2678,7 @@ var THM = {
 '13.1': ['Lemma', 'Open sets from a basis', R`If $\mathcal B$ is a basis for a topology $\mathcal T$ on $X$, then $\mathcal T$ is the collection of all unions of elements of $\mathcal B$.`, 'generated-topology'],
 '13.2': ['Lemma', 'Recognising a basis', R`If $\mathcal C$ is a collection of open sets of $X$ such that for each open $U$ and each $x\in U$ there is $C\in\mathcal C$ with $x\in C\subseteq U$, then $\mathcal C$ is a basis for the topology of $X$.`, 'generated-topology'],
 '13.3': ['Lemma', 'Comparing topologies through bases', R`Let $\mathcal B,\mathcal B'$ be bases for $\mathcal T,\mathcal T'$ on $X$. Then $\mathcal T'$ is finer than $\mathcal T$ iff for each $x$ and each $B\in\mathcal B$ containing $x$ there is $B'\in\mathcal B'$ with $x\in B'\subseteq B$.`, 'lemma-13-3'],
-'13.4': ['Lemma', 'The lower limit and K-topologies', R`The topologies of $\mathbb R_\ell$ and $\mathbb R_K$ are each strictly finer than the standard topology on $\mathbb R$, but are not comparable with one another.`, 'lemma-13-3'],
+'13.4': ['Lemma', 'The lower limit and K-topologies', R`The topologies of $\mathbb R_\ell$ and $\mathbb R_K$ are each strictly finer than the standard topology on $\mathbb R$, but are not comparable with one another.`, 'lemma-13-4'],
 '15.1': ['Theorem', 'Basis for a product', R`If $\mathcal B$ is a basis for $X$ and $\mathcal C$ a basis for $Y$, then $\{B\times C: B\in\mathcal B, C\in\mathcal C\}$ is a basis for the product topology on $X\times Y$.`, 'product-topology'],
 '15.2': ['Theorem', 'Subbasis for a product', R`The sets $\pi_1^{-1}(U)$ ($U$ open in $X$) and $\pi_2^{-1}(V)$ ($V$ open in $Y$) form a subbasis for the product topology on $X\times Y$.`, 'product-topology'],
 '16.1': ['Lemma', 'Basis for a subspace', R`If $\mathcal B$ is a basis for $X$, then $\{B\cap Y: B\in\mathcal B\}$ is a basis for the subspace topology on $Y\subseteq X$.`, 'subspace-topology'],
