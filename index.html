@@ -2794,7 +2794,7 @@ Object.keys(A).forEach(function(id){ var a = A[id]; if (a.kind !== 'definition' 
     + 'a.partref{text-decoration:none;border-bottom:1px solid var(--text2);color:var(--text);font-weight:600;padding:0 1px;}'
     + '.qpill{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom));z-index:70;display:none;border:1px solid var(--border2);border-radius:999px;padding:8px 14px;font:13px -apple-system,system-ui,sans-serif;background:var(--card2);color:var(--text);box-shadow:0 4px 14px rgba(0,0,0,.35);cursor:pointer;}'
     + '.qpill.on{display:block;}#qpill{right:12px;}'
-    + '#qback{left:12px;font-weight:600;font-size:15px;padding:11px 18px;background:var(--text);color:var(--bg);border-color:var(--text);white-space:nowrap;}'
+    + '#qback{left:10px;font-weight:500;font-size:12px;padding:5px 10px;background:var(--card2);color:var(--text2);border-color:var(--border2);box-shadow:none;opacity:.6;white-space:nowrap;transition:opacity .15s;}#qback:hover,#qback:focus-visible{opacity:1;}'
     + '@media (max-width:699px){#qback{display:none!important;}}'
     + '.partflash{animation:partflash 1.6s ease;}@keyframes partflash{0%,40%{background:rgba(160,180,220,.22);}100%{background:transparent;}}';
   document.head.appendChild(css);
@@ -2802,7 +2802,7 @@ Object.keys(A).forEach(function(id){ var a = A[id]; if (a.kind !== 'definition' 
   sh.innerHTML = '<div class="pm"></div><div class="pq"></div><div class="pb"><button type="button" class="pj">Jump to it</button><button type="button" class="px">Close</button></div>';
   document.body.appendChild(sh);
   var pill = document.createElement('button'); pill.type = 'button'; pill.id = 'qpill'; pill.className = 'qpill'; pill.textContent = 'Problem'; document.body.appendChild(pill);
-  var back = document.createElement('button'); back.type = 'button'; back.id = 'qback'; back.className = 'qpill'; back.textContent = '↩ Back'; back.setAttribute('aria-label', 'Back to where you were reading'); document.body.appendChild(back);
+  var back = document.createElement('button'); back.type = 'button'; back.id = 'qback'; back.className = 'qpill'; back.textContent = '↩'; back.title = 'Back'; back.setAttribute('aria-label', 'Back to where you were reading'); document.body.appendChild(back);
   // page history inside the guide: each move to another article remembers the page and how far down you were
   var NAV = [], restoring = null, curHash = location.hash, lastY = 0;
   window.addEventListener('scroll', function(){ lastY = window.scrollY; }, {passive: true});
