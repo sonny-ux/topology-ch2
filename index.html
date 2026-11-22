@@ -240,12 +240,29 @@ ol.sent li::before{content:counter(sn);position:absolute;left:0;top:7px;width:19
 .sketchbox{border:1px dashed var(--border2);border-radius:6px;height:150px;margin:8px 0;display:flex;align-items:flex-end;justify-content:flex-end;padding:4px 8px;font:11px -apple-system,system-ui,sans-serif;color:var(--muted);}
 .sketchbox.tall{height:260px;}
 @media print{ #padprint .sketchbox{border:0;height:70mm;break-inside:avoid;} #padprint .sketchbox.tall{height:120mm;} }
+
+.focusbtn{float:right;margin-top:-2px;border:1px solid var(--border2);background:var(--card);color:var(--text2);border-radius:999px;padding:4px 10px;font:12px -apple-system,system-ui,sans-serif;cursor:pointer;text-transform:none;letter-spacing:0;}
+.focusbtn.on{color:var(--text);border-color:var(--text2);}
+#focusBtn .fcount{font-size:11px;margin-left:3px;}
+#focusPanel{position:fixed;z-index:90;top:56px;right:12px;width:min(380px,calc(100vw - 24px));max-height:65vh;overflow:auto;background:var(--card);border:1px solid var(--border2);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.35);padding:8px;display:none;font:14px -apple-system,system-ui,sans-serif;}
+#focusPanel.on{display:block;}
+#focusPanel .fh{display:flex;justify-content:space-between;align-items:baseline;padding:6px 8px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em;}
+#focusPanel .fh button,.focuslist .fx{background:none;border:0;color:var(--muted);cursor:pointer;font:inherit;padding:2px 6px;}
+.focuslist{list-style:none;margin:0;padding:0;}
+.focuslist li{display:flex;align-items:center;gap:6px;border-radius:8px;}
+.focuslist li a{flex:1;display:block;padding:8px;color:var(--text);text-decoration:none;}
+.focuslist li a:hover{background:var(--card2);border-radius:8px;}
+.focuslist li a .fk{display:block;font-size:11px;color:var(--muted);}
+.focuslist .fnone{padding:8px;color:var(--muted);}
+.focushome{border:1px solid var(--border2);border-radius:12px;padding:6px 8px;margin:14px 0;}
+.focushome h2{font:600 13px -apple-system,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:6px 8px;}
 </style>
 </head>
 <body>
 <div class="top"><div class="toprow">
   <a class="logo" href="#" aria-label="Home">𝒯</a>
   <div class="search"><input id="q" type="search" placeholder="Search the guide" autocomplete="off" aria-label="Search"><div id="sugg"></div></div>
+  <button class="tb" id="focusBtn" aria-label="Pages you are focusing on" title="Focus">★</button>
   <button class="tb" id="findBtn" aria-label="Browse and symbols">Browse</button>
   <button class="tb" id="themeBtn" aria-label="Light or dark">Light</button>
 </div></div>
@@ -2305,6 +2322,7 @@ function home(){
   var recent = []; try { recent = JSON.parse(localStorage.getItem('tg-recent') || '[]'); } catch(e){}
   var h = '<h1>Topology Reference Guide</h1><p class="intro">An encyclopedia of the course in the order of Munkres. Each section holds its concepts, the methods its problems call for, and the assigned problems themselves, all linked to each other. Each article opens to a one-line summary and its definition; everything else unfolds when you want it. Underlined terms are links: tap one for a preview, then read on or stay where you are. At the end of each article you will find what it depends on and what builds on it, and the next article in the book.</p>';
   h += '<div class="start"><a class="chip" href="#a/what-is-topology">Start here: what topology is</a><a class="chip" href="#a/approach">How to approach a problem</a><a class="chip" href="#a/whole-picture">The whole picture</a><a class="chip" href="#a/relations-map">Relations</a><a class="chip" href="#a/first-moves">Practice: first moves</a><a class="chip" href="#a/image-preimage">Chapter 1</a><a class="chip" href="#a/connected">Now: §23–24 connectedness</a><a class="chip" href="#a/mt2-q1">Midterm 2 practice</a><a class="chip" href="#a/hw8-q1">Homework 8</a><a class="chip" href="#a/hw7-q2">Homework 7</a><a class="chip" href="#a/ivt">Intermediate value theorem</a><a class="chip" href="#a/gallery">Gallery of spaces</a><a class="chip" href="#a/theorems">Theorems by number</a><a class="chip" href="tabs/">Quick-reference tabs</a></div>';
+  if (focusGet().length) h += '<div class="focushome"><h2>Focusing on</h2>' + focusList() + '</div>';
   if (recent.length) h += '<div class="topic"><h2>Recently read</h2><div class="chips">' + recent.slice(0, 8).map(chip).join('') + '</div></div>';
   function row(id){ var a = A[id]; return '<a href="#a/' + id + '"><b>' + a.title + '</b><span class="kind">' + KIND[a.kind] + '</span><i>' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }
   function group(ids){ var g = {c: [], m: [], p: []}; ids.forEach(function(id){ var k = A[id].kind; (k === 'method' ? g.m : k === 'problem' ? g.p : g.c).push(id); });
@@ -2320,12 +2338,35 @@ function home(){
   h += '<p class="foot">Theorem numbers follow Munkres, <em>Topology</em>, 2nd ed.; check them against your copy. Earlier notes and quiz: <a href="classic/">classic</a>.</p>';
   return h;
 }
+// ===== Focus: pages Jackson marks as what he is working on now. Kept in this browser (localStorage), newest first.
+function focusGet(){ try { return JSON.parse(localStorage.getItem('tg-focus') || '[]').filter(function(id){ return A[id]; }); } catch(e){ return []; } }
+function focusSet(v){ try { localStorage.setItem('tg-focus', JSON.stringify(v)); } catch(e){} focusCount(); }
+function focusHas(id){ return focusGet().indexOf(id) >= 0; }
+function focusToggle(id){ var v = focusGet(), k = v.indexOf(id); if (k >= 0) v.splice(k, 1); else v.unshift(id); focusSet(v); return k < 0; }
+function focusCount(){ var b = document.getElementById('focusBtn'); if (!b) return; var n = focusGet().length; b.innerHTML = '★' + (n ? '<span class="fcount">' + n + '</span>' : ''); }
+function focusList(){ var v = focusGet(); if (!v.length) return '<div class="fnone">Nothing marked yet. Open a page and tap ☆ Focus beside its title.</div>';
+  return '<ul class="focuslist">' + v.map(function(id){ var a = A[id]; return '<li><a href="#a/' + id + '">' + a.title + '<span class="fk">' + KIND[a.kind] + ' · ' + (SECOF[id] || a.where) + '</span></a><button class="fx" data-unfocus="' + id + '" aria-label="Remove from focus">×</button></li>'; }).join('') + '</ul>'; }
+function focusPanel(show){ var p = document.getElementById('focusPanel'); if (!p){ p = document.createElement('div'); p.id = 'focusPanel'; document.body.appendChild(p); }
+  if (show === false || (show === undefined && p.classList.contains('on'))){ p.classList.remove('on'); return; }
+  p.innerHTML = '<div class="fh"><span>Focusing on</span>' + (focusGet().length ? '<button data-clearfocus="1">Clear all</button>' : '') + '</div>' + focusList(); p.classList.add('on'); }
+document.addEventListener('click', function(e){
+  var t = e.target;
+  if (t.closest('#focusBtn')){ e.stopPropagation(); focusPanel(); return; }
+  var fb = t.closest('.focusbtn'); if (fb){ var on = focusToggle(fb.dataset.id); fb.classList.toggle('on', on); fb.textContent = on ? '★ Focusing' : '☆ Focus'; return; }
+  var x = t.closest('[data-unfocus]'); if (x){ e.preventDefault(); e.stopPropagation(); var v = focusGet().filter(function(id){ return id !== x.dataset.unfocus; }); focusSet(v);
+    if (x.closest('#focusPanel')) focusPanel(true); else if (location.hash === '' || location.hash === '#') route(); return; }
+  if (t.closest('[data-clearfocus]')){ e.stopPropagation(); if (confirm('Clear every page from Focus?')){ focusSet([]); focusPanel(true); } return; }
+  if (t.closest('#focusPanel a')){ focusPanel(false); return; }
+  if (!t.closest('#focusPanel')) focusPanel(false);
+});
+window.addEventListener('hashchange', function(){ focusPanel(false); });
+document.addEventListener('DOMContentLoaded', focusCount); focusCount();
 function article(id){
   var a = A[id]; if (!a) return '<p>No article called “' + id + '”.</p>';
   TRAIL = TRAIL.filter(function(x){ return x !== id; }); TRAIL.push(id); TRAIL = TRAIL.slice(-3); try { sessionStorage.setItem('tg-trail', JSON.stringify(TRAIL)); var r = JSON.parse(localStorage.getItem('tg-recent') || '[]').filter(function(x){ return x !== id; }); r.unshift(id); localStorage.setItem('tg-recent', JSON.stringify(r.slice(0, 12))); } catch(e){}
   var h = '<div class="trail"><a href="#">Home</a>' + TRAIL.slice(0, -1).map(function(t){ return '<span class="sep">›</span><a href="#a/' + t + '">' + A[t].title + '</a>'; }).join('') + '<span class="sep">›</span>' + a.title + '</div>';
   if (a.kind === 'problem') h += qswitch(id);
-  h += '<div class="meta">' + KIND[a.kind] + ' · ' + (SECOF[id] || a.where) + '</div><h1>' + a.title + '</h1><div class="lede">' + wiki(a.lede) + '</div>';
+  var fon = focusHas(id); h += '<div class="meta">' + KIND[a.kind] + ' · ' + (SECOF[id] || a.where) + '<button class="focusbtn' + (fon ? ' on' : '') + '" data-id="' + id + '" aria-pressed="' + fon + '">' + (fon ? '★ Focusing' : '☆ Focus') + '</button></div><h1>' + a.title + '</h1><div class="lede">' + wiki(a.lede) + '</div>';
   if (typeof ROLE !== 'undefined' && ROLE[id]) h += '<div class="role">In the whole picture: <b>' + ROLE[id][0] + '</b>. ' + ROLE[id][1] + ' ' + wiki('[[whole-picture|See how it fits →]]') + '</div>';
   if (a.steps) h += '<details class="sec" open><summary>Steps</summary><div class="secb"><ol class="steps">' + a.steps.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + wiki(s[0]) + '</summary><div class="why"><b>Why:</b> ' + wiki(s[1]) + '</div></details>' : wiki(s[0])) + '</li>'; }).join('') + '</ol></div></details>';
   (a.sections || []).forEach(function(s, i){ var body = s[1];
