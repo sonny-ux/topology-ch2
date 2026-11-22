@@ -258,19 +258,20 @@ ol.sent li::before{content:counter(sn);position:absolute;left:0;top:7px;width:19
 var R = String.raw;
 var TOPICS = [
   ['Foundations', ['relation-equivalence', 'equivalence-class', 'partition', 'image-preimage']],
+  ['Relations', ['relations-map', 'relation', 'relation-equivalence', 'equivalence-class', 'partition', 'relation-order', 'relation-induced', 'homeomorphism-relation', 'equivalence-catalogue']],
   ['Open sets and bases', ['topology', 'open-set', 'standard-topologies', 'finer-coarser', 'basis', 'generated-topology', 'lemma-13-3', 'lemma-13-4', 'subbasis']],
   ['Building new spaces', ['order-topology', 'product-topology', 'subspace-topology', 'quotient-topology']],
   ['Closed sets and limits', ['closed-set', 'closure', 'interior', 'limit-point', 'closure-test', 'closure-limit-points', 'convergence']],
   ['Separation', ['hausdorff', 't1']],
   ['Continuous maps', ['continuous', 'restriction', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism']],
   ['Metric spaces', ['metric', 'ball', 'metric-topology', 'metric-hausdorff', 'epsilon-delta']],
-  ['Quotients', ['quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples']],
+  ['Quotients', ['quotient-topology', 'saturated', 'quotient-map', 'relation-induced', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples']],
   ['Methods', ['m-topology', 'm-open', 'm-closed', 'm-closure', 'm-continuous', 'm-hausdorff', 'm-quotient', 'm-compare', 'm-counterexample']],
   ['Example spaces', ['ex-real-line', 'ex-lower-limit', 'ex-k-topology', 'ex-finite-complement', 'ex-discrete', 'ex-indiscrete', 'ex-sierpinski', 'ex-crush-open', 'ex-circle', 'ex-two-origins']],
   ['Worked problems', ['hw7-q1']]
 ];
 // reading order, roughly following Munkres
-var ORDER = ['relation-equivalence', 'equivalence-class', 'partition', 'image-preimage', 'topology', 'open-set', 'standard-topologies', 'finer-coarser', 'basis', 'generated-topology', 'lemma-13-3', 'lemma-13-4', 'subbasis', 'order-topology', 'product-topology', 'subspace-topology', 'closed-set', 'closure', 'interior', 'closure-test', 'limit-point', 'closure-limit-points', 'hausdorff', 't1', 'convergence', 'continuous', 'restriction', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'metric', 'ball', 'metric-topology', 'metric-hausdorff', 'epsilon-delta', 'quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples'];
+var ORDER = ['relation-equivalence', 'equivalence-class', 'partition', 'image-preimage', 'topology', 'open-set', 'standard-topologies', 'finer-coarser', 'basis', 'generated-topology', 'lemma-13-3', 'lemma-13-4', 'subbasis', 'order-topology', 'product-topology', 'subspace-topology', 'closed-set', 'closure', 'interior', 'closure-test', 'limit-point', 'closure-limit-points', 'hausdorff', 't1', 'convergence', 'continuous', 'restriction', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'metric', 'ball', 'metric-topology', 'metric-hausdorff', 'epsilon-delta', 'quotient-topology', 'saturated', 'quotient-map', 'relation-induced', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples'];
 var A = {
 // ---------- foundations
 'relation-equivalence': {title: 'Equivalence relation', kind: 'definition', where: 'Ch. 1, §3', pre: [],
@@ -278,7 +279,7 @@ var A = {
   sections: [['Definition', R`<p>A relation $\sim$ on $X$ is an <b>equivalence relation</b> if for all $x,y,z\in X$:</p><ul><li><b>reflexive:</b> $x\sim x$;</li><li><b>symmetric:</b> $x\sim y\Rightarrow y\sim x$;</li><li><b>transitive:</b> $x\sim y$ and $y\sim z\Rightarrow x\sim z$.</li></ul>`],
     ['Example', R`<p>On a metric space with $A\subseteq X$: $x\sim_A y$ iff $x=y$ or both $x,y\in A$. This crushes $A$ to a point; see [[crushing-a-set]].</p>`],
     ['Non-example', R`<p>$x<y$ on $\mathbb R$: not reflexive ($x<x$ fails) and not symmetric.</p>`],
-    ['Why it matters', R`<p>Its [[equivalence-class|classes]] form a [[partition]], and a partition is exactly what a [[quotient-topology|quotient space]] is built from.</p>`]]},
+    ['Why it matters', R`<p>Its [[equivalence-class|classes]] form a [[partition]], and a partition is exactly what a [[quotient-topology|quotient space]] is built from. The equivalence relations the course uses are collected in [[equivalence-catalogue]]; how they fit with order relations is in [[relations-map]].</p>`]]},
 'equivalence-class': {title: 'Equivalence class', kind: 'definition', where: 'Ch. 1, §3', pre: ['relation-equivalence'],
   lede: R`$[x]=\{y\in X: y\sim x\}$, everything that counts as the same as $x$.`,
   sections: [['Definition', R`<p>For an [[relation-equivalence|equivalence relation]] $\sim$ on $X$ and $x\in X$, the class of $x$ is $[x]=\{y\in X : y\sim x\}$. Two classes are either equal or disjoint.</p>
@@ -578,7 +579,7 @@ var A = {
 var BOOK = [
   ['Chapter 1 · Set Theory and Logic', [
     ['§1–2 · Sets and functions', ['image-preimage', 'set-equality']],
-    ['§3 · Relations', ['relation', 'relation-equivalence', 'equivalence-class', 'partition']]]],
+    ['§3 · Relations', ['relation', 'relation-equivalence', 'equivalence-class', 'partition', 'relation-order', 'relations-map']]]],
   ['Chapter 2 · Topological Spaces and Continuous Functions', [
     ['§12 · Topological spaces', ['topology', 'open-set', 'standard-topologies', 'finer-coarser']],
     ['§13 · Basis for a topology', ['basis', 'generated-topology', 'lemma-13-3', 'lemma-13-4', 'subbasis']],
@@ -586,10 +587,10 @@ var BOOK = [
     ['§15 · The product topology on X × Y', ['product-topology', 'projections']],
     ['§16 · The subspace topology', ['subspace-topology']],
     ['§17 · Closed sets and limit points', ['closed-set', 'closure', 'interior', 'closure-test', 'limit-point', 'closure-limit-points', 'dense', 'hausdorff', 't1', 'convergence']],
-    ['§18 · Continuous functions', ['continuous', 'restriction', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'embedding', 'open-map']],
+    ['§18 · Continuous functions', ['continuous', 'restriction', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'homeomorphism-relation', 'embedding', 'open-map']],
     ['§19 · The product topology (infinite)', ['product-vs-box']],
     ['§20–21 · The metric topology', ['metric', 'ball', 'metric-topology', 'metric-hausdorff', 'epsilon-delta']],
-    ['§22 · The quotient topology', ['quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples']]]],
+    ['§22 · The quotient topology', ['quotient-topology', 'saturated', 'quotient-map', 'relation-induced', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples']]]],
   ['Chapter 3 · Connectedness and Compactness', [
     ['After the midterm', []]]]
 ];
@@ -966,7 +967,7 @@ BOOK = [
   ['Chapter 1 · Set Theory and Logic', [
     ['§1 · Fundamental concepts', ['set-equality', 'de-morgan', 'm-set-equality']],
     ['§2 · Functions', ['image-preimage', 'functions']],
-    ['§3 · Relations', ['relation', 'relation-equivalence', 'equivalence-class', 'partition']],
+    ['§3 · Relations', ['relation', 'relation-equivalence', 'equivalence-class', 'partition', 'relation-order', 'relations-map']],
     ['§5 · Cartesian products', ['indexed-products']],
     ['§7 · Countable and uncountable sets', ['countable']]]],
   ['Chapter 2 · Topological Spaces and Continuous Functions', [
@@ -976,16 +977,16 @@ BOOK = [
     ['§15 · The product topology on X × Y', ['product-topology', 'projections', 'hw2-q1', 'hw2-q2']],
     ['§16 · The subspace topology', ['subspace-topology', 'hw1-q4', 'hw1-q5', 'hw1-q6', 'mt-q1']],
     ['§17 · Closed sets and limit points', ['closed-set', 'closure', 'interior', 'closure-test', 'limit-point', 'closure-limit-points', 'dense', 'hausdorff', 't1', 'convergence', 'm-closed', 'm-closure', 'm-hausdorff', 'm-true-false', 'hw2-q3', 'hw2-q4', 'hw2-q5', 'hw2-q6', 'mt-q2', 'mt-q3']],
-    ['§18 · Continuous functions', ['continuous', 'restriction', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'embedding', 'open-map', 'm-continuous', 'm-open-map', 'm-homeomorphic', 'hw3-q1', 'hw3-q2', 'hw3-q3', 'hw3-q4', 'mt-q4']],
+    ['§18 · Continuous functions', ['continuous', 'restriction', 'continuity-equivalents', 'pasting-lemma', 'homeomorphism', 'homeomorphism-relation', 'embedding', 'open-map', 'm-continuous', 'm-open-map', 'm-homeomorphic', 'hw3-q1', 'hw3-q2', 'hw3-q3', 'hw3-q4', 'mt-q4']],
     ['§19 · The product topology', ['product-vs-box', 'ex-box-rw', 'coordinate-function', 'maps-into-products', 'products-and-subspaces', 'products-hausdorff-closure', 'product-convergence', 'm-product-maps', 'hw3-q5', 'hw3-q6', 'mt-q5', 'hw4-q1', 'hw4-q2', 'hw4-q3', 'hw4-q4']],
     ['§20 · The metric topology', ['metric', 'ball', 'metric-topology', 'metric-hausdorff', 'mt-q6', 'mt2-q1']],
     ['§21 · The metric topology (continued)', ['epsilon-delta', 'first-countable', 'sequence-lemma', 'metrizable', 'uniform-limit']],
-    ['§22 · The quotient topology', ['quotient-topology', 'saturated', 'quotient-map', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples', 'm-quotient-map', 'm-not-quotient', 'm-build-quotient', 'm-quotient', 'hw6-q1', 'hw6-q2', 'hw6-q3', 'hw6-q4', 'hw6-q5', 'hw7-q1', 'hw7-q2', 'hw7-q3', 'hw7-q4', 'hw7-q5', 'hw7-q6', 'mt2-q2', 'mt2-q3']],
+    ['§22 · The quotient topology', ['quotient-topology', 'saturated', 'quotient-map', 'relation-induced', 'maps-out-of-quotients', 'crushing-a-set', 'gluing-examples', 'm-quotient-map', 'm-not-quotient', 'm-build-quotient', 'm-quotient', 'hw6-q1', 'hw6-q2', 'hw6-q3', 'hw6-q4', 'hw6-q5', 'hw7-q1', 'hw7-q2', 'hw7-q3', 'hw7-q4', 'hw7-q5', 'hw7-q6', 'mt2-q2', 'mt2-q3']],
     ['Across the chapter', ['defining-by-maps', 'm-counterexample']]]],
   ['Chapter 3 · Connectedness and Compactness', [
     ['§23 · Connected spaces', ['connected', 'm-connected', 'ex-rationals', 'hw8-q1', 'hw8-q2', 'hw8-q5', 'mt2-q4', 'mt2-q5', 'mt2-q6', 'hw9-q4']],
     ['§24 · Connected subspaces of the real line', ['connected-reals', 'ivt', 'path-connected', 'm-path-connected', 'ex-sine-curve', 'hw8-q3', 'hw8-q4']],
-    ['§25 · Components and local connectedness', ['components', 'path-components', 'local-connectedness', 'local-path-connectedness', 'ex-comb', 'hw9-q1', 'hw9-q2', 'hw9-q3']],
+    ['§25 · Components and local connectedness', ['components', 'path-components', 'equivalence-catalogue', 'local-connectedness', 'local-path-connectedness', 'ex-comb', 'hw9-q1', 'hw9-q2', 'hw9-q3']],
     ['§26 · Compact spaces', ['compact', 'm-compact']],
     ['§27 · Compact subspaces of the real line', ['compact-reals']],
     ['§28 · Limit point compactness', ['limit-point-compact']],
@@ -2233,6 +2234,51 @@ A['equivalence-class'].sections.splice(1, 0,
 })();
 </script>
 <script>
+A['relations-map'] = {title: 'Relations in topology: the map', kind: 'idea', where: 'Reference', pre: ['relation', 'relation-equivalence'],
+  lede: 'A relation compares two things. Topology uses two kinds, equivalence relations (which sort) and order relations (which rank), on four kinds of object: points, topologies, spaces and maps.',
+  sections: [
+  ['What a relation is', R`<p>A [[relation|relation]] on a set $X$ is a set of ordered pairs from $X$: the pairs $(x,y)$ for which "$x$ is related to $y$" is true. It is a yes-or-no question about pairs. A relation can also go between two sets: a subset of $X\times Y$. A function is the special relation in which each $x$ is related to exactly one $y$.</p>`],
+  ['The properties a relation can have', R`<p>Five properties do almost all the sorting. For all $x,y,z$:</p><ul class="facts"><li><b>Reflexive:</b> $x\sim x$.</li><li><b>Symmetric:</b> $x\sim y$ implies $y\sim x$.</li><li><b>Antisymmetric:</b> $x\sim y$ and $y\sim x$ imply $x=y$.</li><li><b>Transitive:</b> $x\sim y$ and $y\sim z$ imply $x\sim z$.</li><li><b>Total</b> (comparable): $x\sim y$ or $y\sim x$, for every pair.</li></ul>`],
+  ['The two great kinds', R`<ul class="facts"><li><b>Equivalence relations</b> (reflexive, symmetric, transitive) <b>sort</b>: they say when two things count as the same, and cut the set into classes ([[relation-equivalence|equivalence relation]], [[equivalence-class|equivalence class]], [[partition|partition]]).</li><li><b>Order relations</b> (transitive, plus antisymmetry or strictness) <b>rank</b>: they say which of two things comes first or is larger ([[relation-order|order relations]]).</li></ul><p>Symmetry is what separates them. An equivalence relation cannot tell $x$ from $y$ when they are related; an order relation always can, unless $x=y$.</p>`],
+  ['Where relations live in this course', R`<p>Sort the relations of topology by <em>what</em> they compare.</p><ol class="facts"><li><b>Points of one space.</b> Equivalence relations that cut a space into pieces: lying in a common connected set ([[components]]), being joined by a path ([[path-components]]), being glued by a map ([[relation-induced]], [[quotient-topology]]). Order relations that build a topology: $\lt$ on $\mathbb R$ gives the [[order-topology]].</li><li><b>Topologies on one set.</b> "Finer than" is an order relation ([[finer-coarser]]): it ranks topologies, and two of them need not be comparable ([[lemma-13-4]]).</li><li><b>Spaces.</b> "Is homeomorphic to" is an equivalence relation on spaces ([[homeomorphism-relation]]); its classes are the spaces topology cannot tell apart.</li><li><b>Maps.</b> Coming in Chapter 9: two paths are <em>path homotopic</em> if one can be deformed into the other. This equivalence relation on paths gives the fundamental group.</li></ol>`],
+  ['The pattern every equivalence relation follows', R`<ol class="facts"><li><b>Check it.</b> Reflexive and symmetric are usually immediate. <b>Transitivity is where the topology does the work</b>: a theorem about unions (23.3), the [[pasting-lemma]] for joining paths, or composition of continuous maps.</li><li><b>Name the classes.</b> The classes, not the relation, get the name: components, path components, fibres, homeomorphism types ([[equivalence-catalogue]]).</li><li><b>Form the set of classes.</b> It is a [[partition|partition]] of the original set; for points of a space it can be given the [[quotient-topology|quotient topology]].</li><li><b>Ask what the classes are like.</b> Closed? Open? How many? Each answer is a theorem (25.1–25.5 for components).</li></ol>`],
+  ['Invariants: how relations turn into tools', R`<p>A property is <b>invariant</b> under an equivalence relation if related things share it. Properties invariant under homeomorphism (connectedness, compactness, Hausdorff, the number of components) are the tools for proving two spaces are <em>not</em> homeomorphic: find a property one has and the other lacks. That is how $\mathbb R\not\cong\mathbb R\setminus\{0\}$ is proved, and how the fundamental group will later tell the circle from the disc.</p>`],
+  ['Where it sits', R`<p>Relations are set up in Chapter 1 (Munkres §3) and look like bookkeeping there. In topology they become the organising idea: the subject's main question, "when are two spaces the same?", is a question about one equivalence relation, homeomorphism. <em>Interpretation:</em> this article's sorting by what is compared (points, topologies, spaces, maps) is the guide's, not Munkres's.</p>`]]};
+
+A['relation-order'] = {title: 'Order relations', kind: 'definition', where: 'Ch. 1, §3', pre: ['relation'],
+  lede: 'Relations that rank: strict orders like < and partial orders like ⊆. In topology they build the order topology and compare topologies.',
+  sections: [
+  ['Definition', R`<p>Munkres (§3) calls a relation $\lt$ on $A$ an <b>order relation</b> (or simple order) if it has three properties:</p><ul class="facts"><li><b>Comparability:</b> for $x\ne y$, either $x\lt y$ or $y\lt x$.</li><li><b>Nonreflexivity:</b> $x\lt x$ never holds.</li><li><b>Transitivity:</b> $x\lt y$ and $y\lt z$ imply $x\lt z$.</li></ul><p>A <b>partial order</b> $\le$ drops comparability and uses the non-strict form: reflexive, antisymmetric ($x\le y$ and $y\le x$ give $x=y$) and transitive. Some pairs may be incomparable.</p>`],
+  ['Examples', R`<ul class="facts"><li><b>The standard example:</b> $\lt$ on $\mathbb R$, a simple order.</li><li><b>Its contrast:</b> $\subseteq$ on the subsets of a set, a partial order: $\{1\}$ and $\{2\}$ are incomparable.</li><li>The dictionary order on $\mathbb R\times\mathbb R$: compare first coordinates, and second coordinates only on a tie. A simple order.</li><li>"Finer than" on the topologies of a set $X$: a partial order ([[finer-coarser]]), with incomparable pairs ([[lemma-13-4]]).</li></ul>`],
+  ['Where they are used in topology', R`<ul class="facts"><li><b>To build a topology:</b> a simple order gives open intervals $(a,b)$, which generate the [[order-topology]]. The standard topology on $\mathbb R$ is the order topology of $\lt$.</li><li><b>To compare topologies:</b> finer and coarser.</li><li><b>To state theorems:</b> the [[ivt]] and the extreme value theorem need an ordered target; the least upper bound property makes $[a,b]$ connected and compact (24.1, 27.1).</li></ul>`],
+  ['Compared with equivalence relations', R`<p>Both are transitive. An [[relation-equivalence|equivalence relation]] is symmetric and sorts things into classes; an order relation is antisymmetric (or strict) and ranks them. Equality $=$ is the one relation that is both an equivalence relation and a partial order. See [[relations-map]].</p>`]]};
+
+A['relation-induced'] = {title: 'The relation induced by a map', kind: 'definition', where: '§22', pre: ['relation-equivalence', 'image-preimage', 'quotient-map'],
+  lede: 'Any function f gives an equivalence relation: x ~ y when f(x) = f(y). Its classes are the fibres, and every equivalence relation arises this way.',
+  sections: [
+  ['Definition', R`<p>Let $f:X\to Y$ be a function. Define $x\sim_f y$ if $f(x)=f(y)$. The class of $x$ is the <b>fibre</b> $f^{-1}(f(x))$: everything $f$ sends to the same place.</p>`],
+  ['Why it is an equivalence relation', R`<p>It is equality, pulled back through $f$: $f(x)=f(x)$ (reflexive); $f(x)=f(y)$ gives $f(y)=f(x)$ (symmetric); $f(x)=f(y)=f(z)$ gives $f(x)=f(z)$ (transitive). Here transitivity costs nothing, because equality is already transitive.</p>`],
+  ['Examples', R`<ul class="facts"><li><b>The standard example:</b> $p:[0,1]\to S^1$, $p(t)=(\cos2\pi t,\sin2\pi t)$. Its fibres are $\{0,1\}$ and the single points $\{t\}$ for $0\lt t\lt1$: the relation glues the two ends of the interval ([[ex-circle]]).</li><li>$\pi_1:\mathbb R^2\to\mathbb R$: the fibres are the vertical lines.</li><li>A constant map: one fibre, everything related.</li><li>An injective map: every fibre is one point, so $\sim_f$ is equality.</li></ul>`],
+  ['Every equivalence relation is induced by a map', R`<p>Given any equivalence relation $\sim$ on $X$, let $\pi:X\to X/{\sim}$ send $x$ to its class $[x]$. Then $\pi(x)=\pi(y)$ exactly when $x\sim y$. So "equivalence relation on $X$", "partition of $X$" and "surjection out of $X$, up to renaming the target" are three descriptions of the same thing.</p>`],
+  ['In topology: quotients', R`<p>When $X$ is a space, $X/{\sim}$ gets the [[quotient-topology]]: the finest topology making $\pi$ continuous. If $p:X\to Y$ is a [[quotient-map]], then $Y$ is homeomorphic to $X/{\sim_p}$; this is how gluing descriptions such as "an interval with its ends identified" become actual spaces ([[gluing-examples]]). Maps out of a quotient are exactly the maps that are constant on the classes ([[maps-out-of-quotients]]).</p>`]]};
+
+A['homeomorphism-relation'] = {title: 'Homeomorphism as an equivalence relation', kind: 'theorem', where: '§18', pre: ['homeomorphism', 'relation-equivalence'],
+  lede: '"X is homeomorphic to Y" is an equivalence relation on spaces. Its classes are what topology cannot tell apart, and its invariants are how spaces are told apart.',
+  sections: [
+  ['Statement', R`<p>Write $X\cong Y$ if there is a [[homeomorphism]] $X\to Y$. Then $\cong$ is reflexive, symmetric and transitive.</p>`],
+  ['Why', R`<ul class="facts"><li><b>Reflexive:</b> the identity $X\to X$ is a homeomorphism.</li><li><b>Symmetric:</b> if $f:X\to Y$ is a homeomorphism, so is $f^{-1}:Y\to X$; the definition is symmetric in $f$ and $f^{-1}$.</li><li><b>Transitive:</b> if $f:X\to Y$ and $g:Y\to Z$ are homeomorphisms, so is $g\circ f$: it is a bijection, continuous as a composite of continuous maps, with continuous inverse $f^{-1}\circ g^{-1}$.</li></ul><p>(Strictly, the spaces do not form a set, so this is a relation in a slightly wider sense; nothing in the course depends on the distinction.)</p>`],
+  ['The classes', R`<p>A class consists of all spaces homeomorphic to a given one, its <b>homeomorphism type</b>. Examples: $(-1,1)$, $(0,1)$ and $\mathbb R$ are in one class; $[0,1]$ is in another; $S^1$ and the square's boundary are in one class.</p>`],
+  ['Invariants', R`<p>A <b>topological property</b> (topological invariant) is one shared by homeomorphic spaces. To prove $X\not\cong Y$, find an invariant that one has and the other lacks.</p><ul class="facts"><li><b>Connected</b> (23.5): $[0,1]\not\cong[0,1]\cup[2,3]$.</li><li><b>Number of components:</b> $\mathbb R\not\cong\mathbb R\setminus\{0\}$.</li><li><b>Cut points:</b> removing a point from $\mathbb R$ disconnects it, removing a point from $\mathbb R^2$ does not; a homeomorphism would carry one situation to the other, so $\mathbb R\not\cong\mathbb R^2$.</li><li><b>Compact</b> (26.5): $[0,1]\not\cong(0,1)$.</li><li><b>Hausdorff</b>, path connected, locally connected: all invariant.</li></ul><p>Not invariant: boundedness, completeness, distances. These depend on a metric, not on the topology alone.</p>`],
+  ['Where it sits', R`<p>Classifying spaces up to homeomorphism is the guiding problem of topology. Invariants answer "not homeomorphic"; explicit maps answer "homeomorphic". The fundamental group (Chapter 9) is a stronger invariant built from another equivalence relation, path homotopy. See [[relations-map]].</p>`]]};
+
+A['equivalence-catalogue'] = {title: 'Equivalence relations in topology: a catalogue', kind: 'idea', where: 'Reference', pre: ['relation-equivalence'],
+  lede: 'Each equivalence relation the course uses, what makes it transitive, and the name of its classes.',
+  sections: [
+  ['How to read this', R`<p>For each relation: what it says, where transitivity comes from (the one step that needs a theorem), and the name of its classes. Usually only the classes have a name; the relation is written $x\sim y$ and described in words. See [[relations-map]] for how they fit together.</p>`],
+  ['On points of a space', R`<ol class="facts"><li><b>Lie in a common connected set</b> (§25). Transitive by Theorem 23.3: two connected sets through a common point have a connected union. Classes: <b>[[components]]</b>.</li><li><b>Joined by a path</b> (§25). Transitive by joining paths end to end, continuous by the [[pasting-lemma]]. Classes: <b>[[path-components]]</b>.</li><li><b>Not separated by any continuous map to $\{0,1\}$</b> ([[hw8-q2]]). Transitive because equality of values is. Classes: <b>quasi-components</b> (a name from outside Munkres's text); each is a union of components.</li><li><b>Same value under a map</b> $f$ ([[relation-induced]]). Transitive because equality is. Classes: the <b>fibres</b> of $f$; with the quotient topology, the set of fibres is a quotient space.</li><li><b>Crushing a set</b> $A$: $x\sim y$ iff $x=y$ or both lie in $A$ ([[crushing-a-set]]). Classes: $A$, and single points.</li></ol>`],
+  ['On spaces', R`<ol class="facts" start="6"><li><b>Homeomorphic</b>, $X\cong Y$ ([[homeomorphism-relation]]). Transitive by composing homeomorphisms. Classes: <b>homeomorphism types</b>.</li></ol>`],
+  ['Coming next', R`<ol class="facts" start="7"><li><b>Path homotopic</b>, $f\simeq_p g$ (§51): two paths with the same ends, one deformable into the other with the ends held fixed. Transitive by stacking the deformations, again by the pasting lemma. Classes: <b>path-homotopy classes</b> $[f]$, the elements of the fundamental group.</li><li><b>Homotopic maps</b> $f\simeq g$ (§51), and <b>homotopy equivalent spaces</b> (§58): coarser cousins of equality and homeomorphism.</li></ol>`],
+  ['What the catalogue shows', R`<p>The relations that are pulled back from equality (fibres, maps to $\{0,1\}$) are transitive for free. The ones defined by <em>joining</em> things (connected sets, paths, homotopies) need a gluing theorem for transitivity, and that theorem is always the same idea: two pieces that agree where they meet fit together. <em>Interpretation, beyond Munkres.</em></p>`]]};
 // ===== The encyclopedia: home page, articles, link previews, a trail of where you have been, search.
 var KIND = {definition: 'Definition', theorem: 'Theorem', method: 'Method', example: 'Example', idea: 'Idea', worked: 'Worked problem', problem: 'Problem'};
 // reading order follows the book; problems step through their own set
@@ -2258,13 +2304,14 @@ var TRAIL = []; try { TRAIL = JSON.parse(sessionStorage.getItem('tg-trail') || '
 function home(){
   var recent = []; try { recent = JSON.parse(localStorage.getItem('tg-recent') || '[]'); } catch(e){}
   var h = '<h1>Topology Reference Guide</h1><p class="intro">An encyclopedia of the course in the order of Munkres. Each section holds its concepts, the methods its problems call for, and the assigned problems themselves, all linked to each other. Each article opens to a one-line summary and its definition; everything else unfolds when you want it. Underlined terms are links: tap one for a preview, then read on or stay where you are. At the end of each article you will find what it depends on and what builds on it, and the next article in the book.</p>';
-  h += '<div class="start"><a class="chip" href="#a/what-is-topology">Start here: what topology is</a><a class="chip" href="#a/approach">How to approach a problem</a><a class="chip" href="#a/whole-picture">The whole picture</a><a class="chip" href="#a/first-moves">Practice: first moves</a><a class="chip" href="#a/image-preimage">Chapter 1</a><a class="chip" href="#a/connected">Now: §23–24 connectedness</a><a class="chip" href="#a/mt2-q1">Midterm 2 practice</a><a class="chip" href="#a/hw8-q1">Homework 8</a><a class="chip" href="#a/hw7-q2">Homework 7</a><a class="chip" href="#a/ivt">Intermediate value theorem</a><a class="chip" href="#a/gallery">Gallery of spaces</a><a class="chip" href="#a/theorems">Theorems by number</a><a class="chip" href="tabs/">Quick-reference tabs</a></div>';
+  h += '<div class="start"><a class="chip" href="#a/what-is-topology">Start here: what topology is</a><a class="chip" href="#a/approach">How to approach a problem</a><a class="chip" href="#a/whole-picture">The whole picture</a><a class="chip" href="#a/relations-map">Relations</a><a class="chip" href="#a/first-moves">Practice: first moves</a><a class="chip" href="#a/image-preimage">Chapter 1</a><a class="chip" href="#a/connected">Now: §23–24 connectedness</a><a class="chip" href="#a/mt2-q1">Midterm 2 practice</a><a class="chip" href="#a/hw8-q1">Homework 8</a><a class="chip" href="#a/hw7-q2">Homework 7</a><a class="chip" href="#a/ivt">Intermediate value theorem</a><a class="chip" href="#a/gallery">Gallery of spaces</a><a class="chip" href="#a/theorems">Theorems by number</a><a class="chip" href="tabs/">Quick-reference tabs</a></div>';
   if (recent.length) h += '<div class="topic"><h2>Recently read</h2><div class="chips">' + recent.slice(0, 8).map(chip).join('') + '</div></div>';
   function row(id){ var a = A[id]; return '<a href="#a/' + id + '"><b>' + a.title + '</b><span class="kind">' + KIND[a.kind] + '</span><i>' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }
   function group(ids){ var g = {c: [], m: [], p: []}; ids.forEach(function(id){ var k = A[id].kind; (k === 'method' ? g.m : k === 'problem' ? g.p : g.c).push(id); });
     return (g.c.length ? '<div class="glab">Concepts</div>' + g.c.map(row).join('') : '') + (g.m.length ? '<div class="glab">Methods</div>' + g.m.map(row).join('') : '') + (g.p.length ? '<div class="glab">Problems</div>' + g.p.map(row).join('') : ''); }
   BOOK.forEach(function(ch){ h += '<h2 class="chap">' + ch[0] + '</h2>'; ch[1].forEach(function(sx){ var n = sx[1].length, np = sx[1].filter(function(id){ return A[id].kind === 'problem'; }).length;
     h += '<details class="topic"><summary>' + sx[0] + '<span class="cnt">' + (n ? (n - np) + (np ? ' · ' + np + ' problems' : '') : 'coming') + '</span></summary><div class="tlist">' + (n ? group(sx[1]) : '<p class="foot">Added as the course reaches it.</p>') + '</div></details>'; }); });
+  h += '<h2 class="chap">Relations</h2><p class="foot">How things are compared in topology: which count as the same, and which come first. Start with the map.</p>' + '<div class="tlist">' + ['relations-map', 'relation', 'relation-equivalence', 'equivalence-class', 'partition', 'relation-order', 'relation-induced', 'homeomorphism-relation', 'equivalence-catalogue'].map(row).join('') + '</div>';
   h += '<h2 class="chap">Indexes</h2>';
   h += '<details class="topic"><summary>All methods<span class="cnt">' + METHODS.length + '</span></summary><div class="tlist">' + METHODS.map(function(id){ var a = A[id], n = (USEDIN[id] || []).length; return '<a href="#a/' + id + '"><b>' + a.title + '</b>' + (n ? '<span class="kind">' + n + ' problem' + (n > 1 ? 's' : '') + '</span>' : '') + '<i>' + wiki(a.lede).replace(/<a [^>]*>|<\/a>/g, '') + '</i></a>'; }).join('') + '</div></details>';
   PROBSETS.forEach(function(ps){ h += '<details class="topic"><summary>' + ps[0] + '<span class="cnt">' + ps[1].length + '</span></summary><div class="tlist">' + ps[1].map(row).join('') + '</div></details>'; });
