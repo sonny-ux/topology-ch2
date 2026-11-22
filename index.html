@@ -303,7 +303,12 @@ var A = {
 <p><b>A set that is also one point.</b> Recall: a set is a collection, and its members can be anything, including other sets. A team is a set of players: $\{\text{Ann},\text{Bo},\text{Cy}\}$. A league is a set of teams. In the league, each team is one member, even though each team has several players inside it.</p>
 <p>An equivalence class is a team in this sense. Inside $X$ it is a collection of points. In the quotient $X/{\sim}$ it is one member. For example, on $X=\{1,2,3,4\}$ with "same parity", $[1]=[3]=\{1,3\}$ and $[2]=[4]=\{2,4\}$, so $X/{\sim}=\{\{1,3\},\{2,4\}\}$ has two members, each of them a set of two numbers. To ask whether a set of classes is open, unpack it: pool the points of its classes into one subset of $X$, which is its preimage under $\pi$.</p>`],
     ['Example', R`<p>For $\sim_A$: if $a\in A$ then $[a]=A$ (every point of $A$ is related to $a$ by the "both in $A$" clause); if $x\notin A$ then $[x]=\{x\}$.</p>`],
-    ['Watch out', R`<p>$[x]$ is a <em>set</em> of points of $X$, but a single <em>point</em> of the quotient $X/{\sim}$.</p>`]]},
+    ['Watch out', R`<p>$[x]$ is a <em>set</em> of points of $X$, but a single <em>point</em> of the quotient $X/{\sim}$.</p>`],
+    ['Set or collection?', R`<p><b>A class is a set.</b> $[x]=\{y\in X: y\sim x\}$ is a subset of $X$; its elements are points.</p><p><b>All the classes together form a collection.</b> In Munkres, "collection" and "family" are not a new kind of object: they are the words used for a set whose elements are themselves sets, because "a collection of sets" reads more easily than "a set of sets". Every collection is a set. The set of all classes,</p>
+$$X/{\sim}=\{[x]: x\in X\},$$
+<p>is a collection: the [[partition|partition]] of $X$, which is also the quotient set.</p><p><b>Two roles at once.</b> $[x]$ is a <em>set</em> in $X$, with points inside it, and an <em>element</em> of the collection $X/{\sim}$.</p><p><b>Quick check</b>, with "same parity" on $X=\{1,2,3,4\}$, where</p>
+$$[1]=\{1,3\},\qquad X/{\sim}=\{\{1,3\},\{2,4\}\}:$$
+<ul class="facts"><li>$1\in[1]$: true. Points are elements of their class.</li><li>$[1]\in X/{\sim}$: true. Classes are elements of the quotient.</li><li>$1\in X/{\sim}$: false. A point is not an element of the collection; its class is.</li></ul>`]]},
 'partition': {title: 'Partition', kind: 'definition', where: 'Ch. 1, §3', pre: ['equivalence-class'],
   lede: R`Cutting a set into nonempty pieces with no overlaps and nothing left out.`,
   sections: [['Definition', R`<p>A collection of nonempty, pairwise disjoint subsets of $X$ whose union is $X$.</p>`],
