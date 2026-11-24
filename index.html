@@ -3158,6 +3158,8 @@ A['theorems'].sections.unshift(['Since Midterm 1 (§19–24): the Midterm 2 rang
 // ===== Key terms link themselves: on every page, the first plain mention of a key term (outside math, headings and existing links)
 // becomes a link to its article, with the usual tap-to-preview, unless the page already links there.
 var AUTOTERMS = [
+ ['locally path connected', 'local-path-connectedness'], ['local path connectedness', 'local-path-connectedness'], ['locally connected', 'local-connectedness'], ['local connectedness', 'local-connectedness'],
+ ['locally compact', 'local-compact'], ['local compactness', 'local-compact'], ['one-point compactification', 'local-compact'],
  ['coordinate functions', 'coordinate-function'], ['coordinate function', 'coordinate-function'],
  ['projections', 'projections'], ['projection', 'projections'],
  ['quotient topology', 'quotient-topology'], ['quotient maps', 'quotient-map'], ['quotient map', 'quotient-map'],
@@ -3167,7 +3169,7 @@ var AUTOTERMS = [
  ['path connected', 'path-connected'], ['saturated', 'saturated'], ['Hausdorff', 'hausdorff'], ['homeomorphism', 'homeomorphism'],
  ['open map', 'open-map'], ['closed map', 'open-map'], ['subbasis', 'subbasis'], ['limit point', 'limit-point'],
  ['preimages', 'image-preimage'], ['preimage', 'image-preimage'], ['partition', 'partition'], ['closure', 'closure'],
- ['metric topology', 'metric-topology'], ['pasting lemma', 'pasting-lemma'], ['order topology', 'order-topology'], ['intermediate value theorem', 'ivt'], ['connected', 'connected'], ['continuous', 'continuous']
+ ['metric topology', 'metric-topology'], ['pasting lemma', 'pasting-lemma'], ['order topology', 'order-topology'], ['intermediate value theorem', 'ivt'], ['connected', 'connected'], ['continuous', 'continuous'], ['compact', 'compact']
 ];
 window.autoLink = function(v){ var id = location.hash.indexOf('#a/') === 0 ? location.hash.slice(3) : null; if (!id || !A[id]) return;
   var root = v; var have = {}; root.querySelectorAll('a.wl').forEach(function(a){ have[a.dataset.id] = 1; }); have[id] = 1;
