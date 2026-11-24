@@ -3503,6 +3503,12 @@ function padInit(id){
   // save on every keystroke, before anything else runs, and again whenever the page is hidden or closed; a backup copy keeps the last non-empty draft
   function save(){ try { localStorage.setItem(key, ta.value); if (ta.value.trim()) localStorage.setItem(key + '-backup', ta.value); sv.textContent = 'Saved on this device'; } catch(e){ sv.textContent = 'Could not save on this device'; } }
   ta.addEventListener('input', function(){ save(); grow(); clearTimeout(tm); tm = setTimeout(function(){ hold(draw); }, 250); });
+  // typing never moves the page: the browser scrolls the caret into view on each keystroke; put the page back where it was
+  var keepY = null;
+  ta.addEventListener('beforeinput', function(){ keepY = window.scrollY; });
+  ta.addEventListener('input', function(){ if (keepY == null) return; var y = keepY; keepY = null;
+    var fix = function(){ if (Math.abs(window.scrollY - y) > 2) window.scrollTo(0, y); };
+    fix(); requestAnimationFrame(fix); setTimeout(fix, 80); });
   ta.addEventListener('blur', save); window.addEventListener('pagehide', save); document.addEventListener('visibilitychange', function(){ if (document.hidden) save(); }); window.addEventListener('hashchange', save, {once: true});
   document.querySelector('.padbar').addEventListener('mousedown', function(e){ if (e.target.closest('button')) e.preventDefault(); });
   document.querySelector('.padbar').addEventListener('click', function(e){ var b = e.target.closest('button'); if (!b) return; var d = PADSYM[+b.dataset.p], a0 = ta.selectionStart, a1 = ta.selectionEnd, sel = ta.value.slice(a0, a1);
