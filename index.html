@@ -256,6 +256,8 @@ ol.sent li::before{content:counter(sn);position:absolute;left:0;top:7px;width:19
 .focuslist .fnone{padding:8px;color:var(--muted);}
 .focushome{border:1px solid var(--border2);border-radius:12px;padding:6px 8px;margin:14px 0;}
 .focushome h2{font:600 13px -apple-system,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:6px 8px;}
+.parth{margin:1.4em 0 .5em;padding-top:.8em;border-top:1px solid var(--border2);font:600 12px -apple-system,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);}
+.secb > .parth:first-child{margin-top:.2em;padding-top:0;border-top:0;}
 </style>
 </head>
 <body>
@@ -2566,6 +2568,19 @@ document.addEventListener('click', function(e){
 });
 window.addEventListener('hashchange', function(){ focusPanel(false); });
 document.addEventListener('DOMContentLoaded', focusCount); focusCount();
+// Problem pages: separate the parts (a), (b), (c) of a breakdown or a clean solution under their own headings
+function partSplit(h){
+  if (/^<ol class="steps">/.test(h)){
+    var items = h.replace(/^<ol class="steps">|<\/ol>$/g, '').split(/(?=<li>)/), groups = [], cur = null;
+    items.forEach(function(li){ var m = /^<li>(?:<details><summary>)?<b>\(([a-z])\)\s*/.exec(li); var lab = m ? m[1] : (cur ? cur.lab : '');
+      if (m) li = li.replace(/<b>\(([a-z])\)\s*/, '<b>');
+      if (!cur || cur.lab !== lab){ cur = {lab: lab, items: []}; groups.push(cur); } cur.items.push(li); });
+    if (groups.filter(function(g){ return g.lab; }).length < 2) return h;
+    return groups.map(function(g){ return '<h4 class="parth">' + (g.lab ? 'Part (' + g.lab + ')' : 'Setting up') + '</h4><ol class="steps">' + g.items.join('') + '</ol>'; }).join('');
+  }
+  if ((h.match(/<p><b>\([a-z]\)<\/b>/g) || []).length < 2) return h;
+  return h.replace(/<p><b>\(([a-z])\)<\/b>\s*/g, function(_, l){ return '<h4 class="parth">Part (' + l + ')</h4><p>'; });
+}
 function article(id){
   var a = A[id]; if (!a) return '<p>No article called “' + id + '”.</p>';
   TRAIL = TRAIL.filter(function(x){ return x !== id; }); TRAIL.push(id); TRAIL = TRAIL.slice(-3); try { sessionStorage.setItem('tg-trail', JSON.stringify(TRAIL)); var r = JSON.parse(localStorage.getItem('tg-recent') || '[]').filter(function(x){ return x !== id; }); r.unshift(id); localStorage.setItem('tg-recent', JSON.stringify(r.slice(0, 12))); } catch(e){}
@@ -2575,6 +2590,7 @@ function article(id){
   if (typeof ROLE !== 'undefined' && ROLE[id]) h += '<div class="role">In the whole picture: <b>' + ROLE[id][0] + '</b>. ' + ROLE[id][1] + ' ' + wiki('[[whole-picture|See how it fits →]]') + '</div>';
   if (a.steps) h += '<details class="sec" open><summary>Steps</summary><div class="secb"><ol class="steps">' + a.steps.map(function(s){ return '<li>' + (s[1] ? '<details><summary>' + wiki(s[0]) + '</summary><div class="why"><b>Why:</b> ' + wiki(s[1]) + '</div></details>' : wiki(s[0])) + '</li>'; }).join('') + '</ol></div></details>';
   (a.sections || []).forEach(function(s, i){ var body = s[1];
+    if (a.kind === 'problem' && (s[0] === 'Breakdown' || s[0] === 'Clean solution')) body = partSplit(body);
     if (s[0] === 'Concepts and method') body = '<p><b>Concepts:</b></p><div class="chips">' + (a.pre || []).map(chip).join('') + '</div><p style="margin-top:10px"><b>Method:</b></p><div class="chips">' + (a.method || []).map(chip).join('') + '</div>';
     var open = (a.kind === 'problem') ? (s[0] === 'Concepts and method' || s[0] === 'The problem' || s[0] === 'What it is about' || s[0] === 'The problem, again' || s[0].indexOf('What it builds on') === 0 || s[0] === 'Terms in the problem' || s[0] === 'How the terms are used' || s[0].indexOf('What "constant" means') === 0 || s[0].indexOf('Breakdown') === 0 || (s[0] === 'Work-through' && a.where !== 'Midterm 2 practice')) : (i === 0 && !a.steps); if (s[0] === 'Facts to keep in mind' || s[0] === 'Open and closed at once' || ((a.kind === 'definition' || a.kind === 'example') && /^(Examples?|Worked examples?)$/.test(s[0])) || (id === 'ivt' && /^(From calculus to topology|Proof)$/.test(s[0])) || /^(In lecture|Proof that it is not path connected)/.test(s[0]) || s[0] === 'Picture' || s[0] === 'Picture of A' || s[0] === 'Reading the definition' || s[0] === 'Reading the statement' || s[0] === 'What it is' || (s[0] === 'Definition' && i === 1) || (a.where === 'Start here') || a.kind === 'idea') open = true;
     h += '<details class="sec"' + (open ? ' open' : '') + '><summary>' + s[0] + '</summary><div class="secb">' + wiki(body) + '</div></details>'; });
