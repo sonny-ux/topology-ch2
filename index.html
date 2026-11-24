@@ -2490,7 +2490,17 @@ $$t=\sum_{n=1}^{\infty}b_n2^{-n},\qquad b_n\in\{0,1\},$$
 <p>and every such sum lies in $[0,1]$, since</p>
 $$0\le\sum_{n=1}^{\infty}b_n2^{-n}\le\sum_{n=1}^{\infty}2^{-n}=1.$$`
 };
-Object.keys(ABOUT10).forEach(function(id){ A[id].sections.splice(1, 0, ['What it is about', ABOUT10[id]]); });
+var READ10 = {
+'hw10-q1': ['metric', 'ball', 'metric-topology', 'compact', 'bounded-metric'],
+'hw10-q2': ['topology', 'hausdorff', 'compact', 'local-compact'],
+'hw10-q3': ['hw10-q2', 'compact', 'hausdorff', 'local-compact'],
+'hw10-q4': ['quotient-map', 'compact', 'hausdorff', 'closed-map-lemma'],
+'hw10-q5': ['product-vs-box', 'ex-cantor-product', 'continuous', 'epsilon-delta'],
+'hw10-q6': ['hw10-q5', 'hw10-q4', 'compact', 'ex-cantor-product']
+};
+// Read first: the articles that prepare the question, in the order to read them, at the top of "What it is about"
+Object.keys(ABOUT10).forEach(function(id){ var rf = (READ10[id] || []).filter(function(x){ return A[x]; }).map(function(x, i){ return '<a class="chip" href="#a/' + x + '">' + (i + 1) + '. ' + A[x].title + '</a>'; }).join('');
+  A[id].sections.splice(1, 0, ['What it is about', (rf ? '<p><b>Read first</b>, in this order:</p><div class="chips readfirst">' + rf + '</div>' : '') + ABOUT10[id]]); });
 // ===== The encyclopedia: home page, articles, link previews, a trail of where you have been, search.
 var KIND = {definition: 'Definition', theorem: 'Theorem', method: 'Method', example: 'Example', idea: 'Idea', worked: 'Worked problem', problem: 'Problem'};
 // reading order follows the book; problems step through their own set
